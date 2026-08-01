@@ -1,5 +1,14 @@
 {
   "dependencies": {
+    "com.cysharp.unitask": "https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask",
+    "com.cysharp.r3": "https://github.com/Cysharp/R3.git?path=src/R3.Unity/Assets/Plugins/R3",
+    "com.cysharp.messagepipe": "https://github.com/Cysharp/MessagePipe.git?path=src/MessagePipe.Unity/Assets/Plugins/MessagePipe",
+    "com.cysharp.memorypack": "https://github.com/Cysharp/MemoryPack.git?path=src/MemoryPack.Unity/Assets/Plugins/MemoryPack",
+    "com.cysharp.mastermemory": "https://github.com/Cysharp/MasterMemory.git?path=src/MasterMemory.Unity/Assets/Plugins/MasterMemory",
+    "com.cysharp.zstring": "https://github.com/Cysharp/ZString.git?path=src/ZString.Unity/Assets/Plugins/ZString",
+    "com.cysharp.zlogger": "https://github.com/Cysharp/ZLogger.git?path=src/ZLogger.Unity/Assets/Plugins/ZLogger",
+    "jp.hadashikick.vcontainer": "https://github.com/hadashiA/VContainer.git?path=src/VContainer/Assets/VContainer",
+    "com.litkey.litmotion": "https://github.com/LitKey/LitMotion.git?path=src/LitMotion/Assets/LitMotion",
     "com.unity.2d.animation": "15.1.0",
     "com.unity.2d.aseprite": "5.0.3",
     "com.unity.2d.psdimporter": "14.0.3",
