@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Swords
+  m_EditorClassIdentifier: Unity.Addressables.Editor::UnityEditor.AddressableAssets.Settings.AddressableAssetGroup
+  m_GroupName: Swords
+  m_GUID: 0d9db73be9829be4cb214640a633d616
+  m_SerializeEntries:
+  - m_GUID: 82746efa197d0c94ab328984fbbad2bf
+    m_Address: SworldAtlas
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - SwordAtlas
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: 0acc7c10e12a237469b3b620e2da354b, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 1fe34172299b38544b3fc45f1070387d, type: 2}
+    - {fileID: 11400000, guid: 9b7b4f007271a2240b71b0c834766665, type: 2}
