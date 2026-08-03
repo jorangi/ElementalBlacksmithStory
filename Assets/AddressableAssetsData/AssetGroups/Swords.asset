@@ -16,7 +16,7 @@ MonoBehaviour:
   m_GUID: 0d9db73be9829be4cb214640a633d616
   m_SerializeEntries:
   - m_GUID: 82746efa197d0c94ab328984fbbad2bf
-    m_Address: SworldAtlas
+    m_Address: SwordAtlas
     m_ReadOnly: 0
     m_SerializedLabels:
     - SwordAtlas
