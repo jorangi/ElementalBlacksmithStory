@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3bf5d3fd2cf37c243a9a83f583606c8b, type: 3}
+  m_Name: 10103
+  m_EditorClassIdentifier: Assembly-CSharp::SO_WeaponData
+  weaponName: "\uC6A9\uC554\uC73C\uB85C \uBCBC\uB9B0 \uAC80"
+  atk: 3
+  ats: 1
+  recipes:
+  - {fileID: 11400000, guid: 1d135ec2c3e947d4b85580e66dbda53e, type: 2}
+  hasOutline: 0
+  elementTypes: 01000000
+  statusEffects: []
