@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3bf5d3fd2cf37c243a9a83f583606c8b, type: 3}
+  m_Name: 10202
+  m_EditorClassIdentifier: Assembly-CSharp::SO_WeaponData
+  weaponName: "\uD30C\uB797\uAC8C \uC5BC\uC740 \uAC80"
+  atk: 2
+  ats: 1
+  cost: 2200
+  recipes:
+  - {fileID: 11400000, guid: dd014b746a9527a44b51c56fb916b994, type: 2}
+  hideOutline: 0
+  elementTypes: 01000000
+  statusEffects: []
+  margin: 2.1
+  basePrice: 2500
+  price: 0

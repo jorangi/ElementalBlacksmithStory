@@ -12,10 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2ebc671e09e4f09479d24550860a548e, type: 3}
   m_Name: 20003
   m_EditorClassIdentifier: Assembly-CSharp::ElementalBlacksmithStory.Data.SO_CraftRecipe
-  recipeId: 20003
-  recipeName: "\uB3C4\uAE08\uB41C \uCCA0\uAC80 \uB808\uC2DC\uD53C"
+  recipeName: "\uBB34\uB09C\uD55C \uCCA0\uAC80 \uC81C\uC791\uBC95"
   recipeMaterials: []
   recipeOutcome:
-    chance: 0.9
-    resultWeapon: {fileID: 11400000, guid: eeaf2362ba59cb84684b755237664cfd, type: 2}
+    chance: 0.92
+    resultWeapon: {fileID: 11400000, guid: 5e93ec8cc4b75b44bb761d18be72e585, type: 2}
     defaultFailWeapon: {fileID: 11400000, guid: 9b67c08ecaf228a42ac4344ebee68548, type: 2}

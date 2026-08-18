@@ -7,32 +7,32 @@ namespace ElementalBlacksmithStory.Data
     [Serializable]
     public struct RecipeMaterial
     {
-        public uint materialId;
+        public SO_MaterialData material;
         public uint count;
     }
 
     [Serializable]
     public struct RecipeOutcome
     {
-        [Header("레시피 성공확률")]
+        [Header("제작법 성공확률")]
         [Range(0f, 1f)]
         public float chance;
-        [Header("레시피 성공시")]
+        [Header("제작법 성공시")]
         public SO_WeaponData resultWeapon;
-        [Header("레시피 실패시")]
+        [Header("제작법 실패시")]
         public SO_WeaponData defaultFailWeapon;
     }
 
     [CreateAssetMenu(fileName = "SO_CraftRecipe", menuName = "Scriptable Objects/SO_CraftRecipe")]
     public class SO_CraftRecipe : ScriptableObject
     {
-        [Header("레시피 아이디")]
-        public uint recipeId;
-        [Header("레시피 이름")]
+        [Header("제작법 아이디")]
+        public uint Id => uint.Parse(this.name);
+        [Header("제작법 이름")]
         public string recipeName;
-        [Header("레시피 재료")]
+        [Header("제작법 재료")]
         public List<RecipeMaterial> recipeMaterials;
-        [Header("레시피 성공")]
+        [Header("제작법 성공")]
         public RecipeOutcome recipeOutcome;
     }
 }

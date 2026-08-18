@@ -1,5 +1,6 @@
 using UnityEngine;
 using TMPro;
+using Cysharp.Text;
 
 namespace ElementalBlacksmithStory.UI
 {
@@ -7,9 +8,12 @@ namespace ElementalBlacksmithStory.UI
     {
         [SerializeField]private TextMeshProUGUI chanceText;
 
-        public void SetChance(float chance)
+        public void SetChance(float chance, ulong cost)
         {
-            chanceText.text = (chance * 100f).ToString("F2") + "%" ;
+            chanceText.SetText(
+                ZString.Format("{0:F2}% <size=\"40%\">(-{1:N0} <sprite name=\"CoinSack\">)</size>",
+                chance * 100.0f,
+                cost));
         }
     }
 }

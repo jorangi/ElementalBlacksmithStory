@@ -17,7 +17,6 @@ namespace ElementalBlacksmithStory.UI
         private readonly IAsyncPublisher<EnhanceRequestEvent> _enhanceRequestPublisher;
         private readonly CompositeDisposable _disposables = new();
         private readonly ForgeManager _forgeManager;
-
         public EnhanceButtonPresenter(
             EnhanceButtonView view, 
             IAsyncPublisher<EnhanceRequestEvent> enhanceRequestPublisher,
@@ -33,8 +32,8 @@ namespace ElementalBlacksmithStory.UI
                 .ThrottleFirst(TimeSpan.FromMilliseconds(300))
                 .Subscribe(_ =>
                 {
-                    UnityEngine.Debug.Log($"[EnhanceButtonPresenter] EnhanceRequestEvent {_forgeManager.CurrentWeapon.id} 전송");
-                    _enhanceRequestPublisher.PublishAsync(new EnhanceRequestEvent(_forgeManager.CurrentWeapon.id)).Forget();
+                    Debug.Log($"[EnhanceButtonPresenter] EnhanceRequestEvent {_forgeManager.CurrentWeapon.Id} 전송");
+                    _enhanceRequestPublisher.PublishAsync(new EnhanceRequestEvent(_forgeManager.CurrentWeapon)).Forget();
                 })
                 .AddTo(_disposables);
         }

@@ -10,12 +10,12 @@ namespace ElementalBlacksmithStory.Core
         public static string GenerateKey(List<RecipeMaterial> materials)
         {
             if(materials == null || materials.Count == 0) return string.Empty;
-            var sorted = materials.OrderBy(m => m.materialId);
+            var sorted = materials.OrderBy(m => m.material.Id);
             using(var sb = ZString.CreateStringBuilder())
             {
                 foreach(var m in sorted)
                 {
-                    sb.Append(m.materialId);
+                    sb.Append(m.material.Id);
                     sb.Append(':');
                     sb.Append(m.count);
                     sb.Append('|');

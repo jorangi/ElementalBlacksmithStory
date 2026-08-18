@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2ebc671e09e4f09479d24550860a548e, type: 3}
+  m_Name: 20103
+  m_EditorClassIdentifier: Assembly-CSharp::ElementalBlacksmithStory.Data.SO_CraftRecipe
+  recipeName: "\uC6A9\uC554\uC73C\uB85C \uBCBC\uB9B0 \uAC80 \uC81C\uC791\uBC95"
+  recipeMaterials: []
+  recipeOutcome:
+    chance: 0.63
+    resultWeapon: {fileID: 11400000, guid: a4f11e60d4a978247bba7b4ce4a4f361, type: 2}
+    defaultFailWeapon: {fileID: 11400000, guid: bbff5a13be4860a4f99df06287bd01be, type: 2}
+    price: 2700

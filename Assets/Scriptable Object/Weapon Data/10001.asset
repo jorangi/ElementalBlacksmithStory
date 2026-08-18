@@ -15,8 +15,12 @@ MonoBehaviour:
   weaponName: "\uB0A1\uACE0 \uD5C8\uB984\uD55C \uAC80"
   atk: 1
   ats: 1
+  cost: 100
   recipes:
   - {fileID: 11400000, guid: a22ca174acdc5f44a8bf92f00d983e32, type: 2}
-  hasOutline: 0
+  hideOutline: 0
   elementTypes: 
   statusEffects: []
+  margin: 0.5
+  basePrice: 0
+  price: 0

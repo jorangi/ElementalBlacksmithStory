@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 468a46d0ae32c3544b7d98094e6448a9, type: 3}
   m_Name: AddressableAssetSettings
   m_EditorClassIdentifier: Unity.Addressables.Editor::UnityEditor.AddressableAssets.Settings.AddressableAssetSettings
-  m_DefaultGroup: f3c5698508438bf45a37e16c5e9f77b5
+  m_DefaultGroup: cb7ea8258ba39d94c92e541c9044b790
   m_currentHash:
     serializedVersion: 2
-    Hash: 3bf78c527b2497e56ea07cfa0457351c
+    Hash: 00000000000000000000000000000000
   m_ExtractTypeTreeData: 0
   m_OptimizeCatalogSize: 0
   m_BuildRemoteCatalog: 0
@@ -63,7 +63,9 @@ MonoBehaviour:
   m_overridePlayerVersion: '[UnityEditor.PlayerSettings.bundleVersion]'
   m_GroupAssets:
   - {fileID: 11400000, guid: 05c8e7192d589ac4d8469524419fe576, type: 2}
+  - {fileID: 11400000, guid: 0105609fca2cb814ba86d205e26ef486, type: 2}
   - {fileID: 11400000, guid: bf388c32ba034c54694ad8946069bdd4, type: 2}
+  - {fileID: 11400000, guid: a26fba11613f5324b9cde752cc36269f, type: 2}
   m_BuildSettings:
     m_LogResourceManagerExceptions: 1
     m_BundleBuildPath: Temp/com.unity.addressables/AssetBundles
@@ -103,7 +105,7 @@ MonoBehaviour:
   m_LabelTable:
     m_LabelNames:
     - default
-    - SwordAtlas
+    - Sounds
   m_SchemaTemplates: []
   m_GroupTemplateObjects:
   - {fileID: 11400000, guid: 387001f2e0b5e474186d97ae9e900b7e, type: 2}

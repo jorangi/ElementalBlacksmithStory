@@ -8,9 +8,13 @@ namespace ElementalBlacksmithStory
     {
         [SerializeField] private Image weaponImage;
         [SerializeField] private TextMeshProUGUI weaponName;
-        public void ChangeSprite(Sprite sprite)
+        public void ChangeSprite(Sprite sprite, bool hideMat = false)
         {
             weaponImage.sprite = sprite;
+            if(hideMat)
+            {
+                weaponImage.material = null;
+            }
         }
         public void ChangeWeaponName(string weaponName)
         {

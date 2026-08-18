@@ -14,51 +14,43 @@ namespace ElementalBlacksmithStory.UI
 {
     public class WeaponSpriteLoader : MonoBehaviour
     {
-        [Header("무기 이미지-Image")]
-        [SerializeField]private Image weaponImage;
-        private SpriteAtlas cachedAtlas;
-        private AsyncOperationHandle<SpriteAtlas> atlasHandler;
-        private UniTaskCompletionSource<SpriteAtlas> atlasLoadTcs;
-        private SO_WeaponDatabase weaponDatabase;
-        [Inject]
-        public void Construct(SO_WeaponDatabase weaponDatabase)
-        {
-            this.weaponDatabase = weaponDatabase;
-        }
+        private SpriteAtlas _cachedAtlas;
+        private AsyncOperationHandle<SpriteAtlas> _atlasHandler;
+        private UniTaskCompletionSource<SpriteAtlas> _atlasLoadTcs;
         private void Awake()
         {
             LoadAtlasAsync().Forget();
         }
         private async UniTask LoadAtlasAsync()
         {
-            atlasLoadTcs = new UniTaskCompletionSource<SpriteAtlas>();
+            _atlasLoadTcs = new UniTaskCompletionSource<SpriteAtlas>();
             var cancellationToken = this.GetCancellationTokenOnDestroy();
 
-            atlasHandler = Addressables.LoadAssetAsync<SpriteAtlas>("SwordAtlas");
-            cachedAtlas = await atlasHandler.ToUniTask(cancellationToken: cancellationToken);
+            _atlasHandler = Addressables.LoadAssetAsync<SpriteAtlas>("SwordAtlas");
+            _cachedAtlas = await _atlasHandler.ToUniTask(cancellationToken: cancellationToken);
 
-            atlasLoadTcs.TrySetResult(cachedAtlas);
+            _atlasLoadTcs.TrySetResult(_cachedAtlas);
             Debug.Log("[WeaponSpriteLoader] SwordAtlas 로드 완료");
         }
         private async UniTaskVoid Start()
         {
             var cancellationToken = this.GetCancellationTokenOnDestroy();
-            atlasHandler = Addressables.LoadAssetAsync<SpriteAtlas>("SwordAtlas");
-            cachedAtlas = await atlasHandler.ToUniTask(cancellationToken: cancellationToken);
+            _atlasHandler = Addressables.LoadAssetAsync<SpriteAtlas>("SwordAtlas");
+            _cachedAtlas = await _atlasHandler.ToUniTask(cancellationToken: cancellationToken);
         }
         public async UniTask<Sprite> GetWeaponSprite(string spriteId, CancellationToken cancellationToken = default)
         {
-            if (cachedAtlas == null && atlasLoadTcs != null)
+            if (_cachedAtlas == null && _atlasLoadTcs != null)
             {
                 Debug.Log("[WeaponSpriteLoader] 아틀라스 로딩 대기 중...");
-                await atlasLoadTcs.Task.AttachExternalCancellation(cancellationToken);
+                await _atlasLoadTcs.Task.AttachExternalCancellation(cancellationToken);
             }
-            if(cachedAtlas == null)
+            if(_cachedAtlas == null)
             {
                 Debug.LogError("[WeaponSpriteLoader] 아틀라스를 불러올 수 없습니다.");
                 return null;  
             }
-            Sprite newSprite = cachedAtlas.GetSprite(spriteId);
+            Sprite newSprite = _cachedAtlas.GetSprite(spriteId);
             if (newSprite == null)
             {
                 Debug.LogWarning($"[WeaponSpriteLoader] '{spriteId}' 스프라이트를 찾을 수 없습니다.");
@@ -67,9 +59,9 @@ namespace ElementalBlacksmithStory.UI
         }
         private void OnDestroy()
         {
-            if(atlasHandler.IsValid())
+            if(_atlasHandler.IsValid())
             {
-                Addressables.Release(atlasHandler);
+                Addressables.Release(_atlasHandler);
             }
         }
     }

@@ -34,28 +34,26 @@ namespace ElementalBlacksmithStory.UI
             weaponChangeSubscriber.Subscribe(e => {ChangeSprite(e).Forget();}).AddTo(_disposables);
             _forgeManager = forgeManager;
         }
-        public void Start()
-        {
-            ChangeSprite(new ChangeWeaponEvent(10001)).Forget();
-        }
+        public void Start(){}
         private async UniTask ChangeSprite(ChangeWeaponEvent e, CancellationToken cancellationToken = default)
         {
             try
             {
-                Sprite sprite = await _weaponSpriteLoader.GetWeaponSprite(e.WeaponId.ToString(), cancellationToken);
+                _anvilWeaponView.ChangeSprite(null, false);
+                SO_WeaponData weaponData = _weaponDatabase.GetWeapon(e.Weapon.WeaponId);
+                Sprite sprite = await _weaponSpriteLoader.GetWeaponSprite(weaponData.Id.ToString(), cancellationToken);
                 if(sprite == null)
                 {
-                    Debug.Log($"[AnvilWeaponPresenter] {e.WeaponId}스프라이트가 없습니다.");
+                    Debug.Log($"[AnvilWeaponPresenter] {e.Weapon.WeaponId}스프라이트가 없습니다.");
                     return;
                 }
-                Debug.Log($"[AnvilWeaponPresenter] {e.WeaponId}스프라이트를 정상적으로 불러왔습니다.");
-                _anvilWeaponView.ChangeSprite(sprite);
-                SO_WeaponData weaponData = _weaponDatabase.GetWeapon(e.WeaponId);
+                Debug.Log($"[AnvilWeaponPresenter] {e.Weapon.WeaponId}스프라이트를 정상적으로 불러왔습니다.");
+                _anvilWeaponView.ChangeSprite(sprite, weaponData.hideOutline);
                 _anvilWeaponView.ChangeWeaponName(weaponData.weaponName);
             }
             catch(Exception exception)
             {
-                Debug.LogError($"[AnvilWeaponPresenter] {e.WeaponId}스프라이트를 불러오던중 오류가 발생했습니다. {exception.Message}");
+                Debug.LogError($"[AnvilWeaponPresenter] {e.Weapon.WeaponId}스프라이트를 불러오던중 오류가 발생했습니다. {exception.Message}");
             }
         }
         public void Dispose()

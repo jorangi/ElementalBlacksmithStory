@@ -15,13 +15,83 @@ MonoBehaviour:
   m_GroupName: WeaponData
   m_GUID: cb7ea8258ba39d94c92e541c9044b790
   m_SerializeEntries:
+  - m_GUID: 1bf942bd4d6e36f4493464390a434afc
+    m_Address: 10305
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 44959ed246aba514d9a8be195c8f69d0
+    m_Address: 10403
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 51445d209d1a17b4885585a2b12d110e
+    m_Address: 10404
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 52e82a95590a9c244ad0c81486a05c7b
+    m_Address: 10204
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 551a9265d279d304d9fb65524c6ee9a7
+    m_Address: 10304
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 598a17558dd4fd04bbe74c21bad2e00e
+    m_Address: 10104
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 59c2bc9e1b846cc4ba55410fc4dd6ca6
+    m_Address: 10201
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5d8e9015606e2c74fb65ef7ab4bbb55d
+    m_Address: 10303
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 5e93ec8cc4b75b44bb761d18be72e585
     m_Address: 10003
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 72320058ceffbbe42a73212d7f560e51
+    m_Address: 10402
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 75a99da856baf2741bf725db17b470fd
+    m_Address: 10102
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 843ae8f853ff5c84285f589eec3ef5d3
+    m_Address: 10205
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8d2b6fc61aadb3f47aa14cd0bb377f2e
+    m_Address: 10105
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 92809fa97f0f6c44a8a6a0bc3e5478b2
+    m_Address: 10202
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 9b67c08ecaf228a42ac4344ebee68548
     m_Address: 10001
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a4f11e60d4a978247bba7b4ce4a4f361
+    m_Address: 10103
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -32,6 +102,36 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: aa6c1f3ff80b4b14386feacc87168012
     m_Address: 10002
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ab83652214500dc4d9e5b264580b4187
+    m_Address: 10301
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b0e65a349c169f14ca454e8f060af411
+    m_Address: 10401
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b862574f05061794ea772f034af0a1bb
+    m_Address: 10203
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: bbff5a13be4860a4f99df06287bd01be
+    m_Address: 10101
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: cde46484cb0661045ad4266fb123cc9a
+    m_Address: 10405
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e43d1093584cf074f93ef2249afd2a61
+    m_Address: 10302
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -46,3 +146,4 @@ MonoBehaviour:
     m_Schemas:
     - {fileID: 11400000, guid: 48b37174e50f9a24992477a9e8498b20, type: 2}
     - {fileID: 11400000, guid: 3940eca1d1d88ba49a5ba30d9a6e65cd, type: 2}
+    - {fileID: 11400000, guid: ebf20cc30044b7e40a1b187b4b2d13c9, type: 2}

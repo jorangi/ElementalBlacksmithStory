@@ -11,7 +11,7 @@ namespace ElementalBlacksmithStory.Core
     {
         private readonly SO_WeaponDatabase _weaponDatabase;
         private readonly ISubscriber<ChangeWeaponEvent> _weaponChangeSubscriber;
-        public SO_WeaponData CurrentWeapon {get; private set;}
+        public Weapon CurrentWeapon {get; private set;}
         [Inject]
         public ForgeManager(
             SO_WeaponDatabase weaponDatabase, 
@@ -19,17 +19,22 @@ namespace ElementalBlacksmithStory.Core
         {
             _weaponDatabase = weaponDatabase;
             _weaponChangeSubscriber = weaponChangeSubscriber;
-            SetCurrentWeapon(10001);
             _weaponChangeSubscriber.Subscribe(e =>
             {
                 UnityEngine.Debug.Log($"[ForgeManager] ChangeWeaponEvent 수신됨 -> [Id]Sprite: [{e.WeaponId}]{_weaponDatabase.GetWeapon(e.WeaponId).weaponName}");
-                SetCurrentWeapon(e.WeaponId); 
+                SetCurrentWeapon(e.Weapon);
+                CurrentWeapon.SetData(_weaponDatabase.GetWeapon(e.WeaponId));
+                if(e.Weapon.Cost == 0)
+                    e.Weapon.PushCost(weaponDatabase.GetWeapon(e.WeaponId).cost);
             });
         }
         public void SetCurrentWeapon(uint weaponId)
         {
-            CurrentWeapon = _weaponDatabase.GetWeapon(weaponId);
-            
+            CurrentWeapon = new Weapon(_weaponDatabase.GetWeapon(weaponId));
+        }
+        public void SetCurrentWeapon(Weapon weapon)
+        {
+            CurrentWeapon = weapon;
         }
     }
 }

@@ -16,7 +16,10 @@ namespace ElementalBlacksmithStory.UI
         private readonly CompositeDisposable _disposables = new();
         
         [Inject]
-        public EnhanceChancePresenter(SO_WeaponDatabase weaponDatabase, EnhanceChanceView view, ISubscriber<ChangeWeaponEvent> changeWeaponSubscriber)
+        public EnhanceChancePresenter(
+            SO_WeaponDatabase weaponDatabase, 
+            EnhanceChanceView view,
+            ISubscriber<ChangeWeaponEvent> changeWeaponSubscriber)
         {
             _weaponDatabase = weaponDatabase;
             _view = view;
@@ -24,16 +27,18 @@ namespace ElementalBlacksmithStory.UI
             {
                 var weapon = weaponDatabase.GetWeapon(e.WeaponId);
                 var recipe = weapon?.recipes?.FirstOrDefault();
+                var cost = e.Weapon.Cost;
                 float chance = (recipe != null) ? recipe.recipeOutcome.chance : 0f;
-                _view.SetChance(chance);
+                _view.SetChance(chance, cost);
             }).AddTo(_disposables);
         }
         public void Start()
         {
             var weapon = _weaponDatabase.GetWeapon(10001);
             var recipe = weapon?.recipes?.FirstOrDefault();
+            var cost = weapon?.cost ?? 0;
             float chance = (recipe != null) ? recipe.recipeOutcome.chance : 0f;
-            _view.SetChance(chance);
+            _view.SetChance(chance, cost);
         }
         public void Dispose()
         {
