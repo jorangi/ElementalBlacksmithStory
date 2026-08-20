@@ -143,7 +143,7 @@ MonoBehaviour:
   m_text: 999+
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 618a753d52e1d344f8a09e7160a70da5, type: 2}
-  m_sharedMaterial: {fileID: -2234127979402205586, guid: 618a753d52e1d344f8a09e7160a70da5, type: 2}
+  m_sharedMaterial: {fileID: 2100000, guid: 130fbeb0bd1a7d7408f5f2acaca07bc9, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -268,7 +268,7 @@ MonoBehaviour:
   iconImage: {fileID: 4193735205902601275}
   button: {fileID: 3407390651850020734}
   countText: {fileID: 6918794120804141758}
-  checkedText: {fileID: 0}
+  checkedImage: {fileID: 3099147881917477959}
 --- !u!114 &3407390651850020734
 MonoBehaviour:
   m_ObjectHideFlags: 0

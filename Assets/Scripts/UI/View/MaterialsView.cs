@@ -6,6 +6,7 @@ using Cysharp.Threading.Tasks;
 using System.Threading;
 using R3.Triggers;
 using UnityEngine.EventSystems;
+using ElementalBlacksmithStory.Data;
 
 namespace ElementalBlacksmithStory.UI
 {
@@ -100,7 +101,8 @@ namespace ElementalBlacksmithStory.UI
                 await UniTask.Yield(PlayerLoopTiming.Update, token);
             }
             materialPanel.anchoredPosition = new(materialPanel.anchoredPosition.x, -1011);
-            _handleButton.enabled = true;
+            if(_handleButton != null)
+                _handleButton.enabled = true;
         }
         public void SyncYPosition(float y)
         {
@@ -122,7 +124,7 @@ namespace ElementalBlacksmithStory.UI
                 Destroy(child.gameObject);
             }
         }
-        public async UniTaskVoid DisplayMaterials(IReadOnlyDictionary<uint, uint> materials, MaterialSpriteLoader loader)
+        public async UniTaskVoid DisplayMaterials(IReadOnlyDictionary<SO_MaterialData, uint> materials, MaterialSpriteLoader loader)
         {
             ClearMaterials();
 
@@ -135,28 +137,27 @@ namespace ElementalBlacksmithStory.UI
 
             foreach (var kvp in materials)
             {
-                uint materialId = kvp.Key;
+                SO_MaterialData material = kvp.Key;
                 uint count = kvp.Value;
 
                 GameObject instance = Instantiate(materialItemPrefab, materialParent);
-                instance.name = kvp.Key.ToString();
+                instance.name = kvp.Key.Id.ToString();
                 if (instance.TryGetComponent<MaterialItemView>(out var itemView))
                 {
-                    itemView.SetData(materialId, count);
-                    Sprite sprite = await loader.GetMaterialSprite(materialId.ToString(), ct);
+                    itemView.SetData(material.Id, count);
+                    Sprite sprite = await loader.GetMaterialSprite(material.Id.ToString(), ct);
                     if(sprite == null)
                     {
-                        Debug.LogError($"[MaterialsView] 재료 스프라이트를 불러오지 못했습니다 - ID: {materialId}");
+                        Debug.LogError($"[MaterialsView] 재료 스프라이트를 불러오지 못했습니다 - ID: {material}");
                     }
                     else
                         itemView.SetIcon(sprite);
                     itemView.OnClickAsObservable()
-                        .Subscribe(_ => _onMaterialClickSubject.OnNext((materialId, count, itemView)))
+                        .Subscribe(_ => _onMaterialClickSubject.OnNext((material.Id, count, itemView)))
                         .AddTo(_itemDisposables);
                 }
             }
         }
-
         private void OnDestroy()
         {
             _itemDisposables.Dispose();

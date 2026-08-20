@@ -87,7 +87,7 @@ namespace ElementalBlacksmithStory.Core
 
             if (success)
             {
-                _soundPublisher.Publish(new PlaySoundEvent(40102));
+                _soundPublisher.Publish(new PlaySoundEvent(40104));
                 var handle = Addressables.LoadAssetAsync<SO_WeaponData>(result.resultWeapon.Id.ToString());
                 _currentWeaponData = await handle.ToUniTask(cancellationToken: cancellationToken);
 

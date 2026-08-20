@@ -180,3 +180,31 @@ Assets/
     다만 포토샵에서 누끼따고 분리하고 이런 작업이 생각보다 오래걸리긴 했다.
 
     이외에 폰트 변경? 머티리얼? 이런거 말고 바꾼게 있는지 기억이 잘 안나서 코드 히스토리를 보는게 나을 것 같다.
+
+## 2026-08-20
+
+    오늘 진행한 작업은 재료 UI 작업이다.
+    슬슬 `UniTask`와 `R3`는 꽤 익숙해졌다. `Addressables`는 `LoadAssetAsync`기반으로 비동기 가져오는 거나, 등록하는 것 등 잘 알겠는데
+    Antigravity 문제인지 코드 인텔리전스가 안떠서 간만에 공식 문서 보면서 작업하고 있다.
+    아무튼 그러다보니 Addressable에 대해서 하나하나 부딪혀가면서 하고있다. Antigravity 할당량을 다른 거 하느라 다 써버리는바람에 Gemini 웹버전에서 검색하면서 예시코드좀 얻고
+    오늘 한 작업 중에는 AI 사용이 많지는 않았던 것 같다.
+
+    - `tempInventory`를 `<uint, uint>`에서 `<SO_MaterialData, uint>`로 변경했다.
+      - `Amount`가 달린 재료 클래스를 따로 만들까 했는데, 난잡해지는게 보여서 안했다.
+      - 정적인 `Model`과 수동적인 `View` 모두를 다루는 `Presenter`로 깔끔하게 가는게 낫다고 여겼다.
+      - 다만, tempInventory는 지금 UI배치를 확인하기 위해 `MaterialPresenter`에 임시로 넣은 것이고, 실제로는 `ReactiveProperty`로 외부에 배치할 것이다.
+    - `SO_MaterialDatabase`를 만든 줄 알았는데, 없었길래 만들었다.
+      - 구조는 `SO_WeaponDatabase`랑 90프로 똑같다.
+      - 다른 점은 `DefaultGroup`이 아니므로 Group 세팅부터 해주었다는 거 말고 없다.
+    - `SubmitMaterialEvent`를 추가했다.
+      - 내용은 재료id와 재료 개수가 끝이다.
+      - 이벤트 페이로드 구조는 간결하게 하는 게 좋은 것 같다.
+    - `MaterialsPresenter`를 완성했다.
+      - `Start`에 각종 이벤트 연결을 했다.
+      - SubmitMaterialEvent를 연결했다.
+    - `MaterialsView`를 완성했다.
+      - `DisplayMaterials`함수에 `IReadOnlyDictionary<uint, uint>`를 받던걸 인벤토리에 맞게 `<SO_MaterialData, uint>`로 받도록 수정했다.
+    - `SelectMaterialAmountView`를 추가했다.
+      - 있겠지 싶긴 했지만 각종 UGUI의 이벤트 `AsObservable`버전이 있는게 신기했다.
+      - 스프라이트와 이름, 최대 수량만을 받는다.
+        - 간략하게 굳이 필요없는 정보를 주고 싶지 않았다.

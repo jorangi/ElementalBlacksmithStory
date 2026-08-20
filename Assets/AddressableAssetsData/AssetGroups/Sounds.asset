@@ -15,6 +15,18 @@ MonoBehaviour:
   m_GroupName: Sounds
   m_GUID: 3da7a7eed5080e54ebbdabcd30a25e06
   m_SerializeEntries:
+  - m_GUID: 2bd8bda2031d7fb4981865802cf6efcf
+    m_Address: 40105
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Sounds
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8cb0c76c66e72b742a48d5e5dade6cbb
+    m_Address: 40104
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Sounds
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 9c56fec78c79bf74794eb20f622491ad
     m_Address: 40103
     m_ReadOnly: 0

@@ -14,7 +14,57 @@ MonoBehaviour:
   m_EditorClassIdentifier: Unity.Addressables.Editor::UnityEditor.AddressableAssets.Settings.AddressableAssetGroup
   m_GroupName: MaterialData
   m_GUID: d865e6a230f982f44be7487b714bec7e
-  m_SerializeEntries: []
+  m_SerializeEntries:
+  - m_GUID: 1cf25c536c2c5a34887243be5733e406
+    m_Address: 30009
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 24646d92dda37f54ca3649fc4688efb6
+    m_Address: 30002
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4c08c899fec350b408a420dd1b03ca0a
+    m_Address: 30007
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 65cedb158e3735f4da5614357b20c12c
+    m_Address: 30008
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 891416fcee8b62c4bae08a507622028d
+    m_Address: 30005
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: bbbb6bb1526291144babdfb436e5022b
+    m_Address: 30004
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: bbbce5d84085f904e8c5196c1584aa98
+    m_Address: 30003
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e138cd3f6b257a848a7aa957e5985189
+    m_Address: 30001
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e3434966aace2554cadc9b257d46fc4a
+    m_Address: 30010
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e99862686ef7f6b4a995bb585ab5fe52
+    m_Address: 30006
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 0acc7c10e12a237469b3b620e2da354b, type: 2}
   m_SchemaSet:
