@@ -104,7 +104,7 @@ namespace ElementalBlacksmithStory.UI
                 .AddTo(_disposables);
             
             _selectMaterialAmountView.OnChangedAmountAsObservable()
-                .ThrottleFirst(TimeSpan.FromMilliseconds(200))
+                .ThrottleFirst(TimeSpan.FromMilliseconds(20))
                 .Subscribe(e =>
                 {
                     _selectedAmount.Value = Math.Clamp(e, 0, Math.Min(MAX_AMOUNT, _selectedItemView.MaterialCount));
@@ -112,7 +112,7 @@ namespace ElementalBlacksmithStory.UI
                 })
                 .AddTo(_disposables);
             _selectMaterialAmountView.OnIncreaseAsObservable()
-                .ThrottleFirst(TimeSpan.FromMilliseconds(200))
+                .ThrottleFirst(TimeSpan.FromMilliseconds(20))
                 .Subscribe(_ =>
                 {
                     _selectedAmount.Value = Math.Clamp(_selectedAmount.Value + 1, 0, Math.Min(MAX_AMOUNT, _selectedItemView.MaterialCount));
@@ -121,7 +121,7 @@ namespace ElementalBlacksmithStory.UI
                 .AddTo(_disposables);
             
             _selectMaterialAmountView.OnDecreaseAsObservable()
-                .ThrottleFirst(TimeSpan.FromMilliseconds(200))
+                .ThrottleFirst(TimeSpan.FromMilliseconds(20))
                 .Subscribe(_ =>
                 {
                     _selectedAmount.Value = Math.Clamp(_selectedAmount.Value - 1, 0, Math.Min(MAX_AMOUNT, _selectedItemView.MaterialCount));
