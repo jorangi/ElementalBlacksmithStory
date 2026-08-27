@@ -17,8 +17,11 @@ MonoBehaviour:
   ats: 1
   cost: 400
   recipes:
-  - {fileID: 11400000, guid: fd19131d766b806458c001a637c837be, type: 2}
   - {fileID: 11400000, guid: d09b4999f4435e443a31f8f6a2bdb2cb, type: 2}
+  - {fileID: 11400000, guid: fd19131d766b806458c001a637c837be, type: 2}
+  - {fileID: 11400000, guid: 4a0edd03569caa745bc2956401717927, type: 2}
+  - {fileID: 11400000, guid: 47d5bfb48776402488d000774518d77d, type: 2}
+  - {fileID: 11400000, guid: 0952e918eeb0ec34f92450d5ab6ac68f, type: 2}
   hideOutline: 0
   elementTypes: 
   statusEffects: []

@@ -10,6 +10,7 @@ using Cysharp.Threading.Tasks;
 using ElementalBlacksmithStory.Data;
 using ElementalBlacksmithStory.Events;
 using System.Threading;
+using ElementalBlacksmithStory.Inventory;
 
 namespace ElementalBlacksmithStory.UI
 {
@@ -24,15 +25,18 @@ namespace ElementalBlacksmithStory.UI
         public MaterialItemView _selectedItemView = null;
         public ReactiveProperty<uint> _selectedAmount = new();
         public uint _selectedMaterialId;
-        private readonly Dictionary<SO_MaterialData, uint> _temporaryInventory = new(); // 다른데로 옮겨야댐
         private readonly IPublisher<SubmitMaterialEvent> _submitMaterialPublisher;
+        private readonly IPublisher<EnhanceButtonPositionEvent> _positionPublisher;
+        private readonly MaterialInventory _inventory;
         [Inject]
         public MaterialsPresenter(
             MaterialsView view,
             SelectMaterialAmountView selectMaterialAmountView,
             SO_MaterialDatabase materialDatabase,
             MaterialSpriteLoader materialSpriteLoader,
-            IPublisher<SubmitMaterialEvent> submitMaterialPublisher
+            IPublisher<SubmitMaterialEvent> submitMaterialPublisher,
+            IPublisher<EnhanceButtonPositionEvent> positionPublisher,
+            MaterialInventory inventory
             )
         {
             _materialSpriteLoader = materialSpriteLoader;
@@ -40,20 +44,14 @@ namespace ElementalBlacksmithStory.UI
             _view = view;
             _selectMaterialAmountView = selectMaterialAmountView;
             _submitMaterialPublisher = submitMaterialPublisher;
+            _positionPublisher = positionPublisher;
+            _inventory = inventory;
 
         }
         float dragY = 0;
         bool isHidingTriggered = false;
         public void Start()
         {
-            _temporaryInventory.TryAdd(_materialDatabase.GetMaterial(30001), (uint)UnityEngine.Random.Range(1, 100));
-            _temporaryInventory.TryAdd(_materialDatabase.GetMaterial(30002), (uint)UnityEngine.Random.Range(1, 100));
-            _temporaryInventory.TryAdd(_materialDatabase.GetMaterial(30003), (uint)UnityEngine.Random.Range(1, 100));
-            _temporaryInventory.TryAdd(_materialDatabase.GetMaterial(30004), (uint)UnityEngine.Random.Range(1, 100));
-            _temporaryInventory.TryAdd(_materialDatabase.GetMaterial(30005), (uint)UnityEngine.Random.Range(1, 100));
-            _temporaryInventory.TryAdd(_materialDatabase.GetMaterial(30006), (uint)UnityEngine.Random.Range(1, 100));
-            _temporaryInventory.TryAdd(_materialDatabase.GetMaterial(30007), 1);
-
             RefreshMaterialsView();
 
             _view.OnMaterialClickAsObservable()
@@ -69,6 +67,7 @@ namespace ElementalBlacksmithStory.UI
                 .Subscribe(_ =>
                 {
                     _view.ShowingMaterialsAnimation().Forget();
+                    _positionPublisher.Publish(new EnhanceButtonPositionEvent(0f));
                 })
                 .AddTo(_disposables);
 
@@ -83,10 +82,12 @@ namespace ElementalBlacksmithStory.UI
                         isHidingTriggered = true;
                         _view.DisableHandle();
                         _view.HidingMaterialsAnimation().Forget();
+                        _positionPublisher.Publish(new EnhanceButtonPositionEvent(-1011f));
                         dragY = 0f;
                         return;
                     }
                     _view.SyncYPosition(dragY);
+                    _positionPublisher.Publish(new EnhanceButtonPositionEvent(dragY));
                 })
                 .AddTo(_disposables);
             
@@ -100,6 +101,7 @@ namespace ElementalBlacksmithStory.UI
                         return;
                     }
                     _view.ShowingMaterialsAnimation().Forget();
+                    _positionPublisher.Publish(new EnhanceButtonPositionEvent(0f));
                 })
                 .AddTo(_disposables);
             
@@ -154,7 +156,7 @@ namespace ElementalBlacksmithStory.UI
 
         public void RefreshMaterialsView()
         {
-            _view.DisplayMaterials(_temporaryInventory,_materialSpriteLoader).Forget();
+            _view.DisplayMaterials(_inventory.GetAll() ,_materialSpriteLoader).Forget();
         }
         
         private CancellationTokenSource _cts = new();
@@ -168,7 +170,7 @@ namespace ElementalBlacksmithStory.UI
             if(itemView.IsSelected)
             {
                 itemView.UnCheck();
-                itemView.SetData(materialId, _temporaryInventory[_materialDatabase.GetMaterial(materialId)]);
+                itemView.SetData(materialId, _inventory.GetCount(_materialDatabase.GetMaterial(materialId)));
                 return;
             }
             Debug.Log($"[MaterialsPresenter] 재료 클릭 수신 - ID: {materialId}, 보유 수량: {count}");
@@ -183,7 +185,7 @@ namespace ElementalBlacksmithStory.UI
                 Sprite sprite = await _materialSpriteLoader.GetMaterialSprite(_selectedMaterialId.ToString(), ct);
                 SO_MaterialData materialData = _materialDatabase.GetMaterial(_selectedMaterialId);
                 _selectedItemView = itemView;
-                _selectMaterialAmountView.SetData(sprite, materialData.materialName, _temporaryInventory[materialData]);
+                _selectMaterialAmountView.SetData(sprite, materialData.materialName, _inventory.GetCount(materialData));
             }
         }        public void Dispose()
         {

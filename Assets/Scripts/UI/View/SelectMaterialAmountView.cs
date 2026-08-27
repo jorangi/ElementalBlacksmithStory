@@ -39,6 +39,29 @@ namespace ElementalBlacksmithStory.UI
             }
             return countText.onValueChanged.AsObservable().Select(text => uint.TryParse(text, out uint amount) ? amount : 0);
         }
+        private HoldRepeatButton _increaseHoldButton;
+        private HoldRepeatButton _decreaseHoldButton;
+
+        private void Awake()
+        {
+            EnsureHoldButtons();
+        }
+
+        private void EnsureHoldButtons()
+        {
+            if (increaseButton != null && _increaseHoldButton == null)
+            {
+                _increaseHoldButton = increaseButton.GetComponent<HoldRepeatButton>() 
+                                      ?? increaseButton.gameObject.AddComponent<HoldRepeatButton>();
+            }
+
+            if (decreseButton != null && _decreaseHoldButton == null)
+            {
+                _decreaseHoldButton = decreseButton.GetComponent<HoldRepeatButton>() 
+                                      ?? decreseButton.gameObject.AddComponent<HoldRepeatButton>();
+            }
+        }
+
         public Observable<Unit> OnIncreaseAsObservable()
         {
             if (increaseButton == null)
@@ -46,7 +69,8 @@ namespace ElementalBlacksmithStory.UI
                 Debug.LogError("[SelectMaterialAmountView] increaseButton이 없습니다.");
                 return Observable.Empty<Unit>();
             }
-            return increaseButton.OnClickAsObservable();
+            EnsureHoldButtons();
+            return _increaseHoldButton != null ? _increaseHoldButton.OnTickAsObservable() : increaseButton.OnClickAsObservable();
         }
         public Observable<Unit> OnDecreaseAsObservable()
         {
@@ -55,7 +79,8 @@ namespace ElementalBlacksmithStory.UI
                 Debug.LogError("[SelectMaterialAmountView] decreseButton이 없습니다.");
                 return Observable.Empty<Unit>();
             }
-            return decreseButton.OnClickAsObservable();
+            EnsureHoldButtons();
+            return _decreaseHoldButton != null ? _decreaseHoldButton.OnTickAsObservable() : decreseButton.OnClickAsObservable();
         }
         public Observable<Unit> OnSubmitAsObservable()
         {

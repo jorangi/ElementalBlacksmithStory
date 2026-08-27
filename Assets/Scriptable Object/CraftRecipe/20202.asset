@@ -13,9 +13,12 @@ MonoBehaviour:
   m_Name: 20202
   m_EditorClassIdentifier: Assembly-CSharp::ElementalBlacksmithStory.Data.SO_CraftRecipe
   recipeName: "\uD30C\uB797\uAC8C \uC5BC\uC740 \uAC80 \uC81C\uC791\uBC95"
-  recipeMaterials: []
+  recipeMaterials:
+  - material: {fileID: 11400000, guid: bbbce5d84085f904e8c5196c1584aa98, type: 2}
+    count: 3
+  - material: {fileID: 11400000, guid: 4c08c899fec350b408a420dd1b03ca0a, type: 2}
+    count: 1
   recipeOutcome:
     chance: 0.73
     resultWeapon: {fileID: 11400000, guid: 92809fa97f0f6c44a8a6a0bc3e5478b2, type: 2}
     defaultFailWeapon: {fileID: 11400000, guid: 59c2bc9e1b846cc4ba55410fc4dd6ca6, type: 2}
-    price: 1800

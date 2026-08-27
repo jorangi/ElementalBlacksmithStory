@@ -17,14 +17,33 @@ namespace ElementalBlacksmithStory.UI
         private readonly IAsyncPublisher<EnhanceRequestEvent> _enhanceRequestPublisher;
         private readonly CompositeDisposable _disposables = new();
         private readonly ForgeManager _forgeManager;
+        [Inject]
         public EnhanceButtonPresenter(
             EnhanceButtonView view, 
             IAsyncPublisher<EnhanceRequestEvent> enhanceRequestPublisher,
-            ForgeManager forgeManager)
+            ForgeManager forgeManager,
+            ISubscriber<EnhanceButtonPositionEvent> buttonPositionSubscriber
+            )
         {
             _view = view;
             _enhanceRequestPublisher = enhanceRequestPublisher;
             _forgeManager = forgeManager;
+
+            buttonPositionSubscriber.Subscribe(e =>
+            {
+                if (e.positionY <= -1000f)
+                {
+                    _view.HidingButtonAnimation().Forget();
+                }
+                else if (Mathf.Approximately(e.positionY, 0f))
+                {
+                    _view.ShowingButtonAnimation().Forget();
+                }
+                else
+                {
+                    _view.SyncYPosition(295f + e.positionY);
+                }
+            }).AddTo(_disposables);
         }
         public void Start()
         {

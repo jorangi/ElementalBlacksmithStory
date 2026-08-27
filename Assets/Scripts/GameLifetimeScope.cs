@@ -5,6 +5,7 @@ using MessagePipe;
 using ElementalBlacksmithStory.Events;
 using ElementalBlacksmithStory.UI;
 using ElementalBlacksmithStory.Data;
+using ElementalBlacksmithStory.Inventory;
 
 namespace ElementalBlacksmithStory.Core
 {
@@ -20,12 +21,16 @@ namespace ElementalBlacksmithStory.Core
             materialDatabase.Init();
             builder.RegisterInstance(weaponDatabase);
             builder.RegisterInstance(materialDatabase);
+            builder.Register<EquipmentInventory>(Lifetime.Singleton);
+            builder.Register<MaterialInventory>(Lifetime.Singleton);
+            builder.RegisterEntryPoint<GameInitializer>();
             builder.RegisterComponentInHierarchy<WeaponSpriteLoader>();
             builder.RegisterComponentInHierarchy<AudioClipLoader>();
             builder.Register<ForgeManager>(Lifetime.Singleton);
             builder.RegisterEntryPoint<MoneyPresenter>();
             builder.RegisterEntryPoint<QuickSellPresenter>();
             builder.RegisterComponentInHierarchy<MaterialSpriteLoader>();
+            builder.RegisterComponentInHierarchy<WeaponTreeBuilder>();
             builder.RegisterComponentInHierarchy<MoneyView>();
             builder.RegisterComponentInHierarchy<QuickSellView>();
             builder.RegisterComponentInHierarchy<AnvilWeaponView>();
@@ -43,6 +48,7 @@ namespace ElementalBlacksmithStory.Core
             builder.RegisterMessageBroker<ChangeWeaponEvent>(options);
             builder.RegisterMessageBroker<ChangeMoneyEvent>(options);
             builder.RegisterMessageBroker<SubmitMaterialEvent>(options);
+            builder.RegisterMessageBroker<EnhanceButtonPositionEvent>(options);
         }
     }
 }

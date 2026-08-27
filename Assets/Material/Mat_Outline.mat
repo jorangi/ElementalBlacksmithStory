@@ -41,7 +41,14 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
+    - _ColorMask: 15
     - _Pre_Step: 0.8
+    - _Stencil: 0
+    - _StencilComp: 0
+    - _StencilOp: 0
+    - _StencilReadMask: 255
+    - _StencilWriteMask: 0
+    - _Stencil_Write_Mask: 0
     - _Thinkness: 0.005
     m_Colors:
     - White: {r: 1, g: 1, b: 1, a: 1}

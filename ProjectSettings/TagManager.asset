@@ -47,6 +47,9 @@ TagManager:
   - name: Object
     uniqueID: 4113822573
     locked: 0
+  - name: MainUI
+    uniqueID: 3698560665
+    locked: 0
   m_RenderingLayers:
   - Default
   m_MigratedRenderPipelines: []
