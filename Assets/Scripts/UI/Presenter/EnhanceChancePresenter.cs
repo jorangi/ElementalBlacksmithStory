@@ -16,23 +16,30 @@ namespace ElementalBlacksmithStory.UI
         private readonly SO_WeaponDatabase _weaponDatabase;
         private readonly EnhanceChanceView _view;
         private readonly CompositeDisposable _disposables = new();
+        private float _currentChance = 0f;
+        private ulong _currentCost = 0;
         
         [Inject]
         public EnhanceChancePresenter(
             SO_WeaponDatabase weaponDatabase, 
             EnhanceChanceView view,
             ISubscriber<ChangeWeaponEvent> changeWeaponSubscriber,
+            ISubscriber<NextRecipeChangedEvent> nextRecipeSubscriber,
             ISubscriber<EnhanceButtonPositionEvent> positionSubscriber)
         {
             _weaponDatabase = weaponDatabase;
             _view = view;
+
             changeWeaponSubscriber.Subscribe(e =>
             {
-                var weapon = weaponDatabase.GetWeapon(e.WeaponId);
-                var recipe = weapon?.recipes?.FirstOrDefault();
-                var cost = e.Weapon.Cost;
-                float chance = (recipe != null) ? recipe.recipeOutcome.chance : 0f;
-                _view.SetChance(chance, cost);
+                _currentCost = e.Weapon.Cost;
+                _view.SetChance(_currentChance, _currentCost);
+            }).AddTo(_disposables);
+
+            nextRecipeSubscriber.Subscribe(e =>
+            {
+                _currentChance = (e.Recipe != null) ? e.Recipe.recipeOutcome.chance : 0f;
+                _view.SetChance(_currentChance, _currentCost);
             }).AddTo(_disposables);
 
             positionSubscriber.Subscribe(e =>
@@ -51,14 +58,16 @@ namespace ElementalBlacksmithStory.UI
                 }
             }).AddTo(_disposables);
         }
+
         public void Start()
         {
             var weapon = _weaponDatabase.GetWeapon(10001);
             var recipe = weapon?.recipes?.FirstOrDefault();
-            var cost = weapon?.cost ?? 0;
-            float chance = (recipe != null) ? recipe.recipeOutcome.chance : 0f;
-            _view.SetChance(chance, cost);
+            _currentCost = weapon?.cost ?? 0;
+            _currentChance = (recipe != null) ? recipe.recipeOutcome.chance : 0f;
+            _view.SetChance(_currentChance, _currentCost);
         }
+
         public void Dispose()
         {
             _disposables.Dispose();

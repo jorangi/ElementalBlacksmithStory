@@ -50,6 +50,7 @@ namespace ElementalBlacksmithStory.Core
             builder.RegisterMessageBroker<ChangeMoneyEvent>(options);
             builder.RegisterMessageBroker<SubmitMaterialEvent>(options);
             builder.RegisterMessageBroker<EnhanceButtonPositionEvent>(options);
+            builder.RegisterMessageBroker<NextRecipeChangedEvent>(options);
         }
     }
 }

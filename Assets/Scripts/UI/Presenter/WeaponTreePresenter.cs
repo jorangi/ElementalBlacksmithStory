@@ -31,13 +31,31 @@ namespace ElementalBlacksmithStory.UI
             WeaponTreeBuilder treeBuilder,
             WeaponSpriteLoader spriteLoader,
             SO_WeaponDatabase weaponDatabase,
-            IPublisher<ChangeRecipeFlagEvent> recipeFlagPublisher)
+            IPublisher<ChangeRecipeFlagEvent> recipeFlagPublisher,
+            ISubscriber<EnhanceButtonPositionEvent> positionSubscriber)
         {
             _forgeManager = forgeManager;
             _treeBuilder = treeBuilder;
             _spriteLoader = spriteLoader;
             _weaponDatabase = weaponDatabase;
             _recipeFlagPublisher = recipeFlagPublisher;
+
+            positionSubscriber.Subscribe(e =>
+            {
+                if (e.positionY <= -1000f)
+                {
+                    _treeBuilder.HidingButtonAnimation().Forget();
+                }
+                else if (Mathf.Approximately(e.positionY, 0f))
+                {
+                    _treeBuilder.ShowingButtonAnimation().Forget();
+                }
+                else
+                {
+                    _treeBuilder.SyncButtonYPosition(e.positionY);
+                }
+            }).AddTo(_disposables);
+
             _treeBuilder.OnChangeRecipeFlagEventAsObservable.Subscribe(e =>
             {
                 if(path != null)
@@ -64,6 +82,8 @@ namespace ElementalBlacksmithStory.UI
                     {
                         branch.SetHighlight(true);
                     }
+                    _recipeFlagPublisher.Publish(new ChangeRecipeFlagEvent { _recipeId = e._recipeId });
+                    
                 }
                 _nodes[path[^1]].SetDestinationNode();
             }).AddTo(_disposables);

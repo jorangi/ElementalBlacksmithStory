@@ -28,6 +28,9 @@ namespace ElementalBlacksmithStory.UI
         private readonly IPublisher<SubmitMaterialEvent> _submitMaterialPublisher;
         private readonly IPublisher<EnhanceButtonPositionEvent> _positionPublisher;
         private readonly MaterialInventory _inventory;
+        private readonly ISubscriber<NextRecipeChangedEvent> _nextRecipeSubscriber;
+        private SO_CraftRecipe _currentNextRecipe;
+
         [Inject]
         public MaterialsPresenter(
             MaterialsView view,
@@ -36,7 +39,8 @@ namespace ElementalBlacksmithStory.UI
             MaterialSpriteLoader materialSpriteLoader,
             IPublisher<SubmitMaterialEvent> submitMaterialPublisher,
             IPublisher<EnhanceButtonPositionEvent> positionPublisher,
-            MaterialInventory inventory
+            MaterialInventory inventory,
+            ISubscriber<NextRecipeChangedEvent> nextRecipeSubscriber
             )
         {
             _materialSpriteLoader = materialSpriteLoader;
@@ -46,13 +50,15 @@ namespace ElementalBlacksmithStory.UI
             _submitMaterialPublisher = submitMaterialPublisher;
             _positionPublisher = positionPublisher;
             _inventory = inventory;
-
+            _nextRecipeSubscriber = nextRecipeSubscriber;
         }
         float dragY = 0;
         bool isHidingTriggered = false;
         public void Start()
         {
             RefreshMaterialsView();
+
+            _nextRecipeSubscriber.Subscribe(OnNextRecipeChanged).AddTo(_disposables);
 
             _view.OnMaterialClickAsObservable()
                 .ThrottleFirst(TimeSpan.FromMilliseconds(200))
@@ -187,7 +193,53 @@ namespace ElementalBlacksmithStory.UI
                 _selectedItemView = itemView;
                 _selectMaterialAmountView.SetData(sprite, materialData.materialName, _inventory.GetCount(materialData));
             }
-        }        public void Dispose()
+        }
+        private void OnNextRecipeChanged(NextRecipeChangedEvent e)
+        {
+            _currentNextRecipe = e.Recipe;
+
+            foreach (var itemView in _view.GetAllItemViews())
+            {
+                if (itemView != null)
+                {
+                    itemView.UnCheck();
+                    var matData = _materialDatabase.GetMaterial(itemView.MaterialId);
+                    if (matData != null)
+                    {
+                        itemView.SetData(itemView.MaterialId, _inventory.GetCount(matData));
+                    }
+                    _submitMaterialPublisher.Publish(new SubmitMaterialEvent(itemView.MaterialId, 0));
+                }
+            }
+
+            if (_currentNextRecipe == null || _currentNextRecipe.recipeMaterials == null)
+            {
+                return;
+            }
+
+            foreach (var recipeMat in _currentNextRecipe.recipeMaterials)
+            {
+                if (recipeMat.material == null) continue;
+
+                uint matId = recipeMat.material.Id;
+                uint neededCount = recipeMat.count;
+                uint ownedCount = _inventory.GetCount(recipeMat.material);
+
+                if (ownedCount > 0)
+                {
+                    uint selectCount = Math.Min(neededCount, ownedCount);
+                    var itemView = _view.GetItemView(matId);
+                    if (itemView != null)
+                    {
+                        itemView.Check();
+                        itemView.SetAmount(selectCount);
+                    }
+                    _submitMaterialPublisher.Publish(new SubmitMaterialEvent(matId, selectCount));
+                }
+            }
+        }
+
+        public void Dispose()
         {
             _disposables.Dispose();
         }

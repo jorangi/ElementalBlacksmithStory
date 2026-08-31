@@ -714,10 +714,14 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
+  normalColor: {r: 1, g: 1, b: 1, a: 1}
+  routeColor: {r: 1, g: 0.6470588, b: 0, a: 1}
+  branchSprite: {fileID: 0}
   startNode: {fileID: 4848869265309538424}
   endNode: {fileID: 2149584442221786155}
   thickness: 10
   segments: 15
+  isVerticalTexture: 1
   uvTilingFactor: 0.02
   curveDirection: {x: 0, y: 1}
 --- !u!1 &665855818595832572
@@ -889,6 +893,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ElementalBlacksmithStory.UI.WeaponNodeUI
   iconImage: {fileID: 6782680470753556656}
+  highlight_Opened: {fileID: 0}
+  highlight_Destination: {fileID: 0}
+  highlight_Route: {fileID: 0}
   nameText: {fileID: 5016755818207375688}
   button: {fileID: 0}
 --- !u!114 &5091720872403904117
@@ -1014,10 +1021,14 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
+  normalColor: {r: 1, g: 1, b: 1, a: 1}
+  routeColor: {r: 1, g: 0.6470588, b: 0, a: 1}
+  branchSprite: {fileID: 0}
   startNode: {fileID: 8600983257553313647}
   endNode: {fileID: 4680756970686308866}
   thickness: 10
   segments: 15
+  isVerticalTexture: 1
   uvTilingFactor: 0.02
   curveDirection: {x: 0, y: 1}
 --- !u!1 &718242175759852590
@@ -1085,10 +1096,14 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
+  normalColor: {r: 1, g: 1, b: 1, a: 1}
+  routeColor: {r: 1, g: 0.6470588, b: 0, a: 1}
+  branchSprite: {fileID: 0}
   startNode: {fileID: 5132820548405338958}
   endNode: {fileID: 7972715343339092045}
   thickness: 10
   segments: 15
+  isVerticalTexture: 1
   uvTilingFactor: 0.02
   curveDirection: {x: 0, y: 1}
 --- !u!1 &763060661749087503
@@ -1852,10 +1867,14 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
+  normalColor: {r: 1, g: 1, b: 1, a: 1}
+  routeColor: {r: 1, g: 0.6470588, b: 0, a: 1}
+  branchSprite: {fileID: 0}
   startNode: {fileID: 4062825688675954014}
   endNode: {fileID: 6722603449244190656}
   thickness: 10
   segments: 15
+  isVerticalTexture: 1
   uvTilingFactor: 0.02
   curveDirection: {x: 0, y: 1}
 --- !u!1 &1194310356169369103
@@ -1952,6 +1971,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ElementalBlacksmithStory.UI.WeaponNodeUI
   iconImage: {fileID: 7029977897193028042}
+  highlight_Opened: {fileID: 0}
+  highlight_Destination: {fileID: 0}
+  highlight_Route: {fileID: 0}
   nameText: {fileID: 7361151623410346762}
   button: {fileID: 0}
 --- !u!114 &3953180167332670610
@@ -2259,10 +2281,14 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
+  normalColor: {r: 1, g: 1, b: 1, a: 1}
+  routeColor: {r: 1, g: 0.6470588, b: 0, a: 1}
+  branchSprite: {fileID: 0}
   startNode: {fileID: 2162352618508370680}
   endNode: {fileID: 6583860632285812345}
   thickness: 10
   segments: 15
+  isVerticalTexture: 1
   uvTilingFactor: 0.02
   curveDirection: {x: 0, y: 1}
 --- !u!1 &1311367328538024190
@@ -2359,6 +2385,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ElementalBlacksmithStory.UI.WeaponNodeUI
   iconImage: {fileID: 4343508421838899553}
+  highlight_Opened: {fileID: 0}
+  highlight_Destination: {fileID: 0}
+  highlight_Route: {fileID: 0}
   nameText: {fileID: 8810609567211933496}
   button: {fileID: 0}
 --- !u!114 &3023537298119343225
@@ -2587,6 +2616,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ElementalBlacksmithStory.UI.WeaponNodeUI
   iconImage: {fileID: 9163050401250664882}
+  highlight_Opened: {fileID: 0}
+  highlight_Destination: {fileID: 0}
+  highlight_Route: {fileID: 0}
   nameText: {fileID: 2493369018936263869}
   button: {fileID: 0}
 --- !u!114 &4046849907136511050
@@ -2787,10 +2819,14 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
+  normalColor: {r: 1, g: 1, b: 1, a: 1}
+  routeColor: {r: 1, g: 0.6470588, b: 0, a: 1}
+  branchSprite: {fileID: 0}
   startNode: {fileID: 1928207489619055764}
   endNode: {fileID: 4578215298053547208}
   thickness: 10
   segments: 15
+  isVerticalTexture: 1
   uvTilingFactor: 0.02
   curveDirection: {x: 0, y: 1}
 --- !u!1 &1674302513946807622
@@ -2887,6 +2923,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ElementalBlacksmithStory.UI.WeaponNodeUI
   iconImage: {fileID: 1196234660062814431}
+  highlight_Opened: {fileID: 0}
+  highlight_Destination: {fileID: 0}
+  highlight_Route: {fileID: 0}
   nameText: {fileID: 7200682496307704191}
   button: {fileID: 0}
 --- !u!114 &3190521533004907553
@@ -3040,6 +3079,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ElementalBlacksmithStory.UI.WeaponNodeUI
   iconImage: {fileID: 6199342965323713078}
+  highlight_Opened: {fileID: 0}
+  highlight_Destination: {fileID: 0}
+  highlight_Route: {fileID: 0}
   nameText: {fileID: 5107569267130692687}
   button: {fileID: 0}
 --- !u!114 &6187275336032800981
@@ -3165,10 +3207,14 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
+  normalColor: {r: 1, g: 1, b: 1, a: 1}
+  routeColor: {r: 1, g: 0.6470588, b: 0, a: 1}
+  branchSprite: {fileID: 0}
   startNode: {fileID: 7726666280248705165}
   endNode: {fileID: 6127786078646238882}
   thickness: 10
   segments: 15
+  isVerticalTexture: 1
   uvTilingFactor: 0.02
   curveDirection: {x: 0, y: 1}
 --- !u!1 &1825696702584950082
@@ -4091,7 +4137,6 @@ GameObject:
   - component: {fileID: 1278220773552030603}
   - component: {fileID: 8459847256089136218}
   - component: {fileID: 2394821505529169551}
-  - component: {fileID: 6913873825956718437}
   m_Layer: 5
   m_Name: WeaponTreePanel
   m_TagString: Untagged
@@ -4112,6 +4157,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6905408193972374266}
+  - {fileID: 2226175056819425502}
   m_Father: {fileID: 149592564848266062}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -4157,28 +4203,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &6913873825956718437
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2347710025253571285}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7c95f3b4a715c3c4d96fc6a1270ea01f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ElementalBlacksmithStory.UI.WeaponTreeBuilder
-  testRootWeapon: {fileID: 11400000, guid: 9b67c08ecaf228a42ac4344ebee68548, type: 2}
-  scrollRect: {fileID: 4726214723956829470}
-  contentRect: {fileID: 7679520991818747140}
-  branchContainer: {fileID: 1252813671238412128}
-  nodeContainer: {fileID: 8962802799971742640}
-  nodePrefab: {fileID: 23867309551586831, guid: 77e71ecaac9144448a7066c667531ebc, type: 3}
-  branchPrefab: {fileID: 1234753452412867397, guid: 8fdad771518920045a471b4645864b34, type: 3}
-  nodeSpacingX: 800
-  nodeSpacingY: 800
-  padding: {x: 400, y: 400}
 --- !u!1 &2374923638101197627
 GameObject:
   m_ObjectHideFlags: 0
@@ -4456,10 +4480,14 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
+  normalColor: {r: 1, g: 1, b: 1, a: 1}
+  routeColor: {r: 1, g: 0.6470588, b: 0, a: 1}
+  branchSprite: {fileID: 0}
   startNode: {fileID: 7627895134304000742}
   endNode: {fileID: 7800886141421619747}
   thickness: 10
   segments: 15
+  isVerticalTexture: 1
   uvTilingFactor: 0.02
   curveDirection: {x: 0, y: 1}
 --- !u!1 &2586465883513496731
@@ -4527,10 +4555,14 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
+  normalColor: {r: 1, g: 1, b: 1, a: 1}
+  routeColor: {r: 1, g: 0.6470588, b: 0, a: 1}
+  branchSprite: {fileID: 0}
   startNode: {fileID: 1879478539213196617}
   endNode: {fileID: 8679333379396147316}
   thickness: 10
   segments: 15
+  isVerticalTexture: 1
   uvTilingFactor: 0.02
   curveDirection: {x: 0, y: 1}
 --- !u!1 &2788552606633476377
@@ -4898,10 +4930,14 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
+  normalColor: {r: 1, g: 1, b: 1, a: 1}
+  routeColor: {r: 1, g: 0.6470588, b: 0, a: 1}
+  branchSprite: {fileID: 0}
   startNode: {fileID: 7726666280248705165}
   endNode: {fileID: 5790150431959968951}
   thickness: 10
   segments: 15
+  isVerticalTexture: 1
   uvTilingFactor: 0.02
   curveDirection: {x: 0, y: 1}
 --- !u!1 &2972140859447546764
@@ -5289,10 +5325,14 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
+  normalColor: {r: 1, g: 1, b: 1, a: 1}
+  routeColor: {r: 1, g: 0.6470588, b: 0, a: 1}
+  branchSprite: {fileID: 0}
   startNode: {fileID: 4578215298053547208}
   endNode: {fileID: 7627895134304000742}
   thickness: 10
   segments: 15
+  isVerticalTexture: 1
   uvTilingFactor: 0.02
   curveDirection: {x: 0, y: 1}
 --- !u!1 &3124938622593461531
@@ -5498,10 +5538,14 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
+  normalColor: {r: 1, g: 1, b: 1, a: 1}
+  routeColor: {r: 1, g: 0.6470588, b: 0, a: 1}
+  branchSprite: {fileID: 0}
   startNode: {fileID: 2149584442221786155}
   endNode: {fileID: 1879478539213196617}
   thickness: 10
   segments: 15
+  isVerticalTexture: 1
   uvTilingFactor: 0.02
   curveDirection: {x: 0, y: 1}
 --- !u!1 &3172282949378490406
@@ -5673,6 +5717,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ElementalBlacksmithStory.UI.WeaponNodeUI
   iconImage: {fileID: 7004012390921604863}
+  highlight_Opened: {fileID: 0}
+  highlight_Destination: {fileID: 0}
+  highlight_Route: {fileID: 0}
   nameText: {fileID: 8470828017711020844}
   button: {fileID: 0}
 --- !u!114 &1405484909904825197
@@ -5901,6 +5948,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ElementalBlacksmithStory.UI.WeaponNodeUI
   iconImage: {fileID: 4942296031927199002}
+  highlight_Opened: {fileID: 0}
+  highlight_Destination: {fileID: 0}
+  highlight_Route: {fileID: 0}
   nameText: {fileID: 604603834895355133}
   button: {fileID: 0}
 --- !u!114 &4933015578400539945
@@ -6191,6 +6241,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ElementalBlacksmithStory.UI.WeaponNodeUI
   iconImage: {fileID: 6687297260151782195}
+  highlight_Opened: {fileID: 0}
+  highlight_Destination: {fileID: 0}
+  highlight_Route: {fileID: 0}
   nameText: {fileID: 1007692677897662245}
   button: {fileID: 0}
 --- !u!114 &1968188398513474321
@@ -6316,10 +6369,14 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
+  normalColor: {r: 1, g: 1, b: 1, a: 1}
+  routeColor: {r: 1, g: 0.6470588, b: 0, a: 1}
+  branchSprite: {fileID: 0}
   startNode: {fileID: 7776908044567134851}
   endNode: {fileID: 4062825688675954014}
   thickness: 10
   segments: 15
+  isVerticalTexture: 1
   uvTilingFactor: 0.02
   curveDirection: {x: 0, y: 1}
 --- !u!1 &3439821930322331430
@@ -6749,10 +6806,14 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
+  normalColor: {r: 1, g: 1, b: 1, a: 1}
+  routeColor: {r: 1, g: 0.6470588, b: 0, a: 1}
+  branchSprite: {fileID: 0}
   startNode: {fileID: 7972715343339092045}
   endNode: {fileID: 6481693070395612604}
   thickness: 10
   segments: 15
+  isVerticalTexture: 1
   uvTilingFactor: 0.02
   curveDirection: {x: 0, y: 1}
 --- !u!1 &3832697089682193805
@@ -7040,10 +7101,14 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
+  normalColor: {r: 1, g: 1, b: 1, a: 1}
+  routeColor: {r: 1, g: 0.6470588, b: 0, a: 1}
+  branchSprite: {fileID: 0}
   startNode: {fileID: 7726666280248705165}
   endNode: {fileID: 8600983257553313647}
   thickness: 10
   segments: 15
+  isVerticalTexture: 1
   uvTilingFactor: 0.02
   curveDirection: {x: 0, y: 1}
 --- !u!1 &3899461281486133812
@@ -7352,6 +7417,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ElementalBlacksmithStory.UI.WeaponNodeUI
   iconImage: {fileID: 5868879417727990238}
+  highlight_Opened: {fileID: 0}
+  highlight_Destination: {fileID: 0}
+  highlight_Route: {fileID: 0}
   nameText: {fileID: 1292607368052567913}
   button: {fileID: 0}
 --- !u!114 &6185071166390965209
@@ -7839,6 +7907,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ElementalBlacksmithStory.UI.WeaponNodeUI
   iconImage: {fileID: 8501650434175077306}
+  highlight_Opened: {fileID: 0}
+  highlight_Destination: {fileID: 0}
+  highlight_Route: {fileID: 0}
   nameText: {fileID: 3550135548644602820}
   button: {fileID: 0}
 --- !u!114 &8597883546383467523
@@ -7963,10 +8034,14 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
+  normalColor: {r: 1, g: 1, b: 1, a: 1}
+  routeColor: {r: 1, g: 0.6470588, b: 0, a: 1}
+  branchSprite: {fileID: 0}
   startNode: {fileID: 74092429925486}
   endNode: {fileID: 8446771601590414714}
   thickness: 10
   segments: 15
+  isVerticalTexture: 1
   uvTilingFactor: 0.02
   curveDirection: {x: 0, y: 1}
 --- !u!1 &4369673465492969434
@@ -8034,10 +8109,14 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
+  normalColor: {r: 1, g: 1, b: 1, a: 1}
+  routeColor: {r: 1, g: 0.6470588, b: 0, a: 1}
+  branchSprite: {fileID: 0}
   startNode: {fileID: 7726666280248705165}
   endNode: {fileID: 5132820548405338958}
   thickness: 10
   segments: 15
+  isVerticalTexture: 1
   uvTilingFactor: 0.02
   curveDirection: {x: 0, y: 1}
 --- !u!1 &4430482013413971764
@@ -8454,10 +8533,14 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
+  normalColor: {r: 1, g: 1, b: 1, a: 1}
+  routeColor: {r: 1, g: 0.6470588, b: 0, a: 1}
+  branchSprite: {fileID: 0}
   startNode: {fileID: 7726666280248705165}
   endNode: {fileID: 74092429925486}
   thickness: 10
   segments: 15
+  isVerticalTexture: 1
   uvTilingFactor: 0.02
   curveDirection: {x: 0, y: 1}
 --- !u!1 &4594732614911280970
@@ -8554,6 +8637,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ElementalBlacksmithStory.UI.WeaponNodeUI
   iconImage: {fileID: 8104147716467392413}
+  highlight_Opened: {fileID: 0}
+  highlight_Destination: {fileID: 0}
+  highlight_Route: {fileID: 0}
   nameText: {fileID: 4637472713818749340}
   button: {fileID: 0}
 --- !u!114 &1261354278897419954
@@ -9444,6 +9530,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ElementalBlacksmithStory.UI.WeaponNodeUI
   iconImage: {fileID: 1814126407964331870}
+  highlight_Opened: {fileID: 0}
+  highlight_Destination: {fileID: 0}
+  highlight_Route: {fileID: 0}
   nameText: {fileID: 3670201056379826195}
   button: {fileID: 0}
 --- !u!114 &4620411538844593394
@@ -9953,10 +10042,14 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
+  normalColor: {r: 1, g: 1, b: 1, a: 1}
+  routeColor: {r: 1, g: 0.6470588, b: 0, a: 1}
+  branchSprite: {fileID: 0}
   startNode: {fileID: 4680756970686308866}
   endNode: {fileID: 7776908044567134851}
   thickness: 10
   segments: 15
+  isVerticalTexture: 1
   uvTilingFactor: 0.02
   curveDirection: {x: 0, y: 1}
 --- !u!1 &5455284781750304019
@@ -10534,6 +10627,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ElementalBlacksmithStory.UI.WeaponNodeUI
   iconImage: {fileID: 502742509005727933}
+  highlight_Opened: {fileID: 0}
+  highlight_Destination: {fileID: 0}
+  highlight_Route: {fileID: 0}
   nameText: {fileID: 4052439632530359432}
   button: {fileID: 0}
 --- !u!114 &7601853522786204562
@@ -11522,6 +11618,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ElementalBlacksmithStory.UI.WeaponNodeUI
   iconImage: {fileID: 4114427840101685181}
+  highlight_Opened: {fileID: 0}
+  highlight_Destination: {fileID: 0}
+  highlight_Route: {fileID: 0}
   nameText: {fileID: 6433738725577043954}
   button: {fileID: 0}
 --- !u!114 &2576523882922954216
@@ -12719,10 +12818,14 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
+  normalColor: {r: 1, g: 1, b: 1, a: 1}
+  routeColor: {r: 1, g: 0.6470588, b: 0, a: 1}
+  branchSprite: {fileID: 0}
   startNode: {fileID: 6127786078646238882}
   endNode: {fileID: 4848869265309538424}
   thickness: 10
   segments: 15
+  isVerticalTexture: 1
   uvTilingFactor: 0.02
   curveDirection: {x: 0, y: 1}
 --- !u!1 &7151350149169740608
@@ -13001,6 +13104,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ElementalBlacksmithStory.UI.WeaponNodeUI
   iconImage: {fileID: 6212452707492987093}
+  highlight_Opened: {fileID: 0}
+  highlight_Destination: {fileID: 0}
+  highlight_Route: {fileID: 0}
   nameText: {fileID: 3752964134383959594}
   button: {fileID: 0}
 --- !u!114 &2970281162468797728
@@ -13125,10 +13231,14 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
+  normalColor: {r: 1, g: 1, b: 1, a: 1}
+  routeColor: {r: 1, g: 0.6470588, b: 0, a: 1}
+  branchSprite: {fileID: 0}
   startNode: {fileID: 8021089862602182522}
   endNode: {fileID: 7726666280248705165}
   thickness: 10
   segments: 15
+  isVerticalTexture: 1
   uvTilingFactor: 0.02
   curveDirection: {x: 0, y: 1}
 --- !u!1 &7607231898939620450
@@ -14091,6 +14201,200 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!1 &8438035510072769503
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2226175056819425502}
+  - component: {fileID: 7442685078050209680}
+  - component: {fileID: 407155601110989270}
+  - component: {fileID: 482415612102617544}
+  m_Layer: 5
+  m_Name: CloseButton
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &2226175056819425502
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8438035510072769503}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 0.99933606, y: 0.99933606, z: 0.99933606}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1278220773552030603}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 1, y: 1}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: -50, y: -50}
+  m_SizeDelta: {x: 80, y: 80}
+  m_Pivot: {x: 1, y: 1}
+--- !u!222 &7442685078050209680
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8438035510072769503}
+  m_CullTransparentMesh: 1
+--- !u!114 &407155601110989270
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8438035510072769503}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_text: X
+  m_isRightToLeft: 0
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontSharedMaterials: []
+  m_fontMaterial: {fileID: 0}
+  m_fontMaterials: []
+  m_fontColor32:
+    serializedVersion: 2
+    rgba: 4294967295
+  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+  m_enableVertexGradient: 0
+  m_colorMode: 3
+  m_fontColorGradient:
+    topLeft: {r: 1, g: 1, b: 1, a: 1}
+    topRight: {r: 1, g: 1, b: 1, a: 1}
+    bottomLeft: {r: 1, g: 1, b: 1, a: 1}
+    bottomRight: {r: 1, g: 1, b: 1, a: 1}
+  m_fontColorGradientPreset: {fileID: 0}
+  m_spriteAsset: {fileID: 0}
+  m_tintAllSprites: 0
+  m_StyleSheet: {fileID: 0}
+  m_TextStyleHashCode: -1183493901
+  m_overrideHtmlColors: 0
+  m_faceColor:
+    serializedVersion: 2
+    rgba: 4294967295
+  m_fontSize: 36
+  m_fontSizeBase: 36
+  m_fontWeight: 400
+  m_enableAutoSizing: 1
+  m_fontSizeMin: 18
+  m_fontSizeMax: 72
+  m_fontStyle: 0
+  m_HorizontalAlignment: 2
+  m_VerticalAlignment: 512
+  m_textAlignment: 65535
+  m_characterSpacing: 0
+  m_characterHorizontalScale: 1
+  m_wordSpacing: 0
+  m_lineSpacing: 0
+  m_lineSpacingMax: 0
+  m_paragraphSpacing: 0
+  m_charWidthMaxAdj: 0
+  m_TextWrappingMode: 1
+  m_wordWrappingRatios: 0.4
+  m_overflowMode: 0
+  m_linkedTextComponent: {fileID: 0}
+  parentLinkedComponent: {fileID: 0}
+  m_enableKerning: 0
+  m_ActiveFontFeatures: 6e72656b
+  m_enableExtraPadding: 0
+  checkPaddingRequired: 0
+  m_isRichText: 1
+  m_EmojiFallbackSupport: 1
+  m_parseCtrlCharacters: 1
+  m_isOrthographic: 1
+  m_isCullingEnabled: 0
+  m_horizontalMapping: 0
+  m_verticalMapping: 0
+  m_uvLineOffset: 0
+  m_geometrySortingOrder: 0
+  m_IsTextObjectScaleStatic: 0
+  m_VertexBufferAutoSizeReduction: 0
+  m_useMaxVisibleDescender: 1
+  m_pageToDisplay: 1
+  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_isUsingLegacyAnimationComponent: 0
+  m_isVolumetricText: 0
+  m_hasFontAssetChanged: 0
+  m_baseMaterial: {fileID: 0}
+  m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &482415612102617544
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8438035510072769503}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Button
+  m_Navigation:
+    m_Mode: 3
+    m_WrapAround: 0
+    m_SelectOnUp: {fileID: 0}
+    m_SelectOnDown: {fileID: 0}
+    m_SelectOnLeft: {fileID: 0}
+    m_SelectOnRight: {fileID: 0}
+  m_Transition: 1
+  m_Colors:
+    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
+    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_ColorMultiplier: 1
+    m_FadeDuration: 0.1
+  m_SpriteState:
+    m_HighlightedSprite: {fileID: 0}
+    m_PressedSprite: {fileID: 0}
+    m_SelectedSprite: {fileID: 0}
+    m_DisabledSprite: {fileID: 0}
+  m_AnimationTriggers:
+    m_NormalTrigger: Normal
+    m_HighlightedTrigger: Highlighted
+    m_PressedTrigger: Pressed
+    m_SelectedTrigger: Selected
+    m_DisabledTrigger: Disabled
+  m_Interactable: 1
+  m_TargetGraphic: {fileID: 407155601110989270}
+  m_OnClick:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 2347710025253571285}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: SetActive
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &8440591193545349461
 GameObject:
   m_ObjectHideFlags: 0
@@ -14185,6 +14489,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ElementalBlacksmithStory.UI.WeaponNodeUI
   iconImage: {fileID: 3345745582113751808}
+  highlight_Opened: {fileID: 0}
+  highlight_Destination: {fileID: 0}
+  highlight_Route: {fileID: 0}
   nameText: {fileID: 5679956460803036009}
   button: {fileID: 0}
 --- !u!114 &3020862644956951980
@@ -14626,6 +14933,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ElementalBlacksmithStory.UI.WeaponNodeUI
   iconImage: {fileID: 87277041523877142}
+  highlight_Opened: {fileID: 0}
+  highlight_Destination: {fileID: 0}
+  highlight_Route: {fileID: 0}
   nameText: {fileID: 2872356805399249249}
   button: {fileID: 0}
 --- !u!114 &4969865087106803499
@@ -14900,6 +15210,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ElementalBlacksmithStory.UI.WeaponNodeUI
   iconImage: {fileID: 1106624882970045662}
+  highlight_Opened: {fileID: 0}
+  highlight_Destination: {fileID: 0}
+  highlight_Route: {fileID: 0}
   nameText: {fileID: 7248988701547619437}
   button: {fileID: 0}
 --- !u!114 &4768026613054981430
@@ -15129,6 +15442,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ElementalBlacksmithStory.UI.WeaponNodeUI
   iconImage: {fileID: 1083485245190656510}
+  highlight_Opened: {fileID: 0}
+  highlight_Destination: {fileID: 0}
+  highlight_Route: {fileID: 0}
   nameText: {fileID: 1830896334917494027}
   button: {fileID: 0}
 --- !u!114 &6484066541686540874
@@ -15282,6 +15598,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ElementalBlacksmithStory.UI.WeaponNodeUI
   iconImage: {fileID: 9218248489287223729}
+  highlight_Opened: {fileID: 0}
+  highlight_Destination: {fileID: 0}
+  highlight_Route: {fileID: 0}
   nameText: {fileID: 3549643296389435268}
   button: {fileID: 0}
 --- !u!114 &6547925968051969938
@@ -15693,10 +16012,14 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
+  normalColor: {r: 1, g: 1, b: 1, a: 1}
+  routeColor: {r: 1, g: 0.6470588, b: 0, a: 1}
+  branchSprite: {fileID: 0}
   startNode: {fileID: 8403274444857302467}
   endNode: {fileID: 2162352618508370680}
   thickness: 10
   segments: 15
+  isVerticalTexture: 1
   uvTilingFactor: 0.02
   curveDirection: {x: 0, y: 1}
 --- !u!1 &8883185253999409802
@@ -15927,6 +16250,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ElementalBlacksmithStory.UI.WeaponNodeUI
   iconImage: {fileID: 2029759187141964762}
+  highlight_Opened: {fileID: 0}
+  highlight_Destination: {fileID: 0}
+  highlight_Route: {fileID: 0}
   nameText: {fileID: 457919688745720983}
   button: {fileID: 0}
 --- !u!114 &1620701985201795752
@@ -16155,6 +16481,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ElementalBlacksmithStory.UI.WeaponNodeUI
   iconImage: {fileID: 737559173825964489}
+  highlight_Opened: {fileID: 0}
+  highlight_Destination: {fileID: 0}
+  highlight_Route: {fileID: 0}
   nameText: {fileID: 8671815435652173640}
   button: {fileID: 0}
 --- !u!114 &2381203204865141307
@@ -16308,6 +16637,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ElementalBlacksmithStory.UI.WeaponNodeUI
   iconImage: {fileID: 7962774758986175812}
+  highlight_Opened: {fileID: 0}
+  highlight_Destination: {fileID: 0}
+  highlight_Route: {fileID: 0}
   nameText: {fileID: 3304879324447791789}
   button: {fileID: 0}
 --- !u!114 &7044707263647699431
@@ -16432,10 +16764,14 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
+  normalColor: {r: 1, g: 1, b: 1, a: 1}
+  routeColor: {r: 1, g: 0.6470588, b: 0, a: 1}
+  branchSprite: {fileID: 0}
   startNode: {fileID: 8446771601590414714}
   endNode: {fileID: 8403274444857302467}
   thickness: 10
   segments: 15
+  isVerticalTexture: 1
   uvTilingFactor: 0.02
   curveDirection: {x: 0, y: 1}
 --- !u!1 &9046186241507668492
@@ -16503,10 +16839,14 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
+  normalColor: {r: 1, g: 1, b: 1, a: 1}
+  routeColor: {r: 1, g: 0.6470588, b: 0, a: 1}
+  branchSprite: {fileID: 0}
   startNode: {fileID: 5790150431959968951}
   endNode: {fileID: 1928207489619055764}
   thickness: 10
   segments: 15
+  isVerticalTexture: 1
   uvTilingFactor: 0.02
   curveDirection: {x: 0, y: 1}
 --- !u!1 &9081991291425183399
@@ -16603,6 +16943,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ElementalBlacksmithStory.UI.WeaponNodeUI
   iconImage: {fileID: 4075558866216707823}
+  highlight_Opened: {fileID: 0}
+  highlight_Destination: {fileID: 0}
+  highlight_Route: {fileID: 0}
   nameText: {fileID: 7552946971644239309}
   button: {fileID: 0}
 --- !u!114 &1305594115771221852

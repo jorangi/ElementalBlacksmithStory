@@ -112,10 +112,15 @@ namespace ElementalBlacksmithStory.UI
         {
             _handleButton.enabled = false;
         }
+        private readonly Dictionary<uint, MaterialItemView> _itemViews = new();
+        public MaterialItemView GetItemView(uint materialId) => _itemViews.TryGetValue(materialId, out var view) ? view : null;
+        public IEnumerable<MaterialItemView> GetAllItemViews() => _itemViews.Values;
+
         public void ClearMaterials()
         {
             _itemDisposables.Dispose();
             _itemDisposables = new CompositeDisposable();
+            _itemViews.Clear();
 
             if (materialParent == null) return;
 
@@ -144,6 +149,7 @@ namespace ElementalBlacksmithStory.UI
                 instance.name = kvp.Key.Id.ToString();
                 if (instance.TryGetComponent<MaterialItemView>(out var itemView))
                 {
+                    _itemViews[material.Id] = itemView;
                     itemView.SetData(material.Id, count);
                     Sprite sprite = await loader.GetMaterialSprite(material.Id.ToString(), ct);
                     if(sprite == null)

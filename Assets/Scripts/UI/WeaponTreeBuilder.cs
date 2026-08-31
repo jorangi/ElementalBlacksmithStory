@@ -23,6 +23,7 @@ namespace ElementalBlacksmithStory.UI
         [SerializeField] private RectTransform contentRect; // ScrollView의 Content
         [SerializeField] private Transform branchContainer;
         [SerializeField] private Transform nodeContainer;
+        [SerializeField] private Button _button;        
 
         [Header("프리팹")]
         [SerializeField] private WeaponNodeUI nodePrefab;
@@ -47,11 +48,73 @@ namespace ElementalBlacksmithStory.UI
         {
             this.spriteLoader = spriteLoader;
         }
-        private void Start()
+        [Header("버튼 이동 설정")]
+        [SerializeField] private float targetShowY = 295f;
+        private RectTransform _buttonRect;
+        private float _defaultY = 0f;
+        private CancellationTokenSource _animCts;
+
+        private void Awake()
         {
-            if (testRootWeapon != null)
+            if (_button != null)
             {
-                GenerateTree(testRootWeapon);
+                _buttonRect = _button.GetComponent<RectTransform>();
+                if (_buttonRect != null)
+                {
+                    _defaultY = _buttonRect.anchoredPosition.y;
+                }
+            }
+        }
+
+        public async UniTaskVoid ShowingButtonAnimation()
+        {
+            if (_buttonRect == null) return;
+
+            _animCts?.Cancel();
+            _animCts?.Dispose();
+
+            _animCts = new();
+            var token = _animCts.Token;
+
+            while (_buttonRect.anchoredPosition.y < targetShowY - 1f)
+            {
+                if (token.IsCancellationRequested)
+                {
+                    break;
+                }
+                _buttonRect.anchoredPosition = Vector2.Lerp(_buttonRect.anchoredPosition, new Vector2(_buttonRect.anchoredPosition.x, targetShowY), 0.1f);
+                await UniTask.Yield(PlayerLoopTiming.Update, token);
+            }
+            _buttonRect.anchoredPosition = new Vector2(_buttonRect.anchoredPosition.x, targetShowY);
+        }
+
+        public async UniTaskVoid HidingButtonAnimation()
+        {
+            if (_buttonRect == null) return;
+
+            _animCts?.Cancel();
+            _animCts?.Dispose();
+
+            _animCts = new();
+            var token = _animCts.Token;
+
+            while (_buttonRect.anchoredPosition.y > _defaultY + 1f)
+            {
+                if (token.IsCancellationRequested)
+                {
+                    break;
+                }
+                _buttonRect.anchoredPosition = Vector2.Lerp(_buttonRect.anchoredPosition, new Vector2(_buttonRect.anchoredPosition.x, _defaultY), 0.1f);
+                await UniTask.Yield(PlayerLoopTiming.Update, token);
+            }
+            _buttonRect.anchoredPosition = new Vector2(_buttonRect.anchoredPosition.x, _defaultY);
+        }
+
+        public void SyncButtonYPosition(float y)
+        {
+            if (_buttonRect != null)
+            {
+                _buttonRect.anchoredPosition = new Vector2(_buttonRect.anchoredPosition.x, targetShowY + y);
             }
         }
 

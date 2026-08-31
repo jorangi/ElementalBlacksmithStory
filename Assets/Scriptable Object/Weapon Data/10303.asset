@@ -22,3 +22,6 @@ MonoBehaviour:
   elementTypes: 05000000
   statusEffects: []
   margin: 4.5
+  basePrice: 13333
+  price: 0
+  cumulativeBasePrice: 0
