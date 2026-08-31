@@ -57,52 +57,68 @@ namespace ElementalBlacksmithStory.UI
             return _handleButton.OnEndDragAsObservable();
         }
         private CancellationTokenSource _cts;
+        private const float ANIM_DURATION = 0.25f;
+
         /// <summary>
         /// 재료창 보이게 하는 함수
         /// </summary>
-        /// <returns></returns>
         public async UniTaskVoid ShowingMaterialsAnimation()
         {
+            if (materialPanel == null) return;
+
             _cts?.Cancel();
             _cts?.Dispose();
 
             _cts = new();
             var token = _cts.Token;
-            while(materialPanel.anchoredPosition.y < -10)
+
+            float startY = materialPanel.anchoredPosition.y;
+            float targetY = 0f;
+            float elapsed = 0f;
+
+            while (elapsed < ANIM_DURATION)
             {
-                if(token.IsCancellationRequested)
-                {
-                    break;
-                }
-                materialPanel.anchoredPosition = Vector2.Lerp(materialPanel.anchoredPosition, new(materialPanel.anchoredPosition.x, 0), 0.1f);
+                if (token.IsCancellationRequested) return;
+                elapsed += Time.unscaledDeltaTime;
+                float t = Mathf.Clamp01(elapsed / ANIM_DURATION);
+                float ease = 1f - Mathf.Pow(1f - t, 3);
+                float currentY = Mathf.LerpUnclamped(startY, targetY, ease);
+                materialPanel.anchoredPosition = new Vector2(materialPanel.anchoredPosition.x, currentY);
                 await UniTask.Yield(PlayerLoopTiming.Update, token);
             }
-            materialPanel.anchoredPosition = new(materialPanel.anchoredPosition.x, 0);
-            _handleButton.enabled = true;
+            materialPanel.anchoredPosition = new Vector2(materialPanel.anchoredPosition.x, targetY);
+            if (_handleButton != null) _handleButton.enabled = true;
         }
+
         /// <summary>
         /// 재료창 숨기는 함수
         /// </summary>
-        /// <returns></returns>
         public async UniTaskVoid HidingMaterialsAnimation()
         {
+            if (materialPanel == null) return;
+
             _cts?.Cancel();
             _cts?.Dispose();
 
             _cts = new();
             var token = _cts.Token;
-            while(materialPanel.anchoredPosition.y > -1011)
+
+            float startY = materialPanel.anchoredPosition.y;
+            float targetY = -1011f;
+            float elapsed = 0f;
+
+            while (elapsed < ANIM_DURATION)
             {
-                if(token.IsCancellationRequested)
-                {
-                    break;
-                }
-                materialPanel.anchoredPosition = Vector2.Lerp(materialPanel.anchoredPosition, new(materialPanel.anchoredPosition.x, -1011), 0.1f);
+                if (token.IsCancellationRequested) return;
+                elapsed += Time.unscaledDeltaTime;
+                float t = Mathf.Clamp01(elapsed / ANIM_DURATION);
+                float ease = 1f - Mathf.Pow(1f - t, 3);
+                float currentY = Mathf.LerpUnclamped(startY, targetY, ease);
+                materialPanel.anchoredPosition = new Vector2(materialPanel.anchoredPosition.x, currentY);
                 await UniTask.Yield(PlayerLoopTiming.Update, token);
             }
-            materialPanel.anchoredPosition = new(materialPanel.anchoredPosition.x, -1011);
-            if(_handleButton != null)
-                _handleButton.enabled = true;
+            materialPanel.anchoredPosition = new Vector2(materialPanel.anchoredPosition.x, targetY);
+            if (_handleButton != null) _handleButton.enabled = true;
         }
         public void SyncYPosition(float y)
         {

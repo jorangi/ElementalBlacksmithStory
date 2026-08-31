@@ -4,7 +4,7 @@ TextureImporter:
   internalIDToNameTable:
   - first:
       213: -7090231186806501540
-    second: sword_none_3_0
+    second: 10003_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -100,7 +100,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: sword_none_3_0
+      name: 10003_0
       rect:
         serializedVersion: 2
         x: 0
@@ -135,7 +135,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      sword_none_3_0: -7090231186806501540
+      10003_0: -7090231186806501540
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -20,38 +20,36 @@ namespace ElementalBlacksmithStory.UI
         [SerializeField] private Button button;        
         public SO_WeaponData WeaponData { get; private set; }
         public RectTransform RectTransform => (RectTransform)transform;
-        public CompositeDisposable _disposables = new();
+        public readonly CompositeDisposable _disposables = new();
         private bool _isOpened = false;
-        public Observable<Unit> OnClickAsObservable() => button.OnClickAsObservable();
+        public Observable<Unit> OnClickAsObservable() => button != null ? button.OnClickAsObservable() : Observable.Empty<Unit>();
         public void SetOpen(bool isOpened)
         {
             _isOpened = isOpened;
-            nameText.SetText(isOpened ? WeaponData.weaponName : "?????");
-            iconImage.color = isOpened ? Color.white : Color.black;
-            if(_isOpened)
+            if (nameText != null && WeaponData != null)
             {
-                highlight_Opened.SetActive(true);
-                highlight_Destination.SetActive(false);
-                highlight_Route.SetActive(false);
+                nameText.SetText(isOpened ? WeaponData.weaponName : "?????");
             }
-            else
+            if (iconImage != null)
             {
-                highlight_Opened.SetActive(false);
-                highlight_Destination.SetActive(false);
-                highlight_Route.SetActive(false);
+                iconImage.color = isOpened ? Color.white : Color.black;
+                iconImage.enabled = iconImage.sprite != null;
             }
+            if (highlight_Opened != null) highlight_Opened.SetActive(_isOpened);
+            if (highlight_Destination != null) highlight_Destination.SetActive(false);
+            if (highlight_Route != null) highlight_Route.SetActive(false);
         }
         public void SetDestinationNode()
         {
-            highlight_Opened.SetActive(false);
-            highlight_Destination.SetActive(true);
-            highlight_Route.SetActive(false);
+            if (highlight_Opened != null) highlight_Opened.SetActive(false);
+            if (highlight_Destination != null) highlight_Destination.SetActive(true);
+            if (highlight_Route != null) highlight_Route.SetActive(false);
         }
         public void SetRouteNode()
         {
-            highlight_Opened.SetActive(false);
-            highlight_Destination.SetActive(false);
-            highlight_Route.SetActive(true);
+            if (highlight_Opened != null) highlight_Opened.SetActive(false);
+            if (highlight_Destination != null) highlight_Destination.SetActive(false);
+            if (highlight_Route != null) highlight_Route.SetActive(true);
         }
         public void SetNormalNode()
         {
@@ -64,19 +62,30 @@ namespace ElementalBlacksmithStory.UI
         public async UniTask Setup(SO_WeaponData data, WeaponSpriteLoader spriteLoader, CancellationToken cancellationToken = default)
         {
             WeaponData = data;
-            if (nameText != null) 
+            if (nameText != null && data != null) 
                 nameText.SetText(data.weaponName);
             
+            if (iconImage != null)
+            {
+                iconImage.enabled = false;
+            }
+
             if (iconImage != null && spriteLoader != null && data != null)
             {
                 Sprite weaponSprite = await spriteLoader.GetWeaponSprite(data.Id.ToString(), cancellationToken);
                 if (weaponSprite != null)
                 {
                     iconImage.sprite = weaponSprite;
+                    iconImage.enabled = true;
                 }
             }
             
             SetOpen(true);
+        }
+
+        private void OnDestroy()
+        {
+            _disposables.Dispose();
         }
     }
 }

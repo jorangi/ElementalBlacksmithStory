@@ -66,6 +66,8 @@ namespace ElementalBlacksmithStory.UI
             }
         }
 
+        private const float ANIM_DURATION = 0.25f;
+
         public async UniTaskVoid ShowingButtonAnimation()
         {
             if (_buttonRect == null) return;
@@ -76,13 +78,17 @@ namespace ElementalBlacksmithStory.UI
             _animCts = new();
             var token = _animCts.Token;
 
-            while (_buttonRect.anchoredPosition.y < targetShowY - 1f)
+            float startY = _buttonRect.anchoredPosition.y;
+            float elapsed = 0f;
+
+            while (elapsed < ANIM_DURATION)
             {
-                if (token.IsCancellationRequested)
-                {
-                    break;
-                }
-                _buttonRect.anchoredPosition = Vector2.Lerp(_buttonRect.anchoredPosition, new Vector2(_buttonRect.anchoredPosition.x, targetShowY), 0.1f);
+                if (token.IsCancellationRequested) return;
+                elapsed += Time.unscaledDeltaTime;
+                float t = Mathf.Clamp01(elapsed / ANIM_DURATION);
+                float ease = 1f - Mathf.Pow(1f - t, 3);
+                float currentY = Mathf.LerpUnclamped(startY, targetShowY, ease);
+                _buttonRect.anchoredPosition = new Vector2(_buttonRect.anchoredPosition.x, currentY);
                 await UniTask.Yield(PlayerLoopTiming.Update, token);
             }
             _buttonRect.anchoredPosition = new Vector2(_buttonRect.anchoredPosition.x, targetShowY);
@@ -98,13 +104,17 @@ namespace ElementalBlacksmithStory.UI
             _animCts = new();
             var token = _animCts.Token;
 
-            while (_buttonRect.anchoredPosition.y > _defaultY + 1f)
+            float startY = _buttonRect.anchoredPosition.y;
+            float elapsed = 0f;
+
+            while (elapsed < ANIM_DURATION)
             {
-                if (token.IsCancellationRequested)
-                {
-                    break;
-                }
-                _buttonRect.anchoredPosition = Vector2.Lerp(_buttonRect.anchoredPosition, new Vector2(_buttonRect.anchoredPosition.x, _defaultY), 0.1f);
+                if (token.IsCancellationRequested) return;
+                elapsed += Time.unscaledDeltaTime;
+                float t = Mathf.Clamp01(elapsed / ANIM_DURATION);
+                float ease = 1f - Mathf.Pow(1f - t, 3);
+                float currentY = Mathf.LerpUnclamped(startY, _defaultY, ease);
+                _buttonRect.anchoredPosition = new Vector2(_buttonRect.anchoredPosition.x, currentY);
                 await UniTask.Yield(PlayerLoopTiming.Update, token);
             }
             _buttonRect.anchoredPosition = new Vector2(_buttonRect.anchoredPosition.x, _defaultY);

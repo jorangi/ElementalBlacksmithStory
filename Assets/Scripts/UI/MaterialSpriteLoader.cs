@@ -12,43 +12,62 @@ namespace ElementalBlacksmithStory.UI
         private SpriteAtlas _cachedAtlas;
         private AsyncOperationHandle<SpriteAtlas> _atlasHandler;
         private UniTaskCompletionSource<SpriteAtlas> _atlasLoadTcs;
+
         private void Awake()
         {
             LoadAtlasAsync().Forget();
         }
+
         private async UniTask LoadAtlasAsync()
         {
             _atlasLoadTcs = new();
             var cancellationToken = this.GetCancellationTokenOnDestroy();
 
-            _atlasHandler = Addressables.LoadAssetAsync<SpriteAtlas>("MaterialAtlas");
-            _cachedAtlas = await _atlasHandler.ToUniTask(cancellationToken: cancellationToken);
-
-            _atlasLoadTcs.TrySetResult(_cachedAtlas);
-            Debug.Log("[MaterialSpriteLoader] MaterialAtlas 로드 완료");
+            try
+            {
+                _atlasHandler = Addressables.LoadAssetAsync<SpriteAtlas>("MaterialAtlas");
+                _cachedAtlas = await _atlasHandler.ToUniTask(cancellationToken: cancellationToken);
+                _atlasLoadTcs.TrySetResult(_cachedAtlas);
+                Debug.Log("[MaterialSpriteLoader] MaterialAtlas 로드 완료");
+            }
+            catch (System.Exception ex)
+            {
+                Debug.LogError($"[MaterialSpriteLoader] MaterialAtlas 로드 실패: {ex.Message}");
+                _atlasLoadTcs.TrySetException(ex);
+            }
         }
+
         public async UniTask<Sprite> GetMaterialSprite(string materialId, CancellationToken cancellationToken = default)
         {
-            if(_cachedAtlas == null && _atlasLoadTcs != null)
+            if (string.IsNullOrEmpty(materialId)) return null;
+
+            if (_cachedAtlas == null && _atlasLoadTcs != null)
             {
-                Debug.Log("[MaterialSpriteLoader] 아틀라스 로딩 대기 중...");
                 await _atlasLoadTcs.Task.AttachExternalCancellation(cancellationToken);
             }
-            if(_cachedAtlas == null)
+
+            if (_cachedAtlas == null)
             {
                 Debug.LogError("[MaterialSpriteLoader] 아틀라스를 불러올 수 없습니다.");
                 return null;
             }
-            Sprite newSprite = _cachedAtlas.GetSprite(materialId);
-            if(newSprite == null)
+
+            Sprite sprite = _cachedAtlas.GetSprite(materialId);
+            if (sprite == null)
+            {
+                sprite = _cachedAtlas.GetSprite($"{materialId}_0");
+            }
+
+            if (sprite == null)
             {
                 Debug.LogWarning($"[MaterialSpriteLoader] '{materialId}' 스프라이트를 찾을 수 없습니다.");
             }
-            return newSprite;
+            return sprite;
         }
+
         private void OnDestroy()
         {
-            if(_atlasHandler.IsValid())
+            if (_atlasHandler.IsValid())
             {
                 Addressables.Release(_atlasHandler);
             }

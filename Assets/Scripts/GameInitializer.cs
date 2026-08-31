@@ -1,3 +1,4 @@
+using UnityEngine;
 using ElementalBlacksmithStory.Data;
 using ElementalBlacksmithStory.Inventory;
 using VContainer;
@@ -19,6 +20,11 @@ namespace ElementalBlacksmithStory.Core
         }
         public void Start()
         {
+            QualitySettings.vSyncCount = 0;
+            int refreshRate = (int)System.Math.Round(Screen.currentResolution.refreshRateRatio.value);
+            Application.targetFrameRate = refreshRate >= 60 ? refreshRate : 60;
+            UnityEngine.Debug.Log($"[GameInitializer] Target Frame Rate 설정 완료: {Application.targetFrameRate} FPS (Display: {refreshRate} Hz)");
+
             _materialInventory.Add(_materialDatabase.GetMaterial(30001), 500);
             _materialInventory.Add(_materialDatabase.GetMaterial(30002), 500);
             _materialInventory.Add(_materialDatabase.GetMaterial(30003), 500);

@@ -198,8 +198,7 @@ namespace ElementalBlacksmithStory.Core
             if (success)
             {
                 _soundPublisher.Publish(new PlaySoundEvent(40104));
-                var handle = Addressables.LoadAssetAsync<SO_WeaponData>(result.resultWeapon.Id.ToString());
-                currentWeaponData = await handle.ToUniTask(cancellationToken: cancellationToken);
+                currentWeaponData = weaponDatabase.GetWeapon(result.resultWeapon.Id) ?? result.resultWeapon;
 
                 weapon.PushEnhanceStep(currentWeaponData.Id, result.resultWeapon.basePrice, currentWeaponData.cost);
                 Debug.Log($"[EnhancementService] 강화 요청 처리됨 -> 성공, 결과물: {currentWeaponData.weaponName}");

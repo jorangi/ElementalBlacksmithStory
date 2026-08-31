@@ -39,21 +39,27 @@ namespace ElementalBlacksmithStory.UI
         {
             try
             {
-                _anvilWeaponView.ChangeSprite(null, false);
+                if (e.Weapon == null) return;
                 SO_WeaponData weaponData = _weaponDatabase.GetWeapon(e.Weapon.WeaponId);
-                Sprite sprite = await _weaponSpriteLoader.GetWeaponSprite(weaponData.Id.ToString(), cancellationToken);
-                if(sprite == null)
+                if (weaponData == null)
                 {
-                    Debug.Log($"[AnvilWeaponPresenter] {e.Weapon.WeaponId}스프라이트가 없습니다.");
+                    Debug.LogWarning($"[AnvilWeaponPresenter] {e.Weapon.WeaponId} 무기 데이터를 찾을 수 없습니다.");
                     return;
                 }
-                Debug.Log($"[AnvilWeaponPresenter] {e.Weapon.WeaponId}스프라이트를 정상적으로 불러왔습니다.");
-                _anvilWeaponView.ChangeSprite(sprite, weaponData.hideOutline);
+
                 _anvilWeaponView.ChangeWeaponName(weaponData.weaponName);
+                Sprite sprite = await _weaponSpriteLoader.GetWeaponSprite(weaponData.Id.ToString(), cancellationToken);
+                if (sprite == null)
+                {
+                    Debug.LogWarning($"[AnvilWeaponPresenter] {e.Weapon.WeaponId} 스프라이트가 없습니다.");
+                    return;
+                }
+
+                _anvilWeaponView.ChangeSprite(sprite, weaponData.hideOutline);
             }
-            catch(Exception exception)
+            catch (Exception exception)
             {
-                Debug.LogError($"[AnvilWeaponPresenter] {e.Weapon.WeaponId}스프라이트를 불러오던중 오류가 발생했습니다. {exception.Message}");
+                Debug.LogError($"[AnvilWeaponPresenter] {e.Weapon?.WeaponId} 스프라이트를 불러오던 중 오류가 발생했습니다: {exception.Message}");
             }
         }
         public void Dispose()

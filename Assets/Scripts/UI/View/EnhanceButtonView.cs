@@ -36,6 +36,8 @@ namespace ElementalBlacksmithStory.UI
             return enhanceButton.OnClickAsObservable();
         }
 
+        private const float ANIM_DURATION = 0.25f;
+
         /// <summary>
         /// 강화 버튼 보이게/올라가게 하는 애니메이션 (목표 Y: targetShowY)
         /// </summary>
@@ -49,13 +51,17 @@ namespace ElementalBlacksmithStory.UI
             _cts = new();
             var token = _cts.Token;
 
-            while (_rectTransform.anchoredPosition.y < targetShowY - 1f)
+            float startY = _rectTransform.anchoredPosition.y;
+            float elapsed = 0f;
+
+            while (elapsed < ANIM_DURATION)
             {
-                if (token.IsCancellationRequested)
-                {
-                    break;
-                }
-                _rectTransform.anchoredPosition = Vector2.Lerp(_rectTransform.anchoredPosition, new Vector2(_rectTransform.anchoredPosition.x, targetShowY), 0.1f);
+                if (token.IsCancellationRequested) return;
+                elapsed += Time.unscaledDeltaTime;
+                float t = Mathf.Clamp01(elapsed / ANIM_DURATION);
+                float ease = 1f - Mathf.Pow(1f - t, 3);
+                float currentY = Mathf.LerpUnclamped(startY, targetShowY, ease);
+                _rectTransform.anchoredPosition = new Vector2(_rectTransform.anchoredPosition.x, currentY);
                 await UniTask.Yield(PlayerLoopTiming.Update, token);
             }
             _rectTransform.anchoredPosition = new Vector2(_rectTransform.anchoredPosition.x, targetShowY);
@@ -74,13 +80,17 @@ namespace ElementalBlacksmithStory.UI
             _cts = new();
             var token = _cts.Token;
 
-            while (_rectTransform.anchoredPosition.y > _defaultY + 1f)
+            float startY = _rectTransform.anchoredPosition.y;
+            float elapsed = 0f;
+
+            while (elapsed < ANIM_DURATION)
             {
-                if (token.IsCancellationRequested)
-                {
-                    break;
-                }
-                _rectTransform.anchoredPosition = Vector2.Lerp(_rectTransform.anchoredPosition, new Vector2(_rectTransform.anchoredPosition.x, _defaultY), 0.1f);
+                if (token.IsCancellationRequested) return;
+                elapsed += Time.unscaledDeltaTime;
+                float t = Mathf.Clamp01(elapsed / ANIM_DURATION);
+                float ease = 1f - Mathf.Pow(1f - t, 3);
+                float currentY = Mathf.LerpUnclamped(startY, _defaultY, ease);
+                _rectTransform.anchoredPosition = new Vector2(_rectTransform.anchoredPosition.x, currentY);
                 await UniTask.Yield(PlayerLoopTiming.Update, token);
             }
             _rectTransform.anchoredPosition = new Vector2(_rectTransform.anchoredPosition.x, _defaultY);
