@@ -65,9 +65,11 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
+  branchSprite: {fileID: 21300000, guid: 2875081f3d65af84495bcd7d1e897bc1, type: 3}
   startNode: {fileID: 0}
   endNode: {fileID: 0}
-  thickness: 10
-  segments: 15
+  thickness: 100
+  segments: 20
+  isVerticalTexture: 1
   uvTilingFactor: 0.02
   curveDirection: {x: 0, y: 1}

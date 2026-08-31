@@ -10,6 +10,7 @@ using System.Threading;
 using R3;
 using MessagePipe;
 using ElementalBlacksmithStory.Events;
+using System;
 namespace ElementalBlacksmithStory.UI
 {
     public class WeaponTreeBuilder : MonoBehaviour
@@ -39,6 +40,8 @@ namespace ElementalBlacksmithStory.UI
         private CompositeDisposable _disposables = new();
         private readonly Subject<ChangeRecipeFlagEvent> _onChangeRecipeFlagEventSubject = new();
         public Observable<ChangeRecipeFlagEvent> OnChangeRecipeFlagEventAsObservable => _onChangeRecipeFlagEventSubject;
+        private Dictionary<(uint from, uint to), WeaponTreeBranchView> _branches = new();
+        public Dictionary<(uint from, uint to), WeaponTreeBranchView> Branches => _branches;
         [Inject]
         public void Construct(WeaponSpriteLoader spriteLoader)
         {
@@ -66,6 +69,7 @@ namespace ElementalBlacksmithStory.UI
             maxPosX = 0f;
             maxPosY = 0f;
             _disposables.Clear();
+            _branches.Clear();
 
             ClearContainer(branchContainer);
             ClearContainer(nodeContainer);
@@ -139,7 +143,9 @@ namespace ElementalBlacksmithStory.UI
 
             nodes[weapon.Id] = currentNode;
 
-            currentNode.OnClickAsObservable().Subscribe(e =>
+            currentNode.OnClickAsObservable().
+            ThrottleFirst(TimeSpan.FromMilliseconds(100)).
+            Subscribe(e =>
             {
                 _onChangeRecipeFlagEventSubject.OnNext(new ChangeRecipeFlagEvent { _recipeId = weapon.Id });
             }).AddTo(_disposables);
@@ -149,6 +155,8 @@ namespace ElementalBlacksmithStory.UI
                 WeaponTreeBranchView branch = Instantiate(branchPrefab, branchContainer);
                 branch.name = $"Branch_{weapon.weaponName}->{childUI.WeaponData.weaponName}";
                 branch.SetNodes(currentNode.RectTransform, childUI.RectTransform);
+                branch.SetHighlight(false);
+                _branches[(weapon.Id, childUI.WeaponData.Id)] = branch;
             }
 
             return currentNode;

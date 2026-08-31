@@ -42,6 +42,7 @@ namespace ElementalBlacksmithStory.Core
             builder.RegisterEntryPoint<EnhanceButtonPresenter>();
             builder.RegisterEntryPoint<EnhanceChancePresenter>();
             builder.RegisterEntryPoint<MaterialsPresenter>();
+            builder.RegisterEntryPoint<WeaponTreePresenter>();
             builder.RegisterEntryPoint<EnhancementService>(Lifetime.Singleton);
             builder.RegisterMessageBroker<EnhanceRequestEvent>(options);
             builder.RegisterMessageBroker<EnhanceResultEvent>(options);

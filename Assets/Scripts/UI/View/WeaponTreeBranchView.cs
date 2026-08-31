@@ -8,6 +8,12 @@ namespace ElementalBlacksmithStory.UI
     [RequireComponent(typeof(CanvasRenderer))]
     public class WeaponTreeBranchView : MaskableGraphic
     {
+        [Header("상태별 파이프 색상")]
+        [SerializeField] private Color normalColor = Color.white;
+        [SerializeField] private Color routeColor = Color.orange;
+        [Header("선 스프라이트/텍스처")]
+        [SerializeField] private Sprite branchSprite;
+        
         [Header("연결 대상")]
         [SerializeField] private RectTransform startNode;
         [SerializeField] private RectTransform endNode;
@@ -16,14 +22,33 @@ namespace ElementalBlacksmithStory.UI
         [SerializeField] private float thickness = 6f;
         [Range(2, 30)]
         [SerializeField] private int segments = 15;
-        [SerializeField] private float uvTilingFactor = 0.02f;
+        [Header("UV / 타일링 설정")]
+        [Tooltip("세로로 긴 텍스처(32x256 등)를 사용하는 경우 체크")]
+        [SerializeField] private bool isVerticalTexture = true; 
+        [Tooltip("수치를 낮출수록 텍스처가 길게 늘어나고, 높일수록 촘촘하게 반복됩니다.")]
+        [SerializeField] private float uvTilingFactor = 0.003f;
 
         [Header("곡선 제어")]
         [Tooltip("트리 형태(가로/세로)에 맞게 핸들 방향 조정")]
         [SerializeField] private Vector2 curveDirection = new(1f, 0);
         private Vector3 lastStartPos;
         private Vector3 lastEndPos;
-
+        public override Texture mainTexture
+        {
+            get
+            {
+                if (branchSprite != null)
+                    return branchSprite.texture;
+                if (material != null && material.mainTexture != null)
+                    return material.mainTexture;
+                return s_WhiteTexture;
+            }
+        }
+        public void SetHighlight(bool isHighlight)
+        {
+            color = isHighlight ? routeColor : normalColor;
+            SetVerticesDirty();
+        }
         public void SetNodes(RectTransform start, RectTransform end)
         {
             startNode = start;
@@ -72,10 +97,21 @@ namespace ElementalBlacksmithStory.UI
                 Vector2 v1 = points[i] + normal * (thickness * 0.5f);
                 Vector2 v2 = points[i] - normal * (thickness * 0.5f);
                 
-                float u = totalLength * uvTilingFactor;
-                vh.AddVert(v1, color, new Vector2(u, 1f));
-                vh.AddVert(v2, color, new Vector2(u, 0f));
+                float progress = totalLength * uvTilingFactor;
+                Vector2 uv1, uv2;
 
+                if (isVerticalTexture)
+                {
+                    uv1 = new Vector2(1f, progress);
+                    uv2 = new Vector2(0f, progress);
+                }
+                else
+                {
+                    uv1 = new Vector2(progress, 1f);
+                    uv2 = new Vector2(progress, 0f);
+                }
+                vh.AddVert(v1, color, uv1);
+                vh.AddVert(v2, color, uv2);
                 if(i > 0)
                 {
                     int baseIndex = (i-1)*2;
