@@ -30,7 +30,7 @@ namespace ElementalBlacksmithStory.Core
         private SO_CraftRecipe _currentRecipe;
         private readonly Dictionary<uint, uint> _selectedMaterials = new();
 
-        public EnhancementService(IAsyncSubscriber<EnhanceRequestEvent> enhaceRequestSubscriber,
+        public EnhancementService(ISubscriber<EnhanceRequestEvent> enhanceRequestSubscriber,
                                     IPublisher<ChangeWeaponEvent> weaponChangePublisher,
                                     IPublisher<ChangeMoneyEvent> moneyChangePublisher,
                                     IPublisher<PlaySoundEvent> soundPublisher,
@@ -49,7 +49,7 @@ namespace ElementalBlacksmithStory.Core
             this._soundPublisher = soundPublisher;
             this._nextRecipePublisher = nextRecipePublisher;
             this.moneyChangePublisher.Publish(new ChangeMoneyEvent(out uint tempId, money));
-            this.subscription = enhaceRequestSubscriber.Subscribe(OnEnhanceRequested).AddTo(_disposables);
+            this.subscription = enhanceRequestSubscriber.Subscribe(OnEnhanceRequested).AddTo(_disposables);
             
             submitMaterialSubscriber.Subscribe(e =>
             {
@@ -147,7 +147,7 @@ namespace ElementalBlacksmithStory.Core
 
         private ulong totalCost;
         private uint cachedWeaponId = 0;
-        private async UniTask OnEnhanceRequested(EnhanceRequestEvent request, CancellationToken cancellationToken)
+        private void OnEnhanceRequested(EnhanceRequestEvent request)
         {
             Weapon weapon = request.Weapon;
             _currentWeapon = weapon;

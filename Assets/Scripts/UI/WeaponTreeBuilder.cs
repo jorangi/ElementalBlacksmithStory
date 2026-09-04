@@ -11,6 +11,7 @@ using R3;
 using MessagePipe;
 using ElementalBlacksmithStory.Events;
 using System;
+
 namespace ElementalBlacksmithStory.UI
 {
     public class WeaponTreeBuilder : MonoBehaviour
@@ -43,16 +44,18 @@ namespace ElementalBlacksmithStory.UI
         public Observable<ChangeRecipeFlagEvent> OnChangeRecipeFlagEventAsObservable => _onChangeRecipeFlagEventSubject;
         private Dictionary<(uint from, uint to), WeaponTreeBranchView> _branches = new();
         public Dictionary<(uint from, uint to), WeaponTreeBranchView> Branches => _branches;
-        [Inject]
-        public void Construct(WeaponSpriteLoader spriteLoader)
-        {
-            this.spriteLoader = spriteLoader;
-        }
         [Header("버튼 이동 설정")]
         [SerializeField] private float targetShowY = 295f;
         private RectTransform _buttonRect;
         private float _defaultY = 0f;
         private CancellationTokenSource _animCts;
+
+        
+        [Inject]
+        public void Construct(WeaponSpriteLoader spriteLoader)
+        {
+            this.spriteLoader = spriteLoader;
+        }
 
         private void Awake()
         {

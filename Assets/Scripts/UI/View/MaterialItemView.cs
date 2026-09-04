@@ -16,6 +16,14 @@ namespace ElementalBlacksmithStory.UI
         public uint MaterialId { get; private set; }
         public uint MaterialCount { get; private set; }
 
+        private void Awake()
+        {
+            if (button != null && !button.TryGetComponent<UIButtonSound>(out _))
+            {
+                button.gameObject.AddComponent<UIButtonSound>();
+            }
+        }
+
         public void SetData(uint id, uint count)
         {
             MaterialId = id;

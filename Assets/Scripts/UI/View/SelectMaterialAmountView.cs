@@ -45,6 +45,24 @@ namespace ElementalBlacksmithStory.UI
         private void Awake()
         {
             EnsureHoldButtons();
+            EnsureButtonSounds();
+        }
+
+        private void EnsureButtonSounds()
+        {
+            EnsureButtonSound(increaseButton, false);
+            EnsureButtonSound(decreseButton, false);
+            EnsureButtonSound(submitButton, true);
+            EnsureButtonSound(cancelButton, true);
+        }
+
+        private void EnsureButtonSound(Button btn, bool autoBind)
+        {
+            if (btn != null && !btn.TryGetComponent<UIButtonSound>(out var sound))
+            {
+                sound = btn.gameObject.AddComponent<UIButtonSound>();
+                sound.SetAutoBindOnClick(autoBind);
+            }
         }
 
         private void EnsureHoldButtons()

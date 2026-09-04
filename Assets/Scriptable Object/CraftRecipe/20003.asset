@@ -17,6 +17,6 @@ MonoBehaviour:
   - material: {fileID: 11400000, guid: e138cd3f6b257a848a7aa957e5985189, type: 2}
     count: 2
   recipeOutcome:
-    chance: 0.92
+    chance: 0.9
     resultWeapon: {fileID: 11400000, guid: 5e93ec8cc4b75b44bb761d18be72e585, type: 2}
     defaultFailWeapon: {fileID: 11400000, guid: 9b67c08ecaf228a42ac4344ebee68548, type: 2}

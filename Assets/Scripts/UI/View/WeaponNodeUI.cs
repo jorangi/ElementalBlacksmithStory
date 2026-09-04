@@ -22,6 +22,15 @@ namespace ElementalBlacksmithStory.UI
         public RectTransform RectTransform => (RectTransform)transform;
         public readonly CompositeDisposable _disposables = new();
         private bool _isOpened = false;
+
+        private void Awake()
+        {
+            if (button != null && !button.TryGetComponent<UIButtonSound>(out _))
+            {
+                button.gameObject.AddComponent<UIButtonSound>();
+            }
+        }
+
         public Observable<Unit> OnClickAsObservable() => button != null ? button.OnClickAsObservable() : Observable.Empty<Unit>();
         public void SetOpen(bool isOpened)
         {

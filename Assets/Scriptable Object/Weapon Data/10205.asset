@@ -17,9 +17,10 @@ MonoBehaviour:
   ats: 1
   cost: 38500
   recipes: []
-  hideOutline: 0
+  hideOutline: 1
   elementTypes: 01000000
   statusEffects: []
   margin: 4.78
   basePrice: 40000
   price: 0
+  cumulativeBasePrice: 0

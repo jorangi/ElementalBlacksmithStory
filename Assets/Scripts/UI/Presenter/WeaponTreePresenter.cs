@@ -32,14 +32,14 @@ namespace ElementalBlacksmithStory.UI
             WeaponSpriteLoader spriteLoader,
             SO_WeaponDatabase weaponDatabase,
             IPublisher<ChangeRecipeFlagEvent> recipeFlagPublisher,
-            ISubscriber<EnhanceButtonPositionEvent> positionSubscriber)
+            ISubscriber<EnhanceButtonPositionEvent> positionSubscriber
+            )
         {
             _forgeManager = forgeManager;
             _treeBuilder = treeBuilder;
             _spriteLoader = spriteLoader;
             _weaponDatabase = weaponDatabase;
             _recipeFlagPublisher = recipeFlagPublisher;
-
             positionSubscriber.Subscribe(e =>
             {
                 if (e.positionY <= -1000f)

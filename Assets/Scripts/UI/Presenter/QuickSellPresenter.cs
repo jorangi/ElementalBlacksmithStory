@@ -8,7 +8,6 @@ using ElementalBlacksmithStory.Events;
 using ElementalBlacksmithStory.Data;
 using System.Threading;
 using R3;
-using System.Diagnostics;
 
 namespace ElementalBlacksmithStory.UI
 {
@@ -23,7 +22,8 @@ namespace ElementalBlacksmithStory.UI
             SO_WeaponDatabase weaponDataBase,
             QuickSellView view,
             ISubscriber<ChangeWeaponEvent> weaponChangeSubscriber,
-            IPublisher<SellEvent> sellEventPublisher)
+            IPublisher<SellEvent> sellEventPublisher
+            )
         {
             this._view = view;
             _sellEventPublisher = sellEventPublisher;

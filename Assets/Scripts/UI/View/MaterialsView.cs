@@ -28,6 +28,14 @@ namespace ElementalBlacksmithStory.UI
         private readonly Subject<(uint id, uint count, MaterialItemView itemView)> _onMaterialClickSubject = new();
         private CompositeDisposable _itemDisposables = new();
 
+        private void Awake()
+        {
+            if (_bagButton != null && !_bagButton.TryGetComponent<UIButtonSound>(out _))
+            {
+                _bagButton.gameObject.AddComponent<UIButtonSound>();
+            }
+        }
+
         public Observable<(uint id, uint count, MaterialItemView itemView)> OnMaterialClickAsObservable() => _onMaterialClickSubject;
         public Observable<Unit> OnBagClickAsObservable()
         {

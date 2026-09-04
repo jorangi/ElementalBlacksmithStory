@@ -14,13 +14,13 @@ namespace ElementalBlacksmithStory.UI
     public class EnhanceButtonPresenter : IStartable, IDisposable
     {
         private readonly EnhanceButtonView _view;
-        private readonly IAsyncPublisher<EnhanceRequestEvent> _enhanceRequestPublisher;
+        private readonly IPublisher<EnhanceRequestEvent> _enhanceRequestPublisher;
         private readonly CompositeDisposable _disposables = new();
         private readonly ForgeManager _forgeManager;
         [Inject]
         public EnhanceButtonPresenter(
             EnhanceButtonView view, 
-            IAsyncPublisher<EnhanceRequestEvent> enhanceRequestPublisher,
+            IPublisher<EnhanceRequestEvent> enhanceRequestPublisher,
             ForgeManager forgeManager,
             ISubscriber<EnhanceButtonPositionEvent> buttonPositionSubscriber
             )
@@ -52,7 +52,7 @@ namespace ElementalBlacksmithStory.UI
                 .Subscribe(_ =>
                 {
                     Debug.Log($"[EnhanceButtonPresenter] EnhanceRequestEvent {_forgeManager.CurrentWeapon.Id} 전송");
-                    _enhanceRequestPublisher.PublishAsync(new EnhanceRequestEvent(_forgeManager.CurrentWeapon)).Forget();
+                    _enhanceRequestPublisher.Publish(new EnhanceRequestEvent(_forgeManager.CurrentWeapon));
                 })
                 .AddTo(_disposables);
         }

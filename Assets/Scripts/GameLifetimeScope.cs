@@ -38,12 +38,18 @@ namespace ElementalBlacksmithStory.Core
             builder.RegisterComponentInHierarchy<EnhanceChanceView>();
             builder.RegisterComponentInHierarchy<MaterialsView>();
             builder.RegisterComponentInHierarchy<SelectMaterialAmountView>();
+            builder.RegisterComponentInHierarchy<GameExitView>();
+            builder.RegisterComponentInHierarchy<SettingsView>();
             builder.RegisterEntryPoint<AnvilWeaponPresenter>();
             builder.RegisterEntryPoint<EnhanceButtonPresenter>();
             builder.RegisterEntryPoint<EnhanceChancePresenter>();
             builder.RegisterEntryPoint<MaterialsPresenter>();
             builder.RegisterEntryPoint<WeaponTreePresenter>();
+            builder.RegisterEntryPoint<GameExitPresenter>().AsSelf();
+            builder.RegisterEntryPoint<SettingsPresenter>();
             builder.RegisterEntryPoint<EnhancementService>(Lifetime.Singleton);
+            builder.RegisterEntryPoint<SettingsService>(Lifetime.Singleton).AsSelf();
+            builder.RegisterBuildCallback(c => GlobalMessagePipe.SetProvider(c.AsServiceProvider()));
             builder.RegisterMessageBroker<EnhanceRequestEvent>(options);
             builder.RegisterMessageBroker<EnhanceResultEvent>(options);
             builder.RegisterMessageBroker<ChangeWeaponEvent>(options);
@@ -51,6 +57,9 @@ namespace ElementalBlacksmithStory.Core
             builder.RegisterMessageBroker<SubmitMaterialEvent>(options);
             builder.RegisterMessageBroker<EnhanceButtonPositionEvent>(options);
             builder.RegisterMessageBroker<NextRecipeChangedEvent>(options);
+            builder.RegisterMessageBroker<GameExitEvent>(options);
+            builder.RegisterMessageBroker<PlaySoundEvent>(options);
+            builder.RegisterMessageBroker<SellEvent>(options);
         }
     }
 }

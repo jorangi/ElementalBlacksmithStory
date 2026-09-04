@@ -13,6 +13,14 @@ namespace ElementalBlacksmithStory.UI
         [SerializeField] private TextMeshProUGUI _priceText;
         [SerializeField] private Button _sellButton;
         private ulong _currentPrice;
+
+        private void Awake()
+        {
+            if (_sellButton != null && !_sellButton.TryGetComponent<UIButtonSound>(out _))
+            {
+                _sellButton.gameObject.AddComponent<UIButtonSound>();
+            }
+        }
         public Observable<Unit> OnClickAsObservable()
         {
             if(_sellButton == null)

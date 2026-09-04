@@ -38,4 +38,36 @@ public static class BuildScript
         }
         Debug.Log("[BuildScript] Android Build Completed Successfully");
     }
+
+    public static void PerformPCBuild()
+    {
+        EditorUserBuildSettings.SwitchActiveBuildTarget(BuildTargetGroup.Standalone, BuildTarget.StandaloneWindows64);
+
+        Debug.Log("[BuildScript] Starting Addressables Content Build (PC)...");
+        AddressableAssetSettings.BuildPlayerContent(out AddressablesPlayerBuildResult addressablesResult);
+
+        if (!string.IsNullOrEmpty(addressablesResult.Error))
+        {
+            throw new Exception($"[BuildScript] Addressables Build Failed: {addressablesResult.Error}");
+        }
+
+        Debug.Log("[BuildScript] Addressables Content Build Successfully");
+        BuildPlayerOptions buildPlayerOptions = new()
+        {
+            scenes = new[] { "Assets/Scenes/MainScene.unity" },
+            locationPathName = "Builds/PC/ElementalBlacksmithStory.exe",
+            target = BuildTarget.StandaloneWindows64,
+            targetGroup = BuildTargetGroup.Standalone,
+            options = BuildOptions.None
+        };
+        Debug.Log("[BuildScript] Starting PC Player Build");
+
+        var report = BuildPipeline.BuildPlayer(buildPlayerOptions);
+
+        if (report.summary.result != UnityEditor.Build.Reporting.BuildResult.Succeeded)
+        {
+            throw new Exception($"[BuildScript] PC 빌드 실패: {report.summary.result}");
+        }
+        Debug.Log("[BuildScript] PC Build Completed Successfully");
+    }
 }

@@ -18,6 +18,10 @@ namespace ElementalBlacksmithStory.UI
         {
             if (enhanceButton != null)
             {
+                if (!enhanceButton.TryGetComponent<UIButtonSound>(out _))
+                {
+                    enhanceButton.gameObject.AddComponent<UIButtonSound>();
+                }
                 _rectTransform = enhanceButton.GetComponent<RectTransform>();
                 if (_rectTransform != null)
                 {

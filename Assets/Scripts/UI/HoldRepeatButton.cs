@@ -27,6 +27,12 @@ namespace ElementalBlacksmithStory.UI
 
         private readonly Subject<Unit> _onTickSubject = new();
         private CancellationTokenSource _cts;
+        private UIButtonSound _buttonSound;
+
+        private void Awake()
+        {
+            _buttonSound = GetComponent<UIButtonSound>();
+        }
 
         public Observable<Unit> OnTickAsObservable() => _onTickSubject;
 
@@ -34,6 +40,7 @@ namespace ElementalBlacksmithStory.UI
         {
             StopRepeat();
             _cts = new CancellationTokenSource();
+            _buttonSound?.PlaySound();
             _onTickSubject.OnNext(Unit.Default);
             RepeatLoopAsync(_cts.Token).Forget();
         }
@@ -76,6 +83,7 @@ namespace ElementalBlacksmithStory.UI
             float currentInterval = initialInterval;
             while (!ct.IsCancellationRequested)
             {
+                _buttonSound?.PlaySound();
                 _onTickSubject.OnNext(Unit.Default);
                 canceled = await UniTask.Delay(TimeSpan.FromSeconds(currentInterval), cancellationToken: ct).SuppressCancellationThrow();
                 if (canceled) return;
