@@ -2,11 +2,33 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using R3;
+using System.Collections.ObjectModel;
 
 namespace ElementalBlacksmithStory.UI
 {
     public class SettingsView : MonoBehaviour
     {
+        [Header("Settings Panel")]
+        [SerializeField] private GameObject _settingsPanel;
+        public bool IsActivated => _settingsPanel.activeSelf;
+
+        [Header("Setting Buttons")]
+        [SerializeField] private Button _audioButton;
+        [SerializeField] private Button _forgeButton;
+        [SerializeField] private Button _expeditionButton;
+        [SerializeField] private Button _sellingButton;
+        [SerializeField] private Button _screenButton;
+        [SerializeField] private Button _etcButton;
+        [SerializeField] private Button _closeButton;
+
+        [Header("Menus")]
+        [SerializeField] private GameObject _audioMenu;
+        [SerializeField] private GameObject _forgeMenu;
+        [SerializeField] private GameObject _expeditionMenu;
+        [SerializeField] private GameObject _sellingMenu;
+        [SerializeField] private GameObject _screenMenu;
+        [SerializeField] private GameObject _etcMenu;
+
         [Header("Audio Controls")]
         [SerializeField] private Slider _bgmSlider;
         [SerializeField] private TextMeshProUGUI _bgmPercentText;
@@ -31,6 +53,7 @@ namespace ElementalBlacksmithStory.UI
         [Header("Account/Etc Controls")]
         [SerializeField] private Button _accountLinkButton;
         [SerializeField] private Button _termsOfUseButton;
+
         public void SetInitialValues(
             float bgmVolume,
             float sfxVolume,
@@ -58,7 +81,72 @@ namespace ElementalBlacksmithStory.UI
             if (_quicksellAlertToggle != null) _quicksellAlertToggle.isOn = quicksellAlert;
             if (_screenShakeToggle != null) _screenShakeToggle.isOn = screenShake;
         }
-
+        public void Hide()
+        {
+            ShowButtonWithoutChild();
+            _settingsPanel.SetActive(false);
+        }
+        private void HideButtons()
+        {
+            _audioButton.gameObject.SetActive(false);
+            _forgeButton.gameObject.SetActive(false);
+            _expeditionButton.gameObject.SetActive(false);
+            _sellingButton.gameObject.SetActive(false);
+            _screenButton.gameObject.SetActive(false);
+            _etcButton.gameObject.SetActive(false);
+        }
+        private void ShowButtonWithoutChild()
+        {
+            _audioButton.gameObject.SetActive(true);
+            _forgeButton.gameObject.SetActive(true);
+            _expeditionButton.gameObject.SetActive(true);
+            _sellingButton.gameObject.SetActive(true);
+            _screenButton.gameObject.SetActive(true);
+            _etcButton.gameObject.SetActive(true);
+            _audioMenu.SetActive(false);
+            _forgeMenu.SetActive(false);
+            _expeditionMenu.SetActive(false);
+            _sellingMenu.SetActive(false);
+            _screenMenu.SetActive(false);
+            _etcMenu.SetActive(false);
+            _closeButton.gameObject.SetActive(false);
+        }
+        public void ShowAudio()
+        {
+            HideButtons();
+            _audioMenu.SetActive(true);
+            _closeButton.gameObject.SetActive(true);
+        }
+        public void ShowForge()
+        {
+            HideButtons();
+            _forgeMenu.SetActive(true);
+            _closeButton.gameObject.SetActive(true);
+        }
+        public void ShowExpedition()
+        {
+            HideButtons();
+            _expeditionMenu.SetActive(true);
+            _closeButton.gameObject.SetActive(true);
+        }
+        public void ShowSelling()
+        {
+            HideButtons();
+            _sellingMenu.SetActive(true);
+            _closeButton.gameObject.SetActive(true);
+        }
+        public void ShowScreen()
+        {
+            HideButtons();
+            _screenMenu.SetActive(true);
+            _closeButton.gameObject.SetActive(true);
+        }
+        public void ShowEtc()
+        {
+            HideButtons();
+            _etcMenu.SetActive(true);
+            _closeButton.gameObject.SetActive(true);
+        }
         public void UpdateBGMPercentText(float value)
         {
             if (_bgmPercentText != null)

@@ -72,11 +72,13 @@ namespace ElementalBlacksmithStory.UI
         {
             WeaponData = data;
             if (nameText != null && data != null) 
-                nameText.SetText(data.weaponName);
-            
-            if (iconImage != null)
             {
-                iconImage.enabled = false;
+                nameText.text = data.weaponName;
+            }
+
+            if (data == null)
+            {
+                Debug.LogWarning("[WeaponNodeUI] Data가 비어있습니다");
             }
 
             if (iconImage != null && spriteLoader != null && data != null)

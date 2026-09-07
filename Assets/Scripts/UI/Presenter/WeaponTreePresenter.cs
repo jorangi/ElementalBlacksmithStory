@@ -24,6 +24,8 @@ namespace ElementalBlacksmithStory.UI
         private Dictionary<uint, WeaponNodeUI> _nodes = new();
         private ForgeManager _forgeManager;
         List<uint> path;
+        public bool IsActivated => _treeBuilder.IsActivated;
+        public void Hide() => _treeBuilder.Hide();
 
         [Inject]
         public WeaponTreePresenter(
@@ -40,6 +42,7 @@ namespace ElementalBlacksmithStory.UI
             _spriteLoader = spriteLoader;
             _weaponDatabase = weaponDatabase;
             _recipeFlagPublisher = recipeFlagPublisher;
+            // 화면 스크롤 동기화
             positionSubscriber.Subscribe(e =>
             {
                 if (e.positionY <= -1000f)
@@ -56,6 +59,7 @@ namespace ElementalBlacksmithStory.UI
                 }
             }).AddTo(_disposables);
 
+            // 레시피 변경 동기화
             _treeBuilder.OnChangeRecipeFlagEventAsObservable.Subscribe(e =>
             {
                 if(path != null)

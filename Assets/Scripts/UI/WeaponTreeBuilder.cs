@@ -20,11 +20,28 @@ namespace ElementalBlacksmithStory.UI
         [SerializeField] private SO_WeaponData testRootWeapon;
 
         [Header("UI 참조")]
+        [SerializeField] private GameObject weaponTreePanel;
         [SerializeField] private ScrollRect scrollRect;
         [SerializeField] private RectTransform contentRect; // ScrollView의 Content
         [SerializeField] private Transform branchContainer;
         [SerializeField] private Transform nodeContainer;
         [SerializeField] private Button _button;        
+
+        public bool IsActivated => weaponTreePanel != null 
+            ? weaponTreePanel.activeSelf 
+            : (scrollRect != null ? scrollRect.gameObject.activeInHierarchy : gameObject.activeInHierarchy);
+
+        public void Hide()
+        {
+            if (weaponTreePanel != null)
+            {
+                weaponTreePanel.SetActive(false);
+            }
+            else if (scrollRect != null)
+            {
+                scrollRect.gameObject.SetActive(false);
+            }
+        }        
 
         [Header("프리팹")]
         [SerializeField] private WeaponNodeUI nodePrefab;
@@ -71,6 +88,10 @@ namespace ElementalBlacksmithStory.UI
 
         private const float ANIM_DURATION = 0.25f;
 
+        /// <summary>
+        /// 무기트리 패널이 보일 때 버튼을 위로 올리는 애니메이션
+        /// </summary>
+        /// <returns></returns>
         public async UniTaskVoid ShowingButtonAnimation()
         {
             if (_buttonRect == null) return;
@@ -97,6 +118,10 @@ namespace ElementalBlacksmithStory.UI
             _buttonRect.anchoredPosition = new Vector2(_buttonRect.anchoredPosition.x, targetShowY);
         }
 
+        /// <summary>
+        /// 무기트리 패널이 닫힐 때 버튼을 내리는 애니메이션
+        /// </summary>
+        /// <returns></returns>
         public async UniTaskVoid HidingButtonAnimation()
         {
             if (_buttonRect == null) return;
@@ -123,6 +148,10 @@ namespace ElementalBlacksmithStory.UI
             _buttonRect.anchoredPosition = new Vector2(_buttonRect.anchoredPosition.x, _defaultY);
         }
 
+        /// <summary>
+        /// 화면 스크롤시 버튼의 Y좌표를 동기화(패널이 닫힐 때 버튼이 패널에 가려지는 것을 방지)
+        /// </summary>
+        /// <param name="y"></param>
         public void SyncButtonYPosition(float y)
         {
             if (_buttonRect != null)
@@ -131,6 +160,9 @@ namespace ElementalBlacksmithStory.UI
             }
         }
 
+        /// <summary>
+        /// (테스트용) 컨텍스트 메뉴에서 트리 생성
+        /// </summary>
         [ContextMenu("Generate Tree (트리 생성)")]
         public void GenerateTreeFromContext()
         {
@@ -138,6 +170,9 @@ namespace ElementalBlacksmithStory.UI
                 GenerateTree(testRootWeapon);
         }
 
+        /// <summary>
+        /// (테스트용) 컨텍스트 메뉴에서 트리 초기화
+        /// </summary>
         [ContextMenu("Clear Tree (트리 초기화)")]
         public void ClearTree()
         {
@@ -150,7 +185,11 @@ namespace ElementalBlacksmithStory.UI
             ClearContainer(branchContainer);
             ClearContainer(nodeContainer);
         }
-
+        /// <summary>
+        /// 무기트리 생성
+        /// </summary>
+        /// <param name="rootWeapon">기본무기</param>
+        /// <returns>생성된 노드 사전</returns>
         public Dictionary<uint, WeaponNodeUI> GenerateTree(SO_WeaponData rootWeapon)
         {
             nodes.Clear();
@@ -176,6 +215,12 @@ namespace ElementalBlacksmithStory.UI
             }
             return nodes;
         }
+        /// <summary>
+        /// 무기 노드를 재귀적으로 생성
+        /// </summary>
+        /// <param name="weapon">현재 무기</param>
+        /// <param name="depth">현재 깊이</param>
+        /// <returns>생성된 노드</returns>
         private WeaponNodeUI BuildNodeRecursive(SO_WeaponData weapon, int depth)
         {
             if (weapon == null) return null;
@@ -219,6 +264,7 @@ namespace ElementalBlacksmithStory.UI
 
             nodes[weapon.Id] = currentNode;
 
+            // 무기 노드 클릭 시 레시피 변경 이벤트 발생함
             currentNode.OnClickAsObservable().
             ThrottleFirst(TimeSpan.FromMilliseconds(100)).
             Subscribe(e =>
@@ -226,6 +272,7 @@ namespace ElementalBlacksmithStory.UI
                 _onChangeRecipeFlagEventSubject.OnNext(new ChangeRecipeFlagEvent { _recipeId = weapon.Id });
             }).AddTo(_disposables);
 
+            // 자식 노드 연결
             foreach (var childUI in childNodes)
             {
                 WeaponTreeBranchView branch = Instantiate(branchPrefab, branchContainer);
@@ -237,6 +284,10 @@ namespace ElementalBlacksmithStory.UI
 
             return currentNode;
         }
+        /// <summary>
+        /// 스크롤 위치 초기화
+        /// </summary>
+        /// <returns></returns>
         private async UniTask ResetScrollPositionRoutine()
         {
             await UniTask.Yield(PlayerLoopTiming.Update);
@@ -246,6 +297,10 @@ namespace ElementalBlacksmithStory.UI
             }
         }
 
+        /// <summary>
+        /// 자식 노드 및 브랜치 제거
+        /// </summary>
+        /// <param name="container">제거할 컨테이너</param>
         private void ClearContainer(Transform container)
         {
             if (container == null) return;

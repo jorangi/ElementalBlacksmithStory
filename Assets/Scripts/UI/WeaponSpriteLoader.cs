@@ -4,29 +4,27 @@ using UnityEngine.ResourceManagement.AsyncOperations;
 using Cysharp.Threading.Tasks;
 using UnityEngine.AddressableAssets;
 using System.Threading;
+using VContainer.Unity;
+using System;
+using R3;
 
 namespace ElementalBlacksmithStory.UI
 {
-    public class WeaponSpriteLoader : MonoBehaviour
+    public class WeaponSpriteLoader : IAsyncStartable, IDisposable
     {
         private SpriteAtlas _cachedAtlas;
         private AsyncOperationHandle<SpriteAtlas> _atlasHandler;
-        private UniTaskCompletionSource<SpriteAtlas> _atlasLoadTcs;
+        private readonly UniTaskCompletionSource<SpriteAtlas> _atlasLoadTcs = new();
+        private readonly CompositeDisposable _disposables = new();
+        private readonly CancellationTokenSource _cts = new();
 
-        private void Awake()
+        public async UniTask StartAsync(CancellationToken cancellation = default)
         {
-            LoadAtlasAsync().Forget();
-        }
-
-        private async UniTask LoadAtlasAsync()
-        {
-            _atlasLoadTcs = new UniTaskCompletionSource<SpriteAtlas>();
-            var cancellationToken = this.GetCancellationTokenOnDestroy();
-
+            using var linkedCTs = CancellationTokenSource.CreateLinkedTokenSource(_cts.Token, cancellation);
             try
             {
                 _atlasHandler = Addressables.LoadAssetAsync<SpriteAtlas>("SwordAtlas");
-                _cachedAtlas = await _atlasHandler.ToUniTask(cancellationToken: cancellationToken);
+                _cachedAtlas = await _atlasHandler.ToUniTask(cancellationToken: linkedCTs.Token);
                 _atlasLoadTcs.TrySetResult(_cachedAtlas);
                 Debug.Log("[WeaponSpriteLoader] SwordAtlas 로드 완료");
             }
@@ -41,7 +39,7 @@ namespace ElementalBlacksmithStory.UI
         {
             if (string.IsNullOrEmpty(spriteId)) return null;
 
-            if (_cachedAtlas == null && _atlasLoadTcs != null)
+            if (_cachedAtlas == null)
             {
                 await _atlasLoadTcs.Task.AttachExternalCancellation(cancellationToken);
             }
@@ -55,18 +53,14 @@ namespace ElementalBlacksmithStory.UI
             Sprite sprite = _cachedAtlas.GetSprite(spriteId);
             if (sprite == null)
             {
-                sprite = _cachedAtlas.GetSprite($"{spriteId}_0");
-            }
-
-            if (sprite == null)
-            {
                 Debug.LogWarning($"[WeaponSpriteLoader] '{spriteId}' 스프라이트를 찾을 수 없습니다.");
             }
+
             return sprite;
         }
-
-        private void OnDestroy()
+        public void Dispose()
         {
+            _disposables.Dispose();
             if (_atlasHandler.IsValid())
             {
                 Addressables.Release(_atlasHandler);

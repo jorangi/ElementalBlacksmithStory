@@ -20,13 +20,16 @@ namespace ElementalBlacksmithStory.Core
         private readonly GameExitPresenter _gameExitPresenter;
         [Inject]
         public GameInitializer(
-            MaterialInventory materialInventory,
+            SO_WeaponDatabase weaponDatabase,
             SO_MaterialDatabase materialDatabase,
+            MaterialInventory materialInventory,
             GameExitPresenter gameExitPresenter,
             IPublisher<PlaySoundEvent> sfxPublisher,
             ISubscriber<GameExitEvent> exitSubscriber
         )
         {
+            weaponDatabase.Init();
+            materialDatabase.Init();
             _materialInventory = materialInventory;
             _materialDatabase = materialDatabase;
             _gameExitPresenter = gameExitPresenter;
@@ -63,7 +66,6 @@ namespace ElementalBlacksmithStory.Core
         }
         private void OnBack(InputAction.CallbackContext context)
         {
-            Debug.Log("패널 토글");
             _gameExitPresenter.ShowPanel();
         }
     }

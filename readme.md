@@ -318,6 +318,16 @@ Assets/
         - 어떤 기능들을 넣을지는 구상했으나, 구체적인 기획이 필요
       - 무기 노드에서는 외곽선 숨김이 적용되지 않는 문제를 해결할 것
 
-## 2026-09-11
+## 2026-09-06
 
     - 임시 커밋(노트북 작업 동기화용)
+
+## 2026-09-07
+
+    - `CoinParticleEvent`를 Publish하여 CoinParticleListner가 받고 판매 금액에 따른 파티클 발생을 구현했다.
+    - `ZLogger`를 쓰려 했는데, 막상 C#10 이상 권장이길래 유니티의 버전이 9여서 그냥 지웠다.
+    - GameLifetimeScope가 점점 길어지는 문제가 있었는데, `IInstaller`를 추가하여 VContainer의 `GameLifetimeScope`를 경량화했다.
+    - `SettingsView`에 여러 버튼들과 close 버튼을 넣어 인스펙터가 아닌 Presenter에서 기능하게끔 하고있다.
+    - SpriteLoader 2종을 순수 C# 클래스로 변경하였다.
+    - 설정, 무기트리, 재료 수량 조정창에서는 뒤로가기시 게임 종료가 아니라 해당 탭이 닫히게 하였다.
+    - 일부 코드에 주석을 추가하였다.

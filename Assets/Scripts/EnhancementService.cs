@@ -48,7 +48,6 @@ namespace ElementalBlacksmithStory.Core
             this.moneyChangePublisher = moneyChangePublisher;
             this._soundPublisher = soundPublisher;
             this._nextRecipePublisher = nextRecipePublisher;
-            this.moneyChangePublisher.Publish(new ChangeMoneyEvent(out uint tempId, money));
             this.subscription = enhanceRequestSubscriber.Subscribe(OnEnhanceRequested).AddTo(_disposables);
             
             submitMaterialSubscriber.Subscribe(e =>
@@ -66,7 +65,7 @@ namespace ElementalBlacksmithStory.Core
             sellEventSubscriber.Subscribe(e=>
             {
                 money += e.Price;
-                moneyChangePublisher.Publish(new ChangeMoneyEvent(out uint tempId2, money));
+                moneyChangePublisher.Publish(new ChangeMoneyEvent(out uint tempId, money));
                 _currentWeapon = new Weapon(weaponDatabase.GetWeapon(10001));
                 weaponChangePublisher.Publish(new ChangeWeaponEvent(_currentWeapon, 10001, 0));
                 totalCost = 0;
@@ -90,6 +89,7 @@ namespace ElementalBlacksmithStory.Core
             weaponChangePublisher.Publish(new ChangeWeaponEvent(_currentWeapon, 10001, 0));
             cachedWeaponId = 10001;
             UpdateNextRecipe();
+            this.moneyChangePublisher.Publish(new ChangeMoneyEvent(out uint tempId, money));
         }
 
         private void UpdateNextRecipe()
@@ -178,7 +178,6 @@ namespace ElementalBlacksmithStory.Core
                 Debug.LogWarning($"[EnhancementService]강화 비용이 부족합니다. 요구비용: {weapon.Cost}, 현재보유금액: {money}");
                 return;
             }
-            Debug.Log(money + " - " + cost + " = " + (money - cost));
             money -= cost;
             moneyChangePublisher.Publish(new ChangeMoneyEvent(out uint tempId, money));
             totalCost += cost;

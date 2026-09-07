@@ -10,6 +10,7 @@ namespace ElementalBlacksmithStory.UI
     {
         private readonly SettingsView _view;
         private readonly SettingsService _service;
+        public bool IsActivated => _view.IsActivated;
         private readonly CompositeDisposable _disposables = new();
 
         [Inject]
@@ -52,7 +53,10 @@ namespace ElementalBlacksmithStory.UI
             _view.OnAccountLinkClick.Subscribe(_ => _service.ExecuteAccountLink()).AddTo(_disposables);
             _view.OnTermsOfUseClick.Subscribe(_ => _service.ExecuteTermsOfUse()).AddTo(_disposables);
         }
-
+        public void Hide()
+        {
+            _view.Hide();
+        }
         public void Dispose()
         {
             _disposables.Dispose();

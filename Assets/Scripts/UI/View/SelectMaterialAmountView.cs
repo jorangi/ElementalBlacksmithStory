@@ -21,7 +21,14 @@ namespace ElementalBlacksmithStory.UI
         [SerializeField] private Button cancelButton;
         private MaterialItemView _itemView;
         public uint MaterialCount { get; private set; } // 재료 최대개수
+        public bool IsActivated => panel != null && panel.activeSelf;
 
+        /// <summary>
+        /// 선택 창 설정
+        /// </summary>
+        /// <param name="sprite">재료 이미지</param>
+        /// <param name="name">재료 이름</param>
+        /// <param name="maxAmount">최대 수량</param>
         public void SetData(Sprite sprite, string name, uint maxAmount)
         {
             panel.SetActive(true);
@@ -30,6 +37,10 @@ namespace ElementalBlacksmithStory.UI
             MaterialCount = maxAmount;
             countText.SetTextWithoutNotify("0");
         }
+        /// <summary>
+        /// 입력창에 입력한 값의 Observable
+        /// </summary>
+        /// <returns></returns>
         public Observable<uint> OnChangedAmountAsObservable()
         {
             if(countText == null)
@@ -48,6 +59,9 @@ namespace ElementalBlacksmithStory.UI
             EnsureButtonSounds();
         }
 
+        /// <summary>
+        /// 버튼에 UI버튼 사운드 추가
+        /// </summary>
         private void EnsureButtonSounds()
         {
             EnsureButtonSound(increaseButton, false);
@@ -56,6 +70,11 @@ namespace ElementalBlacksmithStory.UI
             EnsureButtonSound(cancelButton, true);
         }
 
+        /// <summary>
+        /// 버튼에 사운드 추가
+        /// </summary>
+        /// <param name="btn">버튼</param>
+        /// <param name="autoBind">클릭 시 자동 바인딩</param>
         private void EnsureButtonSound(Button btn, bool autoBind)
         {
             if (btn != null && !btn.TryGetComponent<UIButtonSound>(out var sound))
@@ -64,22 +83,31 @@ namespace ElementalBlacksmithStory.UI
                 sound.SetAutoBindOnClick(autoBind);
             }
         }
-
+        /// <summary>
+        /// 버튼에 홀드 반복 버튼 추가
+        /// </summary>
         private void EnsureHoldButtons()
         {
             if (increaseButton != null && _increaseHoldButton == null)
             {
-                _increaseHoldButton = increaseButton.GetComponent<HoldRepeatButton>() 
-                                      ?? increaseButton.gameObject.AddComponent<HoldRepeatButton>();
+                if (!increaseButton.TryGetComponent<HoldRepeatButton>(out _increaseHoldButton))
+                {
+                    _increaseHoldButton = increaseButton.gameObject.AddComponent<HoldRepeatButton>();
+                }
             }
 
             if (decreseButton != null && _decreaseHoldButton == null)
             {
-                _decreaseHoldButton = decreseButton.GetComponent<HoldRepeatButton>() 
-                                      ?? decreseButton.gameObject.AddComponent<HoldRepeatButton>();
+                if (!decreseButton.TryGetComponent<HoldRepeatButton>(out _decreaseHoldButton))
+                {
+                    _decreaseHoldButton = decreseButton.gameObject.AddComponent<HoldRepeatButton>();
+                }
             }
         }
-
+        /// <summary>
+        /// 증가 버튼 클릭
+        /// </summary>
+        /// <returns></returns>
         public Observable<Unit> OnIncreaseAsObservable()
         {
             if (increaseButton == null)
@@ -90,6 +118,10 @@ namespace ElementalBlacksmithStory.UI
             EnsureHoldButtons();
             return _increaseHoldButton != null ? _increaseHoldButton.OnTickAsObservable() : increaseButton.OnClickAsObservable();
         }
+        /// <summary>
+        /// 감소 버튼 클릭
+        /// </summary>
+        /// <returns></returns>
         public Observable<Unit> OnDecreaseAsObservable()
         {
             if (decreseButton == null)
@@ -100,6 +132,10 @@ namespace ElementalBlacksmithStory.UI
             EnsureHoldButtons();
             return _decreaseHoldButton != null ? _decreaseHoldButton.OnTickAsObservable() : decreseButton.OnClickAsObservable();
         }
+        /// <summary>
+        /// 확인 버튼 클릭
+        /// </summary>
+        /// <returns></returns>
         public Observable<Unit> OnSubmitAsObservable()
         {
             if (submitButton == null)
@@ -109,6 +145,10 @@ namespace ElementalBlacksmithStory.UI
             }
             return submitButton.OnClickAsObservable();
         }
+        /// <summary>
+        /// 취소 버튼 클릭
+        /// </summary>
+        /// <returns></returns>
         public Observable<Unit> OnCancelAsObservable()
         {
             if (cancelButton == null)
@@ -118,13 +158,25 @@ namespace ElementalBlacksmithStory.UI
             }
             return cancelButton.OnClickAsObservable();
         }
+        /// <summary>
+        /// 창 숨김
+        /// </summary>
         public void Hide()
         {
             panel.SetActive(false);
         }
+        /// <summary>
+        /// 입력한 값 설정
+        /// </summary>
+        /// <param name="amount">설정할 값</param>
         public void SetAmount(uint amount)
         {
-            countText?.SetTextWithoutNotify(ZString.Format("{0:N0}", amount));
+            if(countText == null)
+            {
+                Debug.LogError("[SelectMaterialAmountView] countText가 없습니다.");
+                return;
+            }
+            countText.SetTextWithoutNotify(ZString.Format("{0:N0}", amount));
         }
     }
 }

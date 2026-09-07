@@ -23,7 +23,10 @@ namespace ElementalBlacksmithStory.UI
                 _button.onClick.AddListener(PlaySound);
             }
         }
-
+        /// <summary>
+        /// 버튼 자동 바인드 설정
+        /// </summary>
+        /// <param name="autoBind"></param>
         public void SetAutoBindOnClick(bool autoBind)
         {
             if (_autoBindOnClick == autoBind) return;
@@ -37,6 +40,10 @@ namespace ElementalBlacksmithStory.UI
             }
         }
 
+        /// <summary>
+        /// 버튼 사운드 id 설정
+        /// </summary>
+        /// <param name="soundId"></param>
         public void SetSoundId(uint soundId)
         {
             _soundId = soundId;
@@ -49,11 +56,17 @@ namespace ElementalBlacksmithStory.UI
                 _button.onClick.RemoveListener(PlaySound);
             }
         }
-
+        /// <summary>
+        /// 버튼 사운드 재생
+        /// </summary>
         public void PlaySound()
         {
             PlaySound(_soundId);
         }
+        /// <summary>
+        /// 버튼 사운드 id로 재생
+        /// </summary>
+        /// <param name="soundId">사운드 id</param>
 
         public void PlaySound(uint soundId)
         {
@@ -67,7 +80,10 @@ namespace ElementalBlacksmithStory.UI
                 Debug.LogWarning($"[UIButtonSound] PlaySoundEvent Publisher를 찾을 수 없습니다. (soundId: {soundId})");
             }
         }
-
+        /// <summary>
+        /// 버튼 사운드 id로 재생, int->uint 캐스팅
+        /// </summary>
+        /// <param name="soundId">사운드 id</param>
         public void PlaySound(int soundId)
         {
             PlaySound((uint)soundId);

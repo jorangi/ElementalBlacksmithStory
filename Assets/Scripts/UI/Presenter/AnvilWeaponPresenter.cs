@@ -31,7 +31,7 @@ namespace ElementalBlacksmithStory.UI
             _weaponDatabase = weaponDatabase;
             _anvilWeaponView = view;
             _weaponSpriteLoader = spriteLoader;
-            weaponChangeSubscriber.Subscribe(e => {ChangeSprite(e).Forget();}).AddTo(_disposables);
+            weaponChangeSubscriber.Subscribe(e => { ChangeSprite(e).Forget(); }).AddTo(_disposables);
             _forgeManager = forgeManager;
         }
         public void Start(){}
@@ -43,7 +43,7 @@ namespace ElementalBlacksmithStory.UI
                 SO_WeaponData weaponData = _weaponDatabase.GetWeapon(e.Weapon.WeaponId);
                 if (weaponData == null)
                 {
-                    Debug.LogWarning($"[AnvilWeaponPresenter] {e.Weapon.WeaponId} 무기 데이터를 찾을 수 없습니다.");
+                    Debug.LogWarning($"[AnvilWeaponPresenter] {e.Weapon.WeaponId} 데이터를 찾을 수 없습니다.");
                     return;
                 }
 
@@ -57,9 +57,9 @@ namespace ElementalBlacksmithStory.UI
 
                 _anvilWeaponView.ChangeSprite(sprite, weaponData.hideOutline);
             }
-            catch (Exception exception)
+            catch (Exception ex)
             {
-                Debug.LogError($"[AnvilWeaponPresenter] {e.Weapon?.WeaponId} 스프라이트를 불러오던 중 오류가 발생했습니다: {exception.Message}");
+                Debug.LogError($"[AnvilWeaponPresenter] 스프라이트 변경 실패: {ex.Message}");
             }
         }
         public void Dispose()
