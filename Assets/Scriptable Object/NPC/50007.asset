@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e51982b598c1394687beeb615b406a3, type: 3}
+  m_Name: 50007
+  m_EditorClassIdentifier: Assembly-CSharp::ElementalBlacksmithStory.Data.SO_NPCData
+  npcName: "\uBE44\uC2E4\uD55C \uACBD\uB9E4\uC0AC"
+  npcFriendlyName: "\uBE44\uC2E4\uD55C \uACBD\uB9E4\uC0AC, \uCF54\uB974\uD06C"
+  dialogues:
+  - {fileID: 11400000, guid: 53771d2e75a9e93438160a5aeb89121c, type: 2}
+  - {fileID: 11400000, guid: 9041b23eef3098542a26d831cdda2539, type: 2}
+  - {fileID: 11400000, guid: 9009c6076ac0c0d4b8cfc19c828bf3f5, type: 2}
+  - {fileID: 11400000, guid: 0b747485ab6d70c48b96b70f53428776, type: 2}
+  - {fileID: 11400000, guid: 0df15fbf61fd8a84190de0baaf84a2e8, type: 2}
+  - {fileID: 11400000, guid: 5189d4ff045e6b44997bc23022d2f3f3, type: 2}
+  preferGift: 

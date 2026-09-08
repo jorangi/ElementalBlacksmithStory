@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b95dc85e94140ab4a84be25b52aada74, type: 3}
+  m_Name: 600203
+  m_EditorClassIdentifier: Assembly-CSharp::ElementalBlacksmithStory.Data.SO_DialogueData
+  description: "\uC6A9\uBCD1\uAD00\uB9AC\uC778 \uC18C\uD53C\uC544, \uC88B\uC544\uD558\uB294
+    \uC120\uBB3C\uC5D0 \uB300\uD55C \uAC10\uC0AC\n\uD638\uAC10\uB3C4 \uB192\uC74C"
+  contents:
+  - speakerId: 50002
+    text: "\uB2F9\uC2E0\uC758 \uC774\uB7F0 \uC138\uC2EC\uD55C \uBC30\uB824\uB294
+      \uB298 \uB9C8\uC74C\uC744 \uD3B8\uD558\uAC8C \uD574 \uC8FC\uB294\uAD70\uC694.
+      \uC18C\uC911\uD788 \uAC04\uC9C1\uD560\uAC8C\uC694, {username}\uB2D8."
