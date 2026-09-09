@@ -7,6 +7,7 @@ using System.Threading;
 using R3;
 using MessagePipe;
 using ElementalBlacksmithStory.Events;
+using ElementalBlacksmithStory.Core;
 
 namespace ElementalBlacksmithStory.UI
 {
@@ -83,7 +84,7 @@ namespace ElementalBlacksmithStory.UI
 
             if (iconImage != null && spriteLoader != null && data != null)
             {
-                Sprite weaponSprite = await spriteLoader.GetWeaponSprite(data.Id.ToString(), cancellationToken);
+                Sprite weaponSprite = await spriteLoader.GetSprite(data.Id, cancellationToken);
                 if (weaponSprite != null)
                 {
                     iconImage.sprite = weaponSprite;

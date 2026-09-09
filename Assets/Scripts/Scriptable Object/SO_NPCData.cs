@@ -28,6 +28,8 @@ namespace ElementalBlacksmithStory.Data
         public IReadOnlyList<SO_DialogueData> Dialogues => dialogues;
         public List<uint> preferGift = new();
         public IReadOnlyList<uint> PreferGift => preferGift;
+        [TextArea(5, 30)]
+        public string memo;
 
         
         #if UNITY_EDITOR

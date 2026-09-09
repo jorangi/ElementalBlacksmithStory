@@ -18,6 +18,7 @@ namespace ElementalBlacksmithStory.Core
             builder.RegisterComponentInHierarchy<SelectMaterialAmountView>();
             builder.RegisterComponentInHierarchy<GameExitView>();
             builder.RegisterComponentInHierarchy<SettingsView>();
+            builder.RegisterComponentInHierarchy<NPCDialogueView>();
 
             // Presenter 등록
             builder.RegisterEntryPoint<MoneyPresenter>();
@@ -29,6 +30,7 @@ namespace ElementalBlacksmithStory.Core
             builder.RegisterEntryPoint<WeaponTreePresenter>().AsSelf();
             builder.RegisterEntryPoint<GameExitPresenter>().AsSelf();
             builder.RegisterEntryPoint<SettingsPresenter>().AsSelf();
+            builder.RegisterEntryPoint<NPCDialoguePresenter>().AsSelf();
         }
     }
 }

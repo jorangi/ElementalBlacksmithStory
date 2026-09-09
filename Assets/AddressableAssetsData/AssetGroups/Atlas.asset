@@ -15,8 +15,13 @@ MonoBehaviour:
   m_GroupName: Atlas
   m_GUID: 0d9db73be9829be4cb214640a633d616
   m_SerializeEntries:
+  - m_GUID: 6dc5854fc7c5c1c4ea2098b767690eb7
+    m_Address: NPCStandingAtlas
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 82746efa197d0c94ab328984fbbad2bf
-    m_Address: SwordAtlas
+    m_Address: WeaponAtlas
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

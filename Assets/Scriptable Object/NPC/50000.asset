@@ -15,3 +15,5 @@ MonoBehaviour:
   npcName: "\uD53C\uC544\uB2C8"
   npcFriendlyName: "\uD53C\uC544\uB2C8"
   dialogues: []
+  preferGift: 
+  memo: "\uD50C\uB808\uC774\uC5B4\n"

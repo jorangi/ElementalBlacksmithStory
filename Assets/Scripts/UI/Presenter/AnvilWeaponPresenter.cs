@@ -48,7 +48,7 @@ namespace ElementalBlacksmithStory.UI
                 }
 
                 _anvilWeaponView.ChangeWeaponName(weaponData.weaponName);
-                Sprite sprite = await _weaponSpriteLoader.GetWeaponSprite(weaponData.Id.ToString(), cancellationToken);
+                Sprite sprite = await _weaponSpriteLoader.GetSprite(weaponData.Id, cancellationToken);
                 if (sprite == null)
                 {
                     Debug.LogWarning($"[AnvilWeaponPresenter] {e.Weapon.WeaponId} 스프라이트가 없습니다.");

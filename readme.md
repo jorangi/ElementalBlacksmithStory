@@ -373,3 +373,19 @@ Assets/
 
     - NPC를 7종 추가하였다.
     - 대화 데이터를 38종 추가하였다.
+
+## 2026-09-09
+
+    - BaseSpriteLoader로 추상클래스 생성
+      - 기존 Weapon, MaterialSpriteLoader가 이를 상속받아 AtlasAddress만 기입하면 되도록 변경
+      - NPCStandingSpriteLoader 추가
+
+
+    - 대화창 Presenter와 View 작성
+      - Typing 효과를 구현
+      - Cursor Arrow가 둥둥 떠있는 효과를 구현
+      - SO_DialogueData를 기반으로 작동함
+
+    - SO_NPCData에 memo추가
+
+    - 기타 등등

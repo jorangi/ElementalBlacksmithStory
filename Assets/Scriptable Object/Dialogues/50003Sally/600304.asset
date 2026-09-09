@@ -15,5 +15,5 @@ MonoBehaviour:
   description: "\uC0C1\uC810 \uC18C\uB140, \uC0D0\uB9AC, \uC77C\uBC18 \uC120\uBB3C\uC5D0
     \uB300\uD55C \uAC10\uC0AC\n\uD638\uAC10\uB3C4 \uB0AE\uC74C"
   contents:
-  - speakerId: 50002
+  - speakerId: 50003
     text: "\uC557, \uC800 \uC8FC\uC2DC\uB294 \uAC70\uC608\uC694? \uAC10\uC0AC\uD574\uC694!"

@@ -11,6 +11,7 @@ using ElementalBlacksmithStory.Data;
 using ElementalBlacksmithStory.Events;
 using System.Threading;
 using ElementalBlacksmithStory.Inventory;
+using ElementalBlacksmithStory.Core;
 
 namespace ElementalBlacksmithStory.UI
 {
@@ -188,7 +189,7 @@ namespace ElementalBlacksmithStory.UI
             else if (count > 1)
             {
                 _selectedMaterialId = itemView.Select();
-                Sprite sprite = await _materialSpriteLoader.GetMaterialSprite(_selectedMaterialId.ToString(), ct);
+                Sprite sprite = await _materialSpriteLoader.GetSprite(_selectedMaterialId, ct);
                 SO_MaterialData materialData = _materialDatabase.GetMaterial(_selectedMaterialId);
                 _selectedItemView = itemView;
                 _selectMaterialAmountView.SetData(sprite, materialData.materialName, _inventory.GetCount(materialData));

@@ -21,6 +21,7 @@ namespace ElementalBlacksmithStory.Core
 
             builder.RegisterEntryPoint<WeaponSpriteLoader>(Lifetime.Singleton).AsSelf();
             builder.RegisterEntryPoint<MaterialSpriteLoader>(Lifetime.Singleton).AsSelf();
+            builder.RegisterEntryPoint<NPCStandingSpriteLoader>(Lifetime.Singleton).AsSelf();
             builder.RegisterComponentInHierarchy<AudioClipLoader>();
             builder.RegisterComponentInHierarchy<WeaponTreeBuilder>();
             builder.RegisterComponentInHierarchy<CoinParticleListener>();

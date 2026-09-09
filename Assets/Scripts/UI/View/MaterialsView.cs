@@ -7,6 +7,7 @@ using System.Threading;
 using R3.Triggers;
 using UnityEngine.EventSystems;
 using ElementalBlacksmithStory.Data;
+using ElementalBlacksmithStory.Core;
 
 namespace ElementalBlacksmithStory.UI
 {
@@ -175,7 +176,7 @@ namespace ElementalBlacksmithStory.UI
                 {
                     _itemViews[material.Id] = itemView;
                     itemView.SetData(material.Id, count);
-                    Sprite sprite = await loader.GetMaterialSprite(material.Id.ToString(), ct);
+                    Sprite sprite = await loader.GetSprite(material.Id, ct);
                     if(sprite == null)
                     {
                         Debug.LogError($"[MaterialsView] 재료 스프라이트를 불러오지 못했습니다 - ID: {material}");

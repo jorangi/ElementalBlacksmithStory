@@ -11,6 +11,7 @@ using R3;
 using MessagePipe;
 using ElementalBlacksmithStory.Events;
 using System;
+using ElementalBlacksmithStory.Core;
 
 namespace ElementalBlacksmithStory.UI
 {
