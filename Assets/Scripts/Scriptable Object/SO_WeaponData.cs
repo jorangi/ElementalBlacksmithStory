@@ -5,10 +5,9 @@ namespace ElementalBlacksmithStory.Data
 {
     
     [CreateAssetMenu(fileName = "SO_WeaponData", menuName = "Scriptable Objects/SO_WeaponData")]
-    public class SO_WeaponData : ScriptableObject
+    public class SO_WeaponData : BaseMaterialData
     {
         [Header("무기 기본 정보")]
-        public uint Id => uint.Parse(this.name);
         public string weaponName;
         public float atk;
         public float ats;
@@ -28,5 +27,6 @@ namespace ElementalBlacksmithStory.Data
         public ulong basePrice; // 외부에서 책정됨
         public ulong price; // 외부에서 책정됨
         public ulong cumulativeBasePrice;
+        public override ulong Value => basePrice;
     }
 }

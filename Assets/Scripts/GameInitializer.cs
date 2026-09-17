@@ -19,7 +19,6 @@ namespace ElementalBlacksmithStory.Core
         private readonly SO_MaterialDatabase _materialDatabase;
         private readonly IPublisher<PlaySoundEvent> _sfxPublisher;
         private readonly GameExitPresenter _gameExitPresenter;
-        private readonly NPCDialoguePresenter _dialoguePresenter;
 
         [Inject]
         public GameInitializer(
@@ -27,7 +26,6 @@ namespace ElementalBlacksmithStory.Core
             SO_MaterialDatabase materialDatabase,
             MaterialInventory materialInventory,
             GameExitPresenter gameExitPresenter,
-            NPCDialoguePresenter dialoguePresenter,
             IPublisher<PlaySoundEvent> sfxPublisher,
             ISubscriber<GameExitEvent> exitSubscriber
         )
@@ -37,7 +35,6 @@ namespace ElementalBlacksmithStory.Core
             _materialInventory = materialInventory;
             _materialDatabase = materialDatabase;
             _gameExitPresenter = gameExitPresenter;
-            _dialoguePresenter = dialoguePresenter;
             _sfxPublisher = sfxPublisher;
             exitSubscriber.Subscribe(_=>{Debug.Log("게임을 정상적으로 종료했습니다."); Application.Quit();});
         }
@@ -59,9 +56,6 @@ namespace ElementalBlacksmithStory.Core
             _materialInventory.Add(_materialDatabase.GetMaterial(30009), 500);
             _materialInventory.Add(_materialDatabase.GetMaterial(30010), 500);
             _sfxPublisher.Publish(new PlaySoundEvent(40201, true));
-
-            // 테스트: 600301 대화 출력
-            _dialoguePresenter.StartDialogue(600301);
 
             mainAction.Enable();
             mainAction.MainActions.Back.performed += OnBack;

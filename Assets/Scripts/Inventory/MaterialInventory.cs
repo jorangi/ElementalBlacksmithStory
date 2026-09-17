@@ -39,6 +39,12 @@ namespace ElementalBlacksmithStory.Inventory
             }
             _inventory.Remove(materialData);
         }
+        /// <summary>
+        /// 가방에서 재료를 선택함
+        /// </summary>
+        /// <param name="materialData">선택한 재료 데이터</param>
+        /// <param name="amount">선택한 재료 개수</param>
+        /// <returns>선택된 재료와 개수</returns>
         public (SO_MaterialData, uint) GetMaterial(SO_MaterialData materialData, uint amount)
         {
             if(_inventory.TryGetValue(materialData, out uint count))

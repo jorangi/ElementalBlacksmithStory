@@ -1,13 +1,13 @@
+using System.Threading;
+using Cysharp.Threading.Tasks;
+using ElementalBlacksmithStory.Core;
+using ElementalBlacksmithStory.Data;
+using ElementalBlacksmithStory.Events;
+using MessagePipe;
+using R3;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
-using ElementalBlacksmithStory.Data;
-using Cysharp.Threading.Tasks;
-using System.Threading;
-using R3;
-using MessagePipe;
-using ElementalBlacksmithStory.Events;
-using ElementalBlacksmithStory.Core;
 
 namespace ElementalBlacksmithStory.UI
 {
@@ -18,7 +18,7 @@ namespace ElementalBlacksmithStory.UI
         [SerializeField] private GameObject highlight_Destination;
         [SerializeField] private GameObject highlight_Route;
         [SerializeField] private TextMeshProUGUI nameText;
-        [SerializeField] private Button button;        
+        [SerializeField] private Button button;
         public SO_WeaponData WeaponData { get; private set; }
         public RectTransform RectTransform => (RectTransform)transform;
         public readonly CompositeDisposable _disposables = new();
@@ -72,7 +72,7 @@ namespace ElementalBlacksmithStory.UI
         public async UniTask Setup(SO_WeaponData data, WeaponSpriteLoader spriteLoader, CancellationToken cancellationToken = default)
         {
             WeaponData = data;
-            if (nameText != null && data != null) 
+            if (nameText != null && data != null)
             {
                 nameText.text = data.weaponName;
             }
@@ -89,10 +89,12 @@ namespace ElementalBlacksmithStory.UI
                 {
                     iconImage.sprite = weaponSprite;
                     iconImage.enabled = true;
+                    // 현재 열림/잠김 상태에 맞게 아이콘 색상 동기화
+                    iconImage.color = _isOpened ? Color.white : Color.black;
                 }
             }
-            
-            SetOpen(true);
+
+            SetOpen(_isOpened);
         }
 
         private void OnDestroy()

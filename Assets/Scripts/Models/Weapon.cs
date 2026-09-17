@@ -9,6 +9,7 @@ namespace ElementalBlacksmithStory.Core
     public class Weapon
     {
         private SO_WeaponData _weaponData;
+        public SO_WeaponData Data => _weaponData;
         //Weapon 인스턴스 Id 누적용
         private static uint lastId;
 
@@ -28,13 +29,17 @@ namespace ElementalBlacksmithStory.Core
         public ulong BasePrice => _basePrice;
         private ulong _price;
         public ulong Price => _price;
+        private readonly SO_WeaponData _baseWeaponData;
+        public SO_WeaponData BaseWeaponData => _baseWeaponData;
         // 강화 히스토리 스택 (무기 ID, 해당 단계에서 추가된 기본 가격, 해당 단계 비용)
-        private Stack<EnhanceStep> _enhanceHistory = new();
+        private readonly Stack<EnhanceStep> _enhanceHistory = new();
+        public Stack<EnhanceStep> EnhanceHistory => _enhanceHistory;
 
         public Weapon(SO_WeaponData weaponData)
         {
             _id = lastId++;
             _weaponData = weaponData;
+            _baseWeaponData = weaponData;
             _cost = weaponData != null ? weaponData.cost : 0;
             SetMargin(1f);
         }
@@ -46,28 +51,19 @@ namespace ElementalBlacksmithStory.Core
         {
             _weaponData = weaponData;
         }
+        public void SetBasePrice(ulong basePrice)
+        {
+            _basePrice = basePrice;
+        }
+        public void SetCost(ulong cost)
+        {
+            _cost = cost;
+        }
         public void PushEnhanceStep(uint weaponId, ulong addedBasePrice, ulong nextCost)
         {
             _enhanceHistory.Push(new EnhanceStep(weaponId, addedBasePrice, nextCost));
             _basePrice += addedBasePrice;
             _cost = nextCost;
-        }
-
-        public void RollbackTo(uint targetWeaponId, ulong targetCost)
-        {
-            while (_enhanceHistory.Count > 0 && _enhanceHistory.Peek().WeaponId != targetWeaponId)
-            {
-                var popped = _enhanceHistory.Pop();
-                if (_basePrice >= popped.AddedBasePrice)
-                {
-                    _basePrice -= popped.AddedBasePrice;
-                }
-                else
-                {
-                    _basePrice = 0;
-                }
-            }
-            _cost = targetCost;
         }
 
         public void PushPrice(ulong price)

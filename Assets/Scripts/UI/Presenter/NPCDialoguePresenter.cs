@@ -4,11 +4,13 @@ using System.Threading;
 using Cysharp.Threading.Tasks;
 using ElementalBlacksmithStory.Core;
 using ElementalBlacksmithStory.Data;
+using MessagePipe;
 using R3;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using VContainer;
 using VContainer.Unity;
+using ElementalBlacksmithStory.Events;
 
 namespace ElementalBlacksmithStory.UI
 {
@@ -32,10 +34,14 @@ namespace ElementalBlacksmithStory.UI
         [Inject]
         public NPCDialoguePresenter(
             NPCDialogueView view,
-            NPCStandingSpriteLoader spriteLoader = null)
+            NPCStandingSpriteLoader spriteLoader,
+            ISubscriber<StartDialogueEvent> dialogueSubscriber)
         {
             _view = view;
             _spriteLoader = spriteLoader;
+            dialogueSubscriber.Subscribe(e=>{
+                StartDialogue(e.dialogueId);
+            });
         }
 
         public void Start()

@@ -23,6 +23,14 @@ namespace ElementalBlacksmithStory.UI
 
         public void SetChance(float chance, ulong cost)
         {
+            if (chance < 0f)
+            {
+                chanceText.SetText(
+                    ZString.Format("??% <size=\"40%\">(-{0:N0} <sprite name=\"CoinSack\">)</size>",
+                    cost));
+                return;
+            }
+
             chanceText.SetText(
                 ZString.Format("{0:F2}% <size=\"40%\">(-{1:N0} <sprite name=\"CoinSack\">)</size>",
                 chance * 100.0f,

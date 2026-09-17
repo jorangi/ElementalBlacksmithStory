@@ -18,9 +18,12 @@ MonoBehaviour:
   cost: 100
   recipes:
   - {fileID: 11400000, guid: a22ca174acdc5f44a8bf92f00d983e32, type: 2}
+  - {fileID: 11400000, guid: 47d5bfb48776402488d000774518d77d, type: 2}
+  - {fileID: 11400000, guid: 0952e918eeb0ec34f92450d5ab6ac68f, type: 2}
   hideOutline: 0
   elementTypes: 
   statusEffects: []
   margin: 0.5
   basePrice: 0
   price: 0
+  cumulativeBasePrice: 0

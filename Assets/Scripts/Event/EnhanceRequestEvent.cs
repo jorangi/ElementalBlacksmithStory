@@ -4,6 +4,16 @@ using ElementalBlacksmithStory.Core;
 
 namespace ElementalBlacksmithStory.Events
 {
+    public enum EnhanceResult
+    {
+        SUCESS,
+        FAIL, // 운이 안좋았음
+        NEEDSMOREMONEY, //돈이 없음
+        NOMOREENHANCEMENT, //강화 단계가 더 이상 없음
+        INVAILDRECIPE, //재료가 틀림
+        LACKOFMATERIALS_WEAPONS, //재료가 틀림
+        LACKOFMATERIALS_PUREMATERIALS, //재료가 틀림
+    }
     public readonly struct EnhanceRequestEvent
     {
         private static uint _lastId;

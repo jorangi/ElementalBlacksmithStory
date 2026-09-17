@@ -1,6 +1,5 @@
 using VContainer;
 using VContainer.Unity;
-using ElementalBlacksmithStory.Core;
 using ElementalBlacksmithStory.Inventory;
 using ElementalBlacksmithStory.UI;
 
@@ -15,8 +14,11 @@ namespace ElementalBlacksmithStory.Core
             builder.Register<EquipmentInventory>(Lifetime.Singleton);
             builder.Register<MaterialInventory>(Lifetime.Singleton);
             builder.Register<ForgeManager>(Lifetime.Singleton);
+            builder.Register<RecipeKeyHelper>(Lifetime.Singleton);
+            builder.Register<RecipeUnlockService>(Lifetime.Singleton);
+            builder.Register<WeaponRollbackService>(Lifetime.Singleton);
 
-            builder.RegisterEntryPoint<EnhancementService>(Lifetime.Singleton);
+            builder.RegisterEntryPoint<EnhancementService>(Lifetime.Singleton).AsSelf();
             builder.RegisterEntryPoint<SettingsService>(Lifetime.Singleton).AsSelf();
 
             builder.RegisterEntryPoint<WeaponSpriteLoader>(Lifetime.Singleton).AsSelf();

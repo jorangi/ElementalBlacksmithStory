@@ -20,7 +20,8 @@ namespace ElementalBlacksmithStory.Core
             builder.RegisterMessageBroker<ChangeMoneyEvent>(options);
             builder.RegisterMessageBroker<SubmitMaterialEvent>(options);
             builder.RegisterMessageBroker<EnhanceButtonPositionEvent>(options);
-            builder.RegisterMessageBroker<NextRecipeChangedEvent>(options);
+            builder.RegisterMessageBroker<UpdateEnhanceChanceEvent>(options);
+            builder.RegisterMessageBroker<ChangeSelectedMaterialsEvent>(options);
             builder.RegisterMessageBroker<GameExitEvent>(options);
             builder.RegisterMessageBroker<PlaySoundEvent>(options);
             builder.RegisterMessageBroker<SellEvent>(options);

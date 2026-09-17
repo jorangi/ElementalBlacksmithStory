@@ -29,8 +29,7 @@ namespace ElementalBlacksmithStory.UI
         private readonly IPublisher<SubmitMaterialEvent> _submitMaterialPublisher;
         private readonly IPublisher<EnhanceButtonPositionEvent> _positionPublisher;
         private readonly MaterialInventory _inventory;
-        private readonly ISubscriber<NextRecipeChangedEvent> _nextRecipeSubscriber;
-        private SO_CraftRecipe _currentNextRecipe;
+        private readonly ISubscriber<ChangeSelectedMaterialsEvent> _selectedMaterialsSubscriber;
 
         [Inject]
         public MaterialsPresenter(
@@ -41,7 +40,7 @@ namespace ElementalBlacksmithStory.UI
             IPublisher<SubmitMaterialEvent> submitMaterialPublisher,
             IPublisher<EnhanceButtonPositionEvent> positionPublisher,
             MaterialInventory inventory,
-            ISubscriber<NextRecipeChangedEvent> nextRecipeSubscriber
+            ISubscriber<ChangeSelectedMaterialsEvent> selectedMaterialsSubscriber
             )
         {
             _materialSpriteLoader = materialSpriteLoader;
@@ -51,7 +50,7 @@ namespace ElementalBlacksmithStory.UI
             _submitMaterialPublisher = submitMaterialPublisher;
             _positionPublisher = positionPublisher;
             _inventory = inventory;
-            _nextRecipeSubscriber = nextRecipeSubscriber;
+            _selectedMaterialsSubscriber = selectedMaterialsSubscriber;
         }
         float dragY = 0;
         bool isHidingTriggered = false;
@@ -59,7 +58,7 @@ namespace ElementalBlacksmithStory.UI
         {
             RefreshMaterialsView();
 
-            _nextRecipeSubscriber.Subscribe(OnNextRecipeChanged).AddTo(_disposables);
+            _selectedMaterialsSubscriber.Subscribe(OnSelectedMaterialsChanged).AddTo(_disposables);
 
             _view.OnMaterialClickAsObservable()
                 .ThrottleFirst(TimeSpan.FromMilliseconds(200))
@@ -146,7 +145,7 @@ namespace ElementalBlacksmithStory.UI
                     Debug.Log($"[MaterialPresenter] 선택한 재료: {_selectedAmount.Value}개");
                     _selectedItemView.Select();
                     _selectedItemView.SetAmount(_selectedAmount.Value);
-                    _selectedItemView.Check();
+                    // _selectedItemView.Check();
                     _submitMaterialPublisher.Publish(new SubmitMaterialEvent(_selectedMaterialId, _selectedAmount.Value));
                     _selectMaterialAmountView.Hide();
                 })
@@ -177,6 +176,7 @@ namespace ElementalBlacksmithStory.UI
             if(itemView.IsSelected)
             {
                 itemView.UnCheck();
+                _submitMaterialPublisher.Publish(new SubmitMaterialEvent(materialId, 0));
                 itemView.SetData(materialId, _inventory.GetCount(_materialDatabase.GetMaterial(materialId)));
                 return;
             }
@@ -184,7 +184,7 @@ namespace ElementalBlacksmithStory.UI
             if (count == 1)
             {
                 itemView.SelectOnce();
-                _submitMaterialPublisher.Publish(new SubmitMaterialEvent(_selectedMaterialId, 1));
+                _submitMaterialPublisher.Publish(new SubmitMaterialEvent(materialId, 1));
             }
             else if (count > 1)
             {
@@ -195,48 +195,74 @@ namespace ElementalBlacksmithStory.UI
                 _selectMaterialAmountView.SetData(sprite, materialData.materialName, _inventory.GetCount(materialData));
             }
         }
-        private void OnNextRecipeChanged(NextRecipeChangedEvent e)
-        {
-            _currentNextRecipe = e.Recipe;
 
+        /// <summary>
+        /// 모든 재료 선택 해제 및 UI 초기화
+        /// </summary>
+        public void ClearAllSelections()
+        {
             foreach (var itemView in _view.GetAllItemViews())
             {
-                if (itemView != null)
+                if (itemView == null) continue;
+
+                itemView.UnCheck();
+                var matData = _materialDatabase.GetMaterial(itemView.MaterialId);
+                if (matData != null)
                 {
-                    itemView.UnCheck();
-                    var matData = _materialDatabase.GetMaterial(itemView.MaterialId);
-                    if (matData != null)
-                    {
-                        itemView.SetData(itemView.MaterialId, _inventory.GetCount(matData));
-                    }
-                    _submitMaterialPublisher.Publish(new SubmitMaterialEvent(itemView.MaterialId, 0));
+                    itemView.SetData(itemView.MaterialId, _inventory.GetCount(matData));
                 }
             }
+        }
 
-            if (_currentNextRecipe == null || _currentNextRecipe.recipeMaterials == null)
+        /// <summary>
+        /// 특정 재료를 지정한 개수로 선택 표시 (UI)
+        /// </summary>
+        public void SelectMaterial(uint materialId, uint amount)
+        {
+            var itemView = _view.GetItemView(materialId);
+            if (itemView == null) return;
+
+            if (amount > 0)
             {
-                return;
+                itemView.Check();
+                itemView.SetAmount(amount);
+            }
+            else
+            {
+                itemView.UnCheck();
+                var matData = _materialDatabase.GetMaterial(materialId);
+                if (matData != null)
+                {
+                    itemView.SetData(materialId, _inventory.GetCount(matData));
+                }
+            }
+        }
+
+        /// <summary>
+        /// 여러 재료들을 한 번에 선택 표시 (UI)
+        /// </summary>
+        public void SelectMaterials(IEnumerable<KeyValuePair<uint, uint>> materials)
+        {
+            if (materials == null) return;
+
+            foreach (var kvp in materials)
+            {
+                SelectMaterial(kvp.Key, kvp.Value);
+            }
+        }
+
+        private void OnSelectedMaterialsChanged(ChangeSelectedMaterialsEvent e)
+        {
+            // 1. 재료 초기화 플래그가 켜져 있으면 UI 선택 상태 초기화
+            if (e.ClearMaterials)
+            {
+                ClearAllSelections();
             }
 
-            foreach (var recipeMat in _currentNextRecipe.recipeMaterials)
+            // 2. 선택할 재료 목록이 전달된 경우 UI에 반영
+            if (e.SelectedMaterials != null)
             {
-                if (recipeMat.material == null) continue;
-
-                uint matId = recipeMat.material.Id;
-                uint neededCount = recipeMat.count;
-                uint ownedCount = _inventory.GetCount(recipeMat.material);
-
-                if (ownedCount > 0)
-                {
-                    uint selectCount = Math.Min(neededCount, ownedCount);
-                    var itemView = _view.GetItemView(matId);
-                    if (itemView != null)
-                    {
-                        itemView.Check();
-                        itemView.SetAmount(selectCount);
-                    }
-                    _submitMaterialPublisher.Publish(new SubmitMaterialEvent(matId, selectCount));
-                }
+                SelectMaterials(e.SelectedMaterials);
             }
         }
 

@@ -24,7 +24,7 @@ namespace ElementalBlacksmithStory.UI
             SO_WeaponDatabase weaponDatabase, 
             EnhanceChanceView view,
             ISubscriber<ChangeWeaponEvent> changeWeaponSubscriber,
-            ISubscriber<NextRecipeChangedEvent> nextRecipeSubscriber,
+            ISubscriber<UpdateEnhanceChanceEvent> enhanceChanceSubscriber,
             ISubscriber<EnhanceButtonPositionEvent> positionSubscriber)
         {
             _weaponDatabase = weaponDatabase;
@@ -36,9 +36,10 @@ namespace ElementalBlacksmithStory.UI
                 _view.SetChance(_currentChance, _currentCost);
             }).AddTo(_disposables);
 
-            nextRecipeSubscriber.Subscribe(e =>
+            enhanceChanceSubscriber.Subscribe(e =>
             {
-                _currentChance = (e.Recipe != null) ? e.Recipe.recipeOutcome.chance : 0f;
+                _currentChance = e.Chance;
+                _currentCost = e.Cost;
                 _view.SetChance(_currentChance, _currentCost);
             }).AddTo(_disposables);
 
