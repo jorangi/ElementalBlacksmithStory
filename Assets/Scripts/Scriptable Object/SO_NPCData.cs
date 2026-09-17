@@ -1,7 +1,9 @@
 using UnityEngine;
 using System.Collections.Generic;
+#if UNITY_EDITOR
 using UnityEditor;
 using UnityEditor.AddressableAssets;
+#endif
 
 namespace ElementalBlacksmithStory.Data
 {
