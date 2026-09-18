@@ -35,6 +35,24 @@ namespace ElementalBlacksmithStory.Core
         private Weapon _currentWeapon;
         private SO_CraftRecipe _currentRecipe;
         private readonly Dictionary<BaseMaterialData, uint> _selectedMaterials = new();
+        private bool _fixedRecipe;
+        public bool FixedRecipe
+        {
+            get => _fixedRecipe;
+            set
+            {
+                if (_fixedRecipe != value)
+                {
+                    _fixedRecipe = value;
+                    Debug.Log($"[EnhancementService] 레시피 고정 상태 변경됨: {_fixedRecipe} (현재 목표 ID: {pinnedRecipeId})");
+                    if (_fixedRecipe && pinnedRecipeId != 0)
+                    {
+                        cachedPinnedWeaponEnhancePath = null;
+                        UpdateNextRecipe();
+                    }
+                }
+            }
+        }
         private bool _isHardMode = true;
         public bool IsHardMode
         {
@@ -88,27 +106,38 @@ namespace ElementalBlacksmithStory.Core
                 {
                     _selectedMaterials[mat] = e.Amount;
                 }
-                UpdateNextRecipe();
+                // 유저가 재료를 수동 선택/조정할 때는 기존 선택을 덮어쓰거나 지우지 않음
+                UpdateNextRecipe(autoFillMaterials: false);
             }).AddTo(_disposables);
 
             sellEventSubscriber.Subscribe(e =>
             {
                 money += e.Price;
                 moneyChangePublisher.Publish(new ChangeMoneyEvent(out uint tempId, money));
-                _currentWeapon = new Weapon(weaponDatabase.GetWeapon(10001));
-                weaponChangePublisher.Publish(new ChangeWeaponEvent(_currentWeapon, 10001, 0));
                 totalCost = 0;
                 soundPublisher.Publish(new PlaySoundEvent(40103));
+
+                if (!_fixedRecipe)
+                {
+                    pinnedRecipeId = 0;
+                }
                 cachedPinnedWeaponEnhancePath = null;
                 _selectedMaterials.Clear();
-                UpdateNextRecipe();
+
+                _currentWeapon = new Weapon(weaponDatabase.GetWeapon(10001));
+                cachedWeaponId = 10001;
+
+                Debug.Log($"[EnhancementService] 판매됨 -> 레시피 고정: {_fixedRecipe}, 목표 무기: {pinnedRecipeId}");
+                UpdateNextRecipe(autoFillMaterials: true);
+
+                weaponChangePublisher.Publish(new ChangeWeaponEvent(_currentWeapon, 10001, 0));
             }).AddTo(_disposables);
 
             changeRecipeFlagSubscriber.Subscribe(e =>
             {
                 pinnedRecipeId = e._recipeId;
                 cachedPinnedWeaponEnhancePath = null;
-                UpdateNextRecipe();
+                UpdateNextRecipe(autoFillMaterials: true);
             }).AddTo(_disposables);
         }
 
@@ -117,19 +146,20 @@ namespace ElementalBlacksmithStory.Core
             _currentWeapon = new Weapon(weaponDatabase.GetWeapon(10001));
             weaponChangePublisher.Publish(new ChangeWeaponEvent(_currentWeapon, 10001, 0));
             cachedWeaponId = 10001;
-            UpdateNextRecipe(true);
+            UpdateNextRecipe(autoFillMaterials: true, force: true);
             this.moneyChangePublisher.Publish(new ChangeMoneyEvent(out uint tempId, money));
         }
         /// <summary>
         /// 다음 레시피 업데이트
         /// </summary>
+        /// <param name="autoFillMaterials">핀 레시피의 재료를 자동으로 채울지 여부 (유저가 수동 투입할 때는 false)</param>
         /// <param name="force">강제성</param>
-        private void UpdateNextRecipe(bool force = false)
+        private void UpdateNextRecipe(bool autoFillMaterials = true, bool force = false)
         {
             if (_currentWeapon == null) return;
             SO_WeaponData currentWeaponData = _currentWeapon.Data;
 
-            //현재 무기 데이터가 없거나, 현재 무기가 레시피가 없을시
+            // 현재 무기 데이터가 없거나, 현재 무기가 레시피가 없을시
             if (currentWeaponData == null || currentWeaponData.recipes == null || currentWeaponData.recipes.Count == 0)
             {
                 if (_currentRecipe != null || force)
@@ -140,18 +170,10 @@ namespace ElementalBlacksmithStory.Core
                 return;
             }
 
-            //레시피 노드 고정 중
-            if (pinnedRecipeId != 0)
+            // 핀으로 지정된 목표 무기가 있고, 현재 무기와 다른 경우 경로 탐색
+            if (pinnedRecipeId != 0 && pinnedRecipeId != currentWeaponData.Id)
             {
-                // 현재 무기가 핀으로 지정한 목표 무기에 이미 도달한 경우
-                if (currentWeaponData.Id == pinnedRecipeId)
-                {
-                    pinnedRecipeId = 0;
-                    cachedPinnedWeaponEnhancePath = null;
-                    _selectedMaterials.Clear();
-                    _changedSelectedMaterialPublisher.Publish(new ChangeSelectedMaterialsEvent(true));
-                }
-                else if (cachedPinnedWeaponEnhancePath == null || cachedWeaponId != _currentWeapon.WeaponId)
+                if (cachedPinnedWeaponEnhancePath == null || cachedWeaponId != _currentWeapon.WeaponId)
                 {
                     cachedWeaponId = _currentWeapon.WeaponId;
                     var path = WeaponTreePathFinder.FindPath(currentWeaponData.Id, pinnedRecipeId, weaponDatabase);
@@ -162,30 +184,37 @@ namespace ElementalBlacksmithStory.Core
                     }
                     else
                     {
-                        // 경로가 1개 이하(도달했거나 경로가 없음)
-                        pinnedRecipeId = 0;
+                        if (!_fixedRecipe)
+                        {
+                            pinnedRecipeId = 0;
+                        }
                         cachedPinnedWeaponEnhancePath = null;
-                        _selectedMaterials.Clear();
-                        _changedSelectedMaterialPublisher.Publish(new ChangeSelectedMaterialsEvent(true));
                     }
                 }
             }
             else
             {
+                // 현재 무기가 목표 무기와 같거나(현재 노드 선택 또는 도달), 핀이 없는 경우
+                if (pinnedRecipeId == currentWeaponData.Id && !_fixedRecipe)
+                {
+                    pinnedRecipeId = 0;
+                }
                 cachedPinnedWeaponEnhancePath = null;
             }
 
             SO_CraftRecipe newRecipe = null;
-            if (cachedPinnedWeaponEnhancePath == null || cachedPinnedWeaponEnhancePath.Count == 0)
+
+            // 1. 유저가 직접 재료를 선택/수정 중이거나, 핀 경로가 없는 경우 (또는 현재 단계 노드일 때):
+            // -> 현재 _selectedMaterials(유저가 선택한 재료)를 기반으로 완전 일치 레시피 탐색!
+            if (!autoFillMaterials || cachedPinnedWeaponEnhancePath == null || cachedPinnedWeaponEnhancePath.Count == 0)
             {
-                // 핀이 없는 경우: 현재 선택된 재료(_selectedMaterials, 0개 포함)를 기반으로 완전 일치 레시피 탐색
                 newRecipe = _recipeKeyHelper.FindMatchingRecipe(_selectedMaterials, currentWeaponData.recipes);
                 _currentRecipe = newRecipe;
 
                 if (newRecipe != null)
                 {
-                    _changedSelectedMaterialPublisher.Publish(new ChangeSelectedMaterialsEvent(true, _selectedMaterials));
-                    // 미해금 레시피인 경우 확률은 ??%, 비용은 기본무기값 + 재료값
+                    // 수동 조작 시 ClearMaterials를 false로 하여 유저가 선택한 슬롯을 유지
+                    _changedSelectedMaterialPublisher.Publish(new ChangeSelectedMaterialsEvent(false, _selectedMaterials));
                     if (!_recipeUnlockService.IsUnlocked(newRecipe.Id))
                     {
                         ulong cost = _currentWeapon.BasePrice;
@@ -197,37 +226,34 @@ namespace ElementalBlacksmithStory.Core
                         _updateEnhanceChancePublisher.Publish(new UpdateEnhanceChanceEvent(chance, cost));
                         return;
                     }
-                    // 해금된 레시피인 경우 원래 확률과 비용
                     _updateEnhanceChancePublisher.Publish(new UpdateEnhanceChanceEvent(newRecipe.recipeOutcome.chance, _currentWeapon.Cost));
                     return;
                 }
                 else
                 {
-                    // 일치하는 레시피가 확실하게 없는 경우 확률 0%, 비용 0원
+                    // 일치하는 레시피가 없는 경우
                     _currentRecipe = null;
                     _updateEnhanceChancePublisher.Publish(new UpdateEnhanceChanceEvent(0, 0));
-                    _changedSelectedMaterialPublisher.Publish(new ChangeSelectedMaterialsEvent(true, _selectedMaterials));
+                    _changedSelectedMaterialPublisher.Publish(new ChangeSelectedMaterialsEvent(false, _selectedMaterials));
                     return;
                 }
             }
-            else
+
+            // 2. autoFillMaterials가 true이고 핀 경로가 있는 경우:
+            // -> 핀으로 지정된 다음 단계 레시피를 찾고 재료를 자동 선택!
+            foreach (var r in currentWeaponData.recipes)
             {
-                foreach (var r in currentWeaponData.recipes)
+                if (r.recipeOutcome.resultWeapon.Id == cachedPinnedWeaponEnhancePath[0])
                 {
-                    if (r.recipeOutcome.resultWeapon.Id == cachedPinnedWeaponEnhancePath[0])
-                    {
-                        newRecipe = r;
-                        break;
-                    }
+                    newRecipe = r;
+                    break;
                 }
             }
 
-            // 핀으로 지정된 다음 레시피가 존재하는 경우
             if (newRecipe != null)
             {
                 _currentRecipe = newRecipe;
 
-                // 해금된 레시피인 경우 재료 자동 선택 및 확률/비용 표시
                 if (_recipeUnlockService.IsUnlocked(newRecipe.Id))
                 {
                     _selectedMaterials.Clear();
@@ -246,7 +272,6 @@ namespace ElementalBlacksmithStory.Core
                 }
                 else
                 {
-                    // 아직 해금되지 않은 레시피인 경우 재료 비우고 ??% 표시
                     _selectedMaterials.Clear();
                     _changedSelectedMaterialPublisher.Publish(new ChangeSelectedMaterialsEvent(true));
                     _updateEnhanceChancePublisher.Publish(new UpdateEnhanceChanceEvent(-1f, _currentWeapon.Cost));
@@ -254,7 +279,6 @@ namespace ElementalBlacksmithStory.Core
             }
             else
             {
-                // 레시피가 없거나 변경된 경우 재료 초기화
                 _currentRecipe = null;
                 _selectedMaterials.Clear();
                 _updateEnhanceChancePublisher.Publish(new UpdateEnhanceChanceEvent(0, 0));
