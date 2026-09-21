@@ -19,6 +19,7 @@ namespace ElementalBlacksmithStory.UI
         [SerializeField] private TMP_InputField countText;
         [SerializeField] private Button decreseButton;
         [SerializeField] private Button increaseButton;
+        [SerializeField] private Button purchaseButton;
         [SerializeField] private Button submitButton;
         [SerializeField] private Button cancelButton;
 
@@ -138,6 +139,7 @@ namespace ElementalBlacksmithStory.UI
             return _decreaseHoldButton != null ? _decreaseHoldButton.OnTickAsObservable() : decreseButton.OnClickAsObservable();
         }
 
+        public Observable<Unit> OnPurchaseAsObservable() => purchaseButton != null ? purchaseButton.OnClickAsObservable() : Observable.Empty<Unit>();
         public Observable<Unit> OnSubmitAsObservable() => submitButton != null ? submitButton.OnClickAsObservable() : Observable.Empty<Unit>();
         public Observable<Unit> OnCancelAsObservable() => cancelButton != null ? cancelButton.OnClickAsObservable() : Observable.Empty<Unit>();
 

@@ -145,6 +145,32 @@ namespace ElementalBlacksmithStory.UI
                 })
                 .AddTo(_disposables);
 
+            _selectShopAmountView.OnPurchaseAsObservable()
+                .ThrottleFirst(TimeSpan.FromMilliseconds(200))
+                .Subscribe(_ =>
+                {
+                    if (_modalAmount == 0) return;
+
+                    uint purchaseItemId = _modalItemId;
+                    uint amount = _modalAmount;
+                    ulong totalPrice = _modalUnitPrice * (ulong)amount;
+
+                    _purchaseBuffer.Clear();
+                    _purchaseBuffer[purchaseItemId] = amount;
+
+                    var result = _shopService.TryPurchase(_purchaseBuffer, totalPrice);
+                    if (result)
+                    {
+                        if (_cartItems.ContainsKey(purchaseItemId))
+                        {
+                            RemoveItem(purchaseItemId, _cartItems[purchaseItemId].Item2);
+                        }
+
+                        _selectShopAmountView.Hide();
+                    }
+                })
+                .AddTo(_disposables);
+
             _selectShopAmountView.OnSubmitAsObservable()
                 .ThrottleFirst(TimeSpan.FromMilliseconds(200))
                 .Subscribe(_ =>
