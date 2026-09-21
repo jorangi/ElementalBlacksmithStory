@@ -14,6 +14,7 @@ namespace ElementalBlacksmithStory.UI
         [SerializeField] private Image iconImage;
         [SerializeField] private TextMeshProUGUI materialNameText;
         [SerializeField] private TextMeshProUGUI finalPrice;
+        [SerializeField] private TextMeshProUGUI pocketAmount;
         [SerializeField] private TextMeshProUGUI remainingWallet;
         [SerializeField] private TMP_InputField countText;
         [SerializeField] private Button decreseButton;
@@ -53,7 +54,13 @@ namespace ElementalBlacksmithStory.UI
             MaterialCount = maxAmount;
             SetAmount(currentAmount);
         }
-
+        public void SetPocketEA(uint ea)
+        {
+            if (pocketAmount != null)
+            {
+                pocketAmount.SetText(ZString.Format("소지: {0:N0}개", ea));
+            }
+        }
         public void SetFinalPrice(ulong price)
         {
             if (finalPrice != null)
@@ -66,7 +73,7 @@ namespace ElementalBlacksmithStory.UI
         {
             if (remainingWallet != null)
             {
-                remainingWallet.SetText(ZString.Format("잔여금: <sprite name=\"CoinSack\">{0:N0}", money));
+                remainingWallet.SetText(ZString.Format("잔여금: {0:N0}", money));
             }
         }
 

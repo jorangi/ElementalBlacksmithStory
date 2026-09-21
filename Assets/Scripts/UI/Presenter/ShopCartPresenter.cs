@@ -10,6 +10,8 @@ using MessagePipe;
 using R3;
 using VContainer;
 using VContainer.Unity;
+using System.Collections.ObjectModel;
+using ElementalBlacksmithStory.Inventory;
 
 namespace ElementalBlacksmithStory.UI
 {
@@ -21,8 +23,11 @@ namespace ElementalBlacksmithStory.UI
         private readonly WeaponSpriteLoader _weaponSpriteLoader;
         private readonly SO_MaterialDatabase _materialDatabase;
         private readonly ISubscriber<ChangeMoneyEvent> _moneySubscriber;
+        private readonly ShopService _shopService;
+        private readonly MaterialInventory _materialInventory;
 
         private readonly Dictionary<uint, (ShopCartItemView, uint)> _cartItems = new();
+        private readonly Dictionary<uint, uint> _purchaseBuffer = new();
         private readonly Dictionary<ShopCartItemView, CompositeDisposable> _itemDisposables = new();
         private readonly CompositeDisposable _disposables = new();
 
@@ -40,7 +45,9 @@ namespace ElementalBlacksmithStory.UI
             MaterialSpriteLoader materialSpriteLoader,
             WeaponSpriteLoader weaponSpriteLoader,
             SO_MaterialDatabase materialDatabase,
-            ISubscriber<ChangeMoneyEvent> moneySubscriber
+            ISubscriber<ChangeMoneyEvent> moneySubscriber,
+            ShopService shopService,
+            MaterialInventory materialInventory
         )
         {
             _view = view;
@@ -49,8 +56,11 @@ namespace ElementalBlacksmithStory.UI
             _weaponSpriteLoader = weaponSpriteLoader;
             _materialDatabase = materialDatabase;
             _moneySubscriber = moneySubscriber;
+            _shopService = shopService;
+            _materialInventory = materialInventory;
 
             BindAmountModal();
+            BindCartButtons();
         }
 
         public async UniTask StartAsync(CancellationToken ct = default)
@@ -62,7 +72,35 @@ namespace ElementalBlacksmithStory.UI
             await SetItem(30004, 5);
             await SetItem(30004, -3);
         }
+        private void BindCartButtons()
+        {
+            _view.OnClickAcceptAsObservable()
+                .Subscribe(_ =>
+                {
+                    if (_cartItems.Count == 0) return;
 
+                    _purchaseBuffer.Clear();
+                    foreach (var kvp in _cartItems)
+                    {
+                        _purchaseBuffer[kvp.Key] = kvp.Value.Item2;
+                    }
+
+                    ulong totalCost = GetTotalCartCost();
+                    var result = _shopService.TryPurchase(_purchaseBuffer, totalCost);
+                    if (result)
+                    {
+                        ClearCart();
+                    }
+                })
+                .AddTo(_disposables);
+            
+            _view.OnClickCancelAsObservable()
+                .Subscribe(_ =>
+                {
+                    ClearCart();
+                })
+                .AddTo(_disposables);
+        }
         private void BindAmountModal()
         {
             _moneySubscriber.Subscribe(e =>
@@ -213,6 +251,10 @@ namespace ElementalBlacksmithStory.UI
 
             uint maxAffordable = GetMaxAffordableAmount(itemId, _modalUnitPrice);
             _selectShopAmountView.SetData(sprite, itemName, _modalUnitPrice, _modalAmount, maxAffordable);
+
+            uint pocketEA = material != null ? _materialInventory.GetCount(material) : 0;
+            _selectShopAmountView.SetPocketEA(pocketEA);
+
             UpdateModalPriceAndWallet();
         }
 
