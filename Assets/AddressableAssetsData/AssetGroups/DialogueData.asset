@@ -180,6 +180,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: beaba9bd6e2a7f5448414ccb0bd9dc2d
+    m_Address: 600307
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: bff1d477bd831c04fa6390978f852bea
     m_Address: 600304
     m_ReadOnly: 0

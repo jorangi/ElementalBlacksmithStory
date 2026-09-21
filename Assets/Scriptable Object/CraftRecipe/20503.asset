@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2ebc671e09e4f09479d24550860a548e, type: 3}
   m_Name: 20503
   m_EditorClassIdentifier: Assembly-CSharp::ElementalBlacksmithStory.Data.SO_CraftRecipe
-  recipeName: "\uC6A9\uC554\uC73C\uB85C \uBCBC\uB9B0 \uAC80 \uC81C\uC791\uBC95"
+  recipeName: "\uB099\uB8B0\uB97C \uC720\uB3C4\uD558\uB294 \uAC00\uC2DC \uC81C\uC791\uBC95"
   recipeMaterials:
   - material: {fileID: 11400000, guid: e138cd3f6b257a848a7aa957e5985189, type: 2}
     count: 1
