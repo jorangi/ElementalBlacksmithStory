@@ -1,10 +1,19 @@
 fileFormatVersion: 2
-guid: 6fee81798cef4f846849bc84f0c63c52
+guid: 8f854528d9ddfa84698495bbc7494854
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -9024537782493505605
-    second: Button_Long_0
+      213: 385173514463150410
+    second: Grid_0
+  - first:
+      213: -5256807490170685802
+    second: Grid_1
+  - first:
+      213: -8430176965839133841
+    second: Grid_2
+  - first:
+      213: 1962840433704199240
+    second: Grid_3
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -37,7 +46,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 0
+    filterMode: 1
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -52,7 +61,7 @@ TextureImporter:
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
   spritePixelsToUnits: 100
-  spriteBorder: {x: 71, y: 56, z: 70, w: 66}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
   alphaIsTransparency: 1
@@ -72,7 +81,7 @@ TextureImporter:
   platformSettings:
   - serializedVersion: 4
     buildTarget: DefaultTexturePlatform
-    maxTextureSize: 512
+    maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 1
@@ -126,23 +135,89 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Button_Long_0
+      name: Grid_0
       rect:
         serializedVersion: 2
         x: 0
-        y: 0
-        width: 373
-        height: 128
+        y: 65
+        width: 63
+        height: 63
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: bb7126c63b662c280800000000000000
-      internalID: -9024537782493505605
+      spriteID: a41077a4549685500800000000000000
+      internalID: 385173514463150410
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Grid_1
+      rect:
+        serializedVersion: 2
+        x: 66
+        y: 65
+        width: 62
+        height: 63
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 69673cf70711c07b0800000000000000
+      internalID: -5256807490170685802
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Grid_2
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 63
+        height: 62
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f636a7de6bef10b80800000000000000
+      internalID: -8430176965839133841
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Grid_3
+      rect:
+        serializedVersion: 2
+        x: 66
+        y: 0
+        width: 62
+        height: 62
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 84466b199f86d3b10800000000000000
+      internalID: 1962840433704199240
       vertices: []
       indices: 
       edges: []
@@ -152,7 +227,7 @@ TextureImporter:
     physicsShape: []
     bones: []
     spriteID: 5e97eb03825dee720800000000000000
-    internalID: 1537655665
+    internalID: 0
     vertices: []
     indices: 
     edges: []
@@ -161,7 +236,10 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Button_Long_0: -9024537782493505605
+      Grid_0: 385173514463150410
+      Grid_1: -5256807490170685802
+      Grid_2: -8430176965839133841
+      Grid_3: 1962840433704199240
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

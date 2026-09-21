@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 6fee81798cef4f846849bc84f0c63c52
+guid: 0603f51528ac7df4cabd80e688157970
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -9024537782493505605
-    second: Button_Long_0
+      213: 1254994750290215117
+    second: CircularGauge_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -37,7 +37,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 0
+    filterMode: 1
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -52,7 +52,7 @@ TextureImporter:
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
   spritePixelsToUnits: 100
-  spriteBorder: {x: 71, y: 56, z: 70, w: 66}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
   alphaIsTransparency: 1
@@ -72,7 +72,7 @@ TextureImporter:
   platformSettings:
   - serializedVersion: 4
     buildTarget: DefaultTexturePlatform
-    maxTextureSize: 512
+    maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 1
@@ -126,23 +126,23 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Button_Long_0
+      name: CircularGauge_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 373
+        width: 128
         height: 128
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: bb7126c63b662c280800000000000000
-      internalID: -9024537782493505605
+      spriteID: dc0470e7313aa6110800000000000000
+      internalID: 1254994750290215117
       vertices: []
       indices: 
       edges: []
@@ -152,7 +152,7 @@ TextureImporter:
     physicsShape: []
     bones: []
     spriteID: 5e97eb03825dee720800000000000000
-    internalID: 1537655665
+    internalID: 0
     vertices: []
     indices: 
     edges: []
@@ -161,7 +161,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Button_Long_0: -9024537782493505605
+      CircularGauge_0: 1254994750290215117
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
