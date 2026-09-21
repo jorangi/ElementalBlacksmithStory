@@ -67,7 +67,7 @@
 Assets/
 └── Scripts/
     ├── Core/                     # 핵심 도메인 서비스 및 DI 생명주기 관리
-    │   ├── GameLifetimeScope.cs  # VContainer 린커 및 의존성 주입 정의
+    │   ├── GameLifetimeScope.cs  # VContainer 링커 및 의존성 주입 정의
     │   ├── EnhancementService.cs # 무기 강화 비즈니스 로직
     │   └── ForgeManager.cs       # 현재 대장간 상태 및 무기 데이터 관리
     ├── Data/                     # 데이터 구조 및 레시피 정의
@@ -94,6 +94,7 @@ Assets/
 3. **상태 변경**: 처리 완료 후 `ChangeWeaponEvent` 발행 ➡️ `ForgeManager` 상태 업데이트 및 `AnvilWeaponPresenter`를 통해 UI View 렌더링 갱신
 
 ---
+
 ---
 
 ## 📝 개발 일지 및 변경 이력 (Changelog)
