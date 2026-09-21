@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using UnityEngine;
-using R3;
 
 namespace ElementalBlacksmithStory.UI
 {
@@ -10,13 +9,6 @@ namespace ElementalBlacksmithStory.UI
         [SerializeField] private GameObject _itemPrefab;
 
         private readonly Dictionary<uint, ShopItemView> _itemViews = new();
-        private readonly Subject<ShopItemView> _onItemClickedSubject = new();
-        private CompositeDisposable _itemDisposables = new();
-
-        /// <summary>
-        /// 아이템 클릭 이벤트 스트림
-        /// </summary>
-        public Observable<ShopItemView> OnItemClickedAsObservable() => _onItemClickedSubject;
 
         /// <summary>
         /// 특정 아이템 ID의 뷰 반환
@@ -31,7 +23,7 @@ namespace ElementalBlacksmithStory.UI
         /// <summary>
         /// 그리드에 새 아이템을 생성하여 배치
         /// </summary>
-        public ShopItemView CreateItem(uint itemId, string itemName, ulong price, Sprite icon)
+        public ShopItemView CreateItem(uint itemId, string itemName, ulong price, Sprite icon, bool isUniqueItem = false)
         {
             if (_gridContainer == null || _itemPrefab == null)
             {
@@ -50,11 +42,7 @@ namespace ElementalBlacksmithStory.UI
 
             if (instance.TryGetComponent<ShopItemView>(out var itemView))
             {
-                itemView.SetData(itemId, itemName, price, icon);
-                itemView.OnClickAsObservable()
-                    .Subscribe(_ => _onItemClickedSubject.OnNext(itemView))
-                    .AddTo(_itemDisposables);
-
+                itemView.SetData(itemId, itemName, price, icon, isUniqueItem);
                 _itemViews[itemId] = itemView;
                 return itemView;
             }
@@ -83,8 +71,6 @@ namespace ElementalBlacksmithStory.UI
         /// </summary>
         public void Clear()
         {
-            _itemDisposables.Dispose();
-            _itemDisposables = new CompositeDisposable();
             _itemViews.Clear();
 
             if (_gridContainer == null) return;
@@ -94,11 +80,6 @@ namespace ElementalBlacksmithStory.UI
                 Destroy(child.gameObject);
             }
         }
-
-        private void OnDestroy()
-        {
-            _itemDisposables.Dispose();
-            _onItemClickedSubject.Dispose();
-        }
     }
-}
+}
+

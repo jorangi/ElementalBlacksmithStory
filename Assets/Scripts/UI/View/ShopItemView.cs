@@ -10,13 +10,14 @@ namespace ElementalBlacksmithStory.UI
     {
         [SerializeField] private Image _iconImage;
         [SerializeField] private TextMeshProUGUI _nameText;
+        [SerializeField] private TextMeshProUGUI _amountInPocketText;
         [SerializeField] private TextMeshProUGUI _priceText;
         [SerializeField] private Button _button;
 
         public uint ItemId { get; private set; }
         public ulong Price { get; private set; }
         public string ItemName { get; private set; }
-
+        private bool _isUniqueItem;
         private void Awake()
         {
             if (_button != null && !_button.TryGetComponent<UIButtonSound>(out _))
@@ -25,25 +26,22 @@ namespace ElementalBlacksmithStory.UI
             }
         }
 
-        public void SetData(uint itemId, string itemName, ulong price, Sprite icon)
+        public void SetData(uint itemId, string itemName, ulong price, Sprite icon, bool isUniqueItem = false)
         {
             ItemId = itemId;
             ItemName = itemName;
             Price = price;
-
-            if (_nameText != null)
-            {
-                _nameText.SetText(itemName);
-            }
-
-            if (_priceText != null)
-            {
-                _priceText.SetText(ZString.Format("{0:N0}", price));
-            }
-
+            _isUniqueItem = isUniqueItem;
+            if(_isUniqueItem) _amountInPocketText.gameObject.SetActive(false);
+            SetName(itemName);
+            SetPrice(price);
             SetIcon(icon);
         }
-
+        public void SetAmountInPocket(uint amount)
+        {
+            if(_isUniqueItem) return;
+            _amountInPocketText.SetText(ZString.Format("({0:N0} 보유)", amount));
+        }
         public void SetIcon(Sprite icon)
         {
             if (_iconImage != null)
@@ -52,16 +50,14 @@ namespace ElementalBlacksmithStory.UI
                 _iconImage.enabled = icon != null;
             }
         }
-
         public void SetPrice(ulong price)
         {
             Price = price;
             if (_priceText != null)
             {
-                _priceText.SetText(ZString.Format("{0:N0}", price));
+                _priceText.SetText(ZString.Format("<size=70%><sprite name=\"CoinSack\">{0:N0}</size>", price));
             }
         }
-
         public void SetName(string itemName)
         {
             ItemName = itemName;
@@ -70,7 +66,6 @@ namespace ElementalBlacksmithStory.UI
                 _nameText.SetText(itemName);
             }
         }
-
         public Observable<Unit> OnClickAsObservable()
         {
             if (_button == null)

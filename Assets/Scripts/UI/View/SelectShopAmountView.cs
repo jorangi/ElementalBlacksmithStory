@@ -4,7 +4,6 @@ using R3;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using Cysharp.Text;
 
 namespace ElementalBlacksmithStory.UI
 {
@@ -55,6 +54,41 @@ namespace ElementalBlacksmithStory.UI
             MaterialCount = maxAmount;
             SetAmount(currentAmount);
         }
+
+        public void SetAmount(uint amount)
+        {
+            if (countText != null)
+            {
+                countText.SetTextWithoutNotify(ZString.Format("{0:N0}", amount));
+            }
+            UpdateButtonStates(amount);
+        }
+
+        private void UpdateButtonStates(uint amount)
+        {
+            if (MaterialCount == 0)
+            {
+                if (increaseButton != null) increaseButton.interactable = false;
+                if (decreseButton != null) decreseButton.interactable = false;
+                if (countText != null) countText.interactable = false;
+                return;
+            }
+
+            if (increaseButton != null)
+            {
+                increaseButton.interactable = amount < MaterialCount;
+            }
+
+            if (decreseButton != null)
+            {
+                decreseButton.interactable = amount > 0;
+            }
+
+            if (countText != null)
+            {
+                countText.interactable = true;
+            }
+        }
         public void SetPocketEA(uint ea)
         {
             if (pocketAmount != null)
@@ -78,11 +112,7 @@ namespace ElementalBlacksmithStory.UI
             }
         }
 
-        public void SetAmount(uint amount)
-        {
-            if (countText == null) return;
-            countText.SetTextWithoutNotify(ZString.Format("{0:N0}", amount));
-        }
+
         public Observable<uint> OnChangedAmountAsObservable()
         {
             if (countText == null) return Observable.Empty<uint>();

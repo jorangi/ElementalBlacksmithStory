@@ -360,6 +360,7 @@ GameObject:
   - component: {fileID: 2327565040465042613}
   - component: {fileID: 8777109971569133270}
   - component: {fileID: 399407221051650118}
+  - component: {fileID: 7670709888196597958}
   m_Layer: 5
   m_Name: ShopItemCard
   m_TagString: Untagged
@@ -474,6 +475,23 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &7670709888196597958
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2264402911976557684}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 641c2d24e58afde42ac69b56b05cfb4b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ElementalBlacksmithStory.UI.ShopItemView
+  _iconImage: {fileID: 1281634009590911073}
+  _nameText: {fileID: 6690374276777362037}
+  _amountInPocketText: {fileID: 2562130780990047776}
+  _priceText: {fileID: 7686056952520229108}
+  _button: {fileID: 4157135164912195367}
 --- !u!1 &3932810675124851699
 GameObject:
   m_ObjectHideFlags: 0

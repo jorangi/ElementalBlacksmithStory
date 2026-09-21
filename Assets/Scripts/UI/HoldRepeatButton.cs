@@ -4,6 +4,7 @@ using Cysharp.Threading.Tasks;
 using R3;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 namespace ElementalBlacksmithStory.UI
 {
@@ -28,16 +29,20 @@ namespace ElementalBlacksmithStory.UI
         private readonly Subject<Unit> _onTickSubject = new();
         private CancellationTokenSource _cts;
         private UIButtonSound _buttonSound;
+        private Button _button;
 
         private void Awake()
         {
             _buttonSound = GetComponent<UIButtonSound>();
+            _button = GetComponent<Button>();
         }
 
         public Observable<Unit> OnTickAsObservable() => _onTickSubject;
 
         public void OnPointerDown(PointerEventData eventData)
         {
+            if (_button != null && (!_button.interactable || !_button.enabled)) return;
+
             StopRepeat();
             _cts = new CancellationTokenSource();
             _buttonSound?.PlaySound();
@@ -83,6 +88,8 @@ namespace ElementalBlacksmithStory.UI
             float currentInterval = initialInterval;
             while (!ct.IsCancellationRequested)
             {
+                if (_button != null && (!_button.interactable || !_button.enabled)) break;
+
                 _buttonSound?.PlaySound();
                 _onTickSubject.OnNext(Unit.Default);
                 canceled = await UniTask.Delay(TimeSpan.FromSeconds(currentInterval), cancellationToken: ct).SuppressCancellationThrow();

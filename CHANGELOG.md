@@ -348,13 +348,31 @@
     - ShopService 생성
       - 상점에서 아이템 구매 기능 연결
 
+    - HoldRepeatButton 수정
+      - interact가 꺼져있다면 클릭을 막음
+
     - 상점 장바구니 UI 수정
       - 장바구니 승인 및 취소(비움) 버튼 추가
         - 기능 구현
         - MaterialInventory와의 연결
           - MaterialInventory의 이벤트 Subject 리스너를 통해 인벤토리 갱신
+      - Modal의 데이터를 받아올 수 있게끔 연결
 
     - 상점 장바구니 수량 변경 모달 UI 수정
       - 현재 해당 아이템 소지량 표시 추가
       - 일부 레이아웃 재배치
       - 즉시 구매 버튼 구현
+      - 최소 최대를 넘지 못하게 버튼 비활성화
+      - 40107(Cash_Register)효과음 추가
+      - 무기 아이템의 경우 1개 고정
+
+    - IShopItem 인터페이스 추가 및 기존 데이터 모델과 연결
+      - MaterialShopItem 추가
+      - Weapon에 IShopItem 상속
+
+    - ShopItemView 수정
+      - 무기를 수용할 수 있게끔 Weapon과 Material의 구분이 가능하도록 변경
+
+    - ShopItemGridView와 Presenter 구현
+      - Cart와 마찬가지로 Create를 통해 View 반환
+      - Remove와 Clear, Dispose 구현

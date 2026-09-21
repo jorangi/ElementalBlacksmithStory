@@ -6,7 +6,7 @@ using ElementalBlacksmithStory.Data;
 
 namespace ElementalBlacksmithStory.Core
 {
-    public class Weapon
+    public class Weapon : IShopItem
     {
         private SO_WeaponData _weaponData;
         public SO_WeaponData Data => _weaponData;
@@ -34,6 +34,16 @@ namespace ElementalBlacksmithStory.Core
         // 강화 히스토리 스택 (무기 ID, 해당 단계에서 추가된 기본 가격, 해당 단계 비용)
         private readonly Stack<EnhanceStep> _enhanceHistory = new();
         public Stack<EnhanceStep> EnhanceHistory => _enhanceHistory;
+
+        uint IShopItem.Id => Id;
+
+        string IShopItem.Name => Data != null ? Data.weaponName : string.Empty;
+
+        ulong IShopItem.Price => _price;
+
+        uint IShopItem.SpriteId => Data != null ? WeaponId : 0;
+
+        uint IShopItem.Count => 1;
 
         public Weapon(SO_WeaponData weaponData)
         {
@@ -76,7 +86,7 @@ namespace ElementalBlacksmithStory.Core
             _enhanceHistory.Clear();
             _basePrice = 0;
         }
-        
+
         public void PushCost(ulong cost)
         {
             _cost = cost;
