@@ -231,9 +231,17 @@ namespace ElementalBlacksmithStory.Core
                 }
                 else
                 {
-                    // 일치하는 레시피가 없는 경우
+                    // 일치하는 레시피가 없는 경우 (없는 레시피 조합 또는 재료 미투입)
                     _currentRecipe = null;
-                    _updateEnhanceChancePublisher.Publish(new UpdateEnhanceChanceEvent(0, 0));
+                    ulong cost = _currentWeapon.BasePrice;
+                    if (_selectedMaterials != null)
+                    {
+                        foreach (var kv in _selectedMaterials)
+                        {
+                            cost += kv.Key.Value * kv.Value;
+                        }
+                    }
+                    _updateEnhanceChancePublisher.Publish(new UpdateEnhanceChanceEvent(-1f, cost));
                     _changedSelectedMaterialPublisher.Publish(new ChangeSelectedMaterialsEvent(false, _selectedMaterials));
                     return;
                 }
@@ -274,14 +282,14 @@ namespace ElementalBlacksmithStory.Core
                 {
                     _selectedMaterials.Clear();
                     _changedSelectedMaterialPublisher.Publish(new ChangeSelectedMaterialsEvent(true));
-                    _updateEnhanceChancePublisher.Publish(new UpdateEnhanceChanceEvent(-1f, _currentWeapon.Cost));
+                    _updateEnhanceChancePublisher.Publish(new UpdateEnhanceChanceEvent(-1f, _currentWeapon.BasePrice));
                 }
             }
             else
             {
                 _currentRecipe = null;
                 _selectedMaterials.Clear();
-                _updateEnhanceChancePublisher.Publish(new UpdateEnhanceChanceEvent(0, 0));
+                _updateEnhanceChancePublisher.Publish(new UpdateEnhanceChanceEvent(-1f, _currentWeapon.BasePrice));
                 _changedSelectedMaterialPublisher.Publish(new ChangeSelectedMaterialsEvent(true));
             }
         }

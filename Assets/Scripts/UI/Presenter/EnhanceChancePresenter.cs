@@ -1,13 +1,13 @@
-using ElementalBlacksmithStory.Data;
-using ElementalBlacksmithStory.Events;
-using VContainer;
-using VContainer.Unity;
-using MessagePipe;
-using R3;
 using System;
 using System.Linq;
-using UnityEngine;
 using Cysharp.Threading.Tasks;
+using ElementalBlacksmithStory.Data;
+using ElementalBlacksmithStory.Events;
+using MessagePipe;
+using R3;
+using UnityEngine;
+using VContainer;
+using VContainer.Unity;
 
 namespace ElementalBlacksmithStory.UI
 {
@@ -18,23 +18,16 @@ namespace ElementalBlacksmithStory.UI
         private readonly CompositeDisposable _disposables = new();
         private float _currentChance = 0f;
         private ulong _currentCost = 0;
-        
+
         [Inject]
         public EnhanceChancePresenter(
-            SO_WeaponDatabase weaponDatabase, 
+            SO_WeaponDatabase weaponDatabase,
             EnhanceChanceView view,
-            ISubscriber<ChangeWeaponEvent> changeWeaponSubscriber,
             ISubscriber<UpdateEnhanceChanceEvent> enhanceChanceSubscriber,
             ISubscriber<EnhanceButtonPositionEvent> positionSubscriber)
         {
             _weaponDatabase = weaponDatabase;
             _view = view;
-
-            changeWeaponSubscriber.Subscribe(e =>
-            {
-                _currentCost = e.Weapon.Cost;
-                _view.SetChance(_currentChance, _currentCost);
-            }).AddTo(_disposables);
 
             enhanceChanceSubscriber.Subscribe(e =>
             {
@@ -63,9 +56,8 @@ namespace ElementalBlacksmithStory.UI
         public void Start()
         {
             var weapon = _weaponDatabase.GetWeapon(10001);
-            var recipe = weapon?.recipes?.FirstOrDefault();
-            _currentCost = weapon?.cost ?? 0;
-            _currentChance = (recipe != null) ? recipe.recipeOutcome.chance : 0f;
+            _currentCost = weapon?.basePrice ?? 0;
+            _currentChance = -1f;
             _view.SetChance(_currentChance, _currentCost);
         }
 
