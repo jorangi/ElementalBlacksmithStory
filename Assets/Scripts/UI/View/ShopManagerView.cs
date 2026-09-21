@@ -59,11 +59,31 @@ namespace ElementalBlacksmithStory.UI
             }
 
             _cts?.Cancel();
+            _cts?.Dispose();
             _cts = CancellationTokenSource.CreateLinkedTokenSource(ct, destroyCancellationToken);
             
             contextText.SetText(text);
+
+            // 1. 텍스트 메쉬 즉시 강제 갱신 (서식 태그 해석 및 크기 계산)
+            contextText.ForceMeshUpdate();
+
+            // 2. 말풍선 패널 및 상위 레이아웃 강제 갱신
+            if (contextText.transform.parent is RectTransform bubbleRect)
+            {
+                LayoutRebuilder.ForceRebuildLayoutImmediate(bubbleRect);
+                if (bubbleRect.parent is RectTransform rootRect)
+                {
+                    LayoutRebuilder.ForceRebuildLayoutImmediate(rootRect);
+                }
+            }
+            else if (contextText.rectTransform != null)
+            {
+                LayoutRebuilder.ForceRebuildLayoutImmediate(contextText.rectTransform);
+            }
+
+            // 3. 서식 태그(<b> 등)를 제외한 실제 글자 수 기준으로 타이핑
             contextText.maxVisibleCharacters = 0;
-            int totalLength = text.Length;
+            int totalLength = contextText.textInfo.characterCount;
 
             for (int i = 0; i <= totalLength; i++)
             {
@@ -73,8 +93,9 @@ namespace ElementalBlacksmithStory.UI
                     await UniTask.Delay(TimeSpan.FromMilliseconds(10), cancellationToken: _cts.Token)
                     .SuppressCancellationThrow();
 
-                if (isCanceled) break;
+                if (isCanceled) return;
             }
+
             contextText.maxVisibleCharacters = totalLength;
         }
     }

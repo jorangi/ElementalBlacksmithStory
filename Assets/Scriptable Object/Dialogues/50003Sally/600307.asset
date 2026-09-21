@@ -12,9 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b95dc85e94140ab4a84be25b52aada74, type: 3}
   m_Name: 600307
   m_EditorClassIdentifier: Assembly-CSharp::ElementalBlacksmithStory.Data.SO_DialogueData
-  description: "\uC0C1\uC810\uC5D0\uC11C \uBB3C\uAC74\uC744 \uC0BC "
+  description: "\uC0C1\uC810 \uC785\uC7A5/\uAD6C\uB9E4 \uCE74\uD2B8\uC5D0 \uBB3C\uAC74\uC744
+    \uB2F4\uC74C "
   contents:
   - speakerId: 50003
-    text: "{itemCount == 1 ? '{item1}' {totalAmount}\uAC1C\uBA74 \uD569\uD574\uC11C
-      <b>{totalPrice}</b>(\uC774\uB124/\uB124)\uC694! : '{item1}', '{item2}' \uB4F1
-      \uB2E4 \uD569\uD574\uC11C {totalAmount}\uAC1C\uB2C8\uAE4C <b>{totalPrice}</b>(\uC774\uB124/\uB124)\uC694!}"
+    text: "{itemCount == 0 ? \uC5B4\uC11C\uC624\uC138\uC694! \uBB3C\uAC74 \uB9CE\uC73C\uB2C8
+      \uB458\uB7EC\uBCF4\uC138\uC694 : {itemCount == 1 ? '{item1}' {totalAmount}\uAC1C\uBA74
+      \uD569\uD574\uC11C <b>{totalCost}</b>(\uC774\uB124/\uB124)\uC694! : '{item1}',
+      '{item2}' \uB4F1 \uB2E4 \uD569\uD574\uC11C {totalAmount}\uAC1C\uB2C8\uAE4C
+      <b>{totalCost}</b>(\uC774\uB124/\uB124)\uC694!}}"

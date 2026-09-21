@@ -1,16 +1,17 @@
 using System;
 using System.Collections.Generic;
 using System.Threading;
-using UnityEngine;
+using Cysharp.Text;
+using Cysharp.Threading.Tasks;
 using ElementalBlacksmithStory.Core;
 using ElementalBlacksmithStory.Data;
 using ElementalBlacksmithStory.Events;
-using Cysharp.Threading.Tasks;
+using ElementalBlacksmithStory.Inventory;
 using MessagePipe;
 using R3;
+using UnityEngine;
 using VContainer;
 using VContainer.Unity;
-using ElementalBlacksmithStory.Inventory;
 
 namespace ElementalBlacksmithStory.UI
 {
@@ -25,12 +26,15 @@ namespace ElementalBlacksmithStory.UI
         private readonly ISubscriber<ChangeMoneyEvent> _moneySubscriber;
         private readonly ShopService _shopService;
         private readonly MaterialInventory _materialInventory;
+        private readonly IPublisher<StartShopDialogueEvent> _shopDialoguePublisher;
 
         private readonly Dictionary<uint, (ShopCartItemView view, IShopItem item, uint ea)> _cartItems = new();
         private readonly Dictionary<ShopCartItemView, CompositeDisposable> _itemDisposables = new();
         private readonly CompositeDisposable _disposables = new();
 
         private const uint MAX_AMOUNT = 999;
+        private uint temp_SHOP_DIALOGUE_ID = 600307;
+        private uint temp_SHOP_PURCHASE_ID = 600309;
 
         private ulong _currentMoney = 0;
         private IShopItem _currentModalItem;
@@ -48,7 +52,8 @@ namespace ElementalBlacksmithStory.UI
             IPublisher<PlaySoundEvent> soundPublisher,
             ISubscriber<ChangeMoneyEvent> moneySubscriber,
             ShopService shopService,
-            MaterialInventory materialInventory
+            MaterialInventory materialInventory,
+            IPublisher<StartShopDialogueEvent> shopDialoguePublisher
         )
         {
             _view = view;
@@ -60,6 +65,7 @@ namespace ElementalBlacksmithStory.UI
             _moneySubscriber = moneySubscriber;
             _shopService = shopService;
             _materialInventory = materialInventory;
+            _shopDialoguePublisher = shopDialoguePublisher;
 
             BindAmountModal();
             BindCartButtons();
@@ -67,6 +73,8 @@ namespace ElementalBlacksmithStory.UI
 
         public async UniTask StartAsync(CancellationToken ct = default)
         {
+            PublishCartDialogue();
+
             await SetItem(30001, 1);
             await SetItem(30001, 1);
             await SetItem(30002, 3);
@@ -93,7 +101,7 @@ namespace ElementalBlacksmithStory.UI
                     if (result)
                     {
                         _soundPublisher.Publish(new PlaySoundEvent(40107));
-                        ClearCart();
+                        ClearCart(isPurchased: true);
                     }
                 })
                 .AddTo(_disposables);
@@ -101,7 +109,7 @@ namespace ElementalBlacksmithStory.UI
             _view.OnClickCancelAsObservable()
                 .Subscribe(_ =>
                 {
-                    ClearCart();
+                    ClearCart(isPurchased: false);
                 })
                 .AddTo(_disposables);
         }
@@ -171,6 +179,7 @@ namespace ElementalBlacksmithStory.UI
                     if (result)
                     {
                         _soundPublisher.Publish(new PlaySoundEvent(40107));
+                        _shopDialoguePublisher.Publish(new StartShopDialogueEvent(600309));
                         if (_cartItems.ContainsKey(purchaseItemId))
                         {
                             RemoveItem(purchaseItemId, _cartItems[purchaseItemId].ea);
@@ -215,6 +224,7 @@ namespace ElementalBlacksmithStory.UI
                 {
                     _cartItems[_modalItemId] = (entry.view, entry.item, _modalAmount);
                     entry.view.SetEA(_modalAmount);
+                    PublishCartDialogue();
                 }
             }
             else
@@ -354,6 +364,7 @@ namespace ElementalBlacksmithStory.UI
                 uint newEA = existing.ea + ea;
                 _cartItems[item.Id] = (existing.view, existing.item, newEA);
                 existing.view.SetEA(newEA);
+                PublishCartDialogue();
                 return;
             }
 
@@ -369,6 +380,7 @@ namespace ElementalBlacksmithStory.UI
 
             var newItem = _view.Create(item.Id, ea, sprite);
             _cartItems.Add(item.Id, (newItem, item, ea));
+            PublishCartDialogue();
 
             CompositeDisposable d = new();
             newItem.OnLongPressAsObservable()
@@ -415,6 +427,7 @@ namespace ElementalBlacksmithStory.UI
                         UnityEngine.Object.Destroy(itemView.gameObject);
                     }
                 }
+                PublishCartDialogue();
             }
 
             if (_cartItems.Count == 0)
@@ -426,7 +439,8 @@ namespace ElementalBlacksmithStory.UI
         /// <summary>
         /// 장바구니 비우기
         /// </summary>
-        public void ClearCart()
+        /// <param name="isPurchased">구매 완료로 인한 비움 여부</param>
+        public void ClearCart(bool isPurchased = false)
         {
             foreach (var d in _itemDisposables.Values)
             {
@@ -444,6 +458,48 @@ namespace ElementalBlacksmithStory.UI
             _cartItems.Clear();
 
             _view.gameObject.SetActive(false);
+
+            if (isPurchased)
+            {
+                // 구매 완료 대사 발행 (600309: 감사합니다!)
+                _shopDialoguePublisher.Publish(new StartShopDialogueEvent(temp_SHOP_PURCHASE_ID));
+            }
+            else
+            {
+                // 단순 취소/비움: 카트가 0개가 되었으므로 "어서오세요!" 대사 발행 (600307)
+                PublishCartDialogue();
+            }
+        }
+
+        private void PublishCartDialogue()
+        {
+            var parameters = new Dictionary<string, object>();
+
+            uint itemCount = (uint)_cartItems.Count;
+            parameters["itemCount"] = itemCount;
+            parameters["_cartItems.Count"] = itemCount;
+
+            uint totalAmount = 0;
+            ulong totalCost = 0;
+            int index = 0;
+
+            foreach (var entry in _cartItems.Values)
+            {
+                totalAmount += entry.ea;
+                totalCost += entry.item.Price * (ulong)entry.ea;
+
+                string itemName = entry.item.Name;
+                parameters[$"item{index + 1}"] = itemName;
+                parameters[$"_cartItems[{index}].item.Name"] = itemName;
+                index++;
+            }
+
+            string formattedCost = ZString.Format("{0:N0} 골드", totalCost);
+            parameters["totalAmount"] = totalAmount;
+            parameters["totalCost"] = formattedCost;
+            parameters["totalPrice"] = formattedCost;
+
+            _shopDialoguePublisher.Publish(new StartShopDialogueEvent(temp_SHOP_DIALOGUE_ID, parameters));
         }
 
         public void Dispose()

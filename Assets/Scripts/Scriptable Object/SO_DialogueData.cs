@@ -24,7 +24,7 @@ namespace ElementalBlacksmithStory.Data
             string step1 = EvaluateTernaryConditions(text, parameters);
 
             // 2단계: {key:A/B} 또는 {key} 패턴 정규식 매칭 및 치환
-            string step2 = Regex.Replace(step1, @"\{(\w+)(?::([^}]+/[^}]+))?\}", m =>
+            string step2 = Regex.Replace(step1, @"\{([a-zA-Z0-9_\.\[\]]+)(?::([^}]+/[^}]+))?\}", m =>
             {
                 string key = m.Groups[1].Value;
                 if (!parameters.TryGetValue(key, out var val) || val == null)
@@ -85,7 +85,12 @@ namespace ElementalBlacksmithStory.Data
                                     string falseText = TrimQuotes(rawText.Substring(colonIdx + 1, j - (colonIdx + 1)).Trim());
 
                                     bool isTrue = EvaluateCondition(conditionStr, parameters);
-                                    sb.Append(isTrue ? trueText : falseText);
+                                    string selected = isTrue ? trueText : falseText;
+                                    if (selected.Contains('?') && selected.Contains(':'))
+                                    {
+                                        selected = EvaluateTernaryConditions(selected, parameters);
+                                    }
+                                    sb.Append(selected);
                                     i = j + 1;
                                     goto NextChar;
                                 }

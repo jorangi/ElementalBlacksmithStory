@@ -41,42 +41,24 @@ namespace ElementalBlacksmithStory.UI
 
         public async UniTask StartAsync(CancellationToken ct = default)
         {
-            // 테스트 스위치: true = 단일 품목 케이스, false = 다수 품목 케이스
-            bool isSingleItemTest = true;
-
-            Dictionary<string, object> testParams;
-
-            if (isSingleItemTest)
+            await SetDialogueByIdAsync(600307, new Dictionary<string, object>
             {
-                // [케이스 1] 단품 구매: itemCount == 1 조건 만족
-                testParams = new Dictionary<string, object>
-                {
-                    { "itemCount", 1 },
-                    { "item1", "철검" },
-                    { "totalAmount", 3 },
-                    { "totalPrice", ZString.Format("{0:N0} 골드", 15000) }
-                };
-            }
-            else
-            {
-                // [케이스 2] 다수 품목 구매: itemCount == 1 조건 불만족 (거짓 분기)
-                testParams = new Dictionary<string, object>
-                {
-                    { "itemCount", 2 },
-                    { "item1", "철검" },
-                    { "item2", "청동 도끼" },
-                    { "item3", "청동 활" },
-                    { "totalAmount", 7 },
-                    { "totalPrice", ZString.Format("{0:N0} 골드", 38500) }
-                };
-            }
-
-            await SetDialogueByIdAsync(600307, testParams, 0, ct);
+                { "itemCount", 0 },
+                { "_cartItems.Count", 0 },
+                { "totalAmount", 0 },
+                { "totalCost", "0 골드" },
+                { "totalPrice", "0 골드" }
+            }, 0, ct);
         }
 
         /// <summary>
-        /// 대화 ID로 SO_DialogueData를 로드하여 대사 출력
+        /// 대사 출력
         /// </summary>
+        /// <param name="dialogueId">대화 id</param>
+        /// <param name="parameters">string키와 object값</param>
+        /// <param name="lineIndex">대사 인덱스</param>
+        /// <param name="ct">캔슬 토큰</param>
+        /// <returns></returns>
         public async UniTask SetDialogueByIdAsync(uint dialogueId, IReadOnlyDictionary<string, object> parameters = null, int lineIndex = 0, CancellationToken ct = default)
         {
             try
@@ -119,7 +101,7 @@ namespace ElementalBlacksmithStory.UI
 
             var line = data.contents[lineIndex];
 
-            // 1. SpeakerId로 SO_NPCData 및 스탠딩 스프라이트 가져오기
+            // 스탠딩 스프라이트 가져오기
             var npcData = await GetNPCDataAsync(line.speakerId);
             string speakerName = npcData != null ? npcData.NpcName : string.Empty;
             Sprite standingSprite = null;
@@ -129,11 +111,11 @@ namespace ElementalBlacksmithStory.UI
                 standingSprite = await _spriteLoader.GetSprite(line.speakerId);
             }
 
-            // 2. View에 스프라이트와 이름 설정
+            // 스프라이트와 이름 설정
             _view.SetSprite(standingSprite);
             _view.SetName(speakerName);
 
-            // 3. 타이핑 텍스트 출력 (조건식, 플레이스홀더, 한국어 조사 자동 연쇄 처리)
+            // 타이핑 텍스트 출력 (조건식, 플레이스홀더, 한국어 조사 자동 연쇄 처리)
             _typingCts?.Cancel();
             _typingCts?.Dispose();
             _typingCts = new CancellationTokenSource();
