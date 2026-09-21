@@ -26,14 +26,19 @@ namespace ElementalBlacksmithStory.UI
         private readonly ISubscriber<ChangeMoneyEvent> _moneySubscriber;
         private readonly ShopService _shopService;
         private readonly MaterialInventory _materialInventory;
+        private readonly EquipmentInventory _equipmentInventory;
         private readonly IPublisher<StartShopDialogueEvent> _shopDialoguePublisher;
+
+        private bool _isSellMode = false;
+        public bool IsSellMode => _isSellMode;
 
         private readonly Dictionary<uint, (ShopCartItemView view, IShopItem item, uint ea)> _cartItems = new();
         private readonly Dictionary<ShopCartItemView, CompositeDisposable> _itemDisposables = new();
         private readonly CompositeDisposable _disposables = new();
 
         private const uint MAX_AMOUNT = 999;
-        private uint temp_SHOP_DIALOGUE_ID = 600307;
+        private uint temp_BUY_DIALOGUE_ID = 600307;
+        private uint temp_SELL_DIALOGUE_ID = 600308;
         private uint temp_SHOP_PURCHASE_ID = 600309;
 
         private ulong _currentMoney = 0;
@@ -53,6 +58,7 @@ namespace ElementalBlacksmithStory.UI
             ISubscriber<ChangeMoneyEvent> moneySubscriber,
             ShopService shopService,
             MaterialInventory materialInventory,
+            EquipmentInventory equipmentInventory,
             IPublisher<StartShopDialogueEvent> shopDialoguePublisher
         )
         {
@@ -65,15 +71,23 @@ namespace ElementalBlacksmithStory.UI
             _moneySubscriber = moneySubscriber;
             _shopService = shopService;
             _materialInventory = materialInventory;
+            _equipmentInventory = equipmentInventory;
             _shopDialoguePublisher = shopDialoguePublisher;
 
             BindAmountModal();
             BindCartButtons();
         }
 
+        public void SetSellMode(bool isSellMode)
+        {
+            if (_isSellMode == isSellMode) return;
+            _isSellMode = isSellMode;
+            _view.SetSellMode(_isSellMode);
+            ClearCart(isPurchased: false, publishDialogue: false);
+        }
+
         public async UniTask StartAsync(CancellationToken ct = default)
         {
-            PublishCartDialogue();
 
             await SetItem(30001, 1);
             await SetItem(30001, 1);
@@ -97,7 +111,10 @@ namespace ElementalBlacksmithStory.UI
                     }
 
                     ulong totalCost = GetTotalCartCost();
-                    var result = _shopService.TryPurchase(purchaseList, totalCost);
+                    bool result = _isSellMode
+                        ? _shopService.TrySell(purchaseList, totalCost)
+                        : _shopService.TryPurchase(purchaseList, totalCost);
+
                     if (result)
                     {
                         _soundPublisher.Publish(new PlaySoundEvent(40107));
@@ -131,7 +148,7 @@ namespace ElementalBlacksmithStory.UI
                 {
                     if (_currentModalItem is Weapon) return;
 
-                    int maxAmount = (int)GetMaxAffordableAmount(_modalItemId, _modalUnitPrice);
+                    int maxAmount = (int)GetModalMaxAmount();
                     _modalAmount = (uint)Mathf.Min((int)_modalAmount + 1, maxAmount);
                     _selectShopAmountView.SetAmount(_modalAmount);
                     UpdateModalPriceAndWallet();
@@ -144,7 +161,7 @@ namespace ElementalBlacksmithStory.UI
                 {
                     if (_currentModalItem is Weapon) return;
 
-                    int maxAmount = (int)GetMaxAffordableAmount(_modalItemId, _modalUnitPrice);
+                    int maxAmount = (int)GetModalMaxAmount();
                     _modalAmount = (uint)Mathf.Max((int)_modalAmount - 1, 0);
                     _selectShopAmountView.SetAmount(_modalAmount);
                     UpdateModalPriceAndWallet();
@@ -157,7 +174,7 @@ namespace ElementalBlacksmithStory.UI
                 {
                     if (_currentModalItem is Weapon) return;
 
-                    int maxAmount = (int)GetMaxAffordableAmount(_modalItemId, _modalUnitPrice);
+                    int maxAmount = (int)GetModalMaxAmount();
                     _modalAmount = (uint)Mathf.Clamp((int)amount, 0, maxAmount);
                     _selectShopAmountView.SetAmount(_modalAmount);
                     UpdateModalPriceAndWallet();
@@ -175,7 +192,10 @@ namespace ElementalBlacksmithStory.UI
                     ulong totalPrice = _modalUnitPrice * (ulong)amount;
 
                     var singlePurchase = new List<(IShopItem item, uint amount)> { (_currentModalItem, amount) };
-                    var result = _shopService.TryPurchase(singlePurchase, totalPrice);
+                    bool result = _isSellMode
+                        ? _shopService.TrySell(singlePurchase, totalPrice)
+                        : _shopService.TryPurchase(singlePurchase, totalPrice);
+
                     if (result)
                     {
                         _soundPublisher.Publish(new PlaySoundEvent(40107));
@@ -283,6 +303,30 @@ namespace ElementalBlacksmithStory.UI
             return (uint)Math.Min((ulong)MAX_AMOUNT, maxByMoney);
         }
 
+        private uint GetModalMaxAmount()
+        {
+            if (_currentModalItem == null) return 0;
+            if (_currentModalItem is Weapon) return 1;
+
+            if (_isSellMode)
+            {
+                uint pocketEA = 0;
+                if (_currentModalItem is MaterialShopItem matItem && matItem.Data != null)
+                {
+                    pocketEA = _materialInventory.GetCount(matItem.Data);
+                }
+                else if (_currentModalItem is Weapon weaponItem)
+                {
+                    pocketEA = (uint)_equipmentInventory.GetCountByWeaponId(weaponItem.WeaponId);
+                }
+                return pocketEA;
+            }
+            else
+            {
+                return GetMaxAffordableAmount(_modalItemId, _modalUnitPrice);
+            }
+        }
+
         private void UpdateModalPriceAndWallet()
         {
             ulong currentItemCost = (ulong)_modalAmount * _modalUnitPrice;
@@ -290,8 +334,15 @@ namespace ElementalBlacksmithStory.UI
 
             ulong otherCost = GetCartTotalCostExcept(_modalItemId);
             ulong totalCartCost = otherCost + currentItemCost;
-            ulong remaining = _currentMoney >= totalCartCost ? _currentMoney - totalCartCost : 0;
-            _selectShopAmountView.SetRemainingWallet(remaining);
+            if (_isSellMode)
+            {
+                _selectShopAmountView.SetRemainingWallet(_currentMoney + totalCartCost);
+            }
+            else
+            {
+                ulong remaining = _currentMoney >= totalCartCost ? _currentMoney - totalCartCost : 0;
+                _selectShopAmountView.SetRemainingWallet(remaining);
+            }
         }
 
         public async UniTask OpenAmountModal(IShopItem item)
@@ -318,16 +369,28 @@ namespace ElementalBlacksmithStory.UI
             string itemName = item.Name;
             _modalUnitPrice = item.Price;
 
-            uint maxAffordable = isWeapon ? 0 : GetMaxAffordableAmount(item.Id, _modalUnitPrice);
-            _selectShopAmountView.SetData(sprite, itemName, _modalUnitPrice, _modalAmount, maxAffordable);
-
             uint pocketEA = 0;
             if (item is MaterialShopItem matItem && matItem.Data != null)
             {
                 pocketEA = _materialInventory.GetCount(matItem.Data);
             }
+            else if (item is Weapon weaponItem)
+            {
+                pocketEA = (uint)_equipmentInventory.GetCountByWeaponId(weaponItem.WeaponId);
+            }
             _selectShopAmountView.SetPocketEA(pocketEA);
 
+            uint maxAffordable = GetModalMaxAmount();
+            if (_isSellMode)
+            {
+                _selectShopAmountView.SetPurchaseButtonText("판매");
+            }
+            else
+            {
+                _selectShopAmountView.SetPurchaseButtonText("구매");
+            }
+
+            _selectShopAmountView.SetData(sprite, itemName, _modalUnitPrice, _modalAmount, maxAffordable);
             UpdateModalPriceAndWallet();
         }
 
@@ -350,6 +413,26 @@ namespace ElementalBlacksmithStory.UI
         public async UniTask AddItem(IShopItem item, uint ea = 1)
         {
             if (item == null) return;
+
+            if (_isSellMode)
+            {
+                uint pocketEA = 0;
+                if (item is MaterialShopItem matItem && matItem.Data != null)
+                {
+                    pocketEA = _materialInventory.GetCount(matItem.Data);
+                }
+                else if (item is Weapon weaponItem)
+                {
+                    pocketEA = (uint)_equipmentInventory.GetCountByWeaponId(weaponItem.WeaponId);
+                }
+
+                uint currentCartEA = _cartItems.TryGetValue(item.Id, out var cur) ? cur.ea : 0;
+                if (currentCartEA + ea > pocketEA)
+                {
+                    Debug.LogWarning($"[ShopCartPresenter] 소지 수량({pocketEA}개)을 초과하여 판매 카트에 담을 수 없습니다.");
+                    return;
+                }
+            }
 
             _view.gameObject.SetActive(true);
 
@@ -440,7 +523,8 @@ namespace ElementalBlacksmithStory.UI
         /// 장바구니 비우기
         /// </summary>
         /// <param name="isPurchased">구매 완료로 인한 비움 여부</param>
-        public void ClearCart(bool isPurchased = false)
+        /// <param name="publishDialogue">대사 발행 여부</param>
+        public void ClearCart(bool isPurchased = false, bool publishDialogue = true)
         {
             foreach (var d in _itemDisposables.Values)
             {
@@ -459,15 +543,18 @@ namespace ElementalBlacksmithStory.UI
 
             _view.gameObject.SetActive(false);
 
-            if (isPurchased)
+            if (publishDialogue)
             {
-                // 구매 완료 대사 발행 (600309: 감사합니다!)
-                _shopDialoguePublisher.Publish(new StartShopDialogueEvent(temp_SHOP_PURCHASE_ID));
-            }
-            else
-            {
-                // 단순 취소/비움: 카트가 0개가 되었으므로 "어서오세요!" 대사 발행 (600307)
-                PublishCartDialogue();
+                if (isPurchased)
+                {
+                    //임시 대사: 구매 감사
+                    _shopDialoguePublisher.Publish(new StartShopDialogueEvent(temp_SHOP_PURCHASE_ID));
+                }
+                else
+                {
+                    //임시 대사: 입장, 상점 카트 관련
+                    PublishCartDialogue();
+                }
             }
         }
 
@@ -498,8 +585,10 @@ namespace ElementalBlacksmithStory.UI
             parameters["totalAmount"] = totalAmount;
             parameters["totalCost"] = formattedCost;
             parameters["totalPrice"] = formattedCost;
+            parameters["isSellMode"] = _isSellMode;
 
-            _shopDialoguePublisher.Publish(new StartShopDialogueEvent(temp_SHOP_DIALOGUE_ID, parameters));
+            uint dialogueId = _isSellMode ? temp_SELL_DIALOGUE_ID : temp_BUY_DIALOGUE_ID;
+            _shopDialoguePublisher.Publish(new StartShopDialogueEvent(dialogueId, parameters));
         }
 
         public void Dispose()

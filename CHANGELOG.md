@@ -383,4 +383,14 @@
       - SO_DialogueData에 조건식과 변수 바인딩을 연결하여 대사 출력 엔진?처럼 구현
         - ex: {itemCount == 0 ? 어서오세요! 물건 많으니 둘러보세요 : {itemCount == 1 ? '{item1}' {totalAmount}개면 합해서 <b>{totalCost}</b>(이네/네)요! : '{item1}', '{item2}' 등 다 합해서 {totalAmount}개니까 <b>{totalCost}</b>(이네/네)요!}}
         - 기존 NPC 대화와 구분을 위해 StartShopDialogueEvent로 구분
+        - 이를 통해 아이템 카트와 연결
       - 이름과 대사를 위한 박스의 크기를 강제 갱신
+      - 타이핑 효과 추가
+    - 상점 구매/판매 탭 연동
+      - 구매 및 판매 모드 전환 시 첫 입장 대사 발행
+      - 상점 진입 시 구매 탭 기준으로 첫 입장 대사 통합 관리
+      - ShopItemGridPresenter 판매 탭 연동 (MaterialInventory 보유 재료 목록 그리드 표기 및 실시간 갱신)
+      - EnhancementService에 ChangeMoneyEvent 구독 추가 (상점 구매/판매로 변경된 소지금 동기화)
+
+    - NPC 1종 추가, NPC 이미지 1종 추가
+      - 장비점 주인 캐롤라인(50008) 추가

@@ -2728,7 +2728,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 0, y: 1120}
+  m_AnchoredPosition: {x: 0, y: 1141}
   m_SizeDelta: {x: 1080, y: 140}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!222 &3181772735794230267
@@ -2784,6 +2784,7 @@ MonoBehaviour:
   _container: {fileID: 7354991175885915867}
   _cartItemPrefab: {fileID: 4520397607090346150, guid: 795fc235d406c904f84127b8cdaca18a, type: 3}
   _acceptButton: {fileID: 1683225314916020405}
+  _acceptButtonText: {fileID: 146860567835462200}
   _cancelButton: {fileID: 5450838366234999309}
 --- !u!1 &3239529412225959899
 GameObject:
@@ -3447,7 +3448,7 @@ MonoBehaviour:
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
     m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
     m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
@@ -3913,8 +3914,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -234, y: 164}
-  m_SizeDelta: {x: 1200, y: 1200}
+  m_AnchoredPosition: {x: -256, y: 164}
+  m_SizeDelta: {x: 804, y: 1228.8}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5716159185266002170
 CanvasRenderer:
@@ -3944,7 +3945,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 8459076d53652ca4c95246e3d9553b49, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 7f16e85b365be6541b8a7252fa037ef5, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1
@@ -6008,7 +6009,7 @@ MonoBehaviour:
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
     m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
     m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:

@@ -5677,6 +5677,17 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 7588191221238464124, guid: 75b97094d8caf9043b5d2638087640cb, type: 3}
   m_PrefabInstance: {fileID: 2530052956669998592}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &500093227 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3872397710103989995, guid: 023ceea11c1bb2d43971d266e6fbc865, type: 3}
+  m_PrefabInstance: {fileID: 258166883637206803}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Button
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -6089,6 +6100,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Button
+--- !u!114 &1086951964 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5442135644427948831, guid: 023ceea11c1bb2d43971d266e6fbc865, type: 3}
+  m_PrefabInstance: {fileID: 258166883637206803}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Button
 --- !u!114 &1091292584 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4889827203408329079, guid: bb2d725c588e25a48b98c54420baf7a4, type: 3}
@@ -6462,6 +6484,7 @@ GameObject:
   - component: {fileID: 2073992086}
   - component: {fileID: 2073992087}
   - component: {fileID: 2073992088}
+  - component: {fileID: 2073992089}
   m_Layer: 0
   m_Name: UIManager
   m_TagString: Untagged
@@ -6703,6 +6726,22 @@ MonoBehaviour:
   _namePlateRect: {fileID: 1816278448}
   nameText: {fileID: 1245247235}
   contextText: {fileID: 2004599372}
+--- !u!114 &2073992089
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2073992073}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e05f294fa35e614cb07ba6646089839, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ElementalBlacksmithStory.UI.ShopTabView
+  _buyTabButton: {fileID: 500093227}
+  _sellTabButton: {fileID: 1086951964}
+  _buyDialogueId: 600307
+  _sellDialogueId: 600308
 --- !u!1001 &258166883637206803
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6766,10 +6805,6 @@ PrefabInstance:
     - target: {fileID: 2716660983128065425, guid: 023ceea11c1bb2d43971d266e6fbc865, type: 3}
       propertyPath: m_Name
       value: Markets
-      objectReference: {fileID: 0}
-    - target: {fileID: 2716660983128065425, guid: 023ceea11c1bb2d43971d266e6fbc865, type: 3}
-      propertyPath: m_IsActive
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5116845936729964485, guid: 023ceea11c1bb2d43971d266e6fbc865, type: 3}
       propertyPath: m_AnchorMax.x
@@ -6838,10 +6873,6 @@ PrefabInstance:
     - target: {fileID: 5457225497774160271, guid: 023ceea11c1bb2d43971d266e6fbc865, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: -30.25
-      objectReference: {fileID: 0}
-    - target: {fileID: 5459795851850264039, guid: 023ceea11c1bb2d43971d266e6fbc865, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 1141
       objectReference: {fileID: 0}
     - target: {fileID: 5621575143944811283, guid: 023ceea11c1bb2d43971d266e6fbc865, type: 3}
       propertyPath: m_Camera

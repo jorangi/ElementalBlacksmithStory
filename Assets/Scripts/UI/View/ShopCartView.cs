@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System;
 using R3;
+using TMPro;
 
 namespace ElementalBlacksmithStory.UI
 {
@@ -10,7 +11,21 @@ namespace ElementalBlacksmithStory.UI
         [SerializeField] private GameObject _container;
         [SerializeField] private GameObject _cartItemPrefab;
         [SerializeField] private Button _acceptButton;
+        [SerializeField] private TextMeshProUGUI _acceptButtonText;
         [SerializeField] private Button _cancelButton;
+
+        public void SetSellMode(bool isSellMode)
+        {
+            if (_acceptButtonText == null && _acceptButton != null)
+            {
+                _acceptButtonText = _acceptButton.GetComponentInChildren<TextMeshProUGUI>();
+            }
+
+            if (_acceptButtonText != null)
+            {
+                _acceptButtonText.SetText(isSellMode ? "판매" : "구매");
+            }
+        }
         public ShopCartItemView Create(uint itemId, uint ea, Sprite sprite)
         {
             GameObject item = Instantiate(_cartItemPrefab, _container.transform);

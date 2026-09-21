@@ -112,6 +112,18 @@ namespace ElementalBlacksmithStory.UI
             }
         }
 
+        public void SetPurchaseButtonText(string text)
+        {
+            if (purchaseButton != null)
+            {
+                var tmp = purchaseButton.GetComponentInChildren<TextMeshProUGUI>();
+                if (tmp != null)
+                {
+                    tmp.SetText(text);
+                }
+            }
+        }
+
 
         public Observable<uint> OnChangedAmountAsObservable()
         {

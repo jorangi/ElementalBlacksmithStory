@@ -62,6 +62,7 @@ namespace ElementalBlacksmithStory.Core
 
         public EnhancementService(IPublisher<ChangeWeaponEvent> weaponChangePublisher,
                                     IPublisher<ChangeMoneyEvent> moneyChangePublisher,
+                                    ISubscriber<ChangeMoneyEvent> moneyChangeSubscriber,
                                     IPublisher<PlaySoundEvent> soundPublisher,
                                     IPublisher<ChangeSelectedMaterialsEvent> changedSelectedMaterialPublisher,
                                     IPublisher<UpdateEnhanceChanceEvent> updateEnhanceChancePublisher,
@@ -89,6 +90,11 @@ namespace ElementalBlacksmithStory.Core
             this._soundPublisher = soundPublisher;
             this._changedSelectedMaterialPublisher = changedSelectedMaterialPublisher;
             this._updateEnhanceChancePublisher = updateEnhanceChancePublisher;
+
+            moneyChangeSubscriber.Subscribe(e =>
+            {
+                money = e.MoneyChange;
+            }).AddTo(_disposables);
 
             submitMaterialSubscriber.Subscribe(e =>
             {

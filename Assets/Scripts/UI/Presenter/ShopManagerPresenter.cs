@@ -14,7 +14,7 @@ using VContainer.Unity;
 
 namespace ElementalBlacksmithStory.UI
 {
-    public class ShopMasterPresenter : IAsyncStartable, IDisposable
+    public class ShopMasterPresenter : IStartable, IDisposable
     {
         private readonly NPCStandingSpriteLoader _spriteLoader;
         private readonly ShopMasterView _view;
@@ -39,17 +39,7 @@ namespace ElementalBlacksmithStory.UI
             });
         }
 
-        public async UniTask StartAsync(CancellationToken ct = default)
-        {
-            await SetDialogueByIdAsync(600307, new Dictionary<string, object>
-            {
-                { "itemCount", 0 },
-                { "_cartItems.Count", 0 },
-                { "totalAmount", 0 },
-                { "totalCost", "0 골드" },
-                { "totalPrice", "0 골드" }
-            }, 0, ct);
-        }
+        public void Start() {}
 
         /// <summary>
         /// 대사 출력
