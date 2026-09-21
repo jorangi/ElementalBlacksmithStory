@@ -1,15 +1,15 @@
-using UnityEngine;
-using R3;
 using System;
-using MessagePipe;
-using VContainer;
-using VContainer.Unity;
-using Cysharp.Threading.Tasks;
+using System.Collections.Generic;
 using System.Threading;
+using Cysharp.Threading.Tasks;
+using ElementalBlacksmithStory.Core;
 using ElementalBlacksmithStory.Data;
 using ElementalBlacksmithStory.Events;
-using System.Collections.Generic;
-using ElementalBlacksmithStory.Core;
+using MessagePipe;
+using R3;
+using UnityEngine;
+using VContainer;
+using VContainer.Unity;
 
 namespace ElementalBlacksmithStory.UI
 {
@@ -21,10 +21,12 @@ namespace ElementalBlacksmithStory.UI
         private readonly SO_WeaponDatabase _weaponDatabase;
         private readonly IPublisher<ChangeRecipeFlagEvent> _recipeFlagPublisher;
         private readonly RecipeUnlockService _recipeUnlockService;
+        private readonly EnhancementService _enhancementService;
         private readonly CompositeDisposable _disposables = new();
         private Dictionary<uint, WeaponNodeUI> _nodes = new();
         private ForgeManager _forgeManager;
-        List<uint> path;
+        private List<uint> path;
+        private uint _pinnedRecipeId;
         public bool IsActivated => _treeBuilder.IsActivated;
         public void Hide() => _treeBuilder.Hide();
 
@@ -36,7 +38,9 @@ namespace ElementalBlacksmithStory.UI
             SO_WeaponDatabase weaponDatabase,
             RecipeUnlockService recipeUnlockService,
             IPublisher<ChangeRecipeFlagEvent> recipeFlagPublisher,
-            ISubscriber<EnhanceButtonPositionEvent> positionSubscriber
+            ISubscriber<EnhanceButtonPositionEvent> positionSubscriber,
+            EnhancementService enhancementService,
+            ISubscriber<ChangeWeaponEvent> weaponChangeSubscriber
             )
         {
             _forgeManager = forgeManager;
@@ -45,6 +49,27 @@ namespace ElementalBlacksmithStory.UI
             _weaponDatabase = weaponDatabase;
             _recipeUnlockService = recipeUnlockService;
             _recipeFlagPublisher = recipeFlagPublisher;
+            _enhancementService = enhancementService;
+
+            // 레시피 고정 토글 동기화
+            _enhancementService.FixedRecipe = _treeBuilder.IsFixRecipeChecked;
+            _treeBuilder.OnFixRecipeChangedAsObservable.Subscribe(isOn =>
+            {
+                _enhancementService.FixedRecipe = isOn;
+                Debug.Log($"[WeaponTreePresenter] 토글 OnValueChanged 수신됨 -> isOn: {isOn}, 현재 _pinnedRecipeId: {_pinnedRecipeId}");
+                if (isOn && _pinnedRecipeId != 0)
+                {
+                    var curWeaponId = _forgeManager.CurrentWeapon?.WeaponId ?? 10001;
+                    RerouteFrom(curWeaponId, _pinnedRecipeId);
+                }
+            }).AddTo(_disposables);
+
+            // 무기 변경 시: 바뀐 무기에서 선택한 무기까지의 루트를 탐색/리루트
+            weaponChangeSubscriber.Subscribe(e =>
+            {
+                HandleWeaponChanged(e.WeaponId);
+            }).AddTo(_disposables);
+
             // 화면 스크롤 동기화
             positionSubscriber.Subscribe(e =>
             {
@@ -78,45 +103,108 @@ namespace ElementalBlacksmithStory.UI
                     return;
                 }
 
-                if(path != null)
+                // 현재 들고 있는 무기 노드를 선택한 경우: 핀 경로 해제 및 자유 재료 조합 모드로 전환
+                if (_forgeManager.CurrentWeapon != null && e._recipeId == _forgeManager.CurrentWeapon.WeaponId)
                 {
-                    for (int i = 0; i < path.Count; i++)
-                    {
-                        uint weaponId = path[i];
-                        if (_nodes.TryGetValue(weaponId, out var node))
-                        {
-                            if (IsNodeFullyUnlocked(weaponId))
-                            {
-                                node.SetNormalNode();
-                            }
-                            else
-                            {
-                                node.SetLockedNode();
-                            }
-                        }
+                    ClearPinnedPath();
+                    _pinnedRecipeId = 0;
+                    _recipeFlagPublisher.Publish(new ChangeRecipeFlagEvent { _recipeId = 0 });
+                    return;
+                }
 
-                        if (i < path.Count - 1)
+                RerouteFrom(_forgeManager.CurrentWeapon.WeaponId, e._recipeId);
+            }).AddTo(_disposables);
+        }
+
+        private void HandleWeaponChanged(uint currentWeaponId)
+        {
+            Debug.Log($"[WeaponTreePresenter] HandleWeaponChanged 수신 -> currentWeaponId: {currentWeaponId}, _pinnedRecipeId: {_pinnedRecipeId}, FixedRecipe: {_enhancementService.FixedRecipe}");
+
+            // 핀 찍은 레시피가 없는 경우
+            if (_pinnedRecipeId == 0)
+            {
+                ClearPinnedPath();
+                return;
+            }
+
+            // 바뀐 무기가 이미 핀 목표 노드에 도달한 경우
+            if (currentWeaponId == _pinnedRecipeId)
+            {
+                if (!_enhancementService.FixedRecipe)
+                {
+                    ClearPinnedPath();
+                    _pinnedRecipeId = 0;
+                }
+                else
+                {
+                    ClearPinnedPath();
+                    if (_nodes.TryGetValue(_pinnedRecipeId, out var dNode))
+                    {
+                        dNode.SetDestinationNode();
+                    }
+                }
+                return;
+            }
+
+            // 바뀐 무기에서 선택한 목표 무기까지의 루트를 탐색
+            RerouteFrom(currentWeaponId, _pinnedRecipeId);
+        }
+
+        private void ClearPinnedPath()
+        {
+            if (path != null)
+            {
+                for (int i = 0; i < path.Count; i++)
+                {
+                    uint weaponId = path[i];
+                    if (_nodes.TryGetValue(weaponId, out var node))
+                    {
+                        if (IsNodeFullyUnlocked(weaponId))
                         {
-                            if (_treeBuilder.Branches.TryGetValue((path[i], path[i + 1]), out var branch))
-                            {
-                                branch.SetHighlight(false);
-                            }
+                            node.SetNormalNode();
+                        }
+                        else
+                        {
+                            node.SetLockedNode();
+                        }
+                    }
+
+                    if (i < path.Count - 1)
+                    {
+                        if (_treeBuilder.Branches.TryGetValue((path[i], path[i + 1]), out var branch))
+                        {
+                            branch.SetHighlight(false);
                         }
                     }
                 }
-                path = WeaponTreePathFinder.FindPath(_forgeManager.CurrentWeapon.WeaponId, e._recipeId, _weaponDatabase);
-                if(path == null) return;
-                for(int i = 0; i < path.Count - 1; i++)
+                path = null;
+            }
+        }
+
+        private void RerouteFrom(uint fromWeaponId, uint targetWeaponId)
+        {
+            ClearPinnedPath();
+            _pinnedRecipeId = targetWeaponId;
+
+            path = WeaponTreePathFinder.FindPath(fromWeaponId, targetWeaponId, _weaponDatabase);
+            if (path == null) return;
+
+            for (int i = 0; i < path.Count - 1; i++)
+            {
+                if (_nodes.TryGetValue(path[i], out var rNode))
                 {
-                    _nodes[path[i]].SetRouteNode();
-                    if (_treeBuilder.Branches.TryGetValue((path[i], path[i + 1]), out var branch))
-                    {
-                        branch.SetHighlight(true);
-                    }
+                    rNode.SetRouteNode();
                 }
-                _nodes[path[^1]].SetDestinationNode();
-                _recipeFlagPublisher.Publish(new ChangeRecipeFlagEvent { _recipeId = e._recipeId });
-            }).AddTo(_disposables);
+                if (_treeBuilder.Branches.TryGetValue((path[i], path[i + 1]), out var branch))
+                {
+                    branch.SetHighlight(true);
+                }
+            }
+            if (_nodes.TryGetValue(path[^1], out var dNode))
+            {
+                dNode.SetDestinationNode();
+            }
+            _recipeFlagPublisher.Publish(new ChangeRecipeFlagEvent { _recipeId = targetWeaponId });
         }
 
         public void Start()

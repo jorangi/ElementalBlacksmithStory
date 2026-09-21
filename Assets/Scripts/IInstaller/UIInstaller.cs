@@ -1,6 +1,6 @@
+using ElementalBlacksmithStory.UI;
 using VContainer;
 using VContainer.Unity;
-using ElementalBlacksmithStory.UI;
 
 namespace ElementalBlacksmithStory.Core
 {
@@ -19,6 +19,8 @@ namespace ElementalBlacksmithStory.Core
             builder.RegisterComponentInHierarchy<GameExitView>();
             builder.RegisterComponentInHierarchy<SettingsView>();
             builder.RegisterComponentInHierarchy<NPCDialogueView>();
+            builder.RegisterComponentInHierarchy<ShopCartView>();
+            builder.RegisterComponentInHierarchy<SelectShopAmountView>();
 
             // Presenter 등록
             builder.RegisterEntryPoint<MoneyPresenter>();
@@ -31,6 +33,7 @@ namespace ElementalBlacksmithStory.Core
             builder.RegisterEntryPoint<GameExitPresenter>().AsSelf();
             builder.RegisterEntryPoint<SettingsPresenter>().AsSelf();
             builder.RegisterEntryPoint<NPCDialoguePresenter>().AsSelf();
+            builder.RegisterEntryPoint<ShopCartPresenter>().AsSelf();
         }
     }
 }

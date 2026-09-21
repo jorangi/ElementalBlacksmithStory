@@ -1,17 +1,17 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
+using Cysharp.Threading.Tasks;
+using ElementalBlacksmithStory.Core;
+using ElementalBlacksmithStory.Data;
+using ElementalBlacksmithStory.Events;
+using MessagePipe;
+using R3;
 using UnityEngine;
 using UnityEngine.UI;
-using ElementalBlacksmithStory.Data;
 using VContainer;
 using VContainer.Unity;
-using Cysharp.Threading.Tasks;
-using System.Threading;
-using R3;
-using MessagePipe;
-using ElementalBlacksmithStory.Events;
-using System;
-using ElementalBlacksmithStory.Core;
 
 namespace ElementalBlacksmithStory.UI
 {
@@ -26,10 +26,11 @@ namespace ElementalBlacksmithStory.UI
         [SerializeField] private RectTransform contentRect; // ScrollView의 Content
         [SerializeField] private Transform branchContainer;
         [SerializeField] private Transform nodeContainer;
-        [SerializeField] private Button _button;        
+        [SerializeField] private Toggle _fixRecipe;
+        [SerializeField] private Button _button;
 
-        public bool IsActivated => weaponTreePanel != null 
-            ? weaponTreePanel.activeSelf 
+        public bool IsActivated => weaponTreePanel != null
+            ? weaponTreePanel.activeSelf
             : (scrollRect != null ? scrollRect.gameObject.activeInHierarchy : gameObject.activeInHierarchy);
 
         public void Hide()
@@ -42,15 +43,15 @@ namespace ElementalBlacksmithStory.UI
             {
                 scrollRect.gameObject.SetActive(false);
             }
-        }        
+        }
 
         [Header("프리팹")]
         [SerializeField] private WeaponNodeUI nodePrefab;
         [SerializeField] private WeaponTreeBranchView branchPrefab;
 
         [Header("배치 간격")]
-        [SerializeField] private float nodeSpacingX = 180f; 
-        [SerializeField] private float nodeSpacingY = 180f; 
+        [SerializeField] private float nodeSpacingX = 180f;
+        [SerializeField] private float nodeSpacingY = 180f;
         [SerializeField] private Vector2 padding = new Vector2(150f, 150f);
         private WeaponSpriteLoader spriteLoader;
         private Dictionary<uint, WeaponNodeUI> nodes = new();
@@ -60,6 +61,8 @@ namespace ElementalBlacksmithStory.UI
         private CompositeDisposable _disposables = new();
         private readonly Subject<ChangeRecipeFlagEvent> _onChangeRecipeFlagEventSubject = new();
         public Observable<ChangeRecipeFlagEvent> OnChangeRecipeFlagEventAsObservable => _onChangeRecipeFlagEventSubject;
+        public Observable<bool> OnFixRecipeChangedAsObservable => _fixRecipe != null ? _fixRecipe.OnValueChangedAsObservable() : Observable.Empty<bool>();
+        public bool IsFixRecipeChecked => _fixRecipe != null && _fixRecipe.isOn;
         private Dictionary<(uint from, uint to), WeaponTreeBranchView> _branches = new();
         public Dictionary<(uint from, uint to), WeaponTreeBranchView> Branches => _branches;
         [Header("버튼 이동 설정")]
@@ -68,7 +71,7 @@ namespace ElementalBlacksmithStory.UI
         private float _defaultY = 0f;
         private CancellationTokenSource _animCts;
 
-        
+
         [Inject]
         public void Construct(WeaponSpriteLoader spriteLoader)
         {
@@ -292,7 +295,7 @@ namespace ElementalBlacksmithStory.UI
         private async UniTask ResetScrollPositionRoutine()
         {
             await UniTask.Yield(PlayerLoopTiming.Update);
-            if(scrollRect != null)
+            if (scrollRect != null)
             {
                 scrollRect.normalizedPosition = new Vector2(0.5f, 0f);
             }
