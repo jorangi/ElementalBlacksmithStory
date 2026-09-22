@@ -12,7 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2ebc671e09e4f09479d24550860a548e, type: 3}
   m_Name: 20504
   m_EditorClassIdentifier: Assembly-CSharp::ElementalBlacksmithStory.Data.SO_CraftRecipe
-  recipeName: "\uD654\uB8E1\uC758 \uAC80 \uC81C\uC791\uBC95"
+  recipeName: "\uC815\uC81C\uB41C \uD669\uAE08\uC758 \uADF8\uB9AC\uD540 \uC138\uC774\uBC84
+    \uC81C\uC791\uBC95"
   recipeMaterials: []
   recipeOutcome:
     chance: 0.57

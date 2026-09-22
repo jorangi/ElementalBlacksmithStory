@@ -184,11 +184,57 @@ namespace ElementalBlacksmithStory.UI
                     else
                         itemView.SetIcon(sprite);
                     itemView.OnClickAsObservable()
-                        .Subscribe(_ => _onMaterialClickSubject.OnNext((material.Id, count, itemView)))
+                        .Subscribe(_ => _onMaterialClickSubject.OnNext((material.Id, itemView.MaterialCount, itemView)))
                         .AddTo(_itemDisposables);
                 }
             }
         }
+
+        /// <summary>
+        /// 특정 재료만 숫자 갱신 또는 새 슬롯 1개 동적 추가 (Zero Rebuild 최적화)
+        /// </summary>
+        public async UniTaskVoid UpdateOrAddItem(SO_MaterialData material, uint count, MaterialSpriteLoader loader)
+        {
+            if (material == null) return;
+
+            // 1. 이미 존재하는 슬롯인 경우: 텍스트 숫자만 변경
+            if (_itemViews.TryGetValue(material.Id, out var existingView) && existingView != null)
+            {
+                if (count > 0)
+                {
+                    existingView.SetData(material.Id, count);
+                }
+                else
+                {
+                    _itemViews.Remove(material.Id);
+                    Destroy(existingView.gameObject);
+                }
+                return;
+            }
+
+            if (count == 0) return;
+
+            // 2. 가방에 없던 새로운 재료인 경우: 새 슬롯 1개만 생성
+            if (materialParent == null || materialItemPrefab == null) return;
+            var ct = this.GetCancellationTokenOnDestroy();
+
+            GameObject instance = Instantiate(materialItemPrefab, materialParent);
+            instance.name = material.Id.ToString();
+            if (instance.TryGetComponent<MaterialItemView>(out var itemView))
+            {
+                _itemViews[material.Id] = itemView;
+                itemView.SetData(material.Id, count);
+                Sprite sprite = await loader.GetSprite(material.Id, ct);
+                if (sprite != null)
+                {
+                    itemView.SetIcon(sprite);
+                }
+                itemView.OnClickAsObservable()
+                    .Subscribe(_ => _onMaterialClickSubject.OnNext((material.Id, itemView.MaterialCount, itemView)))
+                    .AddTo(_itemDisposables);
+            }
+        }
+
         private void OnDestroy()
         {
             _itemDisposables.Dispose();

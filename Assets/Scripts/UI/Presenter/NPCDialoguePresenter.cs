@@ -4,13 +4,13 @@ using System.Threading;
 using Cysharp.Threading.Tasks;
 using ElementalBlacksmithStory.Core;
 using ElementalBlacksmithStory.Data;
+using ElementalBlacksmithStory.Events;
 using MessagePipe;
 using R3;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using VContainer;
 using VContainer.Unity;
-using ElementalBlacksmithStory.Events;
 
 namespace ElementalBlacksmithStory.UI
 {
@@ -22,6 +22,7 @@ namespace ElementalBlacksmithStory.UI
         private readonly Dictionary<uint, SO_NPCData> _npcCache = new();
 
         private SO_DialogueData _currentDialogue;
+        private IReadOnlyDictionary<string, object> _currentParameters;
         private int _currentLineIndex = -1;
         private bool _isTyping = false;
         private bool _isAdvancingLine = false;
@@ -39,8 +40,9 @@ namespace ElementalBlacksmithStory.UI
         {
             _view = view;
             _spriteLoader = spriteLoader;
-            dialogueSubscriber.Subscribe(e=>{
-                StartDialogue(e.dialogueId);
+            dialogueSubscriber.Subscribe(e =>
+            {
+                StartDialogue(e.dialogueId, e.parameters);
             });
         }
 
@@ -62,15 +64,15 @@ namespace ElementalBlacksmithStory.UI
         /// <summary>
         /// 대화 ID로 대화 시작
         /// </summary>
-        public void StartDialogue(uint dialogueId, Action onComplete = null)
+        public void StartDialogue(uint dialogueId, IReadOnlyDictionary<string, object> parameters = null, Action onComplete = null)
         {
-            StartDialogueAsync(dialogueId, onComplete).Forget();
+            StartDialogueAsync(dialogueId, parameters, onComplete).Forget();
         }
 
         /// <summary>
         /// 대화 ID로 대화 비동기 시작
         /// </summary>
-        public async UniTask StartDialogueAsync(uint dialogueId, Action onComplete = null)
+        public async UniTask StartDialogueAsync(uint dialogueId, IReadOnlyDictionary<string, object> parameters = null, Action onComplete = null)
         {
             var handle = Addressables.LoadAssetAsync<SO_DialogueData>(dialogueId.ToString());
             var dialogueData = await handle.ToUniTask();
@@ -83,6 +85,7 @@ namespace ElementalBlacksmithStory.UI
             }
 
             _currentDialogue = dialogueData;
+            _currentParameters = parameters;
             _onComplete = onComplete;
             _currentLineIndex = -1;
 
@@ -149,7 +152,8 @@ namespace ElementalBlacksmithStory.UI
 
                 try
                 {
-                    await _view.TypingText(line.text, _typingCts.Token);
+                    string formattedText = line.GetFormattedText(_currentParameters);
+                    await _view.TypingText(formattedText, _typingCts.Token);
                 }
                 catch (OperationCanceledException) { }
                 finally

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3bf5d3fd2cf37c243a9a83f583606c8b, type: 3}
   m_Name: 10503
   m_EditorClassIdentifier: Assembly-CSharp::SO_WeaponData
-  weaponName: "\uD53C\uB8B0\uC131 \uAC00\uC2DC \uB3CB\uD78C \uC740\uC7A5\uBBF8 "
+  weaponName: "\uB099\uB8B0\uB97C \uC720\uB3C4\uD558\uB294 \uAC00\uC2DC "
   atk: 3
   ats: 1
   cost: 6100

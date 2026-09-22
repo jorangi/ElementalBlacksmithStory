@@ -4,7 +4,6 @@ using R3;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using Cysharp.Text;
 
 namespace ElementalBlacksmithStory.UI
 {
@@ -14,10 +13,12 @@ namespace ElementalBlacksmithStory.UI
         [SerializeField] private Image iconImage;
         [SerializeField] private TextMeshProUGUI materialNameText;
         [SerializeField] private TextMeshProUGUI finalPrice;
+        [SerializeField] private TextMeshProUGUI pocketAmount;
         [SerializeField] private TextMeshProUGUI remainingWallet;
         [SerializeField] private TMP_InputField countText;
         [SerializeField] private Button decreseButton;
         [SerializeField] private Button increaseButton;
+        [SerializeField] private Button purchaseButton;
         [SerializeField] private Button submitButton;
         [SerializeField] private Button cancelButton;
 
@@ -54,6 +55,47 @@ namespace ElementalBlacksmithStory.UI
             SetAmount(currentAmount);
         }
 
+        public void SetAmount(uint amount)
+        {
+            if (countText != null)
+            {
+                countText.SetTextWithoutNotify(ZString.Format("{0:N0}", amount));
+            }
+            UpdateButtonStates(amount);
+        }
+
+        private void UpdateButtonStates(uint amount)
+        {
+            if (MaterialCount == 0)
+            {
+                if (increaseButton != null) increaseButton.interactable = false;
+                if (decreseButton != null) decreseButton.interactable = false;
+                if (countText != null) countText.interactable = false;
+                return;
+            }
+
+            if (increaseButton != null)
+            {
+                increaseButton.interactable = amount < MaterialCount;
+            }
+
+            if (decreseButton != null)
+            {
+                decreseButton.interactable = amount > 0;
+            }
+
+            if (countText != null)
+            {
+                countText.interactable = true;
+            }
+        }
+        public void SetPocketEA(uint ea)
+        {
+            if (pocketAmount != null)
+            {
+                pocketAmount.SetText(ZString.Format("소지: {0:N0}개", ea));
+            }
+        }
         public void SetFinalPrice(ulong price)
         {
             if (finalPrice != null)
@@ -66,15 +108,23 @@ namespace ElementalBlacksmithStory.UI
         {
             if (remainingWallet != null)
             {
-                remainingWallet.SetText(ZString.Format("잔여금: <sprite name=\"CoinSack\">{0:N0}", money));
+                remainingWallet.SetText(ZString.Format("잔여금: {0:N0}", money));
             }
         }
 
-        public void SetAmount(uint amount)
+        public void SetPurchaseButtonText(string text)
         {
-            if (countText == null) return;
-            countText.SetTextWithoutNotify(ZString.Format("{0:N0}", amount));
+            if (purchaseButton != null)
+            {
+                var tmp = purchaseButton.GetComponentInChildren<TextMeshProUGUI>();
+                if (tmp != null)
+                {
+                    tmp.SetText(text);
+                }
+            }
         }
+
+
         public Observable<uint> OnChangedAmountAsObservable()
         {
             if (countText == null) return Observable.Empty<uint>();
@@ -131,6 +181,7 @@ namespace ElementalBlacksmithStory.UI
             return _decreaseHoldButton != null ? _decreaseHoldButton.OnTickAsObservable() : decreseButton.OnClickAsObservable();
         }
 
+        public Observable<Unit> OnPurchaseAsObservable() => purchaseButton != null ? purchaseButton.OnClickAsObservable() : Observable.Empty<Unit>();
         public Observable<Unit> OnSubmitAsObservable() => submitButton != null ? submitButton.OnClickAsObservable() : Observable.Empty<Unit>();
         public Observable<Unit> OnCancelAsObservable() => cancelButton != null ? cancelButton.OnClickAsObservable() : Observable.Empty<Unit>();
 
