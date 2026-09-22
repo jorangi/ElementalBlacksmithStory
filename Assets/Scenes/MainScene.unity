@@ -6750,6 +6750,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 65840837224799864, guid: 023ceea11c1bb2d43971d266e6fbc865, type: 3}
+      propertyPath: m_text
+      value: "\uC0C1\uC810 NPC\uC758 \uB300\uC0AC"
+      objectReference: {fileID: 0}
     - target: {fileID: 829781854064776639, guid: 023ceea11c1bb2d43971d266e6fbc865, type: 3}
       propertyPath: m_SizeDelta.x
       value: 0
@@ -6988,7 +6992,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7977250879445890018, guid: 023ceea11c1bb2d43971d266e6fbc865, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -94.895
+      value: -66.09
       objectReference: {fileID: 0}
     - target: {fileID: 8985509101323535430, guid: 023ceea11c1bb2d43971d266e6fbc865, type: 3}
       propertyPath: m_AnchorMax.y
