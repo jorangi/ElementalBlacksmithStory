@@ -22,6 +22,7 @@ namespace ElementalBlacksmithStory.UI
         private readonly IDisposable _subscription;
         private CancellationTokenSource _typingCts;
         private bool _isTyping = false;
+        public bool IsTyping => _isTyping;
 
         [Inject]
         public ShopMasterPresenter(

@@ -24,6 +24,7 @@ namespace ElementalBlacksmithStory.Core
             builder.RegisterComponentInHierarchy<ShopItemGridView>();
             builder.RegisterComponentInHierarchy<ShopMasterView>();
             builder.RegisterComponentInHierarchy<ShopTabView>();
+            builder.RegisterComponentInHierarchy<ShopCategoriesView>();
 
             // Presenter 등록
             builder.RegisterEntryPoint<MoneyPresenter>();
@@ -40,6 +41,7 @@ namespace ElementalBlacksmithStory.Core
             builder.RegisterEntryPoint<ShopItemGridPresenter>().AsSelf();
             builder.RegisterEntryPoint<ShopMasterPresenter>();
             builder.RegisterEntryPoint<ShopTabPresenter>().AsSelf();
+            builder.RegisterEntryPoint<ShopCategoriesPresenter>().AsSelf();
         }
     }
 }

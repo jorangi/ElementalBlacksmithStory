@@ -30,6 +30,7 @@ namespace ElementalBlacksmithStory.UI
         private bool _isSellMode = false;
         private bool _isInitialized = false;
         private CancellationTokenSource _refreshCts;
+        private Func<IShopItem, bool> _categoryFilter = _ => true;
 
         [Inject]
         public ShopItemGridPresenter(
@@ -69,7 +70,11 @@ namespace ElementalBlacksmithStory.UI
                         }
                         else
                         {
-                            AddItem(new MaterialShopItem(data.material, data.count)).Forget();
+                            var item = new MaterialShopItem(data.material, data.count);
+                            if (_categoryFilter == null || _categoryFilter(item))
+                            {
+                                AddItem(item).Forget();
+                            }
                         }
                     }
                     else
@@ -140,6 +145,18 @@ namespace ElementalBlacksmithStory.UI
         }
 
         /// <summary>
+        /// 카테고리 필터 조건 변경 및 그리드 갱신
+        /// </summary>
+        public void SetCategoryFilter(Func<IShopItem, bool> filterPredicate)
+        {
+            _categoryFilter = filterPredicate ?? (_ => true);
+            if (_isInitialized)
+            {
+                RefreshGridAsync().Forget();
+            }
+        }
+
+        /// <summary>
         /// 그리드 아이템 목록 갱신
         /// </summary>
         public async UniTask RefreshGridAsync()
@@ -169,19 +186,20 @@ namespace ElementalBlacksmithStory.UI
         }
 
         /// <summary>
-        /// 구매 탭 아이템 목록 생성 (상점 판매 상품)
+        /// 구매 탭 아이템 목록 생성 (상점 판매 상품 중 현재 카테고리 필터를 만족하는 항목)
         /// </summary>
         private async UniTask PopulateBuyItemsAsync(CancellationToken ct)
         {
             foreach (var item in _shopBuyGoods)
             {
                 ct.ThrowIfCancellationRequested();
+                if (_categoryFilter != null && !_categoryFilter(item)) continue;
                 await AddItem(item);
             }
         }
 
         /// <summary>
-        /// 판매 탭 아이템 목록 생성 (현재 잡화점 정책: MaterialInventory의 보유 재료만 매입)
+        /// 판매 탭 아이템 목록 생성 (현재 잡화점 정책: MaterialInventory의 보유 재료 중 카테고리 필터를 만족하는 항목)
         /// 추후 다른 인벤토리(IInventory 등) 확장 시 여기에 매입 대상 목록 추가 가능
         /// </summary>
         private async UniTask PopulateSellItemsAsync(CancellationToken ct)
@@ -193,7 +211,9 @@ namespace ElementalBlacksmithStory.UI
                 ct.ThrowIfCancellationRequested();
                 if (pair.Key != null && pair.Value > 0)
                 {
-                    await AddItem(new MaterialShopItem(pair.Key, pair.Value));
+                    var item = new MaterialShopItem(pair.Key, pair.Value);
+                    if (_categoryFilter != null && !_categoryFilter(item)) continue;
+                    await AddItem(item);
                 }
             }
         }

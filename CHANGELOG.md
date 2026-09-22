@@ -394,3 +394,11 @@
 
     - NPC 1종 추가, NPC 이미지 1종 추가
       - 장비점 주인 캐롤라인(50008) 추가
+
+    - 상점 카테고리 시스템 구현
+      - ShopCategoryData 추가 (Id, DisplayName, Sprite, FilterPredicate: 필터 조건 Func)
+      - ShopCategoryButtonView 구현
+      - ShopCategoriesView 구현
+      - ShopCategoriesPresenter 구현
+      - ShopItemGridPresenter에 카테고리 필터 연동
+      - UIInstaller 및 Markets 프리팹에 ShopCategoriesView / ShopCategoriesPresenter 등록
