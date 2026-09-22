@@ -402,3 +402,17 @@
       - ShopCategoriesPresenter 구현
       - ShopItemGridPresenter에 카테고리 필터 연동
       - UIInstaller 및 Markets 프리팹에 ShopCategoriesView / ShopCategoriesPresenter 등록
+
+## 2026-09-23
+
+    - 모든 장면의 드로우콜을 크게 낮출 수 있었다.
+      - 각 항목별 스프라이트 아틀라스 생성
+       - 드로우콜 배칭을 위해 일부 이미지 복제 후 아틀라스에 각각 삽입
+      - 각 항목의 드로우콜 감소량은 일부만 정량 측정을 하였음.
+      - 상점 기준 61->45로 25% 경량
+      - 이외 대장간 역시 무기트리 기준 70->61, 이외 장면 44->37로 감소
+      - 선술집의 경우 장면 자체가 많이 없었지만 3~4가량 감소
+      - 선술집의 Rumor의 스탠딩 이미지를 MainUI로 넘김
+       - 과정에서 불필요하게 Options가 2개이던 중복 문제를 해결
+       - Options의 선택지를 프리팹화
+       - 스탠딩 이미지와 Rumor의 Beer, 메시지 박스 등의 sorting order를 위해 canvas 추가 후 z-index 관리
