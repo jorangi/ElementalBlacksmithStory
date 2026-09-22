@@ -19,7 +19,6 @@ namespace ElementalBlacksmithStory.UI
     {
         private readonly ShopCategoriesView _view;
         private readonly ShopItemGridPresenter _gridPresenter;
-        private readonly MaterialSpriteLoader _materialSpriteLoader;
         private readonly IPublisher<PlaySoundEvent> _soundPublisher;
 
         private readonly List<ShopCategoryData> _categories = new();
@@ -31,30 +30,24 @@ namespace ElementalBlacksmithStory.UI
         public ShopCategoriesPresenter(
             ShopCategoriesView view,
             ShopItemGridPresenter gridPresenter,
-            MaterialSpriteLoader materialSpriteLoader,
             IPublisher<PlaySoundEvent> soundPublisher)
         {
             _view = view;
             _gridPresenter = gridPresenter;
-            _materialSpriteLoader = materialSpriteLoader;
             _soundPublisher = soundPublisher;
         }
 
         public void Start()
         {
-            SetupDefaultGeneralShopCategories().Forget();
+            SetupDefaultGeneralShopCategories();
         }
 
         /// <summary>
         /// 잡화점 기본 카테고리 설정 (전체, 재료)
         /// </summary>
-        public async UniTaskVoid SetupDefaultGeneralShopCategories()
+        public void SetupDefaultGeneralShopCategories()
         {
-            Sprite materialIcon = null;
-            if (_materialSpriteLoader != null)
-            {
-                materialIcon = await _materialSpriteLoader.GetSprite(30001);
-            }
+            Sprite materialIcon = _view != null ? _view.DefaultMaterialIcon : null;
 
             var defaultCategories = new List<ShopCategoryData>
             {

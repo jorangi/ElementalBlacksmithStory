@@ -32,11 +32,17 @@ namespace ElementalBlacksmithStory.UI
         public bool IsPlaying => _currentDialogue != null;
         public bool IsActivated => _view != null && _view.IsActivated;
 
+
+        // IPublisher<StartDialogueEvent> _dialoguePublisher;
+
         [Inject]
         public NPCDialoguePresenter(
             NPCDialogueView view,
             NPCStandingSpriteLoader spriteLoader,
-            ISubscriber<StartDialogueEvent> dialogueSubscriber)
+            ISubscriber<StartDialogueEvent> dialogueSubscriber
+            // ,IPublisher<StartDialogueEvent> dialoguePublisher
+
+            )
         {
             _view = view;
             _spriteLoader = spriteLoader;
@@ -44,6 +50,7 @@ namespace ElementalBlacksmithStory.UI
             {
                 StartDialogue(e.dialogueId, e.parameters);
             });
+            // _dialoguePublisher = dialoguePublisher;
         }
 
         public void Start()
@@ -59,6 +66,7 @@ namespace ElementalBlacksmithStory.UI
             {
                 _view.Hide();
             }
+            // _dialoguePublisher.Publish(new StartDialogueEvent(600203));
         }
 
         /// <summary>
