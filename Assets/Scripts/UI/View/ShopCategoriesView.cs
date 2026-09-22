@@ -12,6 +12,9 @@ namespace ElementalBlacksmithStory.UI
         [SerializeField] private Transform _container;
         [SerializeField] private GameObject _categoryButtonPrefab;
 
+        [SerializeField] private Sprite _defaultMaterialIcon;
+        public Sprite DefaultMaterialIcon { get => _defaultMaterialIcon; }
+
         private readonly Dictionary<string, ShopCategoryButtonView> _buttons = new();
 
         private void Awake()
