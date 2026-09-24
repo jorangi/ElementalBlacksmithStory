@@ -15,5 +15,6 @@ MonoBehaviour:
   runeName: "\uD798\uC758 \uB8EC"
   description: "\uBB34\uAE30\uC758 \uACF5\uACA9\uB825\uC774 2% \uC99D\uAC00\uD55C\uB2E4."
   grade: 0
+  nextRune: {fileID: 11400000, guid: e8709131574b9b148b9fcb2c56c5f9eb, type: 2}
   value: 1800
   memo: 

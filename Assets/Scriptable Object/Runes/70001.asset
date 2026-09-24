@@ -12,8 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b428e9802a826c4495844b53d06f3dc, type: 3}
   m_Name: 70001
   m_EditorClassIdentifier: Assembly-CSharp::ElementalBlacksmithStory.Data.SO_RuneData
-  runeName: "\uAD11\uCC44\uC758 \uB8EC"
+  runeName: "\uD76C\uBBF8\uD55C \uAD11\uCC44\uC758 \uB8EC"
   description: "\uD310\uB9E4 \uC2DC 5%\uC758 \uCD94\uAC00 \uACE8\uB4DC\uB97C \uD68D\uB4DD\uD55C\uB2E4."
   grade: 0
+  nextRune: {fileID: 11400000, guid: 699821274c783ad4eacd1b6f7b8e52f7, type: 2}
   value: 3000
   memo: 

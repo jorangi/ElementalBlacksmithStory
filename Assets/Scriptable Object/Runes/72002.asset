@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1b428e9802a826c4495844b53d06f3dc, type: 3}
-  m_Name: 70003
+  m_Name: 72002
   m_EditorClassIdentifier: Assembly-CSharp::ElementalBlacksmithStory.Data.SO_RuneData
-  runeName: "\uC7AC\uBE60\uB984\uC758 \uB8EC"
-  description: "\uBB34\uAE30\uC758 \uACF5\uACA9\uC18D\uB3C4\uAC00 5% \uC99D\uAC00\uD55C\uB2E4."
-  grade: 0
-  nextRune: {fileID: 11400000, guid: 78dac3e2bc8d97c4992acc7961573edf, type: 2}
-  value: 2000
+  runeName: "\uAD34\uB825\uC758 \uB8EC"
+  description: "\uBB34\uAE30\uC758 \uACF5\uACA9\uB825\uC774 7% \uC99D\uAC00\uD55C\uB2E4."
+  grade: 2
+  nextRune: {fileID: 0}
+  value: 4000
   memo: 
