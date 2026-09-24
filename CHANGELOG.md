@@ -443,3 +443,6 @@
 
     - DB의 AutoRegister시 Addressables의 Default그룹으로 들어가는 문제
       - 제네릭 T의 이름에서 "SO_"를 제거하여 AddressableGroupName으로 사용
+
+    - 룬 27종 추가
+    - 속성, 상태이상 관련 데이터 주석 추가 및 순수 클래스로 변경
