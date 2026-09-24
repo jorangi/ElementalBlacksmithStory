@@ -99,8 +99,8 @@ namespace ElementalBlacksmithStory.Core
             submitMaterialSubscriber.Subscribe(e =>
             {
                 BaseMaterialData mat = RecipeKeyHelper.IsWeaponId(e.MaterialId)
-                    ? (BaseMaterialData)weaponDatabase.GetWeapon(e.MaterialId)
-                    : (BaseMaterialData)materialDatabase.GetMaterial(e.MaterialId);
+                    ? (BaseMaterialData)weaponDatabase.Get(e.MaterialId)
+                    : (BaseMaterialData)materialDatabase.Get(e.MaterialId);
 
                 if (mat == null) return;
 
@@ -130,7 +130,7 @@ namespace ElementalBlacksmithStory.Core
                 cachedPinnedWeaponEnhancePath = null;
                 _selectedMaterials.Clear();
 
-                _currentWeapon = new Weapon(weaponDatabase.GetWeapon(10001));
+                _currentWeapon = new Weapon(weaponDatabase.Get(10001));
                 cachedWeaponId = 10001;
 
                 Debug.Log($"[EnhancementService] 판매됨 -> 레시피 고정: {_fixedRecipe}, 목표 무기: {pinnedRecipeId}");
@@ -149,7 +149,7 @@ namespace ElementalBlacksmithStory.Core
 
         public void Start()
         {
-            _currentWeapon = new Weapon(weaponDatabase.GetWeapon(10001));
+            _currentWeapon = new Weapon(weaponDatabase.Get(10001));
             weaponChangePublisher.Publish(new ChangeWeaponEvent(_currentWeapon, 10001, 0));
             cachedWeaponId = 10001;
             UpdateNextRecipe(autoFillMaterials: true, force: true);
@@ -486,7 +486,7 @@ namespace ElementalBlacksmithStory.Core
                     }
                     else
                     {
-                        _materialInventory.GetMaterial(rm.material, rm.count);
+                        _materialInventory.Get(rm.material, rm.count);
                     }
                 }
             }
@@ -500,7 +500,7 @@ namespace ElementalBlacksmithStory.Core
             if (success)
             {
                 _soundPublisher.Publish(new PlaySoundEvent(40104));
-                currentWeaponData = weaponDatabase.GetWeapon(result.resultWeapon.Id) ?? result.resultWeapon;
+                currentWeaponData = weaponDatabase.Get(result.resultWeapon.Id) ?? result.resultWeapon;
 
                 weapon.PushEnhanceStep(currentWeaponData.Id, result.resultWeapon.basePrice, currentWeaponData.cost);
                 Debug.Log($"[EnhancementService] 강화 요청 처리됨 -> 성공, 결과물: {currentWeaponData.weaponName}");
@@ -553,7 +553,7 @@ namespace ElementalBlacksmithStory.Core
                 }
                 else if (kv.Key is SO_MaterialData materialData)
                 {
-                    _materialInventory.GetMaterial(materialData, kv.Value);
+                    _materialInventory.Get(materialData, kv.Value);
                 }
             }
 
@@ -621,7 +621,7 @@ namespace ElementalBlacksmithStory.Core
                     }
                     else
                     {
-                        _materialInventory.GetMaterial(rm.material, rm.count);
+                        _materialInventory.Get(rm.material, rm.count);
                     }
                 }
             }
@@ -632,7 +632,7 @@ namespace ElementalBlacksmithStory.Core
             if (success)
             {
                 _soundPublisher.Publish(new PlaySoundEvent(40104));
-                currentWeaponData = weaponDatabase.GetWeapon(result.resultWeapon.Id) ?? result.resultWeapon;
+                currentWeaponData = weaponDatabase.Get(result.resultWeapon.Id) ?? result.resultWeapon;
 
                 weapon.PushEnhanceStep(currentWeaponData.Id, result.resultWeapon.basePrice, currentWeaponData.cost);
                 Debug.Log($"[EnhancementService] 강화 요청 처리됨 -> 성공, 결과물: {currentWeaponData.weaponName}");

@@ -29,7 +29,7 @@ namespace ElementalBlacksmithStory.Core
                     break;
                 }
 
-                SO_WeaponData currentWeapon = db.GetWeapon(cur);
+                SO_WeaponData currentWeapon = db.Get(cur);
                 if(currentWeapon == null || currentWeapon.recipes == null) continue;
                 foreach(var recipe in currentWeapon.recipes)
                 {

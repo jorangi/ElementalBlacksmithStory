@@ -3,7 +3,6 @@ using System.Collections.Generic;
 
 namespace ElementalBlacksmithStory.Data
 {
-    
     [CreateAssetMenu(fileName = "SO_WeaponData", menuName = "Scriptable Objects/SO_WeaponData")]
     public class SO_WeaponData : BaseMaterialData
     {

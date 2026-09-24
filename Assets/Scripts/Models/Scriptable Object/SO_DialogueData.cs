@@ -236,7 +236,7 @@ namespace ElementalBlacksmithStory.Data
     /// NPC 대화 데이터
     /// </summary>
     [CreateAssetMenu(fileName = "SO DialogueData", menuName = "Scriptable Objects/SO_DialogueData")]
-    public class SO_DialogueData : ScriptableObject
+    public class SO_DialogueData : ScriptableObject, IIdentifiable
     {
         public uint Id => uint.TryParse(name, out var id) ? id : 0;
         [TextArea(2, 5)]

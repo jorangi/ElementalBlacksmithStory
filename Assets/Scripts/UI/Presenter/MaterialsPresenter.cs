@@ -1,17 +1,17 @@
 using System;
 using System.Collections.Generic;
-using VContainer;
-using VContainer.Unity;
-using R3;
-using MessagePipe;
-using UnityEngine;
-using UnityEngine.UI;
+using System.Threading;
 using Cysharp.Threading.Tasks;
+using ElementalBlacksmithStory.Core;
 using ElementalBlacksmithStory.Data;
 using ElementalBlacksmithStory.Events;
-using System.Threading;
 using ElementalBlacksmithStory.Inventory;
-using ElementalBlacksmithStory.Core;
+using MessagePipe;
+using R3;
+using UnityEngine;
+using UnityEngine.UI;
+using VContainer;
+using VContainer.Unity;
 
 namespace ElementalBlacksmithStory.UI
 {
@@ -103,7 +103,7 @@ namespace ElementalBlacksmithStory.UI
                     _positionPublisher.Publish(new EnhanceButtonPositionEvent(dragY));
                 })
                 .AddTo(_disposables);
-            
+
             _view.OnHandleEndDragAsObservable()
                 .Subscribe(e =>
                 {
@@ -117,7 +117,7 @@ namespace ElementalBlacksmithStory.UI
                     _positionPublisher.Publish(new EnhanceButtonPositionEvent(0f));
                 })
                 .AddTo(_disposables);
-            
+
             _selectMaterialAmountView.OnChangedAmountAsObservable()
                 .ThrottleFirst(TimeSpan.FromMilliseconds(20))
                 .Subscribe(e =>
@@ -134,7 +134,7 @@ namespace ElementalBlacksmithStory.UI
                     _selectMaterialAmountView.SetAmount(_selectedAmount.Value);
                 })
                 .AddTo(_disposables);
-            
+
             _selectMaterialAmountView.OnDecreaseAsObservable()
                 .ThrottleFirst(TimeSpan.FromMilliseconds(20))
                 .Subscribe(_ =>
@@ -143,12 +143,12 @@ namespace ElementalBlacksmithStory.UI
                     _selectMaterialAmountView.SetAmount(_selectedAmount.Value);
                 })
                 .AddTo(_disposables);
-            
+
             _selectMaterialAmountView.OnSubmitAsObservable()
                 .ThrottleFirst(TimeSpan.FromMilliseconds(200))
                 .Subscribe(_ =>
                 {
-                    if(_selectedAmount.Value == 0) return;
+                    if (_selectedAmount.Value == 0) return;
                     Debug.Log($"[MaterialPresenter] 선택한 재료: {_selectedAmount.Value}개");
                     _selectedItemView.Select();
                     _selectedItemView.SetAmount(_selectedAmount.Value);
@@ -169,9 +169,9 @@ namespace ElementalBlacksmithStory.UI
 
         public void RefreshMaterialsView()
         {
-            _view.DisplayMaterials(_inventory.GetAll() ,_materialSpriteLoader).Forget();
+            _view.DisplayMaterials(_inventory.GetAll(), _materialSpriteLoader).Forget();
         }
-        
+
         private CancellationTokenSource _cts = new();
         private async UniTask OnMaterialItemClicked(uint materialId, uint count, MaterialItemView itemView)
         {
@@ -180,11 +180,11 @@ namespace ElementalBlacksmithStory.UI
             var ct = _cts.Token;
             _selectedMaterialId = 0;
             _selectedAmount.Value = 0;
-            if(itemView.IsSelected)
+            if (itemView.IsSelected)
             {
                 itemView.UnCheck();
                 _submitMaterialPublisher.Publish(new SubmitMaterialEvent(materialId, 0));
-                itemView.SetData(materialId, _inventory.GetCount(_materialDatabase.GetMaterial(materialId)));
+                itemView.SetData(materialId, _inventory.GetCount(_materialDatabase.Get(materialId)));
                 return;
             }
             Debug.Log($"[MaterialsPresenter] 재료 클릭 수신 - ID: {materialId}, 보유 수량: {count}");
@@ -197,7 +197,7 @@ namespace ElementalBlacksmithStory.UI
             {
                 _selectedMaterialId = itemView.Select();
                 Sprite sprite = await _materialSpriteLoader.GetSprite(_selectedMaterialId, ct);
-                SO_MaterialData materialData = _materialDatabase.GetMaterial(_selectedMaterialId);
+                SO_MaterialData materialData = _materialDatabase.Get(_selectedMaterialId);
                 _selectedItemView = itemView;
                 _selectMaterialAmountView.SetData(sprite, materialData.materialName, _inventory.GetCount(materialData));
             }
@@ -213,7 +213,7 @@ namespace ElementalBlacksmithStory.UI
                 if (itemView == null) continue;
 
                 itemView.UnCheck();
-                var matData = _materialDatabase.GetMaterial(itemView.MaterialId);
+                var matData = _materialDatabase.Get(itemView.MaterialId);
                 if (matData != null)
                 {
                     itemView.SetData(itemView.MaterialId, _inventory.GetCount(matData));
@@ -237,7 +237,7 @@ namespace ElementalBlacksmithStory.UI
             else
             {
                 itemView.UnCheck();
-                var matData = _materialDatabase.GetMaterial(materialId);
+                var matData = _materialDatabase.Get(materialId);
                 if (matData != null)
                 {
                     itemView.SetData(materialId, _inventory.GetCount(matData));

@@ -1,11 +1,11 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using ElementalBlacksmithStory.Core;
 using ElementalBlacksmithStory.Data;
 using R3;
-using VContainer.Unity;
 using UnityEngine;
-using System.Linq;
+using VContainer.Unity;
 
 namespace ElementalBlacksmithStory.Inventory
 {
@@ -44,7 +44,7 @@ namespace ElementalBlacksmithStory.Inventory
         /// <returns></returns>
         public bool Remove(uint idx)
         {
-            if(_inventory.Count > idx)
+            if (_inventory.Count > idx)
             {
                 //_inventory[(int)idx].Dispose 함수
                 _activeInventory.Remove(_inventory[(int)idx]);
@@ -61,7 +61,7 @@ namespace ElementalBlacksmithStory.Inventory
         /// <returns></returns>
         public Weapon Get(uint idx)
         {
-            if(_inventory.Count > idx && _inventory[(int)idx] != null)
+            if (_inventory.Count > idx && _inventory[(int)idx] != null)
                 return _inventory[(int)idx];
             Debug.LogError($"[EquipmentInventory] {idx}번 슬롯에 장비가 없습니다.");
             return null;
@@ -76,7 +76,7 @@ namespace ElementalBlacksmithStory.Inventory
         /// 인벤토리의 크기(중간의 null인 빈슬롯을 포함함)
         /// </summary>
         /// <returns></returns>
-        public int Count()=>_inventory.Count;
+        public int Count() => _inventory.Count;
         /// <summary>
         /// 비어있지 않고 채워져있는 슬롯 개수
         /// </summary>
@@ -84,9 +84,9 @@ namespace ElementalBlacksmithStory.Inventory
         public int ItemCount()
         {
             int n = 0;
-            foreach(var i in _inventory)
+            foreach (var i in _inventory)
             {
-                if(i != null) n++;
+                if (i != null) n++;
             }
             return n;
         }
@@ -98,9 +98,9 @@ namespace ElementalBlacksmithStory.Inventory
         public int GetCountByWeaponId(uint weaponId)
         {
             int count = 0;
-            foreach(var i in _inventory)
+            foreach (var i in _inventory)
             {
-                if(i.WeaponId == weaponId) count++;
+                if (i.WeaponId == weaponId) count++;
             }
             return count;
         }
@@ -114,21 +114,21 @@ namespace ElementalBlacksmithStory.Inventory
         {
             if (count > 0 && GetCountByWeaponId(weaponId) < count)
                 return false;
-            for(int i = _inventory.Count - 1; i > 0; i--)
+            for (int i = _inventory.Count - 1; i > 0; i--)
             {
                 var item = _inventory[i];
-                if(item.WeaponId == weaponId)
+                if (item.WeaponId == weaponId)
                 {
                     Remove((uint)i);
                     count--;
                 }
-                if(count == 0) break;
+                if (count == 0) break;
             }
             return true;
         }
         public void Start()
         {
-            
+
         }
         /// <summary>
         /// 인벤토리 클리어
@@ -143,9 +143,9 @@ namespace ElementalBlacksmithStory.Inventory
         public void TrimInventory()
         {
             int n = 0;
-            for(int i = _inventory.Count-1; i > 0; i++)
+            for (int i = _inventory.Count - 1; i > 0; i++)
             {
-                if(_inventory[i] == null)
+                if (_inventory[i] == null)
                 {
                     _inventory.RemoveAt(i);
                     n++;

@@ -1,12 +1,7 @@
 namespace ElementalBlacksmithStory.Data
 {
-    public interface IShopItem
+    public interface IShopItem : IIdentifiable
     {
-        /// <summary>
-        /// 상점 슬롯 및 아이템 식별용 ID
-        /// </summary>
-        uint Id { get; }
-
         /// <summary>
         /// 화면에 표시될 아이템 이름
         /// </summary>

@@ -416,3 +416,27 @@
        - 과정에서 불필요하게 Options가 2개이던 중복 문제를 해결
        - Options의 선택지를 프리팹화
        - 스탠딩 이미지와 Rumor의 Beer, 메시지 박스 등의 sorting order를 위해 canvas 추가 후 z-index 관리
+
+## 2026-09-24
+
+    - 폴더 구조 정리
+      - Scripts/Scriptable Object폴더 내부에 Database 추가
+      - Interface 폴더 추가
+      - AudioClipLoader를 AssetLoader로 이동
+      - Utility 폴더 추가: 조사 헬퍼, 레시피 키 헬퍼, 캔버스 스케일러, 코인파티클 리스너, 무기 패스파인더를 이동
+      - VContainer 폴더 추가: GameLifetimeScope를 이동
+      -
+    - SO_RuneData를 추가했다.
+      - 실은 feat으로 룬 브랜치를 추가해야했는데 까먹고 진행했다. 이후 작업부터는 feat 브랜치로 분리해서 작업할 예정
+
+    - IDatabase와 SO_BaseDatabase라는 클래스를 추가하여 기존 `SO_WeaponDataBase`, `SO_MaterialDatabase`를 추상화
+      - 기존 GetWeapon, GetMaterial 메서드를 Get으로 단일화
+      - 내부 로직에서 사용하던 weaponList, weaponDict, materialList, materialDict역시 _itemList와 _itemDict로 변경
+
+    - SO_RuneDatabase를 추가
+
+    - IIdentifiable로 Id 인터페이스를 분리
+      - 이유는 Database를 abstract class로 만들면서 항목의 Id를 인터페이스화 할 필요가 있었기 때문
+      - 인터페이스화하는 김에 기존 uint Id를 사용하는 클래스에 IIdentifiable을 상속
+
+    - 가격을 매기기 위한 인터페이스 IValuable 추가

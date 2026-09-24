@@ -1,6 +1,8 @@
+using ElementalBlacksmithStory.Data;
+
 namespace ElementalBlacksmithStory.Events
 {
-    public readonly struct PlaySoundEvent
+    public readonly struct PlaySoundEvent : IIdentifiable
     {
         public readonly uint Id { get; }
         public readonly bool _isLoop;

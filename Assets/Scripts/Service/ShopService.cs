@@ -84,7 +84,7 @@ namespace ElementalBlacksmithStory.Core
                 else
                 {
                     // 기본 폴백: 재료 DB에서 조회 시도
-                    var mat = _materialDatabase.GetMaterial(shopItem.Id);
+                    var mat = _materialDatabase.Get(shopItem.Id);
                     if (mat != null)
                     {
                         _materialInventory.Add(mat, amount);
@@ -131,7 +131,7 @@ namespace ElementalBlacksmithStory.Core
                 uint itemId = kvp.Key;
                 uint amount = kvp.Value;
 
-                var materialData = _materialDatabase.GetMaterial(itemId);
+                var materialData = _materialDatabase.Get(itemId);
                 if (materialData != null)
                 {
                     _materialInventory.Add(materialData, amount);
@@ -179,7 +179,7 @@ namespace ElementalBlacksmithStory.Core
                 }
                 else
                 {
-                    var mat = _materialDatabase.GetMaterial(shopItem.Id);
+                    var mat = _materialDatabase.Get(shopItem.Id);
                     if (mat == null || _materialInventory.GetCount(mat) < amount)
                     {
                         Debug.LogWarning($"[ShopService] 판매할 아이템({shopItem.Name})의 소지량이 부족합니다.");
@@ -196,7 +196,7 @@ namespace ElementalBlacksmithStory.Core
 
                 if (shopItem is MaterialShopItem materialItem && materialItem.Data != null)
                 {
-                    _materialInventory.GetMaterial(materialItem.Data, amount);
+                    _materialInventory.Get(materialItem.Data, amount);
                 }
                 else if (shopItem is Weapon weapon)
                 {
@@ -204,10 +204,10 @@ namespace ElementalBlacksmithStory.Core
                 }
                 else
                 {
-                    var mat = _materialDatabase.GetMaterial(shopItem.Id);
+                    var mat = _materialDatabase.Get(shopItem.Id);
                     if (mat != null)
                     {
-                        _materialInventory.GetMaterial(mat, amount);
+                        _materialInventory.Get(mat, amount);
                     }
                 }
             }
@@ -238,7 +238,7 @@ namespace ElementalBlacksmithStory.Core
                 uint itemId = kvp.Key;
                 uint amount = kvp.Value;
 
-                var materialData = _materialDatabase.GetMaterial(itemId);
+                var materialData = _materialDatabase.Get(itemId);
                 if (materialData == null || _materialInventory.GetCount(materialData) < amount)
                 {
                     Debug.LogWarning($"[ShopService] ID {itemId} 재료의 소지량이 부족합니다.");
@@ -249,10 +249,10 @@ namespace ElementalBlacksmithStory.Core
             // 2. 인벤토리에서 차감
             foreach (var kvp in cartItems)
             {
-                var materialData = _materialDatabase.GetMaterial(kvp.Key);
+                var materialData = _materialDatabase.Get(kvp.Key);
                 if (materialData != null)
                 {
-                    _materialInventory.GetMaterial(materialData, kvp.Value);
+                    _materialInventory.Get(materialData, kvp.Value);
                 }
             }
 

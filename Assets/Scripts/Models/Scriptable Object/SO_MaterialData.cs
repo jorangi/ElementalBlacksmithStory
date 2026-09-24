@@ -2,11 +2,11 @@ using UnityEngine;
 
 namespace ElementalBlacksmithStory.Data
 {
-    public abstract class BaseMaterialData : ScriptableObject
+    public abstract class BaseMaterialData : ScriptableObject, IValuable, IIdentifiable
     {
         [Header("기본 정보")]
         public uint Id => uint.Parse(this.name);
-        public virtual ulong Value { get; }
+        public abstract ulong Value { get; }
     }
     [CreateAssetMenu(fileName = "SO_MaterialData", menuName = "Scriptable Objects/SO_MaterialData")]
     public class SO_MaterialData : BaseMaterialData

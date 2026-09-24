@@ -31,16 +31,16 @@ namespace ElementalBlacksmithStory.Core
             
             _weaponChangeSubscriber.Subscribe(e =>
             {
-                UnityEngine.Debug.Log($"[ForgeManager] ChangeWeaponEvent 수신됨 -> [Id]Sprite: [{e.WeaponId}]{_weaponDatabase.GetWeapon(e.WeaponId).weaponName}");
+                UnityEngine.Debug.Log($"[ForgeManager] ChangeWeaponEvent 수신됨 -> [Id]Sprite: [{e.WeaponId}]{_weaponDatabase.Get(e.WeaponId).weaponName}");
                 SetCurrentWeapon(e.Weapon);
-                CurrentWeapon.SetData(_weaponDatabase.GetWeapon(e.WeaponId));
+                CurrentWeapon.SetData(_weaponDatabase.Get(e.WeaponId));
                 if(e.Weapon.Cost == 0)
-                    e.Weapon.PushCost(weaponDatabase.GetWeapon(e.WeaponId).cost);
+                    e.Weapon.PushCost(weaponDatabase.Get(e.WeaponId).cost);
             }).AddTo(_disposables);
         }
         public void SetCurrentWeapon(uint weaponId)
         {
-            CurrentWeapon = new Weapon(_weaponDatabase.GetWeapon(weaponId));
+            CurrentWeapon = new Weapon(_weaponDatabase.Get(weaponId));
         }
         public void SetCurrentWeapon(Weapon weapon)
         {

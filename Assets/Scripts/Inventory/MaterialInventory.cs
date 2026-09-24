@@ -53,7 +53,7 @@ namespace ElementalBlacksmithStory.Inventory
         /// <param name="materialData">선택한 재료 데이터</param>
         /// <param name="amount">선택한 재료 개수</param>
         /// <returns>선택된 재료와 개수</returns>
-        public (SO_MaterialData, uint) GetMaterial(SO_MaterialData materialData, uint amount)
+        public (SO_MaterialData, uint) Get(SO_MaterialData materialData, uint amount)
         {
             if (_inventory.TryGetValue(materialData, out uint count))
             {

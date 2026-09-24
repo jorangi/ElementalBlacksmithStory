@@ -1,6 +1,8 @@
+using ElementalBlacksmithStory.Data;
+
 namespace ElementalBlacksmithStory.Events
 {
-    public readonly struct ChangeMoneyEvent
+    public readonly struct ChangeMoneyEvent : IIdentifiable
     {
         private const ulong MAXMONEY = 9999999999999;
         private static uint _lastId = 0;
