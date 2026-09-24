@@ -14,7 +14,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: Unity.Addressables.Editor::UnityEditor.AddressableAssets.Settings.AddressableAssetGroup
   m_GroupName: RuneData
   m_GUID: 9e2783b82d804c2438c50de67eb25143
-  m_SerializeEntries: []
+  m_SerializeEntries:
+  - m_GUID: 466b1a83c54857b4f8ae1691ad190fe7
+    m_Address: 70003
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9ad582973ddc19f4b97bfc6fe1f1009d
+    m_Address: 70002
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: bf9ccd7700de7e74fb2662e2b7757c46
+    m_Address: 70001
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 0acc7c10e12a237469b3b620e2da354b, type: 2}
   m_SchemaSet:

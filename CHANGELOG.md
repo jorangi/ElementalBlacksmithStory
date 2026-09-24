@@ -440,3 +440,6 @@
       - 인터페이스화하는 김에 기존 uint Id를 사용하는 클래스에 IIdentifiable을 상속
 
     - 가격을 매기기 위한 인터페이스 IValuable 추가
+
+    - DB의 AutoRegister시 Addressables의 Default그룹으로 들어가는 문제
+      - 제네릭 T의 이름에서 "SO_"를 제거하여 AddressableGroupName으로 사용

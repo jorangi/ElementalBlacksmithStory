@@ -21,6 +21,9 @@ namespace ElementalBlacksmithStory.Data
         [TextArea(2, 5)]
         public string description = string.Empty;
         public RuneGrade grade = RuneGrade.Common;
+        
+        [Tooltip("다음 등급의 룬 데이터")]
+        public SO_RuneData nextRune;
         [SerializeField] private ulong value = 0;
         public ulong Value => value;
 #if UNITY_EDITOR
