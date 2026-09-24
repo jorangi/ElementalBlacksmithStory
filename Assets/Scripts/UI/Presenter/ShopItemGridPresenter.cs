@@ -105,13 +105,13 @@ namespace ElementalBlacksmithStory.UI
 
             if (_materialDatabase != null)
             {
-                var mat30001 = _materialDatabase.GetMaterial(30001);
+                var mat30001 = _materialDatabase.Get(30001);
                 if (mat30001 != null)
                 {
                     _shopBuyGoods.Add(new MaterialShopItem(mat30001, 5));
                 }
 
-                var mat30002 = _materialDatabase.GetMaterial(30002);
+                var mat30002 = _materialDatabase.Get(30002);
                 if (mat30002 != null)
                 {
                     _shopBuyGoods.Add(new MaterialShopItem(mat30002, 10));
@@ -120,7 +120,7 @@ namespace ElementalBlacksmithStory.UI
 
             if (_weaponDatabase != null)
             {
-                var wep10001 = _weaponDatabase.GetWeapon(10001);
+                var wep10001 = _weaponDatabase.Get(10001);
                 if (wep10001 != null)
                 {
                     var testWeapon = new Weapon(wep10001);

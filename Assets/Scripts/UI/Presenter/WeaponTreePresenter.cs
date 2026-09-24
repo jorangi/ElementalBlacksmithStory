@@ -209,7 +209,7 @@ namespace ElementalBlacksmithStory.UI
 
         public void Start()
         {
-            var rootWeapon = _weaponDatabase.GetWeapon(10001);
+            var rootWeapon = _weaponDatabase.Get(10001);
             if (rootWeapon != null)
             {
                 _nodes = _treeBuilder.GenerateTree(rootWeapon);
@@ -252,7 +252,7 @@ namespace ElementalBlacksmithStory.UI
                 uint fromId = fullPath[i];
                 uint toId = fullPath[i + 1];
 
-                SO_WeaponData fromWeapon = _weaponDatabase.GetWeapon(fromId);
+                SO_WeaponData fromWeapon = _weaponDatabase.Get(fromId);
                 if (fromWeapon == null || fromWeapon.recipes == null) return false;
 
                 bool stepUnlocked = false;

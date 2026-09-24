@@ -1,5 +1,5 @@
-using UnityEngine;
 using ElementalBlacksmithStory.Data;
+using UnityEngine;
 
 namespace ElementalBlacksmithStory.Core
 {
@@ -27,8 +27,10 @@ namespace ElementalBlacksmithStory.Core
             }
 
             var popped = weapon.EnhanceHistory.Pop();
-            ulong newBasePrice = weapon.BasePrice >= popped.AddedBasePrice 
-                ? weapon.BasePrice - popped.AddedBasePrice 
+            ulong newBasePrice = weapon.BasePrice >= popped.AddedBasePrice
+
+                ? weapon.BasePrice - popped.AddedBasePrice
+
                 : 0;
             weapon.SetBasePrice(newBasePrice);
 
@@ -73,7 +75,7 @@ namespace ElementalBlacksmithStory.Core
 
         private void ApplyWeaponData(Weapon weapon, uint weaponId, SO_WeaponData cachedData = null)
         {
-            SO_WeaponData weaponData = cachedData ?? _weaponDatabase.GetWeapon(weaponId);
+            SO_WeaponData weaponData = cachedData ?? _weaponDatabase.Get(weaponId);
             if (weaponData != null)
             {
                 weapon.SetData(weaponData);

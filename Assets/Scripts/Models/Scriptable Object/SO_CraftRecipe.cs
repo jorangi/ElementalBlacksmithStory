@@ -24,7 +24,7 @@ namespace ElementalBlacksmithStory.Data
     }
 
     [CreateAssetMenu(fileName = "SO_CraftRecipe", menuName = "Scriptable Objects/SO_CraftRecipe")]
-    public class SO_CraftRecipe : ScriptableObject
+    public class SO_CraftRecipe : ScriptableObject, IIdentifiable
     {
         [Header("제작법 아이디")]
         public uint Id => uint.Parse(this.name);

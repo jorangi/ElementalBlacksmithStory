@@ -265,7 +265,7 @@ namespace ElementalBlacksmithStory.UI
                 return entry.item.Price;
             }
 
-            var material = _materialDatabase.GetMaterial(itemId);
+            var material = _materialDatabase.Get(itemId);
             return material != null ? material.Value : 0;
         }
 
@@ -398,7 +398,7 @@ namespace ElementalBlacksmithStory.UI
         {
             if (ea >= 0)
             {
-                var mat = _materialDatabase.GetMaterial(itemId);
+                var mat = _materialDatabase.Get(itemId);
                 if (mat != null)
                 {
                     await AddItem(new MaterialShopItem(mat, (uint)ea), (uint)ea);

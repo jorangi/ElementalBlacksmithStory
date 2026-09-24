@@ -7,9 +7,8 @@ using UnityEditor.AddressableAssets;
 
 namespace ElementalBlacksmithStory.Data
 {
-    public interface IReadOnlyNPCData
+    public interface IReadOnlyNPCData: IIdentifiable
     {
-        uint Id {get;}
         string NpcName {get;}
         string NpcFriendlyName {get;}
         IReadOnlyList<SO_DialogueData> Dialogues {get;}

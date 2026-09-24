@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 681a9ecd773631c43a149c23e7bf5147, type: 3}
   m_Name: SO_MaterialDatabase
   m_EditorClassIdentifier: Assembly-CSharp::ElementalBlacksmithStory.Data.SO_MaterialDatabase
-  materialList:
+  _itemList:
   - {fileID: 11400000, guid: e138cd3f6b257a848a7aa957e5985189, type: 2}
   - {fileID: 11400000, guid: 24646d92dda37f54ca3649fc4688efb6, type: 2}
   - {fileID: 11400000, guid: bbbce5d84085f904e8c5196c1584aa98, type: 2}

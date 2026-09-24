@@ -1,19 +1,19 @@
-using ElementalBlacksmithStory.Data;
+using System;
+using System.Threading;
 using Cysharp.Threading.Tasks;
+using ElementalBlacksmithStory.Core;
+using ElementalBlacksmithStory.Data;
+using ElementalBlacksmithStory.Events;
 using MessagePipe;
 using R3;
+using UnityEngine;
+using UnityEngine.UIElements;
 using VContainer;
 using VContainer.Unity;
-using UnityEngine.UIElements;
-using UnityEngine;
-using System;
-using ElementalBlacksmithStory.Events;
-using System.Threading;
-using ElementalBlacksmithStory.Core;
 
 namespace ElementalBlacksmithStory.UI
 {
-    public class AnvilWeaponPresenter: IStartable, IDisposable
+    public class AnvilWeaponPresenter : IStartable, IDisposable
     {
         private readonly SO_WeaponDatabase _weaponDatabase;
         private readonly AnvilWeaponView _anvilWeaponView;
@@ -24,7 +24,7 @@ namespace ElementalBlacksmithStory.UI
         public AnvilWeaponPresenter(
                                     SO_WeaponDatabase weaponDatabase,
                                     AnvilWeaponView view,
-                                    WeaponSpriteLoader spriteLoader, 
+                                    WeaponSpriteLoader spriteLoader,
                                     ISubscriber<ChangeWeaponEvent> weaponChangeSubscriber,
                                     ForgeManager forgeManager)
         {
@@ -34,13 +34,13 @@ namespace ElementalBlacksmithStory.UI
             weaponChangeSubscriber.Subscribe(e => { ChangeSprite(e).Forget(); }).AddTo(_disposables);
             _forgeManager = forgeManager;
         }
-        public void Start(){}
+        public void Start() { }
         private async UniTask ChangeSprite(ChangeWeaponEvent e, CancellationToken cancellationToken = default)
         {
             try
             {
                 if (e.Weapon == null) return;
-                SO_WeaponData weaponData = _weaponDatabase.GetWeapon(e.Weapon.WeaponId);
+                SO_WeaponData weaponData = _weaponDatabase.Get(e.Weapon.WeaponId);
                 if (weaponData == null)
                 {
                     Debug.LogWarning($"[AnvilWeaponPresenter] {e.Weapon.WeaponId} 데이터를 찾을 수 없습니다.");
