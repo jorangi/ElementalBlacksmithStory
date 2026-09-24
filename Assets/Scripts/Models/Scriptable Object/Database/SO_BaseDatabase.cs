@@ -30,6 +30,8 @@ namespace ElementalBlacksmithStory.Data
         public T Get(uint id) => _itemDict.GetValueOrDefault(id);
 
 #if UNITY_EDITOR
+        protected virtual string AddressableGroupName => typeof(T).Name.Replace("SO_", "");
+
         [ContextMenu("데이터 자동 등록")]
         public virtual void AutoRegister()
         {
@@ -40,8 +42,19 @@ namespace ElementalBlacksmithStory.Data
                 return;
             }
 
+            var targetGroup = settings.FindGroup(AddressableGroupName);
+            if (targetGroup == null)
+            {
+                targetGroup = settings.CreateGroup(
+                    AddressableGroupName,
+                    setAsDefaultGroup: false,
+                    readOnly: false,
+                    postEvent: true,
+                    schemasToCopy: settings.DefaultGroup.Schemas
+                );
+            }
+
             _itemList.Clear();
-            // typeof(T).Name을 쓰면 "t:SO_MaterialData", "t:SO_WeaponData"가 자동으로 들어갑니다!
             string typeName = typeof(T).Name;
             string[] guids = UnityEditor.AssetDatabase.FindAssets($"t:{typeName}");
 
@@ -50,7 +63,7 @@ namespace ElementalBlacksmithStory.Data
                 string path = UnityEditor.AssetDatabase.GUIDToAssetPath(guid);
                 string cleanedAddress = System.IO.Path.GetFileNameWithoutExtension(path);
 
-                var entry = settings.CreateOrMoveEntry(guid, settings.DefaultGroup);
+                var entry = settings.CreateOrMoveEntry(guid, targetGroup);
                 if (entry != null)
                 {
                     entry.SetAddress(cleanedAddress);
@@ -66,7 +79,7 @@ namespace ElementalBlacksmithStory.Data
             settings.SetDirty(UnityEditor.AddressableAssets.Settings.AddressableAssetSettings.ModificationEvent.EntryMoved, null, true);
             UnityEditor.AssetDatabase.SaveAssets();
             UnityEditor.EditorUtility.SetDirty(this);
-            Debug.Log($"[{name}] 총 {_itemList.Count}개의 {typeName} 데이터를 자동 등록했습니다.");
+            Debug.Log($"[{name}] 총 {_itemList.Count}개의 {typeName} 데이터를 Addressables [{AddressableGroupName}] 그룹에 등록했습니다.");
         }
 #endif
     }
