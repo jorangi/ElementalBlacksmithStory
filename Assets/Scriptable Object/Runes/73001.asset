@@ -1,4 +1,4 @@
-%YAML 1.1
+﻿%YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
 --- !u!114 &11400000
 MonoBehaviour:
@@ -17,4 +17,15 @@ MonoBehaviour:
   grade: 3
   nextRune: {fileID: 11400000, guid: ea8bbafa036ad4945b35280467fb7ee3, type: 2}
   value: 18000
+  effects:
+  - rid: 700730010001
   memo: 
+  references:
+    version: 2
+    RefIds:
+    - rid: 700730010001
+      type: {class: StatModifierEffect, ns: ElementalBlacksmithStory.Effect, asm: Assembly-CSharp}
+      data:
+        statType: 2
+        statModifierType: 1
+        value: 0.25

@@ -446,3 +446,25 @@
 
     - 룬 27종 추가
     - 속성, 상태이상 관련 데이터 주석 추가 및 순수 클래스로 변경
+
+## 2026-09-28
+
+    - StatModifier 추가
+      - 공격력, 공격속도, 판매보너스, 골드보너스 등의 능력치를 변동시키기 위함
+      - StatModifierType 추가
+        - Flat: 고정값 증가
+        - Add: 합연산 ex) 10%+10% = 20%
+        - Multiply: 곱연산 ex) 10% * 10% = 11%
+
+    - IEffect 인터페이스 추가
+      - IAttackEffect(공격 시점) 추가
+        - PlunderAttackEffect(약탈) 추가
+      - IHitEffect(피격 시점)추가
+      - ISellEffect(판매 시점) 추가
+      - IDungeonClearEffect(던전 클리어 시점) 추가
+      - StatModifierEffect(능력치 변동) 추가
+      - AddElementEffect(속성 부여) 추가
+      - IEffect 기반의 효과 클래스를 ScriptableObject에 담기 위한 SubclassSelectorAttribute 속성 추가
+      - IEffect 기반의 효과 클래스를 ScriptableObject에 담기 위한 SubclassSelectorDrawer 에디터 추가
+
+    - 룬 데이터 SO에 각 효과에 맞는 Effect 추가(총 27종)

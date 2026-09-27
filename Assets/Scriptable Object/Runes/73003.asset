@@ -1,4 +1,4 @@
-%YAML 1.1
+﻿%YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
 --- !u!114 &11400000
 MonoBehaviour:
@@ -15,6 +15,17 @@ MonoBehaviour:
   runeName: "\uB9F9\uACF5\uC758 \uB8EC"
   description: "\uBB34\uAE30\uC758 \uACF5\uACA9\uC18D\uB3C4\uAC00 23% \uC99D\uAC00\uD55C\uB2E4."
   grade: 3
-  nextRune: {fileID: 0}
+  nextRune: {fileID: 11400000, guid: 403d982aac7f42e46857fbdc5cbe4ea2, type: 2}
   value: 2000
+  effects:
+  - rid: 700730030001
   memo: 
+  references:
+    version: 2
+    RefIds:
+    - rid: 700730030001
+      type: {class: StatModifierEffect, ns: ElementalBlacksmithStory.Effect, asm: Assembly-CSharp}
+      data:
+        statType: 1
+        statModifierType: 2
+        value: 0.23
