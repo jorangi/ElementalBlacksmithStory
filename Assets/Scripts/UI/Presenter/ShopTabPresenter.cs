@@ -43,12 +43,11 @@ namespace ElementalBlacksmithStory.UI
         {
             if (_view == null) return;
 
-            // 초기 상태: 구매 탭 활성화 및 첫 입장 대사 발행
+            // 초기 상태: 구매 탭 활성화 (상점 입장 대사는 MarketPresenter에서 상점 오픈 시 발행)
             _isSellMode = false;
             _view.SetTabVisual(_isSellMode);
             _cartPresenter.SetSellMode(_isSellMode);
             _gridPresenter.SetSellMode(_isSellMode);
-            PublishTabDialogue(_isSellMode);
 
             _view.OnClickBuyTabAsObservable()
                 .Subscribe(_ => SwitchTab(isSellMode: false))

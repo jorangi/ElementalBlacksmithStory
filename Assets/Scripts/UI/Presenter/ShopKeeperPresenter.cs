@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Threading;
-using Cysharp.Threading.Tasks;
 using Cysharp.Text;
+using Cysharp.Threading.Tasks;
 using ElementalBlacksmithStory.Core;
 using ElementalBlacksmithStory.Data;
 using ElementalBlacksmithStory.Events;
@@ -14,20 +14,24 @@ using VContainer.Unity;
 
 namespace ElementalBlacksmithStory.UI
 {
-    public class ShopMasterPresenter : IStartable, IDisposable
+    /// <summary>
+    /// 상점 주인-텍스트 버블 Presenter
+    /// </summary>
+    public class ShopKeeperPresenter : IStartable, IDisposable
     {
         private readonly NPCStandingSpriteLoader _spriteLoader;
-        private readonly ShopMasterView _view;
+        private readonly ShopKeeperView _view;
         private readonly Dictionary<uint, SO_NPCData> _npcCache = new();
         private readonly IDisposable _subscription;
+        private uint _currentSpeakerId = 0;
         private CancellationTokenSource _typingCts;
         private bool _isTyping = false;
         public bool IsTyping => _isTyping;
 
         [Inject]
-        public ShopMasterPresenter(
+        public ShopKeeperPresenter(
             NPCStandingSpriteLoader spriteLoader,
-            ShopMasterView view,
+            ShopKeeperView view,
             ISubscriber<StartShopDialogueEvent> shopDialogueSubscriber
         )
         {
@@ -40,7 +44,21 @@ namespace ElementalBlacksmithStory.UI
             });
         }
 
-        public void Start() {}
+        public void Start() { }
+
+        /// <summary>
+        /// 상점 닫힘/오픈 시 이전 NPC 잔상 및 대사 텍스트를 즉시 정리
+        /// </summary>
+        public void ClearView()
+        {
+            _typingCts?.Cancel();
+            _typingCts?.Dispose();
+            _typingCts = null;
+            _isTyping = false;
+            _currentSpeakerId = 0;
+            _view?.SetSprite(null);
+            _view?.SetName(string.Empty);
+        }
 
         /// <summary>
         /// 대사 출력
@@ -62,12 +80,36 @@ namespace ElementalBlacksmithStory.UI
                 }
                 else
                 {
-                    Debug.LogWarning($"[ShopMasterPresenter] 대사 데이터({dialogueId})를 찾을 수 없습니다.");
+                    Debug.LogWarning($"[ShopKeeperPresenter] 대사 데이터({dialogueId})를 찾을 수 없습니다.");
                 }
             }
             catch (Exception ex)
             {
-                Debug.LogWarning($"[ShopMasterPresenter] 대사 데이터({dialogueId}) 로드 실패: {ex.Message}");
+                Debug.LogWarning($"[ShopKeeperPresenter] 대사 데이터({dialogueId}) 로드 실패: {ex.Message}");
+            }
+        }
+
+        /// <summary>
+        /// 상점 오픈 시 대사 파일 로딩을 기다리지 않고 NPC 스탠딩 스프라이트와 이름을 즉시 세팅
+        /// </summary>
+        public async UniTask SetNPCAsync(uint npcId, CancellationToken ct = default)
+        {
+            if (npcId == 0) return;
+            if (_currentSpeakerId == npcId) return;
+
+            _currentSpeakerId = npcId;
+
+            var npcDataTask = GetNPCDataAsync(npcId);
+            var spriteTask = _spriteLoader != null ? _spriteLoader.GetSprite(npcId, ct) : UniTask.FromResult<Sprite>(null);
+
+            var (npcData, standingSprite) = await UniTask.WhenAll(npcDataTask, spriteTask);
+
+            if (_currentSpeakerId != npcId) return;
+
+            _view.SetSprite(standingSprite);
+            if (npcData != null)
+            {
+                _view.SetName(npcData.NpcName);
             }
         }
 
@@ -75,13 +117,13 @@ namespace ElementalBlacksmithStory.UI
         {
             if (_view == null)
             {
-                Debug.LogError($"[ShopMasterPresenter] ShopMasterView가 없습니다.");
+                Debug.LogError($"[ShopKeeperPresenter] ShopKeeperView가 없습니다.");
                 return;
             }
 
             if (data == null || data.contents == null || data.contents.Count == 0)
             {
-                Debug.LogWarning($"[ShopMasterPresenter] SO_DialogueData가 없거나 비어있습니다.");
+                Debug.LogWarning($"[ShopKeeperPresenter] SO_DialogueData가 없거나 비어있습니다.");
                 return;
             }
 
@@ -92,17 +134,24 @@ namespace ElementalBlacksmithStory.UI
 
             var line = data.contents[lineIndex];
 
-            // 스탠딩 스프라이트 가져오기
-            var npcData = await GetNPCDataAsync(line.speakerId);
-            string speakerName = npcData != null ? npcData.NpcName : string.Empty;
-            Sprite standingSprite = null;
-
-            if (_spriteLoader != null && line.speakerId != 0)
+            // 비동기 로딩 대기 중에 이전 NPC 보이지 않도록 즉시 정리
+            if (_currentSpeakerId != line.speakerId)
             {
-                standingSprite = await _spriteLoader.GetSprite(line.speakerId);
+                _view.SetSprite(null);
+                _view.SetName(string.Empty);
             }
 
+            // 스탠딩 스프라이트 및 NPC 데이터 병렬 로드
+            var npcDataTask = GetNPCDataAsync(line.speakerId);
+            var spriteTask = (_spriteLoader != null && line.speakerId != 0)
+                ? _spriteLoader.GetSprite(line.speakerId)
+                : UniTask.FromResult<Sprite>(null);
+
+            var (npcData, standingSprite) = await UniTask.WhenAll(npcDataTask, spriteTask);
+            string speakerName = npcData != null ? npcData.NpcName : string.Empty;
+
             // 스프라이트와 이름 설정
+            _currentSpeakerId = line.speakerId;
             _view.SetSprite(standingSprite);
             _view.SetName(speakerName);
 
@@ -145,7 +194,7 @@ namespace ElementalBlacksmithStory.UI
             }
             catch (Exception ex)
             {
-                Debug.LogWarning($"[ShopMasterPresenter] NPC 데이터({speakerId}) 로드 실패: {ex.Message}");
+                Debug.LogWarning($"[ShopKeeperPresenter] NPC 데이터({speakerId}) 로드 실패: {ex.Message}");
             }
 
             return null;

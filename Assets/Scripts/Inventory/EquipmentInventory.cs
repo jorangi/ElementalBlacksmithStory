@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using ElementalBlacksmithStory.Core;
 using ElementalBlacksmithStory.Data;
 using R3;

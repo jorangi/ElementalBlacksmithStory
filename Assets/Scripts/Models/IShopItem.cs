@@ -1,5 +1,8 @@
 namespace ElementalBlacksmithStory.Data
 {
+    /// <summary>
+    /// 상점에서 판매/구매 가능한 아이템 인터페이스
+    /// </summary>
     public interface IShopItem : IIdentifiable
     {
         /// <summary>

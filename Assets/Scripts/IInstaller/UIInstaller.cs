@@ -22,9 +22,10 @@ namespace ElementalBlacksmithStory.Core
             builder.RegisterComponentInHierarchy<ShopCartView>();
             builder.RegisterComponentInHierarchy<SelectShopAmountView>();
             builder.RegisterComponentInHierarchy<ShopItemGridView>();
-            builder.RegisterComponentInHierarchy<ShopMasterView>();
+            builder.RegisterComponentInHierarchy<ShopKeeperView>();
             builder.RegisterComponentInHierarchy<ShopTabView>();
             builder.RegisterComponentInHierarchy<ShopCategoriesView>();
+            builder.RegisterComponentInHierarchy<MarketView>();
 
             // Presenter 등록
             builder.RegisterEntryPoint<MoneyPresenter>();
@@ -39,9 +40,10 @@ namespace ElementalBlacksmithStory.Core
             builder.RegisterEntryPoint<NPCDialoguePresenter>().AsSelf();
             builder.RegisterEntryPoint<ShopCartPresenter>().AsSelf();
             builder.RegisterEntryPoint<ShopItemGridPresenter>().AsSelf();
-            builder.RegisterEntryPoint<ShopMasterPresenter>();
+            builder.RegisterEntryPoint<ShopKeeperPresenter>().AsSelf();
             builder.RegisterEntryPoint<ShopTabPresenter>().AsSelf();
             builder.RegisterEntryPoint<ShopCategoriesPresenter>().AsSelf();
+            builder.RegisterEntryPoint<MarketPresenter>().AsSelf();
         }
     }
 }

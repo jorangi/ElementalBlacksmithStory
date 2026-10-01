@@ -15,10 +15,11 @@ MonoBehaviour:
   description: "\uC0C1\uC810 \uC785\uC7A5/\uAD6C\uB9E4 \uCE74\uD2B8\uC5D0 \uBB3C\uAC74\uC744
     \uB2F4\uC74C "
   contents:
-  - speakerId: 50003
-    text: "{itemCount == 0 ? \uC5B4\uB5A4 \uBB3C\uAC74\uC744 \uD30C\uC2DC\uB824\uACE0\uC694?
-      \uC0C1\uD0DC \uC88B\uC740 \uAC74 \uC81C\uAC00 \uC798 \uCCD0\uB4DC\uB9B4\uAC8C\uC694!
-      : {itemCount == 1 ? '{item1}' {totalAmount}\uAC1C\uBA74 \uB531 <b>{totalCost}</b>\uC5D0
-      \uB9E4\uC785\uD560\uAC8C\uC694! \uC5B4\uB54C\uC694? : '{item1}', '{item2}'
-      \uB4F1 \uB2E4 \uD569\uD574\uC11C {totalAmount}\uAC1C\uB2C8\uAE4C <b>{totalCost}</b>
-      \uB4DC\uB9B4\uAC8C\uC694! \uAD1C\uCC2E\uC8E0?}}"
+  - speakerId: 50008
+    text: "{itemCount == 0 ? \uB9E4\uC785\uD558\uC2E4 \uBB3C\uAC74\uC774 \uC788\uC73C\uC138\uC694?
+      \uC0C1\uD0DC\uBD80\uD130 \uAF3C\uAF3C\uD788 \uC0B4\uD3B4\uBCFC\uAC8C\uC694.
+      : {itemCount == 1 ? '{item1}' {totalAmount}\uAC1C, \uAC10\uC815\uD574\uBCF4\uB2C8
+      <b>{totalCost}</b>(\uC774\uB124/\uB124)\uC694. \uC774 \uC774\uC0C1\uC740 \uBB34\uB9AC\uC608\uC694.
+      : '{item1}', '{item2}' \uB4F1 {totalAmount}\uAC1C, \uC804\uBD80 \uAC10\uC815\uD55C
+      \uACB0\uACFC <b>{totalCost}</b>(\uC774\uB124/\uB124)\uC694. \uADFC\uAC70 \uC788\uB294
+      \uAC00\uACA9\uC774\uB2C8 \uBBFF\uC73C\uC154\uB3C4 \uB3FC\uC694.}}"

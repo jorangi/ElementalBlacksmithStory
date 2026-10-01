@@ -2,7 +2,6 @@ using VContainer;
 using VContainer.Unity;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
@@ -96,9 +95,9 @@ namespace ElementalBlacksmithStory.Core
             {
                 var _handle = Addressables.LoadResourceLocationsAsync("Sounds", typeof(AudioClip));
                 IList<IResourceLocation> locations = await _handle.ToUniTask(cancellationToken: cancellationToken);
-                var loadTasks = locations.Select(async loc =>
+                async UniTask LoadClipInternalAsync(IResourceLocation loc)
                 {
-                    if(uint.TryParse(loc.PrimaryKey, out uint id))
+                    if (uint.TryParse(loc.PrimaryKey, out uint id))
                     {
                         var handle = Addressables.LoadAssetAsync<AudioClip>(loc);
                         _loadedHandles.Add(handle);
@@ -109,7 +108,13 @@ namespace ElementalBlacksmithStory.Core
                     {
                         Debug.LogWarning($"[AudioClipLoader] 주소(Address)를 숫자로 변환할 수 없습니다: '{loc.PrimaryKey}'");
                     }
-                });
+                }
+
+                var loadTasks = new UniTask[locations.Count];
+                for (int i = 0; i < locations.Count; i++)
+                {
+                    loadTasks[i] = LoadClipInternalAsync(locations[i]);
+                }
                 await UniTask.WhenAll(loadTasks);
                 Debug.Log($"[AudioClipLoader] AudioClip 로드 완료: 총 {_audioClips.Count}개");
                 _isLoaded = true;

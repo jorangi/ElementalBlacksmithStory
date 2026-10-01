@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using Cysharp.Threading.Tasks;
 using ElementalBlacksmithStory.Data;
 using ElementalBlacksmithStory.Events;

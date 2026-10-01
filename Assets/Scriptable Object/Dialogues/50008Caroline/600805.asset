@@ -12,9 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b95dc85e94140ab4a84be25b52aada74, type: 3}
   m_Name: 600805
   m_EditorClassIdentifier: Assembly-CSharp::ElementalBlacksmithStory.Data.SO_DialogueData
-  description: "\uC0C1\uC810 \uC18C\uB140, \uC0D0\uB9AC, \uC77C\uBC18 \uC120\uBB3C\uC5D0
-    \uB300\uD55C \uAC10\uC0AC\n\uD638\uAC10\uB3C4 \uBCF4\uD1B5"
+  description: "\uC7A5\uBE44\uC810 \uC8FC\uC778, \uCE90\uB864\uB77C\uC778, \uC77C\uBC18
+    \uC120\uBB3C\uC5D0 \uB300\uD55C \uAC10\uC0AC\n\uD638\uAC10\uB3C4 \uBCF4\uD1B5"
   contents:
-  - speakerId: 50003
-    text: "\uC624, \uC120\uBB3C\uC778\uAC00\uC694? \uC2E0\uACBD \uC368\uC918\uC11C
-      \uACE0\uB9C8\uC6CC\uC694, {username} \uC624\uBE60!"
+  - speakerId: 50008
+    text: "\uC120\uBB3C\uC774\uAD70\uC694. \uC0C1\uD0DC\uB3C4 \uB098\uC058\uC9C0
+      \uC54A\uB124\uC694. \uAC10\uC0AC\uD788 \uBC1B\uACA0\uC2B5\uB2C8\uB2E4, {username}
+      \uC528."

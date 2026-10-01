@@ -17,8 +17,8 @@ namespace ElementalBlacksmithStory.Data
         public bool hideOutline;
         [Header("속성")]
         public List<ElementType> elementTypes;
-        [Header("상태이상")]
-        public List<StatusEffectData> statusEffects;
+        [Header("특성")]
+        public List<TraitData> traits;
         [Header("기본 마진 범위")]
         [Range(0f, 99f)]
         public float margin;

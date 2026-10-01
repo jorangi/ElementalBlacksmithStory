@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using Cysharp.Text;
 using ElementalBlacksmithStory.Data;
 using ElementalBlacksmithStory.Inventory;
@@ -41,12 +40,20 @@ namespace ElementalBlacksmithStory.Core
             {
                 //오름차순 정렬
                 sb.Append('|');
-                var sorted = materials
-                    .Where(m => m.material != null && m.count > 0)
-                    .OrderBy(m => m.material.Id);
-
-                foreach (var m in sorted)
+                var sorted = new List<RecipeMaterial>(materials.Count);
+                for (int i = 0; i < materials.Count; i++)
                 {
+                    var m = materials[i];
+                    if (m.material != null && m.count > 0)
+                    {
+                        sorted.Add(m);
+                    }
+                }
+                sorted.Sort((a, b) => a.material.Id.CompareTo(b.material.Id));
+
+                for (int i = 0; i < sorted.Count; i++)
+                {
+                    var m = sorted[i];
                     sb.Append(m.material.Id);
                     sb.Append(':');
                     sb.Append(m.count);
@@ -73,12 +80,19 @@ namespace ElementalBlacksmithStory.Core
             if (currentInputs != null && currentInputs.Count > 0)
             {
                 sb.Append('|');
-                var sorted = currentInputs
-                    .Where(kv => kv.Value > 0)
-                    .OrderBy(kv => kv.Key);
-
-                foreach (var kv in sorted)
+                var sorted = new List<KeyValuePair<uint, uint>>(currentInputs.Count);
+                foreach (var kv in currentInputs)
                 {
+                    if (kv.Value > 0)
+                    {
+                        sorted.Add(kv);
+                    }
+                }
+                sorted.Sort((a, b) => a.Key.CompareTo(b.Key));
+
+                for (int i = 0; i < sorted.Count; i++)
+                {
+                    var kv = sorted[i];
                     sb.Append(kv.Key);
                     sb.Append(':');
                     sb.Append(kv.Value);

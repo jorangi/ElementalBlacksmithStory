@@ -5,6 +5,9 @@ using UnityEngine.UI;
 
 namespace ElementalBlacksmithStory.UI
 {
+    /// <summary>
+    /// 상점 구매/판매 탭 전환 제어 View
+    /// </summary>
     public class ShopTabView : MonoBehaviour
     {
         [SerializeField] private Button _buyTabButton;

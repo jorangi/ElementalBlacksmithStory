@@ -88,13 +88,13 @@ namespace ElementalBlacksmithStory.UI
 
         public async UniTask StartAsync(CancellationToken ct = default)
         {
-
-            await SetItem(30001, 1);
-            await SetItem(30001, 1);
-            await SetItem(30002, 3);
-            await SetItem(30004, 5);
-            await SetItem(30004, 5);
-            await SetItem(30004, -3);
+            // await SetItem(30001, 1);
+            // await SetItem(30001, 1);
+            // await SetItem(30002, 3);
+            // await SetItem(30004, 5);
+            // await SetItem(30004, 5);
+            // await SetItem(30004, -3);
+            await UniTask.CompletedTask;
         }
 
         private void BindCartButtons()

@@ -1,12 +1,9 @@
 using System;
 using System.Collections.Generic;
-using Cysharp.Threading.Tasks;
-using ElementalBlacksmithStory.Core;
 using ElementalBlacksmithStory.Data;
 using ElementalBlacksmithStory.Events;
 using MessagePipe;
 using R3;
-using UnityEngine;
 using VContainer;
 using VContainer.Unity;
 
@@ -21,7 +18,7 @@ namespace ElementalBlacksmithStory.UI
         private readonly ShopItemGridPresenter _gridPresenter;
         private readonly IPublisher<PlaySoundEvent> _soundPublisher;
 
-        private readonly List<ShopCategoryData> _categories = new();
+        private readonly List<SO_ShopCategory> _categories = new();
         private readonly CompositeDisposable _disposables = new();
         private readonly CompositeDisposable _buttonDisposables = new();
         private string _selectedCategoryId = "all";
@@ -37,54 +34,49 @@ namespace ElementalBlacksmithStory.UI
             _soundPublisher = soundPublisher;
         }
 
-        public void Start()
-        {
-            SetupDefaultGeneralShopCategories();
-        }
+        public void Start() { }
 
         /// <summary>
-        /// 잡화점 기본 카테고리 설정 (전체, 재료)
+        /// 상점 카테고리 목록을 데이터 기반으로 교체 (맨 앞에 '전체' 탭 자동 생성)
         /// </summary>
-        public void SetupDefaultGeneralShopCategories()
-        {
-            Sprite materialIcon = _view != null ? _view.DefaultMaterialIcon : null;
-
-            var defaultCategories = new List<ShopCategoryData>
-            {
-                new ShopCategoryData("all", "전체", null, _ => true),
-                new ShopCategoryData("material", "재료", materialIcon, item => item is MaterialShopItem || item.SpriteId.ToString()[0] == '3')
-            };
-
-            SetCategories(defaultCategories);
-        }
-
-        /// <summary>
-        /// 상점 카테고리 목록을 데이터 기반으로 교체
-        /// (장비점 등 다른 상점 진입 시 이 메서드를 통해 카테고리 데이터를 교체)
-        /// </summary>
-        public void SetCategories(IEnumerable<ShopCategoryData> categories)
+        public void SetCategories(IEnumerable<SO_ShopCategory> categories)
         {
             _buttonDisposables.Clear();
             _categories.Clear();
 
             if (_view == null) return;
 
-            foreach (var cat in categories)
+            // 1. "전체" 탭 자동 생성 (상점 내 모든 카테고리 물품 포괄)
+            var allBtn = _view.CreateCategoryButton("all", "전체", null);
+            if (allBtn != null)
             {
-                _categories.Add(cat);
-                var btnView = _view.CreateCategoryButton(cat.Id, cat.DisplayName, cat.Icon);
-                if (btnView != null)
+                allBtn.OnClickAsObservable()
+                    .ThrottleFirst(TimeSpan.FromMilliseconds(150))
+                    .Subscribe(_ => SelectCategory("all"))
+                    .AddTo(_buttonDisposables);
+            }
+
+            // 2. 상점에 등록된 하위 카테고리 버튼 생성
+            if (categories != null)
+            {
+                foreach (var cat in categories)
                 {
-                    string catId = cat.Id;
-                    btnView.OnClickAsObservable()
-                        .ThrottleFirst(TimeSpan.FromMilliseconds(150))
-                        .Subscribe(_ => SelectCategory(catId))
-                        .AddTo(_buttonDisposables);
+                    if (cat == null) continue;
+                    _categories.Add(cat);
+                    var btnView = _view.CreateCategoryButton(cat.CategoryId, cat.DisplayName, cat.Icon);
+                    if (btnView != null)
+                    {
+                        string catId = cat.CategoryId;
+                        btnView.OnClickAsObservable()
+                            .ThrottleFirst(TimeSpan.FromMilliseconds(150))
+                            .Subscribe(_ => SelectCategory(catId))
+                            .AddTo(_buttonDisposables);
+                    }
                 }
             }
 
-            // 기본 첫번째 카테고리(전체) 선택
-            SelectCategory(_categories.Count > 0 ? _categories[0].Id : "all");
+            // 기본 첫 번째로 '전체' 선택
+            SelectCategory("all");
         }
 
         /// <summary>
@@ -96,9 +88,17 @@ namespace ElementalBlacksmithStory.UI
             _view?.SetSelectedVisual(categoryId);
             _soundPublisher?.Publish(new PlaySoundEvent(40106));
 
-            var selectedCat = _categories.Find(c => c.Id == categoryId);
-            Func<IShopItem, bool> filter = selectedCat != null ? selectedCat.FilterPredicate : (_ => true);
-            _gridPresenter?.SetCategoryFilter(filter);
+            if (categoryId == "all")
+            {
+                // 전체: 상점의 모든 물품 표시
+                _gridPresenter?.SetCategoryFilter(_ => true);
+            }
+            else
+            {
+                // 특정 카테고리: 해당 카테고리가 들고 있는 아이템 목록으로 필터링
+                var selectedCat = _categories.Find(c => c.CategoryId == categoryId);
+                _gridPresenter?.SetCategoryFilter(item => selectedCat != null && selectedCat.Contains(item));
+            }
         }
 
         public void Dispose()

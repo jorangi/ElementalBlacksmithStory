@@ -1,6 +1,6 @@
 #if UNITY_EDITOR
 using System;
-using System.Linq;
+using System.Collections.Generic;
 using System.Reflection;
 using UnityEditor;
 using UnityEngine;
@@ -19,12 +19,25 @@ namespace ElementalBlacksmithStory.Core
             }
 
             Type baseType = GetFieldType();
-            var types = TypeCache.GetTypesDerivedFrom(baseType)
-                .Where(t => !t.IsAbstract && !t.IsInterface && t.GetCustomAttribute<SerializableAttribute>() != null)
-                .ToList();
-            string typeName = string.IsNullOrEmpty(property.managedReferenceFullTypename)
-                ? "null (선택 안 됨)"
-                : property.managedReferenceFullTypename.Split(' ').Last().Split('.').Last();
+            var rawTypes = TypeCache.GetTypesDerivedFrom(baseType);
+            var types = new List<Type>();
+            for (int i = 0; i < rawTypes.Count; i++)
+            {
+                var t = rawTypes[i];
+                if (!t.IsAbstract && !t.IsInterface && t.GetCustomAttribute<SerializableAttribute>() != null)
+                {
+                    types.Add(t);
+                }
+            }
+
+            string typeName = "null (선택 안 됨)";
+            if (!string.IsNullOrEmpty(property.managedReferenceFullTypename))
+            {
+                int lastDotIndex = property.managedReferenceFullTypename.LastIndexOf('.');
+                typeName = lastDotIndex >= 0 
+                    ? property.managedReferenceFullTypename.Substring(lastDotIndex + 1) 
+                    : property.managedReferenceFullTypename;
+            }
 
             Rect dropdownRect = new Rect(position.x, position.y, position.width, EditorGUIUtility.singleLineHeight);
 

@@ -14,5 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ElementalBlacksmithStory.Data.SO_DialogueData
   description: "\uC0C1\uC810\uC5D0\uC11C \uBB3C\uAC74\uC744 \uAD6C\uB9E4"
   contents:
-  - speakerId: 50003
-    text: "\uAC10\uC0AC\uD569\uB2C8\uB2E4! \uB610 \uC624\uC138\uC694!!"
+  - speakerId: 50008
+    text: "\uAC70\uB798 \uAC10\uC0AC\uD569\uB2C8\uB2E4. \uAC15\uD654\uD558\uC2E4
+      \uB550 \uC644\uCDA9\uC81C \uC78A\uC9C0 \uB9C8\uC2DC\uACE0\uC694. \uB610 \uC624\uC138\uC694."

@@ -1,14 +1,17 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using UnityEngine;
-using UnityEngine.UI;
 using Cysharp.Threading.Tasks;
 using TMPro;
+using UnityEngine;
+using UnityEngine.UI;
 
 namespace ElementalBlacksmithStory.UI
 {
-    public class ShopMasterView : MonoBehaviour
+    /// <summary>
+    /// 상점 주인-텍스트 버블 View
+    /// </summary>
+    public class ShopKeeperView : MonoBehaviour
     {
         [SerializeField] private Image _standingImage;
         [SerializeField] private RectTransform _namePlateRect;
@@ -19,17 +22,18 @@ namespace ElementalBlacksmithStory.UI
         {
             if (_standingImage == null)
             {
-                Debug.LogError($"[ShopMasterView]_standingImage가 없습니다.");
+                Debug.LogError($"[ShopKeeperView]_standingImage가 없습니다.");
                 return;
             }
             _standingImage.sprite = sprite;
+            _standingImage.enabled = sprite != null;
         }
 
         public void SetName(string name)
         {
             if (nameText == null)
             {
-                Debug.LogError($"[ShopMasterView]nameText가 없습니다.");
+                Debug.LogError($"[ShopKeeperView]nameText가 없습니다.");
                 return;
             }
             nameText.SetText(name);
@@ -47,21 +51,19 @@ namespace ElementalBlacksmithStory.UI
                 LayoutRebuilder.ForceRebuildLayoutImmediate(nameText.rectTransform);
             }
         }
-
         private CancellationTokenSource _cts = new();
-
         public async UniTask TypingText(string text, CancellationToken ct = default)
         {
             if (contextText == null)
             {
-                Debug.LogError($"[ShopMasterView]contextText가 없습니다.");
+                Debug.LogError($"[ShopKeeperView]contextText가 없습니다.");
                 return;
             }
 
             _cts?.Cancel();
             _cts?.Dispose();
             _cts = CancellationTokenSource.CreateLinkedTokenSource(ct, destroyCancellationToken);
-            
+
             contextText.SetText(text);
 
             // 1. 텍스트 메쉬 즉시 강제 갱신 (서식 태그 해석 및 크기 계산)
@@ -89,7 +91,7 @@ namespace ElementalBlacksmithStory.UI
             {
                 contextText.maxVisibleCharacters = i;
 
-                bool isCanceled = 
+                bool isCanceled =
                     await UniTask.Delay(TimeSpan.FromMilliseconds(10), cancellationToken: _cts.Token)
                     .SuppressCancellationThrow();
 

@@ -91,43 +91,59 @@ namespace ElementalBlacksmithStory.UI
 
         public async UniTask StartAsync(CancellationToken ct = default)
         {
-            InitializeShopGoods();
             _isInitialized = true;
-            await RefreshGridAsync();
+            await UniTask.CompletedTask;
         }
 
         /// <summary>
-        /// 상점 기본 판매 물품(구매 탭용) 초기화
+        /// SO_ShopData 기반으로 상점 판매 물품 목록 교체 (소속 카테고리의 모든 입고 아이템 취합)
         /// </summary>
-        private void InitializeShopGoods()
+        public void SetShopGoods(SO_ShopData shopData)
         {
-            if (_shopBuyGoods.Count > 0) return;
+            _shopBuyGoods.Clear();
 
-            if (_materialDatabase != null)
+            if (shopData != null)
             {
-                var mat30001 = _materialDatabase.Get(30001);
-                if (mat30001 != null)
+                var stockedItems = shopData.GetAllStockedItems();
+                foreach (var entry in stockedItems)
                 {
-                    _shopBuyGoods.Add(new MaterialShopItem(mat30001, 5));
-                }
-
-                var mat30002 = _materialDatabase.Get(30002);
-                if (mat30002 != null)
-                {
-                    _shopBuyGoods.Add(new MaterialShopItem(mat30002, 10));
+                    var item = CreateShopItem(entry.itemId, entry.stock, 1.0f);
+                    if (item != null)
+                    {
+                        _shopBuyGoods.Add(item);
+                    }
                 }
             }
 
-            if (_weaponDatabase != null)
+            if (_isInitialized && !_isSellMode)
             {
-                var wep10001 = _weaponDatabase.Get(10001);
-                if (wep10001 != null)
+                RefreshGridAsync().Forget();
+            }
+        }
+
+        private IShopItem CreateShopItem(uint id, uint stock, float margin)
+        {
+            if (id.ToString().StartsWith("3") && _materialDatabase != null)
+            {
+                var mat = _materialDatabase.Get(id);
+                if (mat != null)
                 {
-                    var testWeapon = new Weapon(wep10001);
-                    testWeapon.SetMargin(1.2f);
-                    _shopBuyGoods.Add(testWeapon);
+                    return new MaterialShopItem(mat, stock);
                 }
             }
+
+            if (id.ToString().StartsWith("1") && _weaponDatabase != null)
+            {
+                var wep = _weaponDatabase.Get(id);
+                if (wep != null)
+                {
+                    var weapon = new Weapon(wep);
+                    if (margin > 0) weapon.SetMargin(margin);
+                    return weapon;
+                }
+            }
+
+            return null;
         }
 
         /// <summary>

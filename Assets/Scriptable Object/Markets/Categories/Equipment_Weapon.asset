@@ -1,0 +1,44 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da370f093b2f2b941a7dec28c26d1d1d, type: 3}
+  m_Name: Equipment_Weapon
+  m_EditorClassIdentifier: Assembly-CSharp::ElementalBlacksmithStory.Data.SO_ShopCategory
+  _categoryId: Sword
+  _displayName: "\uAC80"
+  _icon: {fileID: 21300000, guid: a32ebf46352b91249875080f2095c1b8, type: 3}
+  _minRandomPickCount: 1
+  _maxRandomPickCount: 6
+  _items:
+  - itemId: 10002
+    stock: 1
+    isFixed: 1
+  - itemId: 10003
+    stock: 1
+    isFixed: 1
+  - itemId: 10004
+    stock: 1
+    isFixed: 0
+  - itemId: 10101
+    stock: 1
+    isFixed: 0
+  - itemId: 10201
+    stock: 1
+    isFixed: 0
+  - itemId: 10301
+    stock: 1
+    isFixed: 0
+  - itemId: 10401
+    stock: 1
+    isFixed: 0
+  - itemId: 10501
+    stock: 1
+    isFixed: 0
