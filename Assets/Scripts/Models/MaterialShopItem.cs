@@ -8,7 +8,7 @@ namespace ElementalBlacksmithStory.Data
         public SO_MaterialData Data => _materialData;
         public uint Id => _materialData != null ? _materialData.Id : 0;
         public string Name => Data != null ? Data.materialName : string.Empty;
-        public ulong Price => Data != null ? Data.Value : 0;
+        public ulong Value => Data != null ? Data.Value : 0;
         public uint SpriteId => Data != null ? Data.Id : 0;
         public uint Count { get; set; }
 

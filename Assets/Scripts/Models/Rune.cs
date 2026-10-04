@@ -5,18 +5,19 @@ namespace ElementalBlacksmithStory.Core
 {
     public class Rune : IShopItem
     {
-        private static uint _id = 0;
-        public uint Id { get; }
-        public string Name => _data.runeName;
-        public ulong Price => _data.Value;
-        public uint SpriteId => _data.Id;
+        private readonly SO_RuneData _data;
+
+        public SO_RuneData Data => _data;
+        public uint Id => _data != null ? _data.Id : 0;
+        public string Name => _data != null ? _data.Name : string.Empty;
+        public ulong Value => _data != null ? _data.Value : 0;
+        public uint SpriteId => _data != null ? _data.Id : 0;
         public uint Count => 1;
-        private SO_RuneData _data;
+
         [Inject]
         public Rune(SO_RuneData data)
         {
             _data = data;
-            Id = _id++;
         }
     }
 }

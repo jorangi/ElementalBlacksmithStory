@@ -34,8 +34,7 @@ namespace ElementalBlacksmithStory.Core
         private readonly Stack<EnhanceStep> _enhanceHistory = new();
         public Stack<EnhanceStep> EnhanceHistory => _enhanceHistory;
         string IShopItem.Name => Data != null ? Data.weaponName : string.Empty;
-
-        ulong IShopItem.Price => _price;
+        public ulong Value => _price;
 
         uint IShopItem.SpriteId => Data != null ? WeaponId : 0;
 

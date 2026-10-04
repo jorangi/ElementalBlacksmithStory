@@ -22,6 +22,7 @@ namespace ElementalBlacksmithStory.Data
         // DB 캐싱
         private SO_MaterialDatabase _materialDatabase;
         private SO_WeaponDatabase _weaponDatabase;
+        private SO_RuneDatabase _runeDatabase;
         private readonly Dictionary<uint, string> _nameCache = new();
 
         private void OnEnable()
@@ -176,6 +177,14 @@ namespace ElementalBlacksmithStory.Data
                 _weaponDatabase = AssetDatabase.LoadAssetAtPath<SO_WeaponDatabase>(path);
                 _weaponDatabase?.Init();
             }
+
+            string[] runeGuids = AssetDatabase.FindAssets("t:SO_RuneDatabase");
+            if (runeGuids.Length > 0)
+            {
+                string path = AssetDatabase.GUIDToAssetPath(runeGuids[0]);
+                _runeDatabase = AssetDatabase.LoadAssetAtPath<SO_RuneDatabase>(path);
+                _runeDatabase?.Init();
+            }
         }
 
         private string ResolveItemName(uint id)
@@ -207,20 +216,25 @@ namespace ElementalBlacksmithStory.Data
                 }
             }
 
+            if (foundName == null && _runeDatabase != null)
+            {
+                var rune = _runeDatabase.Get(id);
+                if (rune != null)
+                {
+                    foundName = rune.Name;
+                }
+            }
+
             if (foundName == null)
             {
-                string[] guids = AssetDatabase.FindAssets($"{id} t:BaseMaterialData");
+                string[] guids = AssetDatabase.FindAssets($"{id} t:ScriptableObject");
                 foreach (var guid in guids)
                 {
                     string path = AssetDatabase.GUIDToAssetPath(guid);
-                    var asset = AssetDatabase.LoadAssetAtPath<BaseMaterialData>(path);
-                    if (asset != null && asset.Id == id)
-                    {
-                        if (asset is SO_MaterialData m) foundName = m.materialName;
-                        else if (asset is SO_WeaponData w) foundName = w.weaponName;
-                        else foundName = asset.name;
-                        break;
-                    }
+                    var asset = AssetDatabase.LoadAssetAtPath<ScriptableObject>(path);
+                    if (asset is SO_MaterialData m && m.Id == id) { foundName = m.materialName; break; }
+                    if (asset is SO_WeaponData w && w.Id == id) { foundName = w.weaponName; break; }
+                    if (asset is SO_RuneData r && r.Id == id) { foundName = r.Name; break; }
                 }
             }
 

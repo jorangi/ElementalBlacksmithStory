@@ -4,6 +4,7 @@ using ElementalBlacksmithStory.Data;
 using ElementalBlacksmithStory.Events;
 using MessagePipe;
 using R3;
+using UnityEngine;
 using VContainer;
 using VContainer.Unity;
 
@@ -17,7 +18,6 @@ namespace ElementalBlacksmithStory.UI
         private readonly ShopCategoriesView _view;
         private readonly ShopItemGridPresenter _gridPresenter;
         private readonly IPublisher<PlaySoundEvent> _soundPublisher;
-
         private readonly List<SO_ShopCategory> _categories = new();
         private readonly CompositeDisposable _disposables = new();
         private readonly CompositeDisposable _buttonDisposables = new();
@@ -44,7 +44,10 @@ namespace ElementalBlacksmithStory.UI
             _buttonDisposables.Clear();
             _categories.Clear();
 
+
             if (_view == null) return;
+
+            _view.HideAllButtons();
 
             // 1. "전체" 탭 자동 생성 (상점 내 모든 카테고리 물품 포괄)
             var allBtn = _view.CreateCategoryButton("all", "전체", null);
@@ -85,7 +88,8 @@ namespace ElementalBlacksmithStory.UI
         public void SelectCategory(string categoryId)
         {
             _selectedCategoryId = categoryId;
-            _view?.SetSelectedVisual(categoryId);
+            if (_view != null)
+                _view.SetSelectedVisual(categoryId);
             _soundPublisher?.Publish(new PlaySoundEvent(40106));
 
             if (categoryId == "all")

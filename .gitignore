@@ -8,6 +8,7 @@
 /[Mm]emoryCaptures/
 /[Rr]ecordings/
 .utmp/
+/[Aa]ssets/_Recovery/
 
 # Asset meta files for empty folders
 # *.meta

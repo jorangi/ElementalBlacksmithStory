@@ -431,6 +431,41 @@ Canvas:
   m_SortingLayerID: -596406631
   m_SortingOrder: 3
   m_TargetDisplay: 0
+--- !u!1 &133353779 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6968838622257314310, guid: bb2d725c588e25a48b98c54420baf7a4, type: 3}
+  m_PrefabInstance: {fileID: 4597523903211267500}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &133353784
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 133353779}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3312d7739989d2b4e91e6319e9a96d76, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.RectMask2D
+  m_Padding: {x: 0, y: 0, z: 0, w: 0}
+  m_Softness: {x: 0, y: 0}
+--- !u!114 &133353785
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 133353779}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a9846faf34b885458dca69905ac63eb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Client.UI.EmptyGraphic
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
 --- !u!1 &144748151
 GameObject:
   m_ObjectHideFlags: 0
@@ -466,6 +501,8 @@ MonoBehaviour:
   autoInjectGameObjects: []
   weaponDatabase: {fileID: 11400000, guid: 23ba30dc6c2056840b53f72c44ce4189, type: 2}
   materialDatabase: {fileID: 11400000, guid: 362b0846d3ffa1f498fd84a324b72dc4, type: 2}
+  runeDatabase: {fileID: 11400000, guid: 655c90af38354094cb0345c45e0357b1, type: 2}
+  spriteSettings: {fileID: 11400000, guid: b2598fdeba0dedb4092e9d4dcdde65ea, type: 2}
 --- !u!4 &144748153
 Transform:
   m_ObjectHideFlags: 0
@@ -6808,8 +6845,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ElementalBlacksmithStory.UI.ShopTabView
   _buyTabButton: {fileID: 1439412755}
   _sellTabButton: {fileID: 433866678}
-  _buyDialogueId: 600307
-  _sellDialogueId: 600308
 --- !u!114 &2073992090
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6910,6 +6945,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5116845936729964485, guid: 023ceea11c1bb2d43971d266e6fbc865, type: 3}
       propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5116845936729964485, guid: 023ceea11c1bb2d43971d266e6fbc865, type: 3}
+      propertyPath: m_SizeDelta.y
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5621575143944811283, guid: 023ceea11c1bb2d43971d266e6fbc865, type: 3}
@@ -7039,10 +7078,6 @@ PrefabInstance:
     - target: {fileID: 8099755797625149363, guid: 023ceea11c1bb2d43971d266e6fbc865, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8176791579119151213, guid: 023ceea11c1bb2d43971d266e6fbc865, type: 3}
-      propertyPath: m_Sprite
-      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 8526075889068887744, guid: 023ceea11c1bb2d43971d266e6fbc865, type: 3}
       propertyPath: m_SizeDelta.x
@@ -7348,7 +7383,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5910058242663504977, guid: 75b97094d8caf9043b5d2638087640cb, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -979.39996
+      value: -979.4
       objectReference: {fileID: 0}
     - target: {fileID: 6035941630498779940, guid: 75b97094d8caf9043b5d2638087640cb, type: 3}
       propertyPath: m_AnchorMax.y
@@ -7725,6 +7760,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8319107960193075809, guid: bb2d725c588e25a48b98c54420baf7a4, type: 3}
+      propertyPath: m_RaycastTarget
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 9171942652819845548, guid: bb2d725c588e25a48b98c54420baf7a4, type: 3}
       propertyPath: m_AnchorMax.x
       value: 1
@@ -7741,10 +7780,18 @@ PrefabInstance:
       propertyPath: m_SizeDelta.y
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 2742262604429098388, guid: bb2d725c588e25a48b98c54420baf7a4, type: 3}
+    - {fileID: 2478223632279292074, guid: bb2d725c588e25a48b98c54420baf7a4, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 6968838622257314310, guid: bb2d725c588e25a48b98c54420baf7a4, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 133353785}
+    - targetCorrespondingSourceObject: {fileID: 6968838622257314310, guid: bb2d725c588e25a48b98c54420baf7a4, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 133353784}
   m_SourcePrefab: {fileID: 100100000, guid: bb2d725c588e25a48b98c54420baf7a4, type: 3}
 --- !u!1 &7735999654122908797 stripped
 GameObject:

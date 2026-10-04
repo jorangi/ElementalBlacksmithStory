@@ -1,7 +1,7 @@
-using VContainer;
-using VContainer.Unity;
 using ElementalBlacksmithStory.Inventory;
 using ElementalBlacksmithStory.UI;
+using VContainer;
+using VContainer.Unity;
 
 namespace ElementalBlacksmithStory.Core
 {
@@ -18,12 +18,14 @@ namespace ElementalBlacksmithStory.Core
             builder.Register<RecipeUnlockService>(Lifetime.Singleton);
             builder.Register<WeaponRollbackService>(Lifetime.Singleton);
             builder.Register<ShopService>(Lifetime.Singleton);
+            builder.Register<IItemShopFactory, ItemShopFactory>(Lifetime.Singleton);
 
             builder.RegisterEntryPoint<EnhancementService>(Lifetime.Singleton).AsSelf();
             builder.RegisterEntryPoint<SettingsService>(Lifetime.Singleton).AsSelf();
 
             builder.RegisterEntryPoint<WeaponSpriteLoader>(Lifetime.Singleton).AsSelf();
             builder.RegisterEntryPoint<MaterialSpriteLoader>(Lifetime.Singleton).AsSelf();
+            builder.RegisterEntryPoint<RuneSpriteLoader>(Lifetime.Singleton).AsSelf();
             builder.RegisterEntryPoint<NPCStandingSpriteLoader>(Lifetime.Singleton).AsSelf();
             builder.RegisterComponentInHierarchy<AudioClipLoader>();
             builder.RegisterComponentInHierarchy<WeaponTreeBuilder>();

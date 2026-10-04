@@ -21,6 +21,7 @@ namespace ElementalBlacksmithStory.UI
         private readonly SelectShopAmountView _selectShopAmountView;
         private readonly MaterialSpriteLoader _materialSpriteLoader;
         private readonly WeaponSpriteLoader _weaponSpriteLoader;
+        private readonly RuneSpriteLoader _runeSpriteLoader;
         private readonly SO_MaterialDatabase _materialDatabase;
         private readonly IPublisher<PlaySoundEvent> _soundPublisher;
         private readonly ISubscriber<ChangeMoneyEvent> _moneySubscriber;
@@ -59,13 +60,15 @@ namespace ElementalBlacksmithStory.UI
             ShopService shopService,
             MaterialInventory materialInventory,
             EquipmentInventory equipmentInventory,
-            IPublisher<StartShopDialogueEvent> shopDialoguePublisher
+            IPublisher<StartShopDialogueEvent> shopDialoguePublisher,
+            RuneSpriteLoader runeSpriteLoader = null
         )
         {
             _view = view;
             _selectShopAmountView = selectShopAmountView;
             _materialSpriteLoader = materialSpriteLoader;
             _weaponSpriteLoader = weaponSpriteLoader;
+            _runeSpriteLoader = runeSpriteLoader;
             _materialDatabase = materialDatabase;
             _soundPublisher = soundPublisher;
             _moneySubscriber = moneySubscriber;
@@ -262,7 +265,7 @@ namespace ElementalBlacksmithStory.UI
         {
             if (_cartItems.TryGetValue(itemId, out var entry))
             {
-                return entry.item.Price;
+                return entry.item.Value;
             }
 
             var material = _materialDatabase.Get(itemId);
@@ -275,7 +278,7 @@ namespace ElementalBlacksmithStory.UI
             foreach (var kvp in _cartItems)
             {
                 if (kvp.Key == excludeItemId) continue;
-                total += kvp.Value.item.Price * (ulong)kvp.Value.ea;
+                total += kvp.Value.item.Value * (ulong)kvp.Value.ea;
             }
             return total;
         }
@@ -285,7 +288,7 @@ namespace ElementalBlacksmithStory.UI
             ulong total = 0;
             foreach (var kvp in _cartItems)
             {
-                total += kvp.Value.item.Price * (ulong)kvp.Value.ea;
+                total += kvp.Value.item.Value * (ulong)kvp.Value.ea;
             }
             return total;
         }
@@ -356,18 +359,10 @@ namespace ElementalBlacksmithStory.UI
             uint currentCartAmount = _cartItems.TryGetValue(item.Id, out var entry) ? entry.ea : 1;
             _modalAmount = isWeapon ? 1 : currentCartAmount;
 
-            Sprite sprite = null;
-            if (item.SpriteId.ToString()[0] == '1')
-            {
-                sprite = await _weaponSpriteLoader.GetSprite(item.SpriteId);
-            }
-            else
-            {
-                sprite = await _materialSpriteLoader.GetSprite(item.SpriteId);
-            }
+            Sprite sprite = await GetItemSpriteAsync(item.SpriteId);
 
             string itemName = item.Name;
-            _modalUnitPrice = item.Price;
+            _modalUnitPrice = item.Value;
 
             uint pocketEA = 0;
             if (item is MaterialShopItem matItem && matItem.Data != null)
@@ -451,15 +446,7 @@ namespace ElementalBlacksmithStory.UI
                 return;
             }
 
-            Sprite sprite = null;
-            if (item.SpriteId.ToString()[0] == '1')
-            {
-                sprite = await _weaponSpriteLoader.GetSprite(item.SpriteId);
-            }
-            else
-            {
-                sprite = await _materialSpriteLoader.GetSprite(item.SpriteId);
-            }
+            Sprite sprite = await GetItemSpriteAsync(item.SpriteId);
 
             var newItem = _view.Create(item.Id, ea, sprite);
             _cartItems.Add(item.Id, (newItem, item, ea));
@@ -480,6 +467,21 @@ namespace ElementalBlacksmithStory.UI
                 }).AddTo(d);
 
             _itemDisposables[newItem] = d;
+        }
+
+        private async UniTask<Sprite> GetItemSpriteAsync(uint spriteId)
+        {
+            switch (ItemIdHelper.GetCategory(spriteId))
+            {
+                case ItemCategory.Weapon:
+                    return await _weaponSpriteLoader.GetSprite(spriteId);
+                case ItemCategory.Material:
+                    return await _materialSpriteLoader.GetSprite(spriteId);
+                case ItemCategory.Rune:
+                    return _runeSpriteLoader != null ? await _runeSpriteLoader.GetSprite(spriteId) : null;
+                default:
+                    return null;
+            }
         }
 
         /// <summary>
@@ -573,7 +575,7 @@ namespace ElementalBlacksmithStory.UI
             foreach (var entry in _cartItems.Values)
             {
                 totalAmount += entry.ea;
-                totalCost += entry.item.Price * (ulong)entry.ea;
+                totalCost += entry.item.Value * (ulong)entry.ea;
 
                 string itemName = entry.item.Name;
                 parameters[$"item{index + 1}"] = itemName;

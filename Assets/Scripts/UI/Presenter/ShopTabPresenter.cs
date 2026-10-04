@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using ElementalBlacksmithStory.Data;
 using ElementalBlacksmithStory.Events;
 using MessagePipe;
 using R3;
@@ -21,6 +22,7 @@ namespace ElementalBlacksmithStory.UI
         private readonly IPublisher<StartShopDialogueEvent> _shopDialoguePublisher;
         private readonly CompositeDisposable _disposables = new();
 
+        private SO_ShopData _currentShopData;
         private bool _isSellMode = false;
         public bool IsSellMode => _isSellMode;
 
@@ -59,6 +61,18 @@ namespace ElementalBlacksmithStory.UI
         }
 
         /// <summary>
+        /// 현재 열린 상점 데이터를 설정하고 탭을 구매 탭으로 리셋
+        /// </summary>
+        public void SetShop(SO_ShopData shopData)
+        {
+            _currentShopData = shopData;
+            _isSellMode = false;
+            _view?.SetTabVisual(_isSellMode);
+            _cartPresenter?.SetSellMode(_isSellMode);
+            _gridPresenter?.SetSellMode(_isSellMode);
+        }
+
+        /// <summary>
         /// 탭 전환 처리
         /// </summary>
         public void SwitchTab(bool isSellMode)
@@ -77,7 +91,11 @@ namespace ElementalBlacksmithStory.UI
 
         private void PublishTabDialogue(bool isSellMode)
         {
-            uint dialogueId = isSellMode ? _view.SellDialogueId : _view.BuyDialogueId;
+            if (_currentShopData == null) return;
+
+            uint dialogueId = isSellMode ? _currentShopData.SellDialogueId : _currentShopData.BuyDialogueId;
+            if (dialogueId == 0) return;
+
             var parameters = new Dictionary<string, object>
             {
                 { "itemCount", 0 },

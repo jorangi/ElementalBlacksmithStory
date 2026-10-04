@@ -13,13 +13,6 @@ namespace ElementalBlacksmithStory.UI
         [SerializeField] private Button _buyTabButton;
         [SerializeField] private Button _sellTabButton;
 
-        [Header("대사 ID 설정")]
-        [SerializeField] private uint _buyDialogueId = 600307;
-        [SerializeField] private uint _sellDialogueId = 600308;
-
-        public uint BuyDialogueId => _buyDialogueId;
-        public uint SellDialogueId => _sellDialogueId;
-
         public Observable<Unit> OnClickBuyTabAsObservable()
         {
             if (_buyTabButton == null) return Observable.Empty<Unit>();

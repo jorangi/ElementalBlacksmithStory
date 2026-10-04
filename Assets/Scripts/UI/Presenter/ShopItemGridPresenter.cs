@@ -18,9 +18,9 @@ namespace ElementalBlacksmithStory.UI
         private readonly ShopItemGridView _view;
         private readonly WeaponSpriteLoader _weaponSpriteLoader;
         private readonly MaterialSpriteLoader _materialSpriteLoader;
+        private readonly RuneSpriteLoader _runeSpriteLoader;
         private readonly MaterialInventory _materialInventory;
-        private readonly SO_MaterialDatabase _materialDatabase;
-        private readonly SO_WeaponDatabase _weaponDatabase;
+        private readonly IItemShopFactory _itemShopFactory;
         private readonly ShopCartPresenter _shopCartPresenter;
         private readonly Dictionary<uint, ShopItemView> _displayItems = new();
         private readonly Dictionary<uint, IDisposable> _itemDisposables = new();
@@ -37,18 +37,18 @@ namespace ElementalBlacksmithStory.UI
             ShopItemGridView view,
             WeaponSpriteLoader weaponSpriteLoader,
             MaterialSpriteLoader materialSpriteLoader,
+            RuneSpriteLoader runeSpriteLoader,
             MaterialInventory materialInventory,
-            SO_MaterialDatabase materialDatabase,
-            SO_WeaponDatabase weaponDatabase,
+            IItemShopFactory itemShopFactory,
             ShopCartPresenter shopCartPresenter
         )
         {
             _view = view;
             _weaponSpriteLoader = weaponSpriteLoader;
             _materialSpriteLoader = materialSpriteLoader;
+            _runeSpriteLoader = runeSpriteLoader;
             _materialInventory = materialInventory;
-            _materialDatabase = materialDatabase;
-            _weaponDatabase = weaponDatabase;
+            _itemShopFactory = itemShopFactory;
             _shopCartPresenter = shopCartPresenter;
 
             // 인벤토리 수량 변경 시 실시간 그리드 갱신
@@ -107,7 +107,7 @@ namespace ElementalBlacksmithStory.UI
                 var stockedItems = shopData.GetAllStockedItems();
                 foreach (var entry in stockedItems)
                 {
-                    var item = CreateShopItem(entry.itemId, entry.stock, 1.0f);
+                    var item = _itemShopFactory.Create(entry.itemId, entry.stock, 1.0f);
                     if (item != null)
                     {
                         _shopBuyGoods.Add(item);
@@ -119,31 +119,6 @@ namespace ElementalBlacksmithStory.UI
             {
                 RefreshGridAsync().Forget();
             }
-        }
-
-        private IShopItem CreateShopItem(uint id, uint stock, float margin)
-        {
-            if (id.ToString().StartsWith("3") && _materialDatabase != null)
-            {
-                var mat = _materialDatabase.Get(id);
-                if (mat != null)
-                {
-                    return new MaterialShopItem(mat, stock);
-                }
-            }
-
-            if (id.ToString().StartsWith("1") && _weaponDatabase != null)
-            {
-                var wep = _weaponDatabase.Get(id);
-                if (wep != null)
-                {
-                    var weapon = new Weapon(wep);
-                    if (margin > 0) weapon.SetMargin(margin);
-                    return weapon;
-                }
-            }
-
-            return null;
         }
 
         /// <summary>
@@ -206,9 +181,10 @@ namespace ElementalBlacksmithStory.UI
         /// </summary>
         private async UniTask PopulateBuyItemsAsync(CancellationToken ct)
         {
-            foreach (var item in _shopBuyGoods)
+            for (int i = 0; i < _shopBuyGoods.Count; i++)
             {
                 ct.ThrowIfCancellationRequested();
+                var item = _shopBuyGoods[i];
                 if (_categoryFilter != null && !_categoryFilter(item)) continue;
                 await AddItem(item);
             }
@@ -238,14 +214,18 @@ namespace ElementalBlacksmithStory.UI
         {
             Sprite icon = null;
             bool isUniqueItem = false;
-            switch (item.SpriteId.ToString()[0])
+            switch (ItemIdHelper.GetCategory(item.SpriteId))
             {
-                case '1':
+                case ItemCategory.Weapon:
                     icon = await _weaponSpriteLoader.GetSprite(item.SpriteId);
                     isUniqueItem = true;
                     break;
-                case '3':
+                case ItemCategory.Material:
                     icon = await _materialSpriteLoader.GetSprite(item.SpriteId);
+                    isUniqueItem = false;
+                    break;
+                case ItemCategory.Rune:
+                    icon = await _runeSpriteLoader.GetSprite(item.SpriteId);
                     isUniqueItem = false;
                     break;
                 default:
@@ -253,7 +233,7 @@ namespace ElementalBlacksmithStory.UI
                     return;
             }
 
-            ShopItemView itemView = _view.CreateItem(item.Id, item.Name, item.Price, icon, isUniqueItem);
+            ShopItemView itemView = _view.CreateItem(item.Id, item.Name, item.Value, icon, isUniqueItem);
             if (itemView == null) return;
 
             if (_itemDisposables.TryGetValue(item.Id, out var prevDisp))

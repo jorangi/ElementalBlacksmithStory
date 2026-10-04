@@ -19,8 +19,9 @@ namespace ElementalBlacksmithStory.UI
         private readonly ShopCategoriesPresenter _categoriesPresenter;
         private readonly ShopItemGridPresenter _itemGridPresenter;
         private readonly ShopKeeperPresenter _shopKeeperPresenter;
+        private readonly ShopTabPresenter _tabPresenter;
         private readonly CompositeDisposable _disposable = new();
-        IPublisher<StartShopDialogueEvent> _shopDialoguePublisher;
+        private readonly IPublisher<StartShopDialogueEvent> _shopDialoguePublisher;
 
         [Inject]
         public MarketPresenter(
@@ -28,6 +29,7 @@ namespace ElementalBlacksmithStory.UI
             ShopCategoriesPresenter categoriesPresenter,
             ShopItemGridPresenter itemGridPresenter,
             ShopKeeperPresenter shopKeeperPresenter,
+            ShopTabPresenter tabPresenter,
             IPublisher<StartShopDialogueEvent> shopDialoguePublisher
             )
         {
@@ -35,6 +37,7 @@ namespace ElementalBlacksmithStory.UI
             _categoriesPresenter = categoriesPresenter;
             _itemGridPresenter = itemGridPresenter;
             _shopKeeperPresenter = shopKeeperPresenter;
+            _tabPresenter = tabPresenter;
             _shopDialoguePublisher = shopDialoguePublisher;
 
             _view.OnGeneralShopBtnClickAsObservable
@@ -79,8 +82,9 @@ namespace ElementalBlacksmithStory.UI
                     _shopKeeperPresenter.SetNPCAsync(shopData.NpcId).Forget();
                 }
 
-                _categoriesPresenter.SetCategories(shopData.Categories);
                 _itemGridPresenter.SetShopGoods(shopData);
+                _categoriesPresenter.SetCategories(shopData.Categories);
+                _tabPresenter.SetShop(shopData);
 
                 if (shopData.GreetingDialogueId > 0)
                 {

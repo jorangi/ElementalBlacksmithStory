@@ -16,5 +16,6 @@ MonoBehaviour:
   _shopName: "\uC7A1\uD654\uC810"
   _npcId: 50003
   _greetingDialogueId: 600307
+  _sellDialogueId: 600308
   _categories:
   - {fileID: 11400000, guid: 753ebb678b33f5c4abb4746776f46872, type: 2}

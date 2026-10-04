@@ -10,7 +10,7 @@ namespace ElementalBlacksmithStory.Editor.Optimization
         [MenuItem("Tools/Optimization/Check Raycast Targets")]
         public static void CheckRaycastTargets()
         {
-            var graphics = Object.FindObjectsByType<Graphic>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+            var graphics = Object.FindObjectsByType<Graphic>(FindObjectsInactive.Include);
             int unneededCount = 0;
 
             foreach (var g in graphics)
@@ -30,7 +30,7 @@ namespace ElementalBlacksmithStory.Editor.Optimization
         [MenuItem("Tools/Optimization/Check 2D Sprite Z-Coordinates")]
         public static void CheckSpriteZPositions()
         {
-            var renderers = Object.FindObjectsByType<SpriteRenderer>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+            var renderers = Object.FindObjectsByType<SpriteRenderer>(FindObjectsInactive.Include);
             int nonZeroZCount = 0;
 
             foreach (var r in renderers)

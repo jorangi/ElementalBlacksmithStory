@@ -10,35 +10,35 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: da370f093b2f2b941a7dec28c26d1d1d, type: 3}
-  m_Name: Equipment_Weapon
+  m_Name: Equipment_Rune
   m_EditorClassIdentifier: Assembly-CSharp::ElementalBlacksmithStory.Data.SO_ShopCategory
-  _categoryId: Sword
-  _displayName: "\uAC80"
-  _icon: {fileID: 21300000, guid: a32ebf46352b91249875080f2095c1b8, type: 3}
+  _categoryId: Rune
+  _displayName: "\uB8EC"
+  _icon: {fileID: 21300000, guid: dc011c081f186d242abc752a5a950775, type: 3}
   _minRandomPickCount: 1
   _maxRandomPickCount: 6
   _items:
-  - itemId: 10002
-    stock: 1
+  - itemId: 70001
+    stock: 2
+    isFixed: 0
+  - itemId: 70002
+    stock: 3
     isFixed: 1
-  - itemId: 10003
-    stock: 1
+  - itemId: 70003
+    stock: 3
     isFixed: 1
-  - itemId: 10004
+  - itemId: 71001
     stock: 1
     isFixed: 0
-  - itemId: 10101
+  - itemId: 71002
+    stock: 2
+    isFixed: 0
+  - itemId: 71003
+    stock: 2
+    isFixed: 0
+  - itemId: 72002
     stock: 1
     isFixed: 0
-  - itemId: 10201
-    stock: 1
-    isFixed: 0
-  - itemId: 10301
-    stock: 1
-    isFixed: 0
-  - itemId: 10401
-    stock: 1
-    isFixed: 0
-  - itemId: 10501
+  - itemId: 72003
     stock: 1
     isFixed: 0

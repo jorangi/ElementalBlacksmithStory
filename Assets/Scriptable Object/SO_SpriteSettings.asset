@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d8e9f01a2b3c4d5e6f708192a3b4c5d, type: 3}
+  m_Name: SO_SpriteSettings
+  m_EditorClassIdentifier: Assembly-CSharp::ElementalBlacksmithStory.Data.SO_SpriteSettings
+  defaultMaterialSprite: {fileID: 21300000, guid: 8f95b5a160b015e46b2c47b44d47dfeb, type: 3}
+  defaultWeaponSprite: {fileID: 21300000, guid: 3353ffec3b0290347876aacd5b79c391, type: 3}
+  defaultNPCStandingSprite: {fileID: 21300000, guid: 8459076d53652ca4c95246e3d9553b49, type: 3}
+  defaultRuneSprite: {fileID: 21300000, guid: dc011c081f186d242abc752a5a950775, type: 3}
