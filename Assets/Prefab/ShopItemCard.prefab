@@ -361,6 +361,7 @@ GameObject:
   - component: {fileID: 8777109971569133270}
   - component: {fileID: 399407221051650118}
   - component: {fileID: 7670709888196597958}
+  - component: {fileID: -5898526687173022100}
   m_Layer: 5
   m_Name: ShopItemCard
   m_TagString: Untagged
@@ -492,6 +493,19 @@ MonoBehaviour:
   _amountInPocketText: {fileID: 2562130780990047776}
   _priceText: {fileID: 7686056952520229108}
   _button: {fileID: 4157135164912195367}
+  _canvasGroup: {fileID: 0}
+--- !u!225 &-5898526687173022100
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2264402911976557684}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &3932810675124851699
 GameObject:
   m_ObjectHideFlags: 0

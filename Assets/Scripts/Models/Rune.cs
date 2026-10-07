@@ -1,4 +1,5 @@
 using ElementalBlacksmithStory.Data;
+using ElementalBlacksmithStory.Inventory;
 using VContainer;
 
 namespace ElementalBlacksmithStory.Core
@@ -18,6 +19,28 @@ namespace ElementalBlacksmithStory.Core
         public Rune(SO_RuneData data)
         {
             _data = data;
+        }
+
+        public void OnPurchased(IInventoryContext context, uint amount)
+        {
+            if (_data != null)
+            {
+                context.RuneInventory.Add(_data, amount);
+            }
+        }
+
+        public uint GetOwnedCount(IInventoryContext context)
+        {
+            if (_data == null) return 0;
+            return context.RuneInventory.GetCount(_data);
+        }
+
+        public void OnSold(IInventoryContext context, uint amount)
+        {
+            if (_data != null)
+            {
+                context.RuneInventory.Get(_data, amount);
+            }
         }
     }
 }

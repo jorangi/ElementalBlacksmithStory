@@ -1,3 +1,5 @@
+using ElementalBlacksmithStory.Inventory;
+
 namespace ElementalBlacksmithStory.Data
 {
     public class MaterialShopItem : IShopItem
@@ -16,6 +18,28 @@ namespace ElementalBlacksmithStory.Data
         {
             _materialData = materialData;
             _count = count;
+        }
+
+        public void OnPurchased(IInventoryContext context, uint amount)
+        {
+            if (_materialData != null)
+            {
+                context.MaterialInventory.Add(_materialData, amount);
+            }
+        }
+
+        public uint GetOwnedCount(IInventoryContext context)
+        {
+            if (_materialData == null) return 0;
+            return context.MaterialInventory.GetCount(_materialData);
+        }
+
+        public void OnSold(IInventoryContext context, uint amount)
+        {
+            if (_materialData != null)
+            {
+                context.MaterialInventory.Get(_materialData, amount);
+            }
         }
     }
 }

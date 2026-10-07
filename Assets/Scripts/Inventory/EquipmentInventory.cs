@@ -8,7 +8,7 @@ using VContainer.Unity;
 
 namespace ElementalBlacksmithStory.Inventory
 {
-    public class EquipmentInventory : IStartable, IDisposable
+    public class EquipmentInventory : IInventory, IStartable, IDisposable
     {
         private readonly CompositeDisposable _disposables = new();
         private List<Weapon> _inventory = new();
@@ -113,10 +113,10 @@ namespace ElementalBlacksmithStory.Inventory
         {
             if (count > 0 && GetCountByWeaponId(weaponId) < count)
                 return false;
-            for (int i = _inventory.Count - 1; i > 0; i--)
+            for (int i = _inventory.Count - 1; i >= 0; i--)
             {
                 var item = _inventory[i];
-                if (item.WeaponId == weaponId)
+                if (item != null && item.WeaponId == weaponId)
                 {
                     Remove((uint)i);
                     count--;

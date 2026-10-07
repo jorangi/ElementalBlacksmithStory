@@ -5,7 +5,9 @@ using System.Threading.Tasks;
 using Cysharp.Threading.Tasks;
 using ElementalBlacksmithStory.Core;
 using ElementalBlacksmithStory.Data;
+using ElementalBlacksmithStory.Events;
 using ElementalBlacksmithStory.Inventory;
+using MessagePipe;
 using R3;
 using UnityEngine;
 using VContainer;
@@ -20,8 +22,11 @@ namespace ElementalBlacksmithStory.UI
         private readonly MaterialSpriteLoader _materialSpriteLoader;
         private readonly RuneSpriteLoader _runeSpriteLoader;
         private readonly MaterialInventory _materialInventory;
+        private readonly EquipmentInventory _equipmentInventory;
+        private readonly RuneInventory _runeInventory;
         private readonly IItemShopFactory _itemShopFactory;
         private readonly ShopCartPresenter _shopCartPresenter;
+        private readonly ShopService _shopService;
         private readonly Dictionary<uint, ShopItemView> _displayItems = new();
         private readonly Dictionary<uint, IDisposable> _itemDisposables = new();
         private readonly CompositeDisposable _disposables = new();
@@ -39,8 +44,12 @@ namespace ElementalBlacksmithStory.UI
             MaterialSpriteLoader materialSpriteLoader,
             RuneSpriteLoader runeSpriteLoader,
             MaterialInventory materialInventory,
+            EquipmentInventory equipmentInventory,
+            RuneInventory runeInventory,
             IItemShopFactory itemShopFactory,
-            ShopCartPresenter shopCartPresenter
+            ShopCartPresenter shopCartPresenter,
+            ShopService shopService = null,
+            ISubscriber<ChangeMoneyEvent> moneySubscriber = null
         )
         {
             _view = view;
@@ -48,45 +57,128 @@ namespace ElementalBlacksmithStory.UI
             _materialSpriteLoader = materialSpriteLoader;
             _runeSpriteLoader = runeSpriteLoader;
             _materialInventory = materialInventory;
+            _equipmentInventory = equipmentInventory;
+            _runeInventory = runeInventory;
             _itemShopFactory = itemShopFactory;
             _shopCartPresenter = shopCartPresenter;
+            _shopService = shopService;
 
-            // 인벤토리 수량 변경 시 실시간 그리드 갱신
-            _materialInventory.OnItemCountChangedAsObservable
-                .Subscribe(data =>
+            moneySubscriber?.Subscribe(_ =>
+            {
+                UpdateAllItemsAffordability();
+            }).AddTo(_disposables);
+
+            _shopCartPresenter?.OnCartChanged
+                .Subscribe(_ =>
                 {
-                    if (data.material == null) return;
-
-                    if (_isSellMode)
-                    {
-                        // 판매 모드: 수량이 0이면 슬롯 제거, 0보다 크면 수량 갱신 또는 신규 등록
-                        if (data.count == 0)
-                        {
-                            RemoveItem(data.material.Id);
-                        }
-                        else if (_displayItems.TryGetValue(data.material.Id, out var viewItem))
-                        {
-                            viewItem.SetAmountInPocket(data.count);
-                        }
-                        else
-                        {
-                            var item = new MaterialShopItem(data.material, data.count);
-                            if (_categoryFilter == null || _categoryFilter(item))
-                            {
-                                AddItem(item).Forget();
-                            }
-                        }
-                    }
-                    else
-                    {
-                        // 구매 모드: 해당 아이템이 상점에 진열되어 있다면 인벤 보유량 텍스트만 갱신
-                        if (_displayItems.TryGetValue(data.material.Id, out var viewItem))
-                        {
-                            viewItem.SetAmountInPocket(data.count);
-                        }
-                    }
+                    UpdateAllItemsAffordability();
                 })
                 .AddTo(_disposables);
+
+            // 재료 인벤토리 수량 변경 시 실시간 그리드 갱신
+            if (_materialInventory != null)
+            {
+                _materialInventory.OnItemCountChangedAsObservable
+                    .Subscribe(OnMaterialCountChanged)
+                    .AddTo(_disposables);
+            }
+
+            // 룬 인벤토리 수량 변경 시 실시간 그리드 갱신
+            if (_runeInventory != null)
+            {
+                _runeInventory.OnItemCountChangedAsObservable
+                    .Subscribe(OnRuneCountChanged)
+                    .AddTo(_disposables);
+            }
+
+            // 장비(무기) 인벤토리 변경 시 실시간 그리드 갱신
+            if (_equipmentInventory != null)
+            {
+                _equipmentInventory.OnAddWeapon
+                    .Subscribe(weapon =>
+                    {
+                        if (!_isSellMode || weapon == null) return;
+                        if (_categoryFilter == null || _categoryFilter(weapon))
+                        {
+                            AddItem(weapon).Forget();
+                        }
+                    })
+                    .AddTo(_disposables);
+
+                _equipmentInventory.OnRemoveWeapon
+                    .Subscribe(_ =>
+                    {
+                        if (_isSellMode)
+                        {
+                            RefreshGridAsync().Forget();
+                        }
+                    })
+                    .AddTo(_disposables);
+            }
+        }
+
+        private void OnMaterialCountChanged((SO_MaterialData item, uint count) data)
+        {
+            if (data.item == null) return;
+
+            if (_isSellMode)
+            {
+                if (data.count == 0)
+                {
+                    RemoveItem(data.item.Id);
+                }
+                else if (_displayItems.TryGetValue(data.item.Id, out var viewItem))
+                {
+                    viewItem.SetAmountInPocket(data.count);
+                }
+                else
+                {
+                    var item = new MaterialShopItem(data.item, data.count);
+                    if (_categoryFilter == null || _categoryFilter(item))
+                    {
+                        AddItem(item).Forget();
+                    }
+                }
+            }
+            else
+            {
+                if (_displayItems.TryGetValue(data.item.Id, out var viewItem))
+                {
+                    viewItem.SetAmountInPocket(data.count);
+                }
+            }
+        }
+
+        private void OnRuneCountChanged((SO_RuneData item, uint count) data)
+        {
+            if (data.item == null) return;
+
+            if (_isSellMode)
+            {
+                if (data.count == 0)
+                {
+                    RemoveItem(data.item.Id);
+                }
+                else if (_displayItems.TryGetValue(data.item.Id, out var viewItem))
+                {
+                    viewItem.SetAmountInPocket(data.count);
+                }
+                else
+                {
+                    var item = new Rune(data.item);
+                    if (_categoryFilter == null || _categoryFilter(item))
+                    {
+                        AddItem(item).Forget();
+                    }
+                }
+            }
+            else
+            {
+                if (_displayItems.TryGetValue(data.item.Id, out var viewItem))
+                {
+                    viewItem.SetAmountInPocket(data.count);
+                }
+            }
         }
 
         public async UniTask StartAsync(CancellationToken ct = default)
@@ -191,21 +283,51 @@ namespace ElementalBlacksmithStory.UI
         }
 
         /// <summary>
-        /// 판매 탭 아이템 목록 생성 (현재 잡화점 정책: MaterialInventory의 보유 재료 중 카테고리 필터를 만족하는 항목)
-        /// 추후 다른 인벤토리(IInventory 등) 확장 시 여기에 매입 대상 목록 추가 가능
+        /// 판매 탭 아이템 목록 생성 (보유 재료, 룬, 무기 중 현재 카테고리 필터를 만족하는 항목)
         /// </summary>
         private async UniTask PopulateSellItemsAsync(CancellationToken ct)
         {
-            if (_materialInventory == null) return;
-
-            foreach (var pair in _materialInventory.GetAll())
+            // 1. 재료 인벤토리
+            if (_materialInventory != null)
             {
-                ct.ThrowIfCancellationRequested();
-                if (pair.Key != null && pair.Value > 0)
+                foreach (var pair in _materialInventory.GetAll())
                 {
-                    var item = new MaterialShopItem(pair.Key, pair.Value);
-                    if (_categoryFilter != null && !_categoryFilter(item)) continue;
-                    await AddItem(item);
+                    ct.ThrowIfCancellationRequested();
+                    if (pair.Key != null && pair.Value > 0)
+                    {
+                        var item = new MaterialShopItem(pair.Key, pair.Value);
+                        if (_categoryFilter != null && !_categoryFilter(item)) continue;
+                        await AddItem(item);
+                    }
+                }
+            }
+
+            // 2. 룬 인벤토리
+            if (_runeInventory != null)
+            {
+                foreach (var pair in _runeInventory.GetAll())
+                {
+                    ct.ThrowIfCancellationRequested();
+                    if (pair.Key != null && pair.Value > 0)
+                    {
+                        var item = new Rune(pair.Key);
+                        if (_categoryFilter != null && !_categoryFilter(item)) continue;
+                        await AddItem(item);
+                    }
+                }
+            }
+
+            // 3. 장비(무기) 인벤토리
+            if (_equipmentInventory != null)
+            {
+                foreach (var weapon in _equipmentInventory.GetAllActive())
+                {
+                    ct.ThrowIfCancellationRequested();
+                    if (weapon != null)
+                    {
+                        if (_categoryFilter != null && !_categoryFilter(weapon)) continue;
+                        await AddItem(weapon);
+                    }
                 }
             }
         }
@@ -236,6 +358,12 @@ namespace ElementalBlacksmithStory.UI
             ShopItemView itemView = _view.CreateItem(item.Id, item.Name, item.Value, icon, isUniqueItem);
             if (itemView == null) return;
 
+            ulong availableMoney = _shopCartPresenter != null
+                ? _shopCartPresenter.ExpectedRemainingMoney
+                : (_shopService != null ? _shopService.CurrentMoney : 0);
+            bool canAfford = _isSellMode || (availableMoney >= item.Value);
+            itemView.SetInteractable(canAfford);
+
             if (_itemDisposables.TryGetValue(item.Id, out var prevDisp))
             {
                 prevDisp.Dispose();
@@ -246,14 +374,29 @@ namespace ElementalBlacksmithStory.UI
                 .ThrottleFirst(TimeSpan.FromMilliseconds(200))
                 .Subscribe(_ =>
                 {
+                    ulong currentExpected = _shopCartPresenter != null
+                        ? _shopCartPresenter.ExpectedRemainingMoney
+                        : (_shopService != null ? _shopService.CurrentMoney : 0);
+                    if (!_isSellMode && currentExpected < item.Value)
+                    {
+                        return;
+                    }
                     _shopCartPresenter.OpenAmountModal(item).Forget();
                 });
             _itemDisposables[item.Id] = clickSub;
 
-            if (!isUniqueItem && item is MaterialShopItem materialItem && materialItem.Data != null)
+            if (!isUniqueItem)
             {
-                uint currentCount = _materialInventory.GetCount(materialItem.Data);
-                itemView.SetAmountInPocket(currentCount);
+                if (item is MaterialShopItem materialItem && materialItem.Data != null && _materialInventory != null)
+                {
+                    uint currentCount = _materialInventory.GetCount(materialItem.Data);
+                    itemView.SetAmountInPocket(currentCount);
+                }
+                else if (item is Rune runeItem && runeItem.Data != null && _runeInventory != null)
+                {
+                    uint currentCount = _runeInventory.GetCount(runeItem.Data);
+                    itemView.SetAmountInPocket(currentCount);
+                }
             }
 
             _displayItems[item.Id] = itemView;
@@ -269,6 +412,33 @@ namespace ElementalBlacksmithStory.UI
 
             _displayItems.Remove(id);
             _view.RemoveItem(id);
+        }
+
+        private void UpdateAllItemsAffordability()
+        {
+            if (_isSellMode)
+            {
+                foreach (var kvp in _displayItems)
+                {
+                    if (kvp.Value != null)
+                    {
+                        kvp.Value.SetInteractable(true);
+                    }
+                }
+                return;
+            }
+
+            ulong availableMoney = _shopCartPresenter != null
+                ? _shopCartPresenter.ExpectedRemainingMoney
+                : (_shopService != null ? _shopService.CurrentMoney : 0);
+
+            foreach (var kvp in _displayItems)
+            {
+                if (kvp.Value != null)
+                {
+                    kvp.Value.SetInteractable(availableMoney >= kvp.Value.Price);
+                }
+            }
         }
 
         public void ClearItems()

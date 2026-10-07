@@ -1,3 +1,5 @@
+using ElementalBlacksmithStory.Inventory;
+
 namespace ElementalBlacksmithStory.Data
 {
     /// <summary>
@@ -19,5 +21,20 @@ namespace ElementalBlacksmithStory.Data
         /// 아이템 수량
         /// </summary>
         public uint Count { get; }
+
+        /// <summary>
+        /// 구매 완료 시 플레이어 인벤토리에 지급
+        /// </summary>
+        void OnPurchased(IInventoryContext context, uint amount);
+
+        /// <summary>
+        /// 판매 검증 시 플레이어의 현재 소지량 조회
+        /// </summary>
+        uint GetOwnedCount(IInventoryContext context);
+
+        /// <summary>
+        /// 판매 완료 시 플레이어 인벤토리에서 차감
+        /// </summary>
+        void OnSold(IInventoryContext context, uint amount);
     }
 }

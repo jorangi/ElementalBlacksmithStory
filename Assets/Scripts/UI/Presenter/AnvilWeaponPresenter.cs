@@ -18,23 +18,94 @@ namespace ElementalBlacksmithStory.UI
         private readonly SO_WeaponDatabase _weaponDatabase;
         private readonly AnvilWeaponView _anvilWeaponView;
         private readonly WeaponSpriteLoader _weaponSpriteLoader;
+        private readonly RuneSpriteLoader _runeSpriteLoader;
         private readonly CompositeDisposable _disposables = new();
+        private readonly CompositeDisposable _weaponDisposables = new();
         private readonly ForgeManager _forgeManager;
+        private Weapon _currentWeapon;
 
+        [Inject]
         public AnvilWeaponPresenter(
-                                    SO_WeaponDatabase weaponDatabase,
-                                    AnvilWeaponView view,
-                                    WeaponSpriteLoader spriteLoader,
-                                    ISubscriber<ChangeWeaponEvent> weaponChangeSubscriber,
-                                    ForgeManager forgeManager)
+            SO_WeaponDatabase weaponDatabase,
+            AnvilWeaponView view,
+            WeaponSpriteLoader spriteLoader,
+            ISubscriber<ChangeWeaponEvent> weaponChangeSubscriber,
+            ForgeManager forgeManager,
+            RuneSpriteLoader runeSpriteLoader = null)
         {
             _weaponDatabase = weaponDatabase;
             _anvilWeaponView = view;
             _weaponSpriteLoader = spriteLoader;
-            weaponChangeSubscriber.Subscribe(e => { ChangeSprite(e).Forget(); }).AddTo(_disposables);
+            _runeSpriteLoader = runeSpriteLoader;
             _forgeManager = forgeManager;
+
+            weaponChangeSubscriber.Subscribe(e => { HandleWeaponChange(e).Forget(); }).AddTo(_disposables);
         }
+
         public void Start() { }
+
+        private async UniTask HandleWeaponChange(ChangeWeaponEvent e, CancellationToken cancellationToken = default)
+        {
+            _weaponDisposables.Clear();
+            _currentWeapon = e.Weapon;
+
+            if (_currentWeapon != null)
+            {
+                await RefreshAllRunesAsync(_currentWeapon, cancellationToken);
+
+                _currentWeapon.OnRuneSlotChanged
+                    .Subscribe(slotCount =>
+                    {
+                        _anvilWeaponView.SetRuneSlotCount(slotCount);
+                    })
+                    .AddTo(_weaponDisposables);
+
+                _currentWeapon.OnRuneChanged
+                    .Subscribe(change =>
+                    {
+                        UpdateRuneSlotAsync(change.socketIndex, change.rune).Forget();
+                    })
+                    .AddTo(_weaponDisposables);
+            }
+            else
+            {
+                _anvilWeaponView.ChangeRuneStatus(0, null, null, null);
+            }
+
+            await ChangeSprite(e, cancellationToken);
+        }
+
+        private async UniTask RefreshAllRunesAsync(Weapon weapon, CancellationToken ct = default)
+        {
+            Sprite s0 = null;
+            Sprite s1 = null;
+            Sprite s2 = null;
+
+            if (_runeSpriteLoader != null)
+            {
+                var r0 = weapon.GetRune(0);
+                if (r0 != null) s0 = await _runeSpriteLoader.GetSprite(r0.SpriteId, ct);
+
+                var r1 = weapon.GetRune(1);
+                if (r1 != null) s1 = await _runeSpriteLoader.GetSprite(r1.SpriteId, ct);
+
+                var r2 = weapon.GetRune(2);
+                if (r2 != null) s2 = await _runeSpriteLoader.GetSprite(r2.SpriteId, ct);
+            }
+
+            _anvilWeaponView.ChangeRuneStatus(weapon.RuneSlot, s0, s1, s2);
+        }
+
+        private async UniTask UpdateRuneSlotAsync(int socketIndex, Rune rune, CancellationToken ct = default)
+        {
+            Sprite runeSprite = null;
+            if (rune != null && _runeSpriteLoader != null)
+            {
+                runeSprite = await _runeSpriteLoader.GetSprite(rune.SpriteId, ct);
+            }
+            _anvilWeaponView.SetRune(socketIndex, runeSprite);
+        }
+
         private async UniTask ChangeSprite(ChangeWeaponEvent e, CancellationToken cancellationToken = default)
         {
             try
@@ -62,8 +133,10 @@ namespace ElementalBlacksmithStory.UI
                 Debug.LogError($"[AnvilWeaponPresenter] 스프라이트 변경 실패: {ex.Message}");
             }
         }
+
         public void Dispose()
         {
+            _weaponDisposables.Dispose();
             _disposables.Dispose();
         }
     }

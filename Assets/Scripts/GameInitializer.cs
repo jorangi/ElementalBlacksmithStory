@@ -12,13 +12,14 @@ using VContainer.Unity;
 
 namespace ElementalBlacksmithStory.Core
 {
-    public class GameInitializer : IStartable
+    public class GameInitializer : IStartable, IDisposable
     {
         private MainAction mainAction;
         private readonly MaterialInventory _materialInventory;
         private readonly SO_MaterialDatabase _materialDatabase;
         private readonly IPublisher<PlaySoundEvent> _sfxPublisher;
         private readonly GameExitPresenter _gameExitPresenter;
+        private readonly IDisposable _exitSubscription;
 
         [Inject]
         public GameInitializer(
@@ -27,16 +28,18 @@ namespace ElementalBlacksmithStory.Core
             MaterialInventory materialInventory,
             GameExitPresenter gameExitPresenter,
             IPublisher<PlaySoundEvent> sfxPublisher,
-            ISubscriber<GameExitEvent> exitSubscriber
+            ISubscriber<GameExitEvent> exitSubscriber,
+            SO_RuneDatabase runeDatabase = null
         )
         {
             weaponDatabase.Init();
             materialDatabase.Init();
+            runeDatabase?.Init();
             _materialInventory = materialInventory;
             _materialDatabase = materialDatabase;
             _gameExitPresenter = gameExitPresenter;
             _sfxPublisher = sfxPublisher;
-            exitSubscriber.Subscribe(_ => { Debug.Log("게임을 정상적으로 종료했습니다."); Application.Quit(); });
+            _exitSubscription = exitSubscriber.Subscribe(_ => { Debug.Log("게임을 정상적으로 종료했습니다."); Application.Quit(); });
         }
         public void Start()
         {
@@ -60,10 +63,17 @@ namespace ElementalBlacksmithStory.Core
             mainAction.Enable();
             mainAction.MainActions.Back.performed += OnBack;
         }
-        public void OnApplicationQuit()
+        public void Dispose()
         {
-            mainAction.MainActions.Back.performed -= OnBack;
-            mainAction.Disable();
+            if (mainAction != null)
+            {
+                mainAction.MainActions.Back.performed -= OnBack;
+                mainAction.Disable();
+                mainAction.Dispose();
+                mainAction = null;
+            }
+
+            _exitSubscription?.Dispose();
         }
         private void OnBack(InputAction.CallbackContext context)
         {

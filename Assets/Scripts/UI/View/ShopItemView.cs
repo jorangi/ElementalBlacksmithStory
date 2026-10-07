@@ -13,16 +13,40 @@ namespace ElementalBlacksmithStory.UI
         [SerializeField] private TextMeshProUGUI _amountInPocketText;
         [SerializeField] private TextMeshProUGUI _priceText;
         [SerializeField] private Button _button;
+        [SerializeField] private CanvasGroup _canvasGroup;
 
         public uint ItemId { get; private set; }
         public ulong Price { get; private set; }
         public string ItemName { get; private set; }
         private bool _isUniqueItem;
+
         private void Awake()
         {
+            if (_canvasGroup == null)
+            {
+                _canvasGroup = GetComponent<CanvasGroup>();
+                if (_canvasGroup == null)
+                {
+                    _canvasGroup = gameObject.AddComponent<CanvasGroup>();
+                }
+            }
+
             if (_button != null && !_button.TryGetComponent<UIButtonSound>(out _))
             {
                 _button.gameObject.AddComponent<UIButtonSound>();
+            }
+        }
+
+        public void SetInteractable(bool interactable)
+        {
+            if (_button != null)
+            {
+                _button.interactable = interactable;
+            }
+
+            if (_canvasGroup != null)
+            {
+                _canvasGroup.alpha = interactable ? 1.0f : 0.55f;
             }
         }
 

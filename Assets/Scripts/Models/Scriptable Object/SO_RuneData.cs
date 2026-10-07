@@ -16,7 +16,7 @@ namespace ElementalBlacksmithStory.Data
         Mythical
     }
     [CreateAssetMenu(fileName = "SO_RuneData", menuName = "Scriptable Objects/SO_RuneData")]
-    public class SO_RuneData : ScriptableObject, IShopItem
+    public class SO_RuneData : ScriptableObject, IIdentifiable, IValuable
     {
         [Header("기본 정보")]
         public uint Id => uint.Parse(this.name);
@@ -25,15 +25,15 @@ namespace ElementalBlacksmithStory.Data
         [TextArea(2, 5)]
         public string description = string.Empty;
         public RuneGrade grade = RuneGrade.Common;
-        public uint SpriteId => Id;
         [Tooltip("다음 등급의 룬 데이터")]
         public SO_RuneData nextRune;
         [SerializeField] private ulong value = 0;
+        public ulong Value => value;
+
         [Header("효과 목록")]
         [SerializeReference, SubclassSelector]
         public List<IEffect> effects = new();
-        public ulong Value => value;
-        public uint Count => 1;
+
 #if UNITY_EDITOR
         [Header("메모용")]
         [TextArea(2, 5)]

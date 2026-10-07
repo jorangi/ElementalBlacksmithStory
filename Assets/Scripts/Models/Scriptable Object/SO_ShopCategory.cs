@@ -77,7 +77,7 @@ namespace ElementalBlacksmithStory.Data
         public bool Contains(IShopItem item)
         {
             if (item == null) return false;
-            return ContainsId(item.SpriteId);
+            return ContainsId(item.SpriteId) || ContainsId(item.Id);
         }
 
         /// <summary>

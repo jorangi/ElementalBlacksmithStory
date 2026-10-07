@@ -15,8 +15,9 @@ MonoBehaviour:
   _shopType: 1
   _shopName: "\uC7A5\uBE44\uC810"
   _npcId: 50008
-  _greetingDialogueId: 600807
-  _sellDialogueId: 600808
+  _buyDialogueId: {fileID: 11400000, guid: 9f4866bfc08e68648a003d49c28a7f98, type: 2}
+  _sellDialogueId: {fileID: 11400000, guid: 7723fc5b228f3684a9425fc28834a042, type: 2}
+  _purchaseDialogueId: {fileID: 11400000, guid: c60567aa11af4a64a8c5b92ba66c3164, type: 2}
   _categories:
   - {fileID: 11400000, guid: c6b7731d4d8bbf443b1874a61c82b578, type: 2}
   - {fileID: 11400000, guid: 9ea5bcd0d56704345b2e4a8cfba8aab8, type: 2}

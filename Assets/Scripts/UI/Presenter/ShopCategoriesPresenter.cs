@@ -94,8 +94,23 @@ namespace ElementalBlacksmithStory.UI
 
             if (categoryId == "all")
             {
-                // 전체: 상점의 모든 물품 표시
-                _gridPresenter?.SetCategoryFilter(_ => true);
+                // 전체: 현재 상점에 등록된 모든 카테고리 중 하나라도 포함하는 아이템만 허용
+                if (_categories.Count > 0)
+                {
+                    _gridPresenter?.SetCategoryFilter(item =>
+                    {
+                        for (int i = 0; i < _categories.Count; i++)
+                        {
+                            if (_categories[i] != null && _categories[i].Contains(item))
+                                return true;
+                        }
+                        return false;
+                    });
+                }
+                else
+                {
+                    _gridPresenter?.SetCategoryFilter(_ => true);
+                }
             }
             else
             {

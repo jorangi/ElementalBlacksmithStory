@@ -13,9 +13,10 @@ namespace ElementalBlacksmithStory.Data
         [SerializeField] private MarketType _shopType;
         [SerializeField] private string _shopName;
         [SerializeField] private uint _npcId;
-        [Header("대사 설정 (입장/구매 탭, 판매 탭)")]
-        [SerializeField] private uint _greetingDialogueId;
-        [SerializeField] private uint _sellDialogueId;
+        [Header("대사 설정 (입장/구매 탭, 판매 탭, 구매 완료 탭)")]
+        [SerializeField] private SO_DialogueData _buyDialogueId;
+        [SerializeField] private SO_DialogueData _sellDialogueId;
+        [SerializeField] private SO_DialogueData _purchaseDialogueId;
 
         [Header("소속 카테고리 목록")]
         [SerializeField] private List<SO_ShopCategory> _categories = new();
@@ -23,9 +24,9 @@ namespace ElementalBlacksmithStory.Data
         public MarketType ShopType => _shopType;
         public string ShopName => _shopName;
         public uint NpcId => _npcId;
-        public uint GreetingDialogueId => _greetingDialogueId;
-        public uint BuyDialogueId => _greetingDialogueId;
-        public uint SellDialogueId => _sellDialogueId;
+        public uint BuyDialogueId => _buyDialogueId != null ? _buyDialogueId.Id : 0;
+        public uint SellDialogueId => _sellDialogueId != null ? _sellDialogueId.Id : 0;
+        public uint PurchaseDialogueId => _purchaseDialogueId != null ? _purchaseDialogueId.Id : 0;
         public IReadOnlyList<SO_ShopCategory> Categories => _categories;
 
         /// <summary>

@@ -68,6 +68,7 @@ namespace ElementalBlacksmithStory.UI
             _currentShopData = shopData;
             _isSellMode = false;
             _view?.SetTabVisual(_isSellMode);
+            _cartPresenter?.SetShop(shopData);
             _cartPresenter?.SetSellMode(_isSellMode);
             _gridPresenter?.SetSellMode(_isSellMode);
         }

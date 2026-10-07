@@ -27,7 +27,14 @@ namespace ElementalBlacksmithStory.Data
                 }
             }
         }
-        public T Get(uint id) => _itemDict.GetValueOrDefault(id);
+        public T Get(uint id)
+        {
+            if (_itemDict == null || (_itemDict.Count == 0 && _itemList != null && _itemList.Count > 0))
+            {
+                Init();
+            }
+            return _itemDict.GetValueOrDefault(id);
+        }
 
 #if UNITY_EDITOR
         protected virtual string AddressableGroupName => typeof(T).Name.Replace("SO_", "");

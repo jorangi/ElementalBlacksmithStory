@@ -13,6 +13,7 @@ namespace ElementalBlacksmithStory.Core
 
             builder.Register<EquipmentInventory>(Lifetime.Singleton);
             builder.Register<MaterialInventory>(Lifetime.Singleton);
+            builder.Register<RuneInventory>(Lifetime.Singleton);
             builder.Register<ForgeManager>(Lifetime.Singleton);
             builder.Register<RecipeKeyHelper>(Lifetime.Singleton);
             builder.Register<RecipeUnlockService>(Lifetime.Singleton);

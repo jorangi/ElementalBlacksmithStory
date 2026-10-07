@@ -3,9 +3,9 @@ using ElementalBlacksmithStory.Data;
 namespace ElementalBlacksmithStory.Inventory
 {
     /// <summary>
-    /// 재료 아이템 전용 인벤토리
+    /// 룬 아이템 전용 인벤토리
     /// </summary>
-    public class MaterialInventory : BaseInventory<SO_MaterialData>
+    public class RuneInventory : BaseInventory<SO_RuneData>
     {
     }
 }

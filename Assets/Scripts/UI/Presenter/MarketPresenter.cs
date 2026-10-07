@@ -86,7 +86,7 @@ namespace ElementalBlacksmithStory.UI
                 _categoriesPresenter.SetCategories(shopData.Categories);
                 _tabPresenter.SetShop(shopData);
 
-                if (shopData.GreetingDialogueId > 0)
+                if (shopData.BuyDialogueId > 0)
                 {
                     var parameters = new Dictionary<string, object>
                     {
@@ -97,7 +97,7 @@ namespace ElementalBlacksmithStory.UI
                         { "totalPrice", "0 골드" },
                         { "isSellMode", false }
                     };
-                    _shopDialoguePublisher.Publish(new StartShopDialogueEvent(shopData.GreetingDialogueId, parameters));
+                    _shopDialoguePublisher.Publish(new StartShopDialogueEvent(shopData.BuyDialogueId, parameters));
                 }
             }
         }
