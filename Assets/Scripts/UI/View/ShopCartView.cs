@@ -1,18 +1,19 @@
-using UnityEngine;
-using UnityEngine.UI;
 using System;
 using R3;
 using TMPro;
+using UnityEngine;
+using UnityEngine.UI;
 
 namespace ElementalBlacksmithStory.UI
 {
-    public class ShopCartView: MonoBehaviour
+    public class ShopCartView : MonoBehaviour
     {
         [SerializeField] private GameObject _container;
         [SerializeField] private GameObject _cartItemPrefab;
         [SerializeField] private Button _acceptButton;
         [SerializeField] private TextMeshProUGUI _acceptButtonText;
         [SerializeField] private Button _cancelButton;
+        [SerializeField] private RectTransform amountModal;
 
         public void SetSellMode(bool isSellMode)
         {
@@ -34,9 +35,13 @@ namespace ElementalBlacksmithStory.UI
             view.SetEA(ea);
             return view;
         }
+        public void ShowModal()
+        {
+            amountModal.gameObject.SetActive(true);
+        }
         public Observable<Unit> OnClickAcceptAsObservable()
         {
-            if(_acceptButton == null)
+            if (_acceptButton == null)
             {
                 return Observable.Empty<Unit>();
             }
@@ -44,7 +49,7 @@ namespace ElementalBlacksmithStory.UI
         }
         public Observable<Unit> OnClickCancelAsObservable()
         {
-            if(_cancelButton == null)
+            if (_cancelButton == null)
             {
                 return Observable.Empty<Unit>();
             }

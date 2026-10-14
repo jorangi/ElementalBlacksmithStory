@@ -18,19 +18,24 @@ namespace ElementalBlacksmithStory.UI
         private readonly ShopCategoriesView _view;
         private readonly ShopItemGridPresenter _gridPresenter;
         private readonly IPublisher<PlaySoundEvent> _soundPublisher;
+        private readonly RuneEquipPresenter _runeEquipPresenter;
         private readonly List<SO_ShopCategory> _categories = new();
         private readonly CompositeDisposable _disposables = new();
         private readonly CompositeDisposable _buttonDisposables = new();
         private string _selectedCategoryId = "all";
+        private string _cachedSelectedCategory;
 
         [Inject]
         public ShopCategoriesPresenter(
             ShopCategoriesView view,
             ShopItemGridPresenter gridPresenter,
-            IPublisher<PlaySoundEvent> soundPublisher)
+            RuneEquipPresenter runeEquipPresenter,
+            IPublisher<PlaySoundEvent> soundPublisher
+            )
         {
             _view = view;
             _gridPresenter = gridPresenter;
+            _runeEquipPresenter = runeEquipPresenter;
             _soundPublisher = soundPublisher;
         }
 
@@ -94,6 +99,7 @@ namespace ElementalBlacksmithStory.UI
 
             if (categoryId == "all")
             {
+                _cachedSelectedCategory = categoryId;
                 // 전체: 현재 상점에 등록된 모든 카테고리 중 하나라도 포함하는 아이템만 허용
                 if (_categories.Count > 0)
                 {
@@ -112,14 +118,27 @@ namespace ElementalBlacksmithStory.UI
                     _gridPresenter?.SetCategoryFilter(_ => true);
                 }
             }
+            else if (categoryId == "RuneEquip")
+            {
+                //룬 장착 UI 표시
+                _runeEquipPresenter.Show();
+                SelectCategory(_cachedSelectedCategory);
+            }
+            else if (categoryId == "RuneSynthesis")
+            {
+                //룬 합성 UI 표시
+                SelectCategory(_cachedSelectedCategory);
+            }
             else
             {
+
+
+                _cachedSelectedCategory = categoryId;
                 // 특정 카테고리: 해당 카테고리가 들고 있는 아이템 목록으로 필터링
                 var selectedCat = _categories.Find(c => c.CategoryId == categoryId);
                 _gridPresenter?.SetCategoryFilter(item => selectedCat != null && selectedCat.Contains(item));
             }
         }
-
         public void Dispose()
         {
             _buttonDisposables.Dispose();

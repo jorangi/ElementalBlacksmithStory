@@ -188,6 +188,7 @@ namespace ElementalBlacksmithStory.UI
         public void Hide()
         {
             if (panel != null) panel.SetActive(false);
+            gameObject.SetActive(false);
         }
     }
 }

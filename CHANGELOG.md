@@ -4,6 +4,47 @@
 
 ---
 
+## 2026-10-15
+
+- 룬 서비스 분리 및 비즈니스 로직 캡슐화
+  - `RuneEquipPresenter`가 직접 룬 DB와 인벤토리를 다루던 구조를 개선하기 위해 `RuneService` 신설
+    - 룬 장착 비용 계산 및 잔액 검사, 골드 차감, 소켓 장착, 인벤토리 차감/환급을 서비스 계층으로 분리
+    - 나중에 룬 합성을 추가할 때도 재사용할 수 있도록 도메인 로직을 한곳에 집중
+  - `GameServiceInstaller`에 `RuneService` 등록
+- 룬 장착 UI 디테일 개선 및 연동
+  - 대장간의 현재 무기(`ForgeManager.CurrentWeapon`)를 자동으로 룬 장착 대상 무기로 연동
+  - 장비점 주인 캐롤라인(`50008Caroline`) 캐릭터 설정에 맞춘 상황별 말풍선 대사 연동
+    - 창 진입, 실시간 비용 산정, 골드 부족 경고, 장착 성공 등 꼼꼼한 감정사 말투 반영
+  - 임시 장착 수량 계산 버그 수정
+    - 카드 클릭 이벤트에서 남은 수량을 중복 차감하여 0개였던 카드가 다시 1개로 살아나던 문제 해결
+
+## 2026-10-14
+
+- 룬 UI 상태 인터페이스 분리 (`IRuneUIState`)
+  - 룬 인벤토리가 장착 화면뿐만 아니라 향후 합성 화면에서도 유연하게 룬 선택 이벤트를 처리할 수 있도록 인터페이스 추상화
+- 룬 카드 우클릭 상호작용 및 슬롯 해제 기능 추가
+  - `RuneCardView`에 `IPointerClickHandler`를 구현하여 좌클릭(장착)과 우클릭을 명확히 분리
+  - 장착 슬롯 우클릭 시 해당 슬롯의 룬을 임시 해제하고 인벤토리 카드 수량을 원복하는 기능 구현
+- 룬 카드 프리팹 및 상점 프리팹 UI 정비
+
+## 2026-10-13
+
+- 룬 장착 및 합성 UI 프레임워크 구축
+  - `RuneEquipView` / `RuneEquipPresenter`, `RuneSynthesisView` / `RuneSynthesisPresenter` 신설
+  - 장비점 서브 카테고리 에셋 추가 (`Equipment_RuneEquip`, `Equipment_RuneSynthesis`)
+  - 팝업 오픈 시 배경 상호작용을 차단하고 닫기를 돕는 공통 백패널(`UIBackPanelView`, `UIBackPanelPresenter`) 추가
+  - `LitMotion`을 이용한 룬 장착 창 오픈/닫힘 스케일 애니메이션 적용
+- 상점 카테고리 UI 개선
+
+## 2026-10-09
+
+- 룬 인벤토리 UI 시스템 구축
+  - `RuneInventoryView`, `RuneInventoryPresenter`, `RuneCardView` 신설
+  - 보유 중인 룬 목록을 카드 형태로 생성 및 배치하는 그리드 컨테이너 구현
+  - 룬 즐겨찾기 토글 및 이름 검색(입력 지연 필터링) 기능 연동
+  - Apply 이전 임시 장착 수량을 트래킹하기 위한 임시 딕셔너리(`_tempWithinRuneDic`) 도입
+- 폰트 에셋 추가 및 프리팹 정비
+
 ## 2026-10-08
 
 - 인벤토리 시스템 추상화

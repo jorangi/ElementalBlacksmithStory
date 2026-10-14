@@ -401,7 +401,7 @@ namespace ElementalBlacksmithStory.UI
         public async UniTask OpenAmountModal(IShopItem item)
         {
             if (item == null) return;
-
+            _view.ShowModal();
             _currentModalItem = item;
             _modalItemId = item.Id;
 
@@ -598,7 +598,9 @@ namespace ElementalBlacksmithStory.UI
                 }
             }
         }
-
+        /// <summary>
+        /// 장바구니 확인 대사
+        /// </summary>
         private void PublishCartDialogue()
         {
             if (_shopData == null) return;
