@@ -18,6 +18,7 @@ namespace ElementalBlacksmithStory.Core
             builder.Register<RecipeKeyHelper>(Lifetime.Singleton);
             builder.Register<RecipeUnlockService>(Lifetime.Singleton);
             builder.Register<WeaponRollbackService>(Lifetime.Singleton);
+            builder.Register<WeaponTreePathService>(Lifetime.Singleton);
             builder.Register<ShopService>(Lifetime.Singleton);
             builder.Register<RuneService>(Lifetime.Singleton);
             builder.Register<IItemShopFactory, ItemShopFactory>(Lifetime.Singleton);

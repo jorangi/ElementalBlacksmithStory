@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 namespace ElementalBlacksmithStory.Data
@@ -64,29 +65,36 @@ namespace ElementalBlacksmithStory.Data
             _itemList.Clear();
             string typeName = typeof(T).Name;
             string[] guids = UnityEditor.AssetDatabase.FindAssets($"t:{typeName}");
-
-            foreach (var guid in guids)
+            AssetDatabase.StartAssetEditing();
+            try
             {
-                string path = UnityEditor.AssetDatabase.GUIDToAssetPath(guid);
-                string cleanedAddress = System.IO.Path.GetFileNameWithoutExtension(path);
-
-                var entry = settings.CreateOrMoveEntry(guid, targetGroup);
-                if (entry != null)
+                foreach (var guid in guids)
                 {
-                    entry.SetAddress(cleanedAddress);
+                    string path = UnityEditor.AssetDatabase.GUIDToAssetPath(guid);
+                    string cleanedAddress = System.IO.Path.GetFileNameWithoutExtension(path);
+
+                    var entry = settings.CreateOrMoveEntry(guid, targetGroup, postEvent: false);
+                    if (entry != null)
+                    {
+                        entry.SetAddress(cleanedAddress);
+                    }
+
+                    var item = UnityEditor.AssetDatabase.LoadAssetAtPath<T>(path);
+                    if (item != null)
+                    {
+                        _itemList.Add(item);
+                    }
                 }
 
-                var item = UnityEditor.AssetDatabase.LoadAssetAtPath<T>(path);
-                if (item != null)
-                {
-                    _itemList.Add(item);
-                }
+                settings.SetDirty(UnityEditor.AddressableAssets.Settings.AddressableAssetSettings.ModificationEvent.EntryMoved, null, true);
+                UnityEditor.AssetDatabase.SaveAssets();
+                UnityEditor.EditorUtility.SetDirty(this);
+                Debug.Log($"[{name}] 총 {_itemList.Count}개의 {typeName} 데이터를 Addressables [{AddressableGroupName}] 그룹에 등록했습니다.");
             }
-
-            settings.SetDirty(UnityEditor.AddressableAssets.Settings.AddressableAssetSettings.ModificationEvent.EntryMoved, null, true);
-            UnityEditor.AssetDatabase.SaveAssets();
-            UnityEditor.EditorUtility.SetDirty(this);
-            Debug.Log($"[{name}] 총 {_itemList.Count}개의 {typeName} 데이터를 Addressables [{AddressableGroupName}] 그룹에 등록했습니다.");
+            finally
+            {
+                AssetDatabase.StopAssetEditing();
+            }
         }
 #endif
     }

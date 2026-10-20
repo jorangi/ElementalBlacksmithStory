@@ -84,7 +84,6 @@ namespace ElementalBlacksmithStory.UI
             _view.SetTabVisual(_isSellMode);
             _cartPresenter.SetSellMode(_isSellMode);
             _gridPresenter.SetSellMode(_isSellMode);
-            _soundPublisher?.Publish(new PlaySoundEvent(40106));
 
             // 탭 전환 시 해당 탭(구매/판매)의 첫 입장 대사 발행
             PublishTabDialogue(_isSellMode);

@@ -88,6 +88,7 @@ GameObject:
   - component: {fileID: 8773264654681875615}
   - component: {fileID: 6701828388332292615}
   - component: {fileID: 27376973379285650}
+  - component: {fileID: 8834668411217981883}
   m_Layer: 5
   m_Name: InCartItem
   m_TagString: Untagged
@@ -217,6 +218,20 @@ MonoBehaviour:
   _icon: {fileID: 4282601709342034131}
   _trashCan: {fileID: 5024201105365595582}
   _gaugeDonut: {fileID: 3939816317494646974}
+--- !u!114 &8834668411217981883
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4520397607090346150}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f93987b3db5b794f85b60ad1a43dd3c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ElementalBlacksmithStory.UI.UIButtonSound
+  _soundId: 40106
+  _autoBindOnClick: 1
 --- !u!1 &7757976750074022453
 GameObject:
   m_ObjectHideFlags: 0

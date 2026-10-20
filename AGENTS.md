@@ -48,3 +48,11 @@
 - Disposal & Lifecycle:
   - Explicitly dispose R3 `IDisposable` (use `CompositeDisposable` or `.AddTo(destroyCancellationToken)`).
   - Always link UniTask cancellations to `destroyCancellationToken`.
+
+## 5. Asset Generation (AI Workflow)
+
+- **Rule Reference**: Follow [.agents/rules/weapon-asset-generation.md](file:///.agents/rules/weapon-asset-generation.md) for all AI weapon image generations.
+- **Cost Rule**: Always generate 3~5 weapons per 16:9 sheet (target: 5 weapons) to minimize per-asset generation cost (~20 KRW per weapon).
+- **Framing**: Upright vertical alignment on pure white background with generous safe margins to prevent cropping.
+- **Post-processing**: Automate background removal, slicing, and 45-degree rotation via Python scripts.
+

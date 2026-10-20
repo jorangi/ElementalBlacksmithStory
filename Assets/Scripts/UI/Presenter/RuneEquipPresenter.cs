@@ -4,6 +4,8 @@ using System.Threading;
 using Cysharp.Text;
 using Cysharp.Threading.Tasks;
 using ElementalBlacksmithStory.Core;
+using ElementalBlacksmithStory.Events;
+using MessagePipe;
 using R3;
 using UnityEngine;
 using VContainer;
@@ -23,7 +25,9 @@ namespace ElementalBlacksmithStory.UI
         private readonly RuneInventoryPresenter _runeInventoryPresenter;
         private readonly RuneService _runeService;
         private readonly ForgeManager _forgeManager;
+        private readonly IPublisher<PlaySoundEvent> _soundPublisher;
         [SerializeField] private readonly uint[] runes = new uint[3];
+        private readonly uint[] _originalRunes = new uint[3];
 
         [Inject]
         public RuneEquipPresenter(
@@ -32,6 +36,7 @@ namespace ElementalBlacksmithStory.UI
             RuneInventoryPresenter runeInventoryPresenter,
             WeaponSpriteLoader weaponspriteLoader,
             RuneSpriteLoader runeSpriteLoader,
+            IPublisher<PlaySoundEvent> soundPublisher,
             RuneService runeService = null,
             ForgeManager forgeManager = null
         )
@@ -43,6 +48,7 @@ namespace ElementalBlacksmithStory.UI
             _runeSpriteLoader = runeSpriteLoader;
             _runeService = runeService;
             _forgeManager = forgeManager;
+            _soundPublisher = soundPublisher;
 
             for (int i = 0; i < runes.Length; i++)
             {
@@ -70,7 +76,11 @@ namespace ElementalBlacksmithStory.UI
                 .AddTo(_disposables);
 
             _runeEquipView.OnApplyButtonAsObservable()
-                .Subscribe(_ => ApplyRunes())
+                .Subscribe(_ =>
+                {
+                    ApplyRunes();
+                    soundPublisher.Publish(new PlaySoundEvent(40108));
+                })
                 .AddTo(_disposables);
         }
         public void SetWeapon(Weapon weapon)
@@ -88,6 +98,8 @@ namespace ElementalBlacksmithStory.UI
 
                 _currentWeapon.OnRuneChanged.Subscribe(e => RuneChanged(e.socketIndex, e.rune).Forget())
                                             .AddTo(_weaponDisposable);
+
+                SyncRunesFromWeapon();
             }
         }
         private async UniTaskVoid UpdateWeaponViewAsync(Weapon weapon)
@@ -102,6 +114,10 @@ namespace ElementalBlacksmithStory.UI
             {
                 SetWeapon(_forgeManager.CurrentWeapon);
             }
+            else
+            {
+                SyncRunesFromWeapon();
+            }
 
             _uiBackPanelPresenter.Show();
             _runeEquipView.Show().Forget();
@@ -113,6 +129,52 @@ namespace ElementalBlacksmithStory.UI
             _uiBackPanelPresenter.Hide();
             _runeEquipView.Hide().Forget();
         }
+        /// <summary>
+        /// 무기로부터 룬 동기화하는 함수
+        /// </summary>
+        private void SyncRunesFromWeapon()
+        {
+            for (int i = 0; i < runes.Length; i++)
+            {
+                uint orig = GetOriginalRuneId(i);
+                _originalRunes[i] = orig;
+                runes[i] = orig;
+            }
+            RefreshRuneSpritesAsync().Forget();
+            _runeInventoryPresenter.SyncDraftRunes(runes, _originalRunes);
+        }
+
+        private uint GetOriginalRuneId(int socketIndex)
+        {
+            if (_currentWeapon == null || socketIndex < 0 || socketIndex >= _currentWeapon.RuneSlot)
+            {
+                return 0;
+            }
+
+            Rune rune = _currentWeapon.GetRune(socketIndex);
+            return (rune != null && rune.Data != null) ? rune.Id : 0;
+        }
+        /// <summary>
+        /// 룬 스프라이트 갱신 함수
+        /// </summary>
+        /// <returns></returns>
+        private async UniTaskVoid RefreshRuneSpritesAsync()
+        {
+            for (int i = 0; i < runes.Length; i++)
+            {
+                uint id = runes[i];
+                if (id != 0)
+                {
+                    Sprite sprite = await _runeSpriteLoader.GetSprite(id);
+                    _runeEquipView.SetRuneSprite(i, sprite);
+                }
+                else
+                {
+                    _runeEquipView.SetRuneSprite(i, null);
+                }
+            }
+        }
+
         /// <summary>
         /// 현재 무기의 룬 상태와 동기화
         /// </summary>
@@ -139,9 +201,11 @@ namespace ElementalBlacksmithStory.UI
         /// <returns></returns>
         public async UniTask ChangeRune(uint runeId)
         {
-            _runeInventoryPresenter.UnselectRune(runes[selectedSocketIndex]); //임시슬롯에서 룬 해제
-            _runeInventoryPresenter.SelectRune(runeId); //임시슬롯에 룬 배정
+            if (selectedSocketIndex < 0 || selectedSocketIndex >= runes.Length) return;
+
             runes[selectedSocketIndex] = runeId;
+            _runeInventoryPresenter.SyncDraftRunes(runes, _originalRunes);
+
             Sprite sprite = await _runeSpriteLoader.GetSprite(runeId);
             _runeEquipView.SetRuneSprite(selectedSocketIndex, sprite);
             PublishDialogue(DialogueType.CostChanged);
@@ -161,9 +225,11 @@ namespace ElementalBlacksmithStory.UI
             _runeEquipView.SelectSocket(socketIndex);
 
             runes[socketIndex] = 0;
-            _runeInventoryPresenter.UnselectRune(currentRune);
+            _runeInventoryPresenter.SyncDraftRunes(runes, _originalRunes);
+
             _runeEquipView.SetRuneSprite(socketIndex, null);
             PublishDialogue(DialogueType.CostChanged);
+            _soundPublisher.Publish(new PlaySoundEvent(40106));
         }
 
         /// <summary>
@@ -171,23 +237,12 @@ namespace ElementalBlacksmithStory.UI
         /// </summary>
         public void CancelDraftRunes()
         {
-            for (int i = 0; i < runes.Length; i++)
-            {
-                if (runes[i] != 0)
-                {
-                    uint currentRune = runes[i];
-                    runes[i] = 0;
-                    _runeInventoryPresenter.UnselectRune(currentRune);
-                    _runeEquipView.SetRuneSprite(i, null);
-                }
-            }
+            _runeInventoryPresenter.ClearDraft();
+            SyncRunesFromWeapon();
             selectedSocketIndex = 0;
             _runeEquipView.SelectSocket(0);
         }
 
-        /// <summary>
-        /// 임시 슬롯에 장착된 룬을 무기에 실제 장착 및 인벤토리 반영
-        /// </summary>
         /// <summary>
         /// 임시 슬롯에 장착된 룬을 무기에 실제 장착 및 인벤토리 반영
         /// </summary>
@@ -203,17 +258,17 @@ namespace ElementalBlacksmithStory.UI
                     {
                         PublishDialogue(DialogueType.NotEnoughMoney);
                     }
+                    else if (result == ApplyRuneResult.NoChanges)
+                    {
+                        Hide();
+                    }
                     return;
                 }
                 PublishDialogue(DialogueType.EquipSuccess);
             }
 
-            for (int i = 0; i < runes.Length; i++)
-            {
-                runes[i] = 0;
-            }
-
             _runeInventoryPresenter.ClearDraft();
+            SyncRunesFromWeapon();
             selectedSocketIndex = 0;
             _runeEquipView.SelectSocket(0);
             Hide();

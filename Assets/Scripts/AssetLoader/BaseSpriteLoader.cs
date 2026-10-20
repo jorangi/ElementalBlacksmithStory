@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using R3;
@@ -12,12 +13,13 @@ namespace ElementalBlacksmithStory.Core
 {
     public abstract class BaseSpriteLoader : IAsyncStartable, IDisposable
     {
-        protected abstract string AtlasAddress { get; }
-        private SpriteAtlas _cachedAtlas;
-        private AsyncOperationHandle<SpriteAtlas> _atlasHandler;
+        protected virtual string AtlasAddress => null;
+        protected virtual string[] AtlasAddresses => !string.IsNullOrEmpty(AtlasAddress) ? new[] { AtlasAddress } : Array.Empty<string>();
+        private readonly List<SpriteAtlas> _cachedAtlases = new();
+        private readonly List<AsyncOperationHandle<SpriteAtlas>> _atlasHandlers = new();
         private readonly CompositeDisposable _disposable = new();
         private CancellationTokenSource _cts = new();
-        private UniTaskCompletionSource<SpriteAtlas> _tcs = new();
+        private UniTaskCompletionSource<bool> _tcs = new();
         protected readonly Sprite DefaultSprite;
 
         protected BaseSpriteLoader(Sprite defaultSprite = null)
@@ -33,14 +35,20 @@ namespace ElementalBlacksmithStory.Core
         {
             try
             {
-                _atlasHandler = Addressables.LoadAssetAsync<SpriteAtlas>(AtlasAddress);
-                _cachedAtlas = await _atlasHandler.ToUniTask(cancellationToken: cancellation);
-                _tcs.TrySetResult(_cachedAtlas);
+                var addresses = AtlasAddresses;
+                for (int i = 0; i < addresses.Length; i++)
+                {
+                    var handle = Addressables.LoadAssetAsync<SpriteAtlas>(addresses[i]);
+                    _atlasHandlers.Add(handle);
+                    var atlas = await handle.ToUniTask(cancellationToken: cancellation);
+                    if (atlas != null) _cachedAtlases.Add(atlas);
+                }
+                _tcs.TrySetResult(true);
             }
             catch (Exception e)
             {
                 _tcs.TrySetException(e);
-                Debug.LogError($"[SpriteLoader] {AtlasAddress}가 로드되지 않음: {e}");
+                Debug.LogError($"[SpriteLoader] 아틀라스 로드 실패: {e}");
             }
         }
         /// <summary>
@@ -51,19 +59,27 @@ namespace ElementalBlacksmithStory.Core
         /// <returns></returns>
         public async UniTask<Sprite> GetSprite(uint id, CancellationToken ct = default)
         {
-            if (_cachedAtlas == null) await _tcs.Task.AttachExternalCancellation(ct);
-            if (_cachedAtlas == null) return DefaultSprite;
-            var sprite = _cachedAtlas.GetSprite(id.ToString());
-            if (sprite == null)
+            if (_cachedAtlases.Count == 0) await _tcs.Task.AttachExternalCancellation(ct);
+            if (_cachedAtlases.Count == 0) return DefaultSprite;
+            string idStr = id.ToString();
+            for (int i = 0; i < _cachedAtlases.Count; i++)
             {
-                Debug.LogWarning($"[SpriteLoader] {id}를 찾을 수 없음");
-                return DefaultSprite;
+                var sprite = _cachedAtlases[i].GetSprite(idStr);
+                if (sprite != null) return sprite;
             }
-            return sprite;
+            Debug.LogWarning($"[SpriteLoader] {id}를 찾을 수 없음");
+            return DefaultSprite;
         }
         public void Dispose()
         {
-            if (_atlasHandler.IsValid()) Addressables.Release(_atlasHandler);
+            for (int i = 0; i < _atlasHandlers.Count; i++)
+            {
+                var handle = _atlasHandlers[i];
+                if (handle.IsValid())
+                    Addressables.Release(handle);
+            }
+            _atlasHandlers.Clear();
+            _cachedAtlases.Clear();
             _disposable.Dispose();
             _cts.Cancel();
             _cts.Dispose();

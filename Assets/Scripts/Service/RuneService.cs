@@ -59,24 +59,48 @@ namespace ElementalBlacksmithStory.Core
         public bool CanAfford(ulong cost) => _currentMoney >= cost;
 
         /// <summary>
-        /// 무기와 장착할 룬 목록을 바탕으로 장착 비용을 산정
+        /// 단일 룬에 대한 장착/해제 비용 산정 (룬 가치의 30% + 무기 가치의 5%, 최소 100골드)
+        /// </summary>
+        public ulong CalculateRuneActionCost(SO_RuneData runeData, Weapon weapon)
+        {
+            if (runeData == null) return 0;
+            ulong runeVal = runeData.Value;
+            ulong weaponVal = weapon != null ? weapon.Value : 0;
+            ulong cost = (ulong)(runeVal * 0.3f) + (ulong)(weaponVal * 0.05f);
+            return cost < 100UL ? 100UL : cost;
+        }
+
+        /// <summary>
+        /// 무기의 기존 룬 상태와 변경할 룬 목록을 비교하여 총 비용(신규 장착비 + 제거비)을 산정
         /// </summary>
         public ulong CalculateEquipCost(Weapon weapon, IReadOnlyList<uint> runeIds)
         {
             if (weapon == null || runeIds == null) return 0;
 
             ulong totalCost = 0;
-            for (int i = 0; i < runeIds.Count; i++)
+            int maxSlots = Mathf.Min(runeIds.Count, weapon.RuneSlot);
+            for (int i = 0; i < maxSlots; i++)
             {
-                uint runeId = runeIds[i];
-                if (runeId == 0) continue;
+                uint newRuneId = runeIds[i];
+                Rune existingRune = weapon.GetRune(i);
+                uint existingRuneId = existingRune != null && existingRune.Data != null ? existingRune.Data.Id : 0;
 
-                var runeData = GetRuneData(runeId);
-                if (runeData != null)
+                if (newRuneId == existingRuneId) continue;
+
+                // 룬 제거 비용
+                if (existingRuneId != 0 && existingRune.Data != null)
                 {
-                    ulong runeCost = runeData.Value > 0 ? (ulong)(runeData.Value * 0.2f) : 50UL;
-                    if (runeCost < 50UL) runeCost = 50UL;
-                    totalCost += runeCost;
+                    totalCost += CalculateRuneActionCost(existingRune.Data, weapon);
+                }
+
+                // 룬 장착 비용
+                if (newRuneId != 0)
+                {
+                    var newData = GetRuneData(newRuneId);
+                    if (newData != null)
+                    {
+                        totalCost += CalculateRuneActionCost(newData, weapon);
+                    }
                 }
             }
 
@@ -84,7 +108,7 @@ namespace ElementalBlacksmithStory.Core
         }
 
         /// <summary>
-        /// 임시 슬롯 룬들을 무기에 장착하고 인벤토리 및 골드를 갱신
+        /// 임시 슬롯 룬 변경사항을 무기에 반영하고 인벤토리 및 골드를 갱신
         /// </summary>
         public bool TryApplyRunes(Weapon weapon, IReadOnlyList<uint> runeIds, out ApplyRuneResult result, out ulong spentCost)
         {
@@ -96,6 +120,27 @@ namespace ElementalBlacksmithStory.Core
             }
 
             if (runeIds == null || runeIds.Count == 0)
+            {
+                result = ApplyRuneResult.NoChanges;
+                return false;
+            }
+
+            // 변경 사항이 있는지 확인
+            bool hasChanges = false;
+            int maxSlots = Mathf.Min(runeIds.Count, weapon.RuneSlot);
+            for (int i = 0; i < maxSlots; i++)
+            {
+                uint newRuneId = runeIds[i];
+                Rune existingRune = weapon.GetRune(i);
+                uint existingRuneId = existingRune != null && existingRune.Data != null ? existingRune.Data.Id : 0;
+                if (newRuneId != existingRuneId)
+                {
+                    hasChanges = true;
+                    break;
+                }
+            }
+
+            if (!hasChanges)
             {
                 result = ApplyRuneResult.NoChanges;
                 return false;
@@ -116,13 +161,25 @@ namespace ElementalBlacksmithStory.Core
                 _moneyPublisher.Publish(new ChangeMoneyEvent(out _, _currentMoney));
             }
 
-            int maxSlots = Mathf.Min(runeIds.Count, weapon.RuneSlot);
             for (int i = 0; i < maxSlots; i++)
             {
-                uint runeId = runeIds[i];
-                if (runeId != 0)
+                uint newRuneId = runeIds[i];
+                Rune existingRune = weapon.GetRune(i);
+                uint existingRuneId = existingRune != null && existingRune.Data != null ? existingRune.Data.Id : 0;
+
+                if (newRuneId == existingRuneId) continue;
+
+                if (newRuneId == 0)
                 {
-                    SO_RuneData runeData = GetRuneData(runeId);
+                    weapon.UnequipRune(i, out Rune unequippedRune);
+                    if (unequippedRune != null && unequippedRune.Data != null)
+                    {
+                        _runeInventory?.Add(unequippedRune.Data, 1);
+                    }
+                }
+                else
+                {
+                    SO_RuneData runeData = GetRuneData(newRuneId);
                     if (runeData != null)
                     {
                         Rune rune = new(runeData);

@@ -28,6 +28,7 @@ namespace ElementalBlacksmithStory.Core
         private readonly RecipeKeyHelper _recipeKeyHelper;
         private readonly RecipeUnlockService _recipeUnlockService;
         private readonly WeaponRollbackService _weaponRollbackService;
+        private readonly WeaponTreePathService _pathService;
         private ulong money = 5000;
         List<uint> cachedPinnedWeaponEnhancePath = null;
         uint pinnedRecipeId;
@@ -73,6 +74,7 @@ namespace ElementalBlacksmithStory.Core
                                     RecipeKeyHelper recipeKeyHelper,
                                     RecipeUnlockService recipeUnlockService,
                                     WeaponRollbackService weaponRollbackService,
+                                    WeaponTreePathService pathService,
                                     ISubscriber<SellEvent> sellEventSubscriber,
                                     ISubscriber<ChangeRecipeFlagEvent> changeRecipeFlagSubscriber,
                                     ISubscriber<SubmitMaterialEvent> submitMaterialSubscriber
@@ -85,6 +87,7 @@ namespace ElementalBlacksmithStory.Core
             this._recipeKeyHelper = recipeKeyHelper;
             this._recipeUnlockService = recipeUnlockService;
             this._weaponRollbackService = weaponRollbackService;
+            this._pathService = pathService;
             this.weaponChangePublisher = weaponChangePublisher;
             this.moneyChangePublisher = moneyChangePublisher;
             this._soundPublisher = soundPublisher;
@@ -182,7 +185,7 @@ namespace ElementalBlacksmithStory.Core
                 if (cachedPinnedWeaponEnhancePath == null || cachedWeaponId != _currentWeapon.WeaponId)
                 {
                     cachedWeaponId = _currentWeapon.WeaponId;
-                    var path = WeaponTreePathFinder.FindPath(currentWeaponData.Id, pinnedRecipeId, weaponDatabase);
+                    var path = _pathService.FindPath(currentWeaponData.Id, pinnedRecipeId);
                     if (path != null && path.Count > 1)
                     {
                         path.RemoveAt(0);
@@ -416,7 +419,7 @@ namespace ElementalBlacksmithStory.Core
 
                     // 새로운 레시피 해금
                     _recipeUnlockService.Unlock(_currentRecipe.Id);
-                    Debug.Log($"[EnhancementService] 새로운 레시피{_currentRecipe.recipeName}을(를) 발견했습니다.");
+                    Debug.Log($"[EnhancementService] 새로운 레시피{_currentRecipe.RecipeName}을(를) 발견했습니다.");
                     UpdateNextRecipe();
                     return EnhanceResult.SUCESS;
                 }

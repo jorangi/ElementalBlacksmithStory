@@ -361,6 +361,7 @@ GameObject:
   - component: {fileID: 5978762846375070028}
   - component: {fileID: 9141137372324697596}
   - component: {fileID: 3761522797644908013}
+  - component: {fileID: 7847441627826622420}
   m_Layer: 5
   m_Name: Favorite
   m_TagString: Untagged
@@ -469,6 +470,20 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &7847441627826622420
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3723474125778861861}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f93987b3db5b794f85b60ad1a43dd3c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ElementalBlacksmithStory.UI.UIButtonSound
+  _soundId: 40106
+  _autoBindOnClick: 1
 --- !u!1 &8545553955181595123
 GameObject:
   m_ObjectHideFlags: 0
@@ -619,6 +634,7 @@ GameObject:
   - component: {fileID: 7429582476110211772}
   - component: {fileID: -342670655660335284}
   - component: {fileID: 3560444418868856247}
+  - component: {fileID: 4844188926020043177}
   m_Layer: 5
   m_Name: RuneCard
   m_TagString: Untagged
@@ -751,6 +767,20 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &4844188926020043177
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8712902120437209618}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f93987b3db5b794f85b60ad1a43dd3c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ElementalBlacksmithStory.UI.UIButtonSound
+  _soundId: 40106
+  _autoBindOnClick: 0
 --- !u!1001 &1154355560349815373
 PrefabInstance:
   m_ObjectHideFlags: 0

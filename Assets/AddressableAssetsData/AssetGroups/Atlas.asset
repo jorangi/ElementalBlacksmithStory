@@ -26,12 +26,17 @@ MonoBehaviour:
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 82746efa197d0c94ab328984fbbad2bf
-    m_Address: WeaponAtlas
+    m_Address: SwordsAtlas
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: c8314641869ba8a49bdccb54370dc8ea
     m_Address: MaterialAtlas
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f1bb81ab585655c408542168c3f8d6b0
+    m_Address: BowsAtlas
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

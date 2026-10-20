@@ -518,6 +518,7 @@ GameObject:
   - component: {fileID: 71087660120438782}
   - component: {fileID: 3210858509147553868}
   - component: {fileID: 4157135164912195367}
+  - component: {fileID: 5521236456874455139}
   m_Layer: 5
   m_Name: Button
   m_TagString: Untagged
@@ -627,6 +628,20 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &5521236456874455139
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3932810675124851699}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f93987b3db5b794f85b60ad1a43dd3c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ElementalBlacksmithStory.UI.UIButtonSound
+  _soundId: 40106
+  _autoBindOnClick: 1
 --- !u!1 &5965446901304306262
 GameObject:
   m_ObjectHideFlags: 0

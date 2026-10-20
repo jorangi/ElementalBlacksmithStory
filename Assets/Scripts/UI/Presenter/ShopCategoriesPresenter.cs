@@ -95,7 +95,6 @@ namespace ElementalBlacksmithStory.UI
             _selectedCategoryId = categoryId;
             if (_view != null)
                 _view.SetSelectedVisual(categoryId);
-            _soundPublisher?.Publish(new PlaySoundEvent(40106));
 
             if (categoryId == "all")
             {

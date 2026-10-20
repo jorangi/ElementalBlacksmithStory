@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 33811799444153321}
   - component: {fileID: 7331290350870872377}
   - component: {fileID: 8407628023696677619}
+  - component: {fileID: 7206111469085669743}
   m_Layer: 5
   m_Name: Back
   m_TagString: Untagged
@@ -277,6 +278,20 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &7206111469085669743
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 30030939180248791}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f93987b3db5b794f85b60ad1a43dd3c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ElementalBlacksmithStory.UI.UIButtonSound
+  _soundId: 40106
+  _autoBindOnClick: 1
 --- !u!1 &245183480597366721
 GameObject:
   m_ObjectHideFlags: 0
@@ -364,6 +379,7 @@ GameObject:
   - component: {fileID: 5000693810747349981}
   - component: {fileID: 5277331186498210691}
   - component: {fileID: 1731084951813301689}
+  - component: {fileID: 7183659235797206146}
   m_Layer: 5
   m_Name: Protect Materials
   m_TagString: Untagged
@@ -473,6 +489,20 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &7183659235797206146
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 399190714250109812}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f93987b3db5b794f85b60ad1a43dd3c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ElementalBlacksmithStory.UI.UIButtonSound
+  _soundId: 40106
+  _autoBindOnClick: 1
 --- !u!1 &511976923836975752
 GameObject:
   m_ObjectHideFlags: 0
@@ -736,6 +766,7 @@ GameObject:
   - component: {fileID: 2009674897722161034}
   - component: {fileID: 2560265940172188587}
   - component: {fileID: 4899249385201425737}
+  - component: {fileID: 940884190412161629}
   m_Layer: 5
   m_Name: Forge
   m_TagString: Untagged
@@ -1001,6 +1032,20 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
+--- !u!114 &940884190412161629
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 913122648479963034}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f93987b3db5b794f85b60ad1a43dd3c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ElementalBlacksmithStory.UI.UIButtonSound
+  _soundId: 40106
+  _autoBindOnClick: 1
 --- !u!1 &943618614605250458
 GameObject:
   m_ObjectHideFlags: 0
@@ -1225,6 +1270,7 @@ GameObject:
   - component: {fileID: 299795696161326679}
   - component: {fileID: 8466810719658778203}
   - component: {fileID: 4713655423633535846}
+  - component: {fileID: 8650177764766646627}
   m_Layer: 5
   m_Name: Settings
   m_TagString: Untagged
@@ -1347,6 +1393,20 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
+--- !u!114 &8650177764766646627
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1308638643806251122}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f93987b3db5b794f85b60ad1a43dd3c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ElementalBlacksmithStory.UI.UIButtonSound
+  _soundId: 40106
+  _autoBindOnClick: 1
 --- !u!1 &1388279018489993049
 GameObject:
   m_ObjectHideFlags: 0
@@ -1967,6 +2027,7 @@ GameObject:
   - component: {fileID: 2830350373903496855}
   - component: {fileID: 6426353679383117221}
   - component: {fileID: 1772654286516108260}
+  - component: {fileID: 1940505815077523265}
   m_Layer: 5
   m_Name: Expedition
   m_TagString: Untagged
@@ -2232,6 +2293,20 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
+--- !u!114 &1940505815077523265
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1854478336776457617}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f93987b3db5b794f85b60ad1a43dd3c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ElementalBlacksmithStory.UI.UIButtonSound
+  _soundId: 40106
+  _autoBindOnClick: 1
 --- !u!1 &1855876081493918645
 GameObject:
   m_ObjectHideFlags: 0
@@ -2593,6 +2668,7 @@ GameObject:
   - component: {fileID: 8976088311733897381}
   - component: {fileID: 3585600916412642904}
   - component: {fileID: 3942630829921555914}
+  - component: {fileID: 7540577037123858146}
   m_Layer: 5
   m_Name: Account Link
   m_TagString: Untagged
@@ -2702,6 +2778,20 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &7540577037123858146
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2103238190010531924}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f93987b3db5b794f85b60ad1a43dd3c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ElementalBlacksmithStory.UI.UIButtonSound
+  _soundId: 40106
+  _autoBindOnClick: 1
 --- !u!1 &2116343163094281463
 GameObject:
   m_ObjectHideFlags: 0
@@ -3553,6 +3643,7 @@ GameObject:
   - component: {fileID: 1536581848222221770}
   - component: {fileID: 3221662615208339138}
   - component: {fileID: 6390711307698632666}
+  - component: {fileID: 6251594335820510488}
   m_Layer: 5
   m_Name: Account/Etc
   m_TagString: Untagged
@@ -3818,6 +3909,20 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
+--- !u!114 &6251594335820510488
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2964258577723043538}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f93987b3db5b794f85b60ad1a43dd3c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ElementalBlacksmithStory.UI.UIButtonSound
+  _soundId: 40106
+  _autoBindOnClick: 1
 --- !u!1 &3001191081965354978
 GameObject:
   m_ObjectHideFlags: 0
@@ -4566,6 +4671,7 @@ GameObject:
   - component: {fileID: 8305936257965089705}
   - component: {fileID: 8019631500151513085}
   - component: {fileID: 6623466631692939696}
+  - component: {fileID: 1801338896089035303}
   m_Layer: 5
   m_Name: Selling
   m_TagString: Untagged
@@ -4831,6 +4937,20 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
+--- !u!114 &1801338896089035303
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3321825652804920223}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f93987b3db5b794f85b60ad1a43dd3c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ElementalBlacksmithStory.UI.UIButtonSound
+  _soundId: 40106
+  _autoBindOnClick: 1
 --- !u!1 &3373490343936611049
 GameObject:
   m_ObjectHideFlags: 0
@@ -4889,10 +5009,10 @@ MonoBehaviour:
     m_Bottom: 0
   m_ChildAlignment: 0
   m_Spacing: 0
-  m_ChildForceExpandWidth: 1
-  m_ChildForceExpandHeight: 1
-  m_ChildControlWidth: 0
-  m_ChildControlHeight: 0
+  m_ChildForceExpandWidth: 0
+  m_ChildForceExpandHeight: 0
+  m_ChildControlWidth: 1
+  m_ChildControlHeight: 1
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
@@ -5396,6 +5516,7 @@ GameObject:
   - component: {fileID: 2835228375019437807}
   - component: {fileID: 3043866016903213240}
   - component: {fileID: 600884216436244897}
+  - component: {fileID: 1721984295581324828}
   m_Layer: 5
   m_Name: Dungeon
   m_TagString: Untagged
@@ -5518,6 +5639,20 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &1721984295581324828
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3688410699087621741}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f93987b3db5b794f85b60ad1a43dd3c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ElementalBlacksmithStory.UI.UIButtonSound
+  _soundId: 40106
+  _autoBindOnClick: 1
 --- !u!1 &3694353667363918893
 GameObject:
   m_ObjectHideFlags: 0
@@ -5680,6 +5815,7 @@ GameObject:
   - component: {fileID: 3885002074382314119}
   - component: {fileID: 4584845055756470225}
   - component: {fileID: 430554917799543744}
+  - component: {fileID: 8575335614633280360}
   m_Layer: 5
   m_Name: Screen
   m_TagString: Untagged
@@ -5945,6 +6081,20 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
+--- !u!114 &8575335614633280360
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3858821567424094973}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f93987b3db5b794f85b60ad1a43dd3c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ElementalBlacksmithStory.UI.UIButtonSound
+  _soundId: 40106
+  _autoBindOnClick: 1
 --- !u!1 &3988089225987104937
 GameObject:
   m_ObjectHideFlags: 0
@@ -6384,7 +6534,6 @@ GameObject:
   - component: {fileID: 5718918764460154992}
   - component: {fileID: 798667255557942267}
   - component: {fileID: 1101533824357481364}
-  - component: {fileID: 5589680402809321309}
   - component: {fileID: 4667247003869452663}
   m_Layer: 5
   m_Name: Money
@@ -6407,10 +6556,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 5002448310867461199}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 425.335, y: -32.5}
-  m_SizeDelta: {x: 850.67, y: 65}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &798667255557942267
 CanvasRenderer:
@@ -6467,7 +6616,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 50.5
+  m_fontSize: 72
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -6512,20 +6661,6 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
---- !u!114 &5589680402809321309
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4712063019153171160}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3245ec927659c4140ac4f8d17403cc18, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.ContentSizeFitter
-  m_HorizontalFit: 2
-  m_VerticalFit: 0
 --- !u!114 &4667247003869452663
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6648,6 +6783,7 @@ GameObject:
   - component: {fileID: 4585543166413198147}
   - component: {fileID: 3061566119584131389}
   - component: {fileID: 1248370529304612419}
+  - component: {fileID: 8692442307685747450}
   m_Layer: 5
   m_Name: Panel
   m_TagString: Untagged
@@ -6768,6 +6904,20 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &8692442307685747450
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5099186237008013537}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f93987b3db5b794f85b60ad1a43dd3c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ElementalBlacksmithStory.UI.UIButtonSound
+  _soundId: 40106
+  _autoBindOnClick: 1
 --- !u!1 &5155902768785168577
 GameObject:
   m_ObjectHideFlags: 0
@@ -7016,6 +7166,7 @@ GameObject:
   - component: {fileID: 4010323826922135585}
   - component: {fileID: 7149232147576679127}
   - component: {fileID: 500531304073100742}
+  - component: {fileID: 2093799434761343797}
   m_Layer: 5
   m_Name: Market
   m_TagString: Untagged
@@ -7174,6 +7325,20 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
+--- !u!114 &2093799434761343797
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5469692089457577269}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f93987b3db5b794f85b60ad1a43dd3c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ElementalBlacksmithStory.UI.UIButtonSound
+  _soundId: 40106
+  _autoBindOnClick: 1
 --- !u!1 &5480607492881490505
 GameObject:
   m_ObjectHideFlags: 0
@@ -7458,6 +7623,7 @@ GameObject:
   - component: {fileID: 7096015557669302543}
   - component: {fileID: 6102359233561703316}
   - component: {fileID: 1939323443065231486}
+  - component: {fileID: 7293480022479666272}
   m_Layer: 5
   m_Name: Audio
   m_TagString: Untagged
@@ -7723,6 +7889,20 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
+--- !u!114 &7293480022479666272
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5705309447767182409}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f93987b3db5b794f85b60ad1a43dd3c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ElementalBlacksmithStory.UI.UIButtonSound
+  _soundId: 40106
+  _autoBindOnClick: 1
 --- !u!1 &5887781005340529904
 GameObject:
   m_ObjectHideFlags: 0
@@ -7811,6 +7991,7 @@ GameObject:
   - component: {fileID: 8448313939238553552}
   - component: {fileID: 7747898798367503509}
   - component: {fileID: 3954189103780228609}
+  - component: {fileID: 2532110878741621673}
   m_Layer: 5
   m_Name: No
   m_TagString: Untagged
@@ -7932,6 +8113,20 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &2532110878741621673
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6007779612197118617}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f93987b3db5b794f85b60ad1a43dd3c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ElementalBlacksmithStory.UI.UIButtonSound
+  _soundId: 40106
+  _autoBindOnClick: 1
 --- !u!1 &6265915455679132294
 GameObject:
   m_ObjectHideFlags: 0
@@ -8081,6 +8276,7 @@ GameObject:
   - component: {fileID: 7580284498758184704}
   - component: {fileID: 8066660461859968643}
   - component: {fileID: 410297239635332403}
+  - component: {fileID: 8108852080112710028}
   m_Layer: 5
   m_Name: Enhancement Presentation
   m_TagString: Untagged
@@ -8190,6 +8386,20 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &8108852080112710028
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6295913033630802128}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f93987b3db5b794f85b60ad1a43dd3c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ElementalBlacksmithStory.UI.UIButtonSound
+  _soundId: 40106
+  _autoBindOnClick: 1
 --- !u!1 &6324439253518313756
 GameObject:
   m_ObjectHideFlags: 0
@@ -8278,6 +8488,7 @@ GameObject:
   - component: {fileID: 7053200217499073223}
   - component: {fileID: 8954187121093420919}
   - component: {fileID: 4374276414610977578}
+  - component: {fileID: 8065902788624328134}
   m_Layer: 5
   m_Name: Panel
   m_TagString: Untagged
@@ -8554,6 +8765,20 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &8065902788624328134
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6402264975970459132}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f93987b3db5b794f85b60ad1a43dd3c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ElementalBlacksmithStory.UI.UIButtonSound
+  _soundId: 40106
+  _autoBindOnClick: 1
 --- !u!1 &6470868639828629583
 GameObject:
   m_ObjectHideFlags: 0
@@ -9251,6 +9476,7 @@ GameObject:
   - component: {fileID: 2113796153946978873}
   - component: {fileID: 4756098727216449378}
   - component: {fileID: 4664305922295059162}
+  - component: {fileID: 6144992500453383578}
   m_Layer: 5
   m_Name: Terms of Use
   m_TagString: Untagged
@@ -9360,6 +9586,20 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &6144992500453383578
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6832581436787530920}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f93987b3db5b794f85b60ad1a43dd3c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ElementalBlacksmithStory.UI.UIButtonSound
+  _soundId: 40106
+  _autoBindOnClick: 1
 --- !u!1 &6834510780170567779
 GameObject:
   m_ObjectHideFlags: 0
@@ -9584,6 +9824,7 @@ GameObject:
   - component: {fileID: 8606644142493828426}
   - component: {fileID: 2267868361361113658}
   - component: {fileID: 4381786400800786818}
+  - component: {fileID: 162516152254557682}
   m_Layer: 5
   m_Name: Yes
   m_TagString: Untagged
@@ -9693,6 +9934,20 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &162516152254557682
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7123852794565282457}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f93987b3db5b794f85b60ad1a43dd3c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ElementalBlacksmithStory.UI.UIButtonSound
+  _soundId: 40106
+  _autoBindOnClick: 1
 --- !u!1 &7446317686218933539
 GameObject:
   m_ObjectHideFlags: 0
@@ -9891,6 +10146,7 @@ GameObject:
   - component: {fileID: 8129275416267638693}
   - component: {fileID: 8895274363715369454}
   - component: {fileID: 7179925544579236867}
+  - component: {fileID: 3028730813038323979}
   m_Layer: 5
   m_Name: Tavern
   m_TagString: Untagged
@@ -10049,6 +10305,20 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &3028730813038323979
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7762151935064976440}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f93987b3db5b794f85b60ad1a43dd3c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ElementalBlacksmithStory.UI.UIButtonSound
+  _soundId: 40106
+  _autoBindOnClick: 1
 --- !u!1 &7808736188463271142
 GameObject:
   m_ObjectHideFlags: 0
@@ -10299,6 +10569,7 @@ GameObject:
   - component: {fileID: 380588696781874655}
   - component: {fileID: 7643812616879069435}
   - component: {fileID: 5426658795614486855}
+  - component: {fileID: 6449917128223945432}
   m_Layer: 5
   m_Name: Forge
   m_TagString: Untagged
@@ -10458,6 +10729,20 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &6449917128223945432
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7987049650457105453}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f93987b3db5b794f85b60ad1a43dd3c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ElementalBlacksmithStory.UI.UIButtonSound
+  _soundId: 40106
+  _autoBindOnClick: 1
 --- !u!1 &8236007974163394393
 GameObject:
   m_ObjectHideFlags: 0
@@ -11518,15 +11803,35 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: -35
       objectReference: {fileID: 0}
+    - target: {fileID: 5040228778558875167, guid: 488af8b39b5b88748853c86971a9a1d7, type: 3}
+      propertyPath: _autoBindOnClick
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5118197512903350599, guid: 488af8b39b5b88748853c86971a9a1d7, type: 3}
       propertyPath: m_SizeDelta.y
       value: 179.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 5465260844829603817, guid: 488af8b39b5b88748853c86971a9a1d7, type: 3}
+      propertyPath: _autoBindOnClick
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5517684159257679331, guid: 488af8b39b5b88748853c86971a9a1d7, type: 3}
       propertyPath: m_text
       value: "\uC640! \uC774\uAC70 \uC644\uC804 \uB9C8\uC74C\uC5D0 \uB4E4\uC5B4\uC694!
         \uC8FC\uB294 \uC0AC\uB78C \uC13C\uC2A4\uAC00 \uAF64 \uC88B\uC740\uB370\uC694?
         \uACE0\uB9C8\uC6CC\uC694!"
+      objectReference: {fileID: 0}
+    - target: {fileID: 6954763424351543542, guid: 488af8b39b5b88748853c86971a9a1d7, type: 3}
+      propertyPath: m_ChildControlWidth
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6954763424351543542, guid: 488af8b39b5b88748853c86971a9a1d7, type: 3}
+      propertyPath: m_ChildForceExpandWidth
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6954763424351543542, guid: 488af8b39b5b88748853c86971a9a1d7, type: 3}
+      propertyPath: m_ChildForceExpandHeight
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7270126114329767218, guid: 488af8b39b5b88748853c86971a9a1d7, type: 3}
       propertyPath: m_AnchorMax.y
@@ -11546,7 +11851,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7270126114329767218, guid: 488af8b39b5b88748853c86971a9a1d7, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -32.4
+      value: -32.399994
       objectReference: {fileID: 0}
     - target: {fileID: 7696178664822684868, guid: 488af8b39b5b88748853c86971a9a1d7, type: 3}
       propertyPath: m_AnchorMax.y
@@ -11648,14 +11953,66 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 8581239055224129045, guid: 488af8b39b5b88748853c86971a9a1d7, type: 3}
+      propertyPath: _autoBindOnClick
+      value: 1
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 8361010510413421438, guid: 488af8b39b5b88748853c86971a9a1d7, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 1180730742998821143, guid: 488af8b39b5b88748853c86971a9a1d7, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1805039918759162358}
+    - targetCorrespondingSourceObject: {fileID: 1180730742998821143, guid: 488af8b39b5b88748853c86971a9a1d7, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6366710375305768415}
+    - targetCorrespondingSourceObject: {fileID: 2938622111630297228, guid: 488af8b39b5b88748853c86971a9a1d7, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 512704612913945272}
+    - targetCorrespondingSourceObject: {fileID: 2802058839439808890, guid: 488af8b39b5b88748853c86971a9a1d7, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 531920382428401123}
   m_SourcePrefab: {fileID: 100100000, guid: 488af8b39b5b88748853c86971a9a1d7, type: 3}
+--- !u!1 &1280636838460524396 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2802058839439808890, guid: 488af8b39b5b88748853c86971a9a1d7, type: 3}
+  m_PrefabInstance: {fileID: 3974239480477752854}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &531920382428401123
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1280636838460524396}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f93987b3db5b794f85b60ad1a43dd3c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ElementalBlacksmithStory.UI.UIButtonSound
+  _soundId: 40106
+  _autoBindOnClick: 1
+--- !u!1 &2301129394055321242 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2938622111630297228, guid: 488af8b39b5b88748853c86971a9a1d7, type: 3}
+  m_PrefabInstance: {fileID: 3974239480477752854}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &512704612913945272
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2301129394055321242}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f93987b3db5b794f85b60ad1a43dd3c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ElementalBlacksmithStory.UI.UIButtonSound
+  _soundId: 40106
+  _autoBindOnClick: 1
 --- !u!1 &2829836830158255873 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1180730742998821143, guid: 488af8b39b5b88748853c86971a9a1d7, type: 3}
@@ -11678,6 +12035,20 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!114 &6366710375305768415
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2829836830158255873}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f93987b3db5b794f85b60ad1a43dd3c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ElementalBlacksmithStory.UI.UIButtonSound
+  _soundId: 40106
+  _autoBindOnClick: 1
 --- !u!224 &5023218253097581162 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 8255480348978586748, guid: 488af8b39b5b88748853c86971a9a1d7, type: 3}

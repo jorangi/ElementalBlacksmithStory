@@ -27,6 +27,12 @@ MonoBehaviour:
     m_SerializedLabels:
     - Sounds
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 477853b289923ef4c94a77abc641b110
+    m_Address: 40108
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Sounds
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 78859c9221391cf4bb0673caee952bcd
     m_Address: 40201
     m_ReadOnly: 0

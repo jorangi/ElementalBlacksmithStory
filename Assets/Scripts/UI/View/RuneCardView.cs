@@ -17,6 +17,7 @@ namespace ElementalBlacksmithStory.UI
         [SerializeField] private TextMeshProUGUI _runeEA;
         [SerializeField] private Button _favoriteButton;
         [SerializeField] private Button _cardButton;
+        private UIButtonSound _buttonSound;
 
         public uint RuneId { get; private set; }
         public RuneGrade Grade { get; private set; }
@@ -26,6 +27,10 @@ namespace ElementalBlacksmithStory.UI
         private readonly Subject<Unit> _onLeftClickSubject = new();
         private readonly Subject<Unit> _onRightClickSubject = new();
 
+        private void Awake()
+        {
+            _buttonSound = GetComponent<UIButtonSound>();
+        }
         /// <summary>
         /// 룬 카드 좌클릭 이벤트
         /// </summary>
@@ -122,6 +127,7 @@ namespace ElementalBlacksmithStory.UI
         {
             if (eventData.button == PointerEventData.InputButton.Left)
             {
+                _buttonSound?.PlaySound();
                 _onLeftClickSubject.OnNext(Unit.Default);
             }
             else if (eventData.button == PointerEventData.InputButton.Right)

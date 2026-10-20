@@ -5,7 +5,7 @@ using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;
 
-namespace ElementalBlacksmithStory.Data
+namespace ElementalBlacksmithStory.Editor
 {
     [CustomEditor(typeof(SO_ShopCategory))]
     [CanEditMultipleObjects]

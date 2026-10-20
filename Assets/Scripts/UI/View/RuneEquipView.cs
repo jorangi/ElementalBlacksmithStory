@@ -124,7 +124,7 @@ namespace ElementalBlacksmithStory.UI
             this.weaponImage.sprite = sprite;
             this.weaponName.SetText(weaponName);
             this.weaponName.ForceMeshUpdate();
-            Canvas.ForceUpdateCanvases();
+            LayoutRebuilder.ForceRebuildLayoutImmediate((RectTransform)this.weaponName.transform.parent);
         }
         public async UniTask Show(CancellationToken ct = default)
         {

@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 8571249811626918882}
   - component: {fileID: 8051339697971093308}
   - component: {fileID: 1512234301072453356}
+  - component: {fileID: 8581239055224129045}
   m_Layer: 5
   m_Name: MessageBox
   m_TagString: Untagged
@@ -149,6 +150,20 @@ Canvas:
   m_SortingLayerID: -596406631
   m_SortingOrder: 2
   m_TargetDisplay: 0
+--- !u!114 &8581239055224129045
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1180730742998821143}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f93987b3db5b794f85b60ad1a43dd3c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ElementalBlacksmithStory.UI.UIButtonSound
+  _soundId: 40106
+  _autoBindOnClick: 1
 --- !u!1 &2253631344364880802
 GameObject:
   m_ObjectHideFlags: 0

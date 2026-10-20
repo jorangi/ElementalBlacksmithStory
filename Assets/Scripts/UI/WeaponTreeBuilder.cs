@@ -55,7 +55,6 @@ namespace ElementalBlacksmithStory.UI
         [SerializeField] private Vector2 padding = new Vector2(150f, 150f);
         private WeaponSpriteLoader spriteLoader;
         private Dictionary<uint, WeaponNodeUI> nodes = new();
-        private int currentLeafIndex = 0;
         private float maxPosX = 0f;
         private float maxPosY = 0f;
         private CompositeDisposable _disposables = new();
@@ -180,7 +179,6 @@ namespace ElementalBlacksmithStory.UI
         [ContextMenu("Clear Tree (트리 초기화)")]
         public void ClearTree()
         {
-            currentLeafIndex = 0;
             maxPosX = 0f;
             maxPosY = 0f;
             _disposables.Clear();
@@ -196,9 +194,14 @@ namespace ElementalBlacksmithStory.UI
         /// <returns>생성된 노드 사전</returns>
         public Dictionary<uint, WeaponNodeUI> GenerateTree(SO_WeaponData rootWeapon)
         {
+            if (rootWeapon == null) return nodes;
+
             nodes.Clear();
             ClearTree();
-            BuildNodeRecursive(rootWeapon, 0);
+
+            _leafColumnIndex = 0;
+            LayoutNodeDynamic(rootWeapon, 0);
+            ConnectAllBranches();
 
             if (contentRect != null)
             {
@@ -219,39 +222,55 @@ namespace ElementalBlacksmithStory.UI
             }
             return nodes;
         }
+
+        private int _leafColumnIndex = 0;
+
         /// <summary>
-        /// 무기 노드를 재귀적으로 생성
+        /// 무기 노드를 동적으로 배치
         /// </summary>
-        /// <param name="weapon">현재 무기</param>
-        /// <param name="depth">현재 깊이</param>
-        /// <returns>생성된 노드</returns>
-        private WeaponNodeUI BuildNodeRecursive(SO_WeaponData weapon, int depth)
+        private WeaponNodeUI LayoutNodeDynamic(SO_WeaponData weapon, int depth)
         {
             if (weapon == null) return null;
 
-            List<WeaponNodeUI> childNodes = new();
+            if (nodes.TryGetValue(weapon.Id, out var existingNode))
+            {
+                return existingNode;
+            }
+
+            List<WeaponNodeUI> primaryChildUIs = new();
+
             if (weapon.recipes != null && weapon.recipes.Count > 0)
             {
-                foreach (var recipe in weapon.recipes)
+                for (int i = 0; i < weapon.recipes.Count; i++)
                 {
-                    if (recipe != null && recipe.recipeOutcome.resultWeapon != null)
+                    var recipe = weapon.recipes[i];
+                    if (recipe == null || recipe.recipeOutcome.resultWeapon == null) continue;
+
+                    var childWeapon = recipe.recipeOutcome.resultWeapon;
+
+                    if (IsSameElementOrBase(weapon, childWeapon))
                     {
-                        WeaponNodeUI childUI = BuildNodeRecursive(recipe.recipeOutcome.resultWeapon, depth + 1);
-                        if (childUI != null) childNodes.Add(childUI);
+                        var childUI = LayoutNodeDynamic(childWeapon, depth + 1);
+                        if (childUI != null)
+                        {
+                            primaryChildUIs.Add(childUI);
+                        }
                     }
                 }
             }
+
             float posX;
-            if (childNodes.Count > 0)
+            if (primaryChildUIs.Count > 0)
             {
-                float firstChildX = childNodes[0].RectTransform.anchoredPosition.x;
-                float lastChildX = childNodes[^1].RectTransform.anchoredPosition.x;
-                posX = (firstChildX + lastChildX) * 0.5f;
+                // 부모 노드는 자식들의 첫 번째 컬럼과 마지막 컬럼의 중앙 배치
+                float firstX = primaryChildUIs[0].RectTransform.anchoredPosition.x;
+                float lastX = primaryChildUIs[^1].RectTransform.anchoredPosition.x;
+                posX = (firstX + lastX) * 0.5f;
             }
             else
             {
-                posX = padding.x + (currentLeafIndex * nodeSpacingX);
-                currentLeafIndex++;
+                posX = padding.x + (_leafColumnIndex * nodeSpacingX);
+                _leafColumnIndex++;
             }
 
             float posY = padding.y + (depth * nodeSpacingY);
@@ -260,33 +279,72 @@ namespace ElementalBlacksmithStory.UI
             maxPosY = Mathf.Max(maxPosY, posY);
 
             WeaponNodeUI currentNode = Instantiate(nodePrefab, nodeContainer);
-
             currentNode.Setup(weapon, spriteLoader).Forget();
-
             currentNode.name = $"Node_{weapon.weaponName}";
             currentNode.RectTransform.anchoredPosition = new Vector2(posX, posY);
 
             nodes[weapon.Id] = currentNode;
 
-            // 무기 노드 클릭 시 레시피 변경 이벤트 발생함
             currentNode.OnClickAsObservable().
-            ThrottleFirst(TimeSpan.FromMilliseconds(100)).
-            Subscribe(e =>
-            {
-                _onChangeRecipeFlagEventSubject.OnNext(new ChangeRecipeFlagEvent { _recipeId = weapon.Id });
-            }).AddTo(_disposables);
-
-            // 자식 노드 연결
-            foreach (var childUI in childNodes)
-            {
-                WeaponTreeBranchView branch = Instantiate(branchPrefab, branchContainer);
-                branch.name = $"Branch_{weapon.weaponName}->{childUI.WeaponData.weaponName}";
-                branch.SetNodes(currentNode.RectTransform, childUI.RectTransform);
-                branch.SetHighlight(false);
-                _branches[(weapon.Id, childUI.WeaponData.Id)] = branch;
-            }
+                ThrottleFirst(TimeSpan.FromMilliseconds(100)).
+                Subscribe(e =>
+                {
+                    _onChangeRecipeFlagEventSubject.OnNext(new ChangeRecipeFlagEvent { _recipeId = weapon.Id });
+                }).AddTo(_disposables);
 
             return currentNode;
+        }
+
+        /// <summary>
+        /// 무기 간 속성 일치 여부 판별 - 일렬 종방향 배치를 위함
+        /// </summary>
+        private static bool IsSameElementOrBase(SO_WeaponData parent, SO_WeaponData child)
+        {
+            if (parent == null || child == null) return false;
+
+            if (parent.elementTypes == null || parent.elementTypes.Count == 0) return true;
+            if (child.elementTypes == null || child.elementTypes.Count == 0) return true;
+
+            for (int i = 0; i < parent.elementTypes.Count; i++)
+            {
+                for (int j = 0; j < child.elementTypes.Count; j++)
+                {
+                    if (parent.elementTypes[i] == child.elementTypes[j]) return true;
+                }
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// 모든 노드 간의 브랜치(선) 연결
+        /// </summary>
+        private void ConnectAllBranches()
+        {
+            foreach (var kvp in nodes)
+            {
+                var parentWeapon = kvp.Value.WeaponData;
+                if (parentWeapon == null || parentWeapon.recipes == null) continue;
+
+                for (int r = 0; r < parentWeapon.recipes.Count; r++)
+                {
+                    var recipe = parentWeapon.recipes[r];
+                    if (recipe == null || recipe.recipeOutcome.resultWeapon == null) continue;
+
+                    var childWeapon = recipe.recipeOutcome.resultWeapon;
+                    if (nodes.TryGetValue(childWeapon.Id, out var childUI))
+                    {
+                        var key = (parentWeapon.Id, childWeapon.Id);
+                        if (!_branches.ContainsKey(key))
+                        {
+                            WeaponTreeBranchView branch = Instantiate(branchPrefab, branchContainer);
+                            branch.name = $"Branch_{parentWeapon.weaponName}->{childWeapon.weaponName}";
+                            branch.SetNodes(kvp.Value.RectTransform, childUI.RectTransform);
+                            branch.SetHighlight(false);
+                            _branches[key] = branch;
+                        }
+                    }
+                }
+            }
         }
         /// <summary>
         /// 스크롤 위치 초기화

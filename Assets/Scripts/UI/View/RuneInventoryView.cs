@@ -83,6 +83,11 @@ namespace ElementalBlacksmithStory.UI
             _runeCards.Add(newCard);
         }
         /// <summary>
+        /// 룬 카드가 존재하는지 확인
+        /// </summary>
+        public bool HasCard(uint runeId) => _runeCardDic.ContainsKey(runeId);
+
+        /// <summary>
         /// 룬 카드의 수량을 설정
         /// </summary>
         /// <param name="runeId"></param>

@@ -9,6 +9,7 @@
 /[Rr]ecordings/
 .utmp/
 /[Aa]ssets/_Recovery/
+Generated Image
 
 # Asset meta files for empty folders
 # *.meta
@@ -31,6 +32,7 @@
 *.mdb
 *.opendb
 *.VC.db
+/.agents/
 
 # OS generated files
 .DS_Store

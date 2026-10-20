@@ -94,58 +94,128 @@ namespace ElementalBlacksmithStory.UI
 
             _view.Sort();
         }
+        private readonly List<uint> _affectedRuneIds = new(8);
+
         /// <summary>
-        /// 임시 슬롯에 룬을 배정
+        /// 현재 임시 편집 슬롯과 무기 원래 슬롯을 비교하여 인벤토리 UI 가상 수량을 동기화
         /// </summary>
-        /// <param name="runeId"></param>
-        public void SelectRune(uint runeId)
+        public void SyncDraftRunes(IReadOnlyList<uint> currentRunes, IReadOnlyList<uint> originalRunes)
         {
-            if (runeId == 0) return;
+            _affectedRuneIds.Clear();
 
-            if (_tempWithinRuneDic.TryGetValue(runeId, out var count))
+            foreach (var kvp in _tempWithinRuneDic)
             {
-                _tempWithinRuneDic[runeId] = count + 1;
-            }
-            else
-            {
-                _tempWithinRuneDic.Add(runeId, 1);
-            }
-
-            int runeEA = _runeInventory.GetCount(runeId);
-            int remaining = Mathf.Max(0, runeEA - _tempWithinRuneDic[runeId]);
-            _view.SetRuneAmount(runeId, (uint)remaining);
-        }
-        /// <summary>
-        /// 임시 슬롯에서 룬을 해제
-        /// </summary>
-        /// <param name="runeId"></param>
-        public void UnselectRune(uint runeId)
-        {
-            if (runeId == 0) return;
-
-            if (_tempWithinRuneDic.TryGetValue(runeId, out var count))
-            {
-                if (count <= 1)
+                if (!_affectedRuneIds.Contains(kvp.Key))
                 {
-                    _tempWithinRuneDic.Remove(runeId);
-                }
-                else
-                {
-                    _tempWithinRuneDic[runeId] = count - 1;
+                    _affectedRuneIds.Add(kvp.Key);
                 }
             }
 
-            int runeEA = _runeInventory.GetCount(runeId);
-            int used = _tempWithinRuneDic.TryGetValue(runeId, out var currentUsed) ? currentUsed : 0;
-            int remaining = Mathf.Max(0, runeEA - used);
-            _view.SetRuneAmount(runeId, (uint)remaining);
+            _tempWithinRuneDic.Clear();
+
+            if (currentRunes != null)
+            {
+                for (int i = 0; i < currentRunes.Count; i++)
+                {
+                    uint id = currentRunes[i];
+                    if (id == 0) continue;
+
+                    if (_tempWithinRuneDic.TryGetValue(id, out var count))
+                    {
+                        _tempWithinRuneDic[id] = count + 1;
+                    }
+                    else
+                    {
+                        _tempWithinRuneDic[id] = 1;
+                    }
+
+                    if (!_affectedRuneIds.Contains(id))
+                    {
+                        _affectedRuneIds.Add(id);
+                    }
+                }
+            }
+
+            if (originalRunes != null)
+            {
+                for (int i = 0; i < originalRunes.Count; i++)
+                {
+                    uint id = originalRunes[i];
+                    if (id == 0) continue;
+
+                    if (_tempWithinRuneDic.TryGetValue(id, out var count))
+                    {
+                        _tempWithinRuneDic[id] = count - 1;
+                    }
+                    else
+                    {
+                        _tempWithinRuneDic[id] = -1;
+                    }
+
+                    if (!_affectedRuneIds.Contains(id))
+                    {
+                        _affectedRuneIds.Add(id);
+                    }
+                }
+            }
+
+            for (int i = 0; i < _affectedRuneIds.Count; i++)
+            {
+                uint runeId = _affectedRuneIds[i];
+                int used = _tempWithinRuneDic.TryGetValue(runeId, out var count) ? count : 0;
+                int baseCount = _runeInventory.GetCount(runeId);
+                int displayCount = Mathf.Max(0, baseCount - used);
+                UpdateRuneDisplayAmountAsync(runeId, (uint)displayCount).Forget();
+            }
         }
+
         /// <summary>
-        /// 장착 완료 또는 초기화 시 임시 슬롯 딕셔너리 비우기
+        /// 특정 룬의 UI 표시 수량을 갱신하며, 필요 시 카드를 생성
+        /// </summary>
+        public async UniTask UpdateRuneDisplayAmountAsync(uint runeId, uint amount)
+        {
+            if (runeId == 0) return;
+
+            if (_view.HasCard(runeId))
+            {
+                _view.SetRuneAmount(runeId, amount);
+                _view.Sort();
+            }
+            else if (amount > 0 && _runeDatabase != null)
+            {
+                SO_RuneData runeData = _runeDatabase.Get(runeId);
+                if (runeData != null)
+                {
+                    Sprite sprite = _runeSpriteLoader != null
+                        ? await _runeSpriteLoader.GetSprite(runeId, _cts.Token)
+                        : null;
+                    bool isFavorite = _runeInventory.IsFavorite(runeId);
+                    _view.Create(runeData, sprite, amount, isFavorite);
+                    _view.Sort();
+                }
+            }
+        }
+
+        /// <summary>
+        /// 장착 완료 또는 초기화 시 임시 슬롯 딕셔너리 비우고 인벤토리 원래 수량으로 복원
         /// </summary>
         public void ClearDraft()
         {
+            if (_tempWithinRuneDic.Count == 0) return;
+
+            _affectedRuneIds.Clear();
+            foreach (var kvp in _tempWithinRuneDic)
+            {
+                _affectedRuneIds.Add(kvp.Key);
+            }
             _tempWithinRuneDic.Clear();
+
+            for (int i = 0; i < _affectedRuneIds.Count; i++)
+            {
+                uint runeId = _affectedRuneIds[i];
+                int baseCount = _runeInventory.GetCount(runeId);
+                UpdateRuneDisplayAmountAsync(runeId, (uint)baseCount).Forget();
+            }
         }
         private void OnToggleFavorite(uint runeId)
         {

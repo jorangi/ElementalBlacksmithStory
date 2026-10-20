@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2ebc671e09e4f09479d24550860a548e, type: 3}
+  m_Name: 20602
+  m_EditorClassIdentifier: Assembly-CSharp::ElementalBlacksmithStory.Data.SO_CraftRecipe
+  recipeMaterials:
+  - material: {fileID: 11400000, guid: 3f48079f0d0f419aa1d101559eab1920, type: 2}
+    count: 2
+  - material: {fileID: 11400000, guid: 7dce68b723654745aaa7484c5a5fd139, type: 2}
+    count: 1
+  - material: {fileID: 11400000, guid: 68e9455b69134ac5ae08a62360b9e31e, type: 2}
+    count: 1
+  recipeOutcome:
+    chance: 0.95
+    resultWeapon: {fileID: 11400000, guid: de4058ae670d6ff4187995ed08d3b8cc, type: 2}
+    defaultFailWeapon: {fileID: 11400000, guid: 54e0433cee6a8d148be4f0add7bc0bbd, type: 2}
