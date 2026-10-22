@@ -72,7 +72,7 @@ namespace ElementalBlacksmithStory.UI
             _runeSynthesisView.OnSynthesizeButtonAsObservable()
                 .Subscribe(_ =>
                 {
-                    SynthesizeRunes();
+                    SynthesizeRunes().Forget();
                     soundPublisher.Publish(new PlaySoundEvent(40108));
                 })
                 .AddTo(_disposables);
