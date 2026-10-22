@@ -331,18 +331,18 @@ namespace ElementalBlacksmithStory.UI
                 uint weaponId = kvp.Key;
                 WeaponNodeUI node = kvp.Value;
                 //테스트용 해금
-                if (node.WeaponData != null && node.WeaponData.recipes != null)
-                {
-                    foreach (var recipe in node.WeaponData.recipes)
-                    {
-                        if (recipe != null)
-                        {
-                            _recipeUnlockService.Unlock(recipe.Id);
-                        }
-                    }
-                }
-                node.SetNormalNode();
-                continue;
+                // if (node.WeaponData != null && node.WeaponData.recipes != null)
+                // {
+                //     foreach (var recipe in node.WeaponData.recipes)
+                //     {
+                //         if (recipe != null)
+                //         {
+                //             _recipeUnlockService.Unlock(recipe.Id);
+                //         }
+                //     }
+                // }
+                // node.SetNormalNode();
+                // continue;
                 if (IsNodeFullyUnlocked(weaponId))
                 {
                     node.SetNormalNode();

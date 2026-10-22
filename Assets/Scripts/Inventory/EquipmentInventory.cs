@@ -2,8 +2,11 @@ using System;
 using System.Collections.Generic;
 using ElementalBlacksmithStory.Core;
 using ElementalBlacksmithStory.Data;
+using ElementalBlacksmithStory.Events;
+using MessagePipe;
 using R3;
 using UnityEngine;
+using VContainer;
 using VContainer.Unity;
 
 namespace ElementalBlacksmithStory.Inventory
@@ -11,12 +14,46 @@ namespace ElementalBlacksmithStory.Inventory
     public class EquipmentInventory : IInventory, IStartable, IDisposable
     {
         private readonly CompositeDisposable _disposables = new();
+        private readonly SO_WeaponDatabase _weaponDatabase;
         private List<Weapon> _inventory = new();
         private List<Weapon> _activeInventory = new();
         private Subject<Weapon> _onAddWeapon = new();
         private Subject<uint> _onRemoveWeapon = new();
         public Observable<Weapon> OnAddWeapon => _onAddWeapon;
         public Observable<uint> OnRemoveWeapon => _onRemoveWeapon;
+
+        [Inject]
+        public EquipmentInventory(
+            ISubscriber<AcquireItemEvent> acquireSubscriber,
+            SO_WeaponDatabase weaponDatabase)
+        {
+            _weaponDatabase = weaponDatabase;
+
+            acquireSubscriber.Subscribe(e =>
+            {
+                // 무기 카테고리가 아니면 무시
+                if (ItemIdHelper.GetCategory(e.ItemId) != ItemCategory.Weapon)
+                {
+                    return;
+                }
+
+                Weapon weapon = e.Weapon;
+                if (weapon == null && _weaponDatabase != null)
+                {
+                    var data = _weaponDatabase.Get(e.ItemId);
+                    if (data != null)
+                    {
+                        weapon = new Weapon(data);
+                    }
+                }
+
+                if (weapon != null)
+                {
+                    Add(weapon);
+                    Debug.Log($"[EquipmentInventory] 무기 획득 처리 완료: [{weapon.WeaponId}]{weapon.Data?.weaponName} (Sender: {e.Sender ?? "Unknown"}, Target: {e.Target ?? "Player"}, Reason: {e.Reason})");
+                }
+            }).AddTo(_disposables);
+        }
         /// <summary>
         /// 장비 인벤토리에 아이템 추가(일단 현재는 Weapon만 지원)
         /// </summary>
@@ -99,7 +136,7 @@ namespace ElementalBlacksmithStory.Inventory
             int count = 0;
             foreach (var i in _inventory)
             {
-                if (i.WeaponId == weaponId) count++;
+                if (i != null && i.WeaponId == weaponId) count++;
             }
             return count;
         }
@@ -142,7 +179,7 @@ namespace ElementalBlacksmithStory.Inventory
         public void TrimInventory()
         {
             int n = 0;
-            for (int i = _inventory.Count - 1; i > 0; i++)
+            for (int i = _inventory.Count - 1; i >= 0; i--)
             {
                 if (_inventory[i] == null)
                 {

@@ -27,7 +27,7 @@ namespace ElementalBlacksmithStory.UI
         private readonly IItemShopFactory _itemShopFactory;
         private readonly ShopCartPresenter _shopCartPresenter;
         private readonly ShopService _shopService;
-        private readonly Dictionary<uint, ShopItemView> _displayItems = new();
+        private readonly Dictionary<uint, ShopItemViewBase> _displayItems = new();
         private readonly Dictionary<uint, IDisposable> _itemDisposables = new();
         private readonly CompositeDisposable _disposables = new();
 
@@ -355,13 +355,19 @@ namespace ElementalBlacksmithStory.UI
                     return;
             }
 
-            ShopItemView itemView = _view.CreateItem(item.Id, item.Name, item.Value, icon, isUniqueItem);
+            ShopItemViewBase itemView = _view.CreateItem(item.Id, item.Name, item.Value, icon, isUniqueItem);
             if (itemView == null) return;
+
+            if (item is Weapon weapon && itemView is EquipmentShopItemView eqView)
+            {
+                await SetupWeaponRuneSlotsAsync(weapon, eqView);
+            }
 
             ulong availableMoney = _shopCartPresenter != null
                 ? _shopCartPresenter.ExpectedRemainingMoney
                 : (_shopService != null ? _shopService.CurrentMoney : 0);
-            bool canAfford = _isSellMode || (availableMoney >= item.Value);
+            bool inCartAlready = isUniqueItem && _shopCartPresenter != null && _shopCartPresenter.ContainsCartItem(item.Id);
+            bool canAfford = _isSellMode || (!inCartAlready && availableMoney >= item.Value);
             itemView.SetInteractable(canAfford);
 
             if (_itemDisposables.TryGetValue(item.Id, out var prevDisp))
@@ -381,7 +387,23 @@ namespace ElementalBlacksmithStory.UI
                     {
                         return;
                     }
-                    _shopCartPresenter.OpenAmountModal(item).Forget();
+
+                    if (isUniqueItem || item is Weapon || itemView is EquipmentShopItemView)
+                    {
+                        // 장비(무기) 아이템은 수량 선택 모달창 없이 1개를 카트에 즉시 추가
+                        if (_shopCartPresenter != null)
+                        {
+                            if (!_isSellMode && _shopCartPresenter.ContainsCartItem(item.Id))
+                            {
+                                return;
+                            }
+                            _shopCartPresenter.AddItem(item, 1).Forget();
+                        }
+                    }
+                    else
+                    {
+                        _shopCartPresenter.OpenAmountModal(item).Forget();
+                    }
                 });
             _itemDisposables[item.Id] = clickSub;
 
@@ -436,9 +458,35 @@ namespace ElementalBlacksmithStory.UI
             {
                 if (kvp.Value != null)
                 {
-                    kvp.Value.SetInteractable(availableMoney >= kvp.Value.Price);
+                    bool inCartAlready = kvp.Value.IsUniqueItem && _shopCartPresenter != null && _shopCartPresenter.ContainsCartItem(kvp.Key);
+                    kvp.Value.SetInteractable(!inCartAlready && availableMoney >= kvp.Value.Price);
                 }
             }
+        }
+
+        private async UniTask SetupWeaponRuneSlotsAsync(Weapon weapon, EquipmentShopItemView eqView, CancellationToken ct = default)
+        {
+            if (weapon == null || eqView == null) return;
+
+            int slotCount = weapon.RuneSlot;
+            Sprite r0 = null;
+            Sprite r1 = null;
+            Sprite r2 = null;
+
+            if (slotCount > 0 && weapon.Runes.Count > 0 && weapon.Runes[0] != null)
+            {
+                r0 = await _runeSpriteLoader.GetSprite(weapon.Runes[0].Id);
+            }
+            if (slotCount > 1 && weapon.Runes.Count > 1 && weapon.Runes[1] != null)
+            {
+                r1 = await _runeSpriteLoader.GetSprite(weapon.Runes[1].Id);
+            }
+            if (slotCount > 2 && weapon.Runes.Count > 2 && weapon.Runes[2] != null)
+            {
+                r2 = await _runeSpriteLoader.GetSprite(weapon.Runes[2].Id);
+            }
+
+            eqView.SetRuneSlots(slotCount, r0, r1, r2);
         }
 
         public void ClearItems()

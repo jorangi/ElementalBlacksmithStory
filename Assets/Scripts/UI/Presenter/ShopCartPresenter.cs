@@ -40,6 +40,7 @@ namespace ElementalBlacksmithStory.UI
         private readonly Subject<Unit> _onCartChanged = new();
 
         public Observable<Unit> OnCartChanged => _onCartChanged;
+        public bool ContainsCartItem(uint itemId) => _cartItems.ContainsKey(itemId);
 
         public ulong ExpectedRemainingMoney
         {

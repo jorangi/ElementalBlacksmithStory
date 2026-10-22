@@ -29,6 +29,7 @@ namespace ElementalBlacksmithStory.Core
             builder.RegisterComponentInHierarchy<UIBackPanelView>();
             builder.RegisterComponentInHierarchy<RuneInventoryView>();
             builder.RegisterComponentInHierarchy<RuneEquipView>();
+            builder.RegisterComponentInHierarchy<RuneSynthesisView>();
 
             // Presenter 등록
             builder.RegisterEntryPoint<MoneyPresenter>();
@@ -50,6 +51,7 @@ namespace ElementalBlacksmithStory.Core
             builder.RegisterEntryPoint<UIBackPanelPresenter>().AsSelf();
             builder.RegisterEntryPoint<RuneInventoryPresenter>().AsSelf();
             builder.RegisterEntryPoint<RuneEquipPresenter>().AsSelf();
+            builder.RegisterEntryPoint<RuneSynthesisPresenter>().AsSelf();
         }
     }
 }

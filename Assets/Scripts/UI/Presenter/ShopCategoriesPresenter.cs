@@ -19,6 +19,7 @@ namespace ElementalBlacksmithStory.UI
         private readonly ShopItemGridPresenter _gridPresenter;
         private readonly IPublisher<PlaySoundEvent> _soundPublisher;
         private readonly RuneEquipPresenter _runeEquipPresenter;
+        private readonly RuneSynthesisPresenter _runeSynthesisPresenter;
         private readonly List<SO_ShopCategory> _categories = new();
         private readonly CompositeDisposable _disposables = new();
         private readonly CompositeDisposable _buttonDisposables = new();
@@ -30,12 +31,14 @@ namespace ElementalBlacksmithStory.UI
             ShopCategoriesView view,
             ShopItemGridPresenter gridPresenter,
             RuneEquipPresenter runeEquipPresenter,
+            RuneSynthesisPresenter runeSynthesisPresenter,
             IPublisher<PlaySoundEvent> soundPublisher
             )
         {
             _view = view;
             _gridPresenter = gridPresenter;
             _runeEquipPresenter = runeEquipPresenter;
+            _runeSynthesisPresenter = runeSynthesisPresenter;
             _soundPublisher = soundPublisher;
         }
 
@@ -126,6 +129,7 @@ namespace ElementalBlacksmithStory.UI
             else if (categoryId == "RuneSynthesis")
             {
                 //룬 합성 UI 표시
+                _runeSynthesisPresenter.Show();
                 SelectCategory(_cachedSelectedCategory);
             }
             else

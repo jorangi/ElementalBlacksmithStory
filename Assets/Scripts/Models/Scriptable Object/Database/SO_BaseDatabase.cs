@@ -7,8 +7,8 @@ namespace ElementalBlacksmithStory.Data
     public abstract class SO_BaseDatabase<T> : ScriptableObject, IDatabase where T : ScriptableObject, IIdentifiable
     {
         [SerializeField] protected List<T> _itemList = new();
-        private Dictionary<uint, T> _itemDict = new();
-        public void Init()
+        protected Dictionary<uint, T> _itemDict = new();
+        public virtual void Init()
         {
             _itemDict = new();
             foreach (var i in _itemList)

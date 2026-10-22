@@ -27,6 +27,7 @@ namespace ElementalBlacksmithStory.Core
             builder.RegisterMessageBroker<SellEvent>(options);
             builder.RegisterMessageBroker<StartDialogueEvent>(options);
             builder.RegisterMessageBroker<StartShopDialogueEvent>(options);
+            builder.RegisterMessageBroker<AcquireItemEvent>(options);
 
             // VFX / Particle 이벤트
             builder.RegisterMessageBroker<CoinParticleEvent>(options);

@@ -19,6 +19,14 @@ namespace ElementalBlacksmithStory.Core
         NoChanges
     }
 
+    public enum SynthesizeRuneResult
+    {
+        Success,
+        NotEnoughMaterials,
+        MythicalNotAllowed,
+        NotEnoughMoney
+    }
+
     /// <summary>
     /// 룬 장착, 비용 계산, (향후) 합성 등 룬 관련 도메인 비즈니스 로직을 전담하는 서비스
     /// </summary>
@@ -106,7 +114,28 @@ namespace ElementalBlacksmithStory.Core
 
             return totalCost;
         }
+        /// <summary>
+        /// 룬 3개의 합성 비용 산정 (합성 불가 조건 시 0 반환)
+        /// </summary>
+        public ulong CalculateSynthesizeCost(IReadOnlyList<uint> runeIds)
+        {
+            if (runeIds == null || runeIds.Count != 3) return 0;
 
+            ulong totalCost = 0;
+            for (int i = 0; i < 3; i++)
+            {
+                if (runeIds[i] == 0) return 0;
+
+                var runeData = _runeDatabase.Get(runeIds[i]);
+                if (runeData == null || runeData.grade == RuneGrade.Mythical)
+                {
+                    // Mythical 등급 룬은 합성 불가
+                    return 0;
+                }
+                totalCost += (ulong)runeData.grade;
+            }
+            return totalCost;
+        }
         /// <summary>
         /// 임시 슬롯 룬 변경사항을 무기에 반영하고 인벤토리 및 골드를 갱신
         /// </summary>
@@ -198,7 +227,94 @@ namespace ElementalBlacksmithStory.Core
             result = ApplyRuneResult.Success;
             return true;
         }
+        public SynthesizeRuneResult TrySynthesizeRunes(IReadOnlyList<uint> runeIds, out SO_RuneData result, out ulong spentCost)
+        {
+            spentCost = 0;
+            result = null;
 
+            if (runeIds == null || runeIds.Count != 3)
+            {
+                return SynthesizeRuneResult.NotEnoughMaterials;
+            }
+
+            for (int i = 0; i < 3; i++)
+            {
+                if (runeIds[i] == 0)
+                {
+                    return SynthesizeRuneResult.NotEnoughMaterials;
+                }
+
+                var runeData = _runeDatabase.Get(runeIds[i]);
+                if (runeData == null)
+                {
+                    return SynthesizeRuneResult.NotEnoughMaterials;
+                }
+
+                if (runeData.grade == RuneGrade.Mythical)
+                {
+                    Debug.LogError("Mythical 등급의 룬은 합성 재료로 사용할 수 없습니다.");
+                    return SynthesizeRuneResult.MythicalNotAllowed;
+                }
+            }
+
+            ulong cost = CalculateSynthesizeCost(runeIds);
+            spentCost = cost;
+
+            if (cost > 0 && !CanAfford(cost))
+            {
+                Debug.LogWarning($"{cost - _currentMoney}골드가 부족합니다.");
+                return SynthesizeRuneResult.NotEnoughMoney;
+            }
+
+            if (cost > 0)
+            {
+                _currentMoney -= cost;
+                _moneyPublisher.Publish(new ChangeMoneyEvent(out _, _currentMoney));
+            }
+
+            List<SO_RuneData> runeTable = new();
+            ulong costAverage = cost / 3;
+            (RuneGrade, RuneGrade) gradeRange;
+            if (costAverage < (ulong)RuneGrade.Uncommon) gradeRange = (RuneGrade.Common, RuneGrade.Uncommon);
+            else if (costAverage < (ulong)RuneGrade.Rare) gradeRange = (RuneGrade.Uncommon, RuneGrade.Rare);
+            else if (costAverage < (ulong)RuneGrade.Epic) gradeRange = (RuneGrade.Rare, RuneGrade.Epic);
+            else if (costAverage < (ulong)RuneGrade.Legendary) gradeRange = (RuneGrade.Epic, RuneGrade.Legendary);
+            else gradeRange = (RuneGrade.Legendary, RuneGrade.Mythical);
+
+            // 기본 상위 보장 30% + 금액 기반 70% (Legendary 3개는 Mythical 고정 30% 확률 적용)
+            float upperPercent = (gradeRange.Item2 == RuneGrade.Mythical)
+                ? 0.3f
+                : Mathf.Clamp01(0.3f + 0.7f * (costAverage - (ulong)gradeRange.Item1) / ((ulong)gradeRange.Item2 - (ulong)gradeRange.Item1));
+
+            if (UnityEngine.Random.Range(0f, 1f) < upperPercent)
+            {
+                // 상위 등급
+                runeTable.AddRange(_runeDatabase.GetRunesByGrade(gradeRange.Item2));
+            }
+            else
+            {
+                // 하위 등급
+                runeTable.AddRange(_runeDatabase.GetRunesByGrade(gradeRange.Item1));
+            }
+
+            SO_RuneData randomRune = runeTable[UnityEngine.Random.Range(0, runeTable.Count)];
+
+            // 합성 재료 룬 3개 소모
+            for (int i = 0; i < 3; i++)
+            {
+                var mat = _runeDatabase.Get(runeIds[i]);
+                if (mat != null)
+                {
+                    _runeInventory?.Get(mat, 1);
+                }
+            }
+
+            // 합성 결과 룬 인벤토리에 추가
+            _runeInventory?.Add(randomRune, 1);
+
+            result = randomRune;
+            return SynthesizeRuneResult.Success;
+        }
         public void Dispose()
         {
             _disposables.Dispose();

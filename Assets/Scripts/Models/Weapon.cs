@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using ElementalBlacksmithStory.Data;
+using ElementalBlacksmithStory.Events;
 using ElementalBlacksmithStory.Inventory;
 using R3;
 using UnityEngine;
@@ -44,21 +45,24 @@ namespace ElementalBlacksmithStory.Core
 
         public void OnPurchased(IInventoryContext context, uint amount)
         {
-            context.EquipmentInventory.Add(this);
+            var publisher = context.AcquireItemPublisher;
+            publisher.Publish(new AcquireItemEvent(this, sender: "Shop", reason: "Shop_Purchase"));
             for (int i = 1; i < amount; i++)
             {
-                context.EquipmentInventory.Add(new Weapon(_weaponData));
+                publisher.Publish(new AcquireItemEvent(new Weapon(_weaponData), sender: "Shop", reason: "Shop_Purchase"));
             }
         }
 
         public uint GetOwnedCount(IInventoryContext context)
         {
+            if (context == null || context.EquipmentInventory == null) return 0;
             int count = context.EquipmentInventory.GetCountByWeaponId(WeaponId);
             return count > 0 ? (uint)count : 0;
         }
 
         public void OnSold(IInventoryContext context, uint amount)
         {
+            if (context == null || context.EquipmentInventory == null) return;
             context.EquipmentInventory.RemoveByWeaponId(WeaponId, (int)amount);
         }
         private int _runeSlot = 2;

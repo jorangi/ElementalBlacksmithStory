@@ -1,3 +1,4 @@
+using ElementalBlacksmithStory.Events;
 using ElementalBlacksmithStory.Inventory;
 
 namespace ElementalBlacksmithStory.Data
@@ -24,7 +25,7 @@ namespace ElementalBlacksmithStory.Data
         {
             if (_materialData != null)
             {
-                context.MaterialInventory.Add(_materialData, amount);
+                context.AcquireItemPublisher.Publish(new AcquireItemEvent(_materialData.Id, amount, sender: "Shop", reason: "Shop_Purchase"));
             }
         }
 

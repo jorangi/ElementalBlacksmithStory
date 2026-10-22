@@ -1,6 +1,9 @@
 using System;
 using System.Collections.Generic;
+using ElementalBlacksmithStory.Core;
 using ElementalBlacksmithStory.Data;
+using ElementalBlacksmithStory.Events;
+using MessagePipe;
 using R3;
 using UnityEngine;
 using VContainer.Unity;
@@ -18,6 +21,38 @@ namespace ElementalBlacksmithStory.Inventory
         protected readonly CompositeDisposable _disposables = new();
 
         public Observable<(T item, uint count)> OnItemCountChangedAsObservable => _onItemCountChangedSubject;
+
+        /// <summary>
+        /// 이 인벤토리가 담당하는 아이템 카테고리 (AcquireItemEvent 라우팅용)
+        /// </summary>
+        protected virtual ItemCategory Category => ItemCategory.Unknown;
+
+        /// <summary>
+        /// 아이템 ID를 보관 데이터로 변환
+        /// </summary>
+        protected virtual T Resolve(uint id) => null;
+
+        /// <summary>
+        /// AcquireItemEvent 구독 (생성 시 1회 호출)
+        /// </summary>
+        protected void SubscribeAcquire(ISubscriber<AcquireItemEvent> subscriber)
+        {
+            if (subscriber == null) return;
+            subscriber.Subscribe(OnAcquire).AddTo(_disposables);
+        }
+
+        private void OnAcquire(AcquireItemEvent e)
+        {
+            if (ItemIdHelper.GetCategory(e.ItemId) != Category) return;
+
+            T item = Resolve(e.ItemId);
+            if (item == null)
+            {
+                Debug.LogError($"[{GetType().Name}] 획득 아이템 데이터를 찾을 수 없습니다: {e.ItemId}");
+                return;
+            }
+            Add(item, e.Amount);
+        }
 
         public virtual void Start() { }
 

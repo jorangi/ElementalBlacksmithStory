@@ -1,4 +1,6 @@
 using ElementalBlacksmithStory.Data;
+using ElementalBlacksmithStory.Events;
+using MessagePipe;
 
 namespace ElementalBlacksmithStory.Inventory
 {
@@ -8,5 +10,6 @@ namespace ElementalBlacksmithStory.Inventory
         EquipmentInventory EquipmentInventory { get; }
         RuneInventory RuneInventory { get; }
         SO_MaterialDatabase MaterialDatabase { get; }
+        IPublisher<AcquireItemEvent> AcquireItemPublisher { get; }
     }
 }

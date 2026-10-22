@@ -11,9 +11,9 @@ namespace ElementalBlacksmithStory.Core
         {
             builder.RegisterEntryPoint<GameInitializer>();
 
-            builder.Register<EquipmentInventory>(Lifetime.Singleton);
-            builder.Register<MaterialInventory>(Lifetime.Singleton);
-            builder.Register<RuneInventory>(Lifetime.Singleton);
+            builder.RegisterEntryPoint<EquipmentInventory>(Lifetime.Singleton).AsSelf();
+            builder.RegisterEntryPoint<MaterialInventory>(Lifetime.Singleton).AsSelf();
+            builder.RegisterEntryPoint<RuneInventory>(Lifetime.Singleton).AsSelf();
             builder.Register<ForgeManager>(Lifetime.Singleton);
             builder.Register<RecipeKeyHelper>(Lifetime.Singleton);
             builder.Register<RecipeUnlockService>(Lifetime.Singleton);

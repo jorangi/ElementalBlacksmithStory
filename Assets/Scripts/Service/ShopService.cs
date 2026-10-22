@@ -16,13 +16,19 @@ namespace ElementalBlacksmithStory.Core
         private readonly EquipmentInventory _equipmentInventory;
         private readonly RuneInventory _runeInventory;
         private readonly SO_MaterialDatabase _materialDatabase;
+        private readonly ForgeManager _forgeManager;
         private readonly IPublisher<ChangeMoneyEvent> _moneyPublisher;
+        private readonly IPublisher<AcquireItemEvent> _acquireItemPublisher;
+        private readonly IPublisher<CoinParticleEvent> _coinParticlePublisher;
+        private readonly IPublisher<PlaySoundEvent> _soundPublisher;
+        private readonly IPublisher<SellEvent> _sellEventPublisher;
         private readonly IDisposable _moneySubscription;
 
         public MaterialInventory MaterialInventory => _materialInventory;
         public EquipmentInventory EquipmentInventory => _equipmentInventory;
         public RuneInventory RuneInventory => _runeInventory;
         public SO_MaterialDatabase MaterialDatabase => _materialDatabase;
+        public IPublisher<AcquireItemEvent> AcquireItemPublisher => _acquireItemPublisher;
 
         private readonly Subject<IReadOnlyDictionary<uint, uint>> _onPurchaseSuccessSubject = new();
         public Observable<IReadOnlyDictionary<uint, uint>> OnPurchaseSuccessAsObservable => _onPurchaseSuccessSubject;
@@ -35,14 +41,24 @@ namespace ElementalBlacksmithStory.Core
             EquipmentInventory equipmentInventory,
             RuneInventory runeInventory,
             SO_MaterialDatabase materialDatabase,
+            ForgeManager forgeManager,
             ISubscriber<ChangeMoneyEvent> moneySubscriber,
-            IPublisher<ChangeMoneyEvent> moneyPublisher)
+            IPublisher<ChangeMoneyEvent> moneyPublisher,
+            IPublisher<AcquireItemEvent> acquireItemPublisher,
+            IPublisher<CoinParticleEvent> coinParticlePublisher,
+            IPublisher<PlaySoundEvent> soundPublisher,
+            IPublisher<SellEvent> sellEventPublisher)
         {
             _materialInventory = materialInventory;
             _equipmentInventory = equipmentInventory;
             _runeInventory = runeInventory;
             _materialDatabase = materialDatabase;
+            _forgeManager = forgeManager;
             _moneyPublisher = moneyPublisher;
+            _acquireItemPublisher = acquireItemPublisher;
+            _coinParticlePublisher = coinParticlePublisher;
+            _soundPublisher = soundPublisher;
+            _sellEventPublisher = sellEventPublisher;
 
             _moneySubscription = moneySubscriber.Subscribe(e =>
             {
@@ -108,60 +124,60 @@ namespace ElementalBlacksmithStory.Core
                 }
             }
 
+            bool isEquippedWeaponSold = false;
             var resultDict = new Dictionary<uint, uint>();
             foreach (var (shopItem, amount) in cartItems)
             {
                 if (shopItem == null) continue;
                 resultDict[shopItem.Id] = amount;
                 shopItem.OnSold(this, amount);
+
+                if (_forgeManager != null && _forgeManager.CurrentWeapon != null)
+                {
+                    if (shopItem == _forgeManager.CurrentWeapon ||
+                        (shopItem is Weapon w && w.Id == _forgeManager.CurrentWeapon.Id))
+                    {
+                        isEquippedWeaponSold = true;
+                    }
+                }
             }
 
             _currentMoney += totalRevenue;
             _moneyPublisher.Publish(new ChangeMoneyEvent(out _, _currentMoney));
 
-            Debug.Log($"[ShopService] 판매 완료! {totalRevenue}골드 획득, 잔여: {_currentMoney}골드");
+            // 판매 수익에 비례한 코인 파티클 연출
+            int coinCount = totalRevenue switch
+            {
+                >= 100000 => 300,
+                >= 80000  => 250,
+                >= 50000  => 200,
+                >= 20000  => 150,
+                >= 10000  => 100,
+                >= 8000   => 90,
+                >= 5000   => 60,
+                >= 3000   => 40,
+                >= 1000   => 20,
+                > 0       => 10,
+                _         => 0
+            };
+
+            if (coinCount > 0)
+            {
+                _coinParticlePublisher.Publish(new CoinParticleEvent(coinCount));
+            }
+
+            // 장착된 무기가 판매된 경우 대장간 초기화 및 기본 무기(10001) 재장착
+            if (isEquippedWeaponSold)
+            {
+                _sellEventPublisher.Publish(new SellEvent(0));
+            }
+            else
+            {
+                _soundPublisher.Publish(new PlaySoundEvent(40103));
+            }
+
+            Debug.Log($"[ShopService] 판매 완료! {totalRevenue}골드 획득, 잔여: {_currentMoney}골드 (장착무기판매: {isEquippedWeaponSold})");
             _onPurchaseSuccessSubject.OnNext(resultDict);
-            return true;
-        }
-
-        /// <summary>
-        /// 장바구니 아이템 일괄 판매 시도 (기존 ID 기반 호환)
-        /// </summary>
-        public bool TrySell(IReadOnlyDictionary<uint, uint> cartItems, ulong totalRevenue)
-        {
-            if (cartItems == null || cartItems.Count == 0)
-            {
-                Debug.LogWarning("[ShopService] 판매할 아이템이 장바구니에 없습니다.");
-                return false;
-            }
-
-            foreach (var kvp in cartItems)
-            {
-                uint itemId = kvp.Key;
-                uint amount = kvp.Value;
-
-                var materialData = _materialDatabase.Get(itemId);
-                if (materialData == null || _materialInventory.GetCount(materialData) < amount)
-                {
-                    Debug.LogWarning($"[ShopService] ID {itemId} 재료의 소지량이 부족합니다.");
-                    return false;
-                }
-            }
-
-            foreach (var kvp in cartItems)
-            {
-                var materialData = _materialDatabase.Get(kvp.Key);
-                if (materialData != null)
-                {
-                    _materialInventory.Get(materialData, kvp.Value);
-                }
-            }
-
-            _currentMoney += totalRevenue;
-            _moneyPublisher.Publish(new ChangeMoneyEvent(out _, _currentMoney));
-
-            Debug.Log($"[ShopService] 판매 완료! {totalRevenue}골드 획득, 잔여: {_currentMoney}골드");
-            _onPurchaseSuccessSubject.OnNext(cartItems);
             return true;
         }
 

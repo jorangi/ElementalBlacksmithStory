@@ -1,4 +1,5 @@
 using ElementalBlacksmithStory.Data;
+using ElementalBlacksmithStory.Events;
 using ElementalBlacksmithStory.Inventory;
 using VContainer;
 
@@ -25,7 +26,7 @@ namespace ElementalBlacksmithStory.Core
         {
             if (_data != null)
             {
-                context.RuneInventory.Add(_data, amount);
+                context.AcquireItemPublisher.Publish(new AcquireItemEvent(_data.Id, amount, sender: "Shop", reason: "Shop_Purchase"));
             }
         }
 

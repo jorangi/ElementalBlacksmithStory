@@ -1,18 +1,18 @@
 using System;
 using System.Collections.Generic;
+using ElementalBlacksmithStory.Core;
 using ElementalBlacksmithStory.Effect;
 using UnityEngine;
-using ElementalBlacksmithStory.Core;
 
 namespace ElementalBlacksmithStory.Data
 {
     public enum RuneGrade
     {
-        Common,
-        Uncommon,
-        Rare,
-        Epic,
-        Legendary,
+        Common = 5000,
+        Uncommon = 10000,
+        Rare = 30000,
+        Epic = 80000,
+        Legendary = 150000,
         Mythical
     }
     [CreateAssetMenu(fileName = "SO_RuneData", menuName = "Scriptable Objects/SO_RuneData")]
