@@ -50,6 +50,7 @@ namespace ElementalBlacksmithStory.UI
 
             if (_buttons.TryGetValue(categoryId, out var existing))
             {
+                existing.gameObject.SetActive(true);
                 existing.SetData(categoryId, displayName, icon);
                 return existing;
             }
@@ -111,6 +112,20 @@ namespace ElementalBlacksmithStory.UI
         /// 등록된 모든 카테고리 버튼 반환
         /// </summary>
         public IEnumerable<ShopCategoryButtonView> GetAllButtons() => _buttons.Values;
+
+        /// <summary>
+        /// 생성된 모든 카테고리 버튼 비활성화 (오브젝트 풀링/재사용 목적)
+        /// </summary>
+        public void HideAllButtons()
+        {
+            foreach (var view in _buttons.Values)
+            {
+                if (view != null && view.gameObject != null)
+                {
+                    view.gameObject.SetActive(false);
+                }
+            }
+        }
 
         /// <summary>
         /// 생성된 모든 카테고리 버튼 정리

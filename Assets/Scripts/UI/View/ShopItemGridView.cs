@@ -7,23 +7,24 @@ namespace ElementalBlacksmithStory.UI
     {
         [SerializeField] private Transform _gridContainer;
         [SerializeField] private GameObject _itemPrefab;
+        [SerializeField] private GameObject _equipmentItemPrefab;
 
-        private readonly Dictionary<uint, ShopItemView> _itemViews = new();
+        private readonly Dictionary<uint, ShopItemViewBase> _itemViews = new();
 
         /// <summary>
         /// 특정 아이템 ID의 뷰 반환
         /// </summary>
-        public ShopItemView GetItemView(uint itemId) => _itemViews.TryGetValue(itemId, out var view) ? view : null;
+        public ShopItemViewBase GetItemView(uint itemId) => _itemViews.TryGetValue(itemId, out var view) ? view : null;
 
         /// <summary>
         /// 현재 생성된 모든 아이템 뷰 반환
         /// </summary>
-        public IEnumerable<ShopItemView> GetAllItemViews() => _itemViews.Values;
+        public IEnumerable<ShopItemViewBase> GetAllItemViews() => _itemViews.Values;
 
         /// <summary>
         /// 그리드에 새 아이템을 생성하여 배치
         /// </summary>
-        public ShopItemView CreateItem(uint itemId, string itemName, ulong price, Sprite icon, bool isUniqueItem = false)
+        public ShopItemViewBase CreateItem(uint itemId, string itemName, ulong price, Sprite icon, bool isUniqueItem = false)
         {
             if (_gridContainer == null || _itemPrefab == null)
             {
@@ -37,17 +38,18 @@ namespace ElementalBlacksmithStory.UI
                 RemoveItem(itemId);
             }
 
-            GameObject instance = Instantiate(_itemPrefab, _gridContainer);
+            GameObject prefabToUse = (isUniqueItem && _equipmentItemPrefab != null) ? _equipmentItemPrefab : _itemPrefab;
+            GameObject instance = Instantiate(prefabToUse, _gridContainer);
             instance.name = $"{itemName}_{itemId}";
 
-            if (instance.TryGetComponent<ShopItemView>(out var itemView))
+            if (instance.TryGetComponent<ShopItemViewBase>(out var itemView))
             {
                 itemView.SetData(itemId, itemName, price, icon, isUniqueItem);
                 _itemViews[itemId] = itemView;
                 return itemView;
             }
 
-            Debug.LogError("[ShopItemGridView] _itemPrefab에 ShopItemView 컴포넌트가 존재하지 않습니다.");
+            Debug.LogError($"[ShopItemGridView] {prefabToUse.name}에 ShopItemViewBase 컴포넌트가 존재하지 않습니다.");
             return null;
         }
 

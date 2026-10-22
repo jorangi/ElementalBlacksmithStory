@@ -5,17 +5,13 @@ using UnityEngine.UI;
 
 namespace ElementalBlacksmithStory.UI
 {
+    /// <summary>
+    /// 상점 구매/판매 탭 전환 제어 View
+    /// </summary>
     public class ShopTabView : MonoBehaviour
     {
         [SerializeField] private Button _buyTabButton;
         [SerializeField] private Button _sellTabButton;
-
-        [Header("대사 ID 설정")]
-        [SerializeField] private uint _buyDialogueId = 600307;
-        [SerializeField] private uint _sellDialogueId = 600308;
-
-        public uint BuyDialogueId => _buyDialogueId;
-        public uint SellDialogueId => _sellDialogueId;
 
         public Observable<Unit> OnClickBuyTabAsObservable()
         {

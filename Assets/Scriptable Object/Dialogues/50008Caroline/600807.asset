@@ -15,9 +15,12 @@ MonoBehaviour:
   description: "\uC0C1\uC810 \uC785\uC7A5/\uAD6C\uB9E4 \uCE74\uD2B8\uC5D0 \uBB3C\uAC74\uC744
     \uB2F4\uC74C "
   contents:
-  - speakerId: 50003
-    text: "{itemCount == 0 ? \uC5B4\uC11C\uC624\uC138\uC694! \uBB3C\uAC74 \uB9CE\uC73C\uB2C8
-      \uB458\uB7EC\uBCF4\uC138\uC694 : {itemCount == 1 ? '{item1}' {totalAmount}\uAC1C\uBA74
-      \uD569\uD574\uC11C <b>{totalCost}</b>(\uC774\uB124/\uB124)\uC694! : '{item1}',
-      '{item2}' \uB4F1 \uB2E4 \uD569\uD574\uC11C {totalAmount}\uAC1C\uB2C8\uAE4C
-      <b>{totalCost}</b>(\uC774\uB124/\uB124)\uC694!}}"
+  - speakerId: 50008
+    text: "{itemCount == 0 ? \uC5B4\uC11C \uC624\uC138\uC694. \uC7A5\uBE44\uB4E0
+      \uB8EC\uC774\uB4E0 \uD544\uC694\uD55C \uAC8C \uC788\uC73C\uBA74 \uB9D0\uC500\uD558\uC138\uC694.
+      : {itemCount == 1 ? '{item1}' {totalAmount}\uAC1C, \uC2DC\uC138\uB300\uB85C
+      <b>{totalCost}</b>(\uC774\uB124/\uB124)\uC694. \uC6D0\uAC00 \uB0B4\uC5ED\uC774
+      \uAD81\uAE08\uD558\uC2DC\uBA74 \uBCF4\uC5EC\uB4DC\uB9B4\uAC8C\uC694. : '{item1}',
+      '{item2}' \uB4F1 \uD569\uD574\uC11C {totalAmount}\uAC1C, <b>{totalCost}</b>(\uC774\uB124/\uB124)\uC694.
+      \uAC15\uD654 \uACC4\uD68D\uC774 \uC788\uC73C\uC2DC\uBA74 \uC644\uCDA9\uC81C\uB3C4
+      \uC78A\uC9C0 \uB9C8\uC138\uC694.}}"

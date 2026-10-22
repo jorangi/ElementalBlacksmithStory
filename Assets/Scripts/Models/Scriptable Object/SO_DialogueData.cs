@@ -18,7 +18,9 @@ namespace ElementalBlacksmithStory.Data
         public string GetFormattedText(IReadOnlyDictionary<string, object> parameters)
         {
             if (string.IsNullOrEmpty(text)) return string.Empty;
-            if (parameters == null || parameters.Count == 0) return KoreanJosaHelper.ResolveJosa(text);
+            if (!text.Contains('{')) return KoreanJosaHelper.ResolveJosa(text);
+
+            parameters ??= new Dictionary<string, object>();
 
             // 1단계: 삼항 조건문({ itemCount == 1 ? "참" : "거짓" }) 평가 및 치환
             string step1 = EvaluateTernaryConditions(text, parameters);
@@ -166,7 +168,7 @@ namespace ElementalBlacksmithStory.Data
                 string rightLiteral = TrimQuotes(condition.Substring(opIndex + matchedOp.Length).Trim());
 
                 parameters.TryGetValue(leftKey, out var leftVal);
-                string leftStr = leftVal?.ToString() ?? string.Empty;
+                string leftStr = leftVal != null ? leftVal.ToString() : (double.TryParse(rightLiteral, out _) ? "0" : string.Empty);
 
                 // 숫자 비교
                 if (double.TryParse(leftStr, out double leftNum) && double.TryParse(rightLiteral, out double rightNum))

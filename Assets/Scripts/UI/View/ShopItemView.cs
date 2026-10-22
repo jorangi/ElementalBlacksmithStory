@@ -1,78 +1,32 @@
 using UnityEngine;
-using UnityEngine.UI;
 using TMPro;
-using R3;
 using Cysharp.Text;
 
 namespace ElementalBlacksmithStory.UI
 {
-    public class ShopItemView : MonoBehaviour
+    /// <summary>
+    /// 일반 상점 아이템(룬, 재료 등) 카드 뷰입니다.
+    /// 보유 수량(_amountInPocketText) 표시를 지원합니다.
+    /// </summary>
+    public class ShopItemView : ShopItemViewBase
     {
-        [SerializeField] private Image _iconImage;
-        [SerializeField] private TextMeshProUGUI _nameText;
+        [Header("Normal Item Specific")]
+        [Tooltip("보유 수량 텍스트 (예: '(1,000개 보유)')")]
         [SerializeField] private TextMeshProUGUI _amountInPocketText;
-        [SerializeField] private TextMeshProUGUI _priceText;
-        [SerializeField] private Button _button;
 
-        public uint ItemId { get; private set; }
-        public ulong Price { get; private set; }
-        public string ItemName { get; private set; }
-        private bool _isUniqueItem;
-        private void Awake()
+        public override void SetData(uint itemId, string itemName, ulong price, Sprite icon, bool isUniqueItem = false)
         {
-            if (_button != null && !_button.TryGetComponent<UIButtonSound>(out _))
+            base.SetData(itemId, itemName, price, icon, isUniqueItem);
+            if (isUniqueItem && _amountInPocketText != null)
             {
-                _button.gameObject.AddComponent<UIButtonSound>();
+                _amountInPocketText.gameObject.SetActive(false);
             }
         }
 
-        public void SetData(uint itemId, string itemName, ulong price, Sprite icon, bool isUniqueItem = false)
+        public override void SetAmountInPocket(uint amount)
         {
-            ItemId = itemId;
-            ItemName = itemName;
-            Price = price;
-            _isUniqueItem = isUniqueItem;
-            if(_isUniqueItem) _amountInPocketText.gameObject.SetActive(false);
-            SetName(itemName);
-            SetPrice(price);
-            SetIcon(icon);
-        }
-        public void SetAmountInPocket(uint amount)
-        {
-            if(_isUniqueItem) return;
+            if (IsUniqueItem || _amountInPocketText == null) return;
             _amountInPocketText.SetText(ZString.Format("({0:N0} 보유)", amount));
-        }
-        public void SetIcon(Sprite icon)
-        {
-            if (_iconImage != null)
-            {
-                _iconImage.sprite = icon;
-                _iconImage.enabled = icon != null;
-            }
-        }
-        public void SetPrice(ulong price)
-        {
-            Price = price;
-            if (_priceText != null)
-            {
-                _priceText.SetText(ZString.Format("<size=70%><sprite name=\"CoinSack\">{0:N0}</size>", price));
-            }
-        }
-        public void SetName(string itemName)
-        {
-            ItemName = itemName;
-            if (_nameText != null)
-            {
-                _nameText.SetText(itemName);
-            }
-        }
-        public Observable<Unit> OnClickAsObservable()
-        {
-            if (_button == null)
-            {
-                return Observable.Empty<Unit>();
-            }
-            return _button.OnClickAsObservable();
         }
     }
 }

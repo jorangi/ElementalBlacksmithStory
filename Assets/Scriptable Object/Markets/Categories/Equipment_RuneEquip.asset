@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da370f093b2f2b941a7dec28c26d1d1d, type: 3}
+  m_Name: Equipment_RuneEquip
+  m_EditorClassIdentifier: Assembly-CSharp::ElementalBlacksmithStory.Data.SO_ShopCategory
+  _categoryId: RuneEquip
+  _displayName: "\uB8EC \uC7A5\uCC29"
+  _icon: {fileID: 21300000, guid: 2a738ea136f9ae5469e937cdd2194190, type: 3}
+  _minRandomPickCount: 0
+  _maxRandomPickCount: 0
+  _items: []

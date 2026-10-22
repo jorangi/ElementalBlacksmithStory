@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1b428e9802a826c4495844b53d06f3dc, type: 3}
+  m_Name: 74001
+  m_EditorClassIdentifier: Assembly-CSharp::ElementalBlacksmithStory.Data.SO_RuneData
+  runeName: "\uC2E0\uC131\uD55C \uAD11\uCC44\uC758 \uB8EC"
+  description: "\uD310\uB9E4 \uC2DC 40%\uC758 \uCD94\uAC00 \uACE8\uB4DC\uB97C \uD68D\uB4DD\uD55C\uB2E4."
+  grade: 150000
+  nextRune: {fileID: 0}
+  value: 30000
+  effects:
+  - rid: 700740010001
+  memo: 
+  references:
+    version: 2
+    RefIds:
+    - rid: 700740010001
+      type: {class: StatModifierEffect, ns: ElementalBlacksmithStory.Effect, asm: Assembly-CSharp}
+      data:
+        statType: 2
+        statModifierType: 1
+        value: 0.4

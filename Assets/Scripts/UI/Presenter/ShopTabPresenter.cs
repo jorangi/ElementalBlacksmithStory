@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using ElementalBlacksmithStory.Data;
 using ElementalBlacksmithStory.Events;
 using MessagePipe;
 using R3;
@@ -21,6 +22,7 @@ namespace ElementalBlacksmithStory.UI
         private readonly IPublisher<StartShopDialogueEvent> _shopDialoguePublisher;
         private readonly CompositeDisposable _disposables = new();
 
+        private SO_ShopData _currentShopData;
         private bool _isSellMode = false;
         public bool IsSellMode => _isSellMode;
 
@@ -43,12 +45,11 @@ namespace ElementalBlacksmithStory.UI
         {
             if (_view == null) return;
 
-            // 초기 상태: 구매 탭 활성화 및 첫 입장 대사 발행
+            // 초기 상태: 구매 탭 활성화 (상점 입장 대사는 MarketPresenter에서 상점 오픈 시 발행)
             _isSellMode = false;
             _view.SetTabVisual(_isSellMode);
             _cartPresenter.SetSellMode(_isSellMode);
             _gridPresenter.SetSellMode(_isSellMode);
-            PublishTabDialogue(_isSellMode);
 
             _view.OnClickBuyTabAsObservable()
                 .Subscribe(_ => SwitchTab(isSellMode: false))
@@ -57,6 +58,19 @@ namespace ElementalBlacksmithStory.UI
             _view.OnClickSellTabAsObservable()
                 .Subscribe(_ => SwitchTab(isSellMode: true))
                 .AddTo(_disposables);
+        }
+
+        /// <summary>
+        /// 현재 열린 상점 데이터를 설정하고 탭을 구매 탭으로 리셋
+        /// </summary>
+        public void SetShop(SO_ShopData shopData)
+        {
+            _currentShopData = shopData;
+            _isSellMode = false;
+            _view?.SetTabVisual(_isSellMode);
+            _cartPresenter?.SetShop(shopData);
+            _cartPresenter?.SetSellMode(_isSellMode);
+            _gridPresenter?.SetSellMode(_isSellMode);
         }
 
         /// <summary>
@@ -70,7 +84,6 @@ namespace ElementalBlacksmithStory.UI
             _view.SetTabVisual(_isSellMode);
             _cartPresenter.SetSellMode(_isSellMode);
             _gridPresenter.SetSellMode(_isSellMode);
-            _soundPublisher?.Publish(new PlaySoundEvent(40106));
 
             // 탭 전환 시 해당 탭(구매/판매)의 첫 입장 대사 발행
             PublishTabDialogue(_isSellMode);
@@ -78,7 +91,11 @@ namespace ElementalBlacksmithStory.UI
 
         private void PublishTabDialogue(bool isSellMode)
         {
-            uint dialogueId = isSellMode ? _view.SellDialogueId : _view.BuyDialogueId;
+            if (_currentShopData == null) return;
+
+            uint dialogueId = isSellMode ? _currentShopData.SellDialogueId : _currentShopData.BuyDialogueId;
+            if (dialogueId == 0) return;
+
             var parameters = new Dictionary<string, object>
             {
                 { "itemCount", 0 },

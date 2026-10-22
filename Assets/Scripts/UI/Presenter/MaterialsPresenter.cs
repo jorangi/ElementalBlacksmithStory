@@ -61,7 +61,7 @@ namespace ElementalBlacksmithStory.UI
             _inventory.OnItemCountChangedAsObservable
                 .Subscribe(item =>
                 {
-                    _view.UpdateOrAddItem(item.material, item.count, _materialSpriteLoader).Forget();
+                    _view.UpdateOrAddItem(item.item, item.count, _materialSpriteLoader).Forget();
                 })
                 .AddTo(_disposables);
 

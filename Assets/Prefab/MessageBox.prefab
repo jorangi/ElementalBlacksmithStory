@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 8571249811626918882}
   - component: {fileID: 8051339697971093308}
   - component: {fileID: 1512234301072453356}
+  - component: {fileID: 8581239055224129045}
   m_Layer: 5
   m_Name: MessageBox
   m_TagString: Untagged
@@ -149,6 +150,20 @@ Canvas:
   m_SortingLayerID: -596406631
   m_SortingOrder: 2
   m_TargetDisplay: 0
+--- !u!114 &8581239055224129045
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1180730742998821143}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f93987b3db5b794f85b60ad1a43dd3c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ElementalBlacksmithStory.UI.UIButtonSound
+  _soundId: 40106
+  _autoBindOnClick: 1
 --- !u!1 &2253631344364880802
 GameObject:
   m_ObjectHideFlags: 0
@@ -432,8 +447,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "NPC\uC758 \uB0B4\uC6A9"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 53a4111c9884f8b4fb06aca53edc131f, type: 2}
-  m_sharedMaterial: {fileID: 2100000, guid: 8cea8d77a4c66d1429f7c7f6effecb39, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 5c10ed418211926469ff319b6311f8cb, type: 2}
+  m_sharedMaterial: {fileID: -3403148564017090098, guid: 5c10ed418211926469ff319b6311f8cb, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -655,8 +670,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 102.14, y: -35}
-  m_SizeDelta: {x: 110.28, y: 28.5}
+  m_AnchoredPosition: {x: 104.155, y: -35}
+  m_SizeDelta: {x: 114.31, y: 28.5}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &585950378751739142
 CanvasRenderer:
@@ -688,8 +703,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "NPC \uC774\uB984"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 53a4111c9884f8b4fb06aca53edc131f, type: 2}
-  m_sharedMaterial: {fileID: 6567602438545666420, guid: 53a4111c9884f8b4fb06aca53edc131f, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 5c10ed418211926469ff319b6311f8cb, type: 2}
+  m_sharedMaterial: {fileID: -3403148564017090098, guid: 5c10ed418211926469ff319b6311f8cb, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []

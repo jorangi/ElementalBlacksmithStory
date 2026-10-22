@@ -19,6 +19,7 @@ namespace ElementalBlacksmithStory.UI
         private readonly WeaponTreeBuilder _treeBuilder;
         private readonly WeaponSpriteLoader _spriteLoader;
         private readonly SO_WeaponDatabase _weaponDatabase;
+        private readonly WeaponTreePathService _pathService;
         private readonly IPublisher<ChangeRecipeFlagEvent> _recipeFlagPublisher;
         private readonly RecipeUnlockService _recipeUnlockService;
         private readonly EnhancementService _enhancementService;
@@ -36,6 +37,7 @@ namespace ElementalBlacksmithStory.UI
             WeaponTreeBuilder treeBuilder,
             WeaponSpriteLoader spriteLoader,
             SO_WeaponDatabase weaponDatabase,
+            WeaponTreePathService pathService,
             RecipeUnlockService recipeUnlockService,
             IPublisher<ChangeRecipeFlagEvent> recipeFlagPublisher,
             ISubscriber<EnhanceButtonPositionEvent> positionSubscriber,
@@ -47,6 +49,7 @@ namespace ElementalBlacksmithStory.UI
             _treeBuilder = treeBuilder;
             _spriteLoader = spriteLoader;
             _weaponDatabase = weaponDatabase;
+            _pathService = pathService;
             _recipeUnlockService = recipeUnlockService;
             _recipeFlagPublisher = recipeFlagPublisher;
             _enhancementService = enhancementService;
@@ -103,16 +106,7 @@ namespace ElementalBlacksmithStory.UI
                     return;
                 }
 
-                // 현재 들고 있는 무기 노드를 선택한 경우: 핀 경로 해제 및 자유 재료 조합 모드로 전환
-                if (_forgeManager.CurrentWeapon != null && e._recipeId == _forgeManager.CurrentWeapon.WeaponId)
-                {
-                    ClearPinnedPath();
-                    _pinnedRecipeId = 0;
-                    _recipeFlagPublisher.Publish(new ChangeRecipeFlagEvent { _recipeId = 0 });
-                    return;
-                }
-
-                RerouteFrom(_forgeManager.CurrentWeapon.WeaponId, e._recipeId);
+                HandleNodeClick(e._recipeId);
             }).AddTo(_disposables);
         }
 
@@ -181,12 +175,122 @@ namespace ElementalBlacksmithStory.UI
             }
         }
 
+        private void HandleNodeClick(uint clickedWeaponId)
+        {
+            var curWeaponId = _forgeManager.CurrentWeapon?.WeaponId ?? 10001;
+
+            // 1. 현재 장착 무기 자체를 클릭한 경우: 핀 해제
+            if (clickedWeaponId == curWeaponId)
+            {
+                ClearPinnedPath();
+                _pinnedRecipeId = 0;
+                _recipeFlagPublisher.Publish(new ChangeRecipeFlagEvent { _recipeId = 0 });
+                return;
+            }
+
+            // 2. 이미 잡힌 경로가 있고 기존 핀이 존재하는 경우 (캐시 활용)
+            if (path != null && path.Count > 0 && _pinnedRecipeId != 0)
+            {
+                // 2-1. 기존 경로에 이미 포함된 중간 노드를 클릭한 경우: 그 노드까지만 경로 축소
+                int existingIndex = -1;
+                for (int i = 0; i < path.Count; i++)
+                {
+                    if (path[i] == clickedWeaponId)
+                    {
+                        existingIndex = i;
+                        break;
+                    }
+                }
+
+                if (existingIndex >= 0)
+                {
+                    if (existingIndex == path.Count - 1) return; // 이미 목표 노드임
+
+                    // existingIndex 이후 노드 및 브랜치 하이라이트 해제
+                    for (int i = existingIndex + 1; i < path.Count; i++)
+                    {
+                        if (_nodes.TryGetValue(path[i], out var node))
+                        {
+                            node.SetNormalNode();
+                        }
+                    }
+                    for (int i = existingIndex; i < path.Count - 1; i++)
+                    {
+                        if (_treeBuilder.Branches.TryGetValue((path[i], path[i + 1]), out var branch))
+                        {
+                            branch.SetHighlight(false);
+                        }
+                    }
+
+                    // 경로 축소
+                    path.RemoveRange(existingIndex + 1, path.Count - (existingIndex + 1));
+                    _pinnedRecipeId = clickedWeaponId;
+
+                    if (_nodes.TryGetValue(clickedWeaponId, out var newDestNode))
+                    {
+                        newDestNode.SetDestinationNode();
+                    }
+
+                    _recipeFlagPublisher.Publish(new ChangeRecipeFlagEvent { _recipeId = clickedWeaponId });
+                    return;
+                }
+
+                // 2-2. 기존 핀 목표 노드(_pinnedRecipeId)에서 새로 클릭한 노드로 연장 가능한 경우
+                var extension = _pathService.FindPath(_pinnedRecipeId, clickedWeaponId);
+                if (extension != null && extension.Count >= 2)
+                {
+                    // 이전 최종 목적지 노드를 RouteNode로 변경
+                    if (_nodes.TryGetValue(_pinnedRecipeId, out var prevDestNode))
+                    {
+                        prevDestNode.SetRouteNode();
+                    }
+
+                    // 연장 구간 브랜치 및 노드 하이라이트
+                    for (int i = 0; i < extension.Count - 1; i++)
+                    {
+                        uint from = extension[i];
+                        uint to = extension[i + 1];
+
+                        if (_treeBuilder.Branches.TryGetValue((from, to), out var branch))
+                        {
+                            branch.SetHighlight(true);
+                        }
+
+                        if (i + 1 < extension.Count - 1)
+                        {
+                            if (_nodes.TryGetValue(to, out var midNode))
+                            {
+                                midNode.SetRouteNode();
+                            }
+                        }
+                    }
+
+                    for (int i = 1; i < extension.Count; i++)
+                    {
+                        path.Add(extension[i]);
+                    }
+
+                    _pinnedRecipeId = clickedWeaponId;
+                    if (_nodes.TryGetValue(clickedWeaponId, out var finalDestNode))
+                    {
+                        finalDestNode.SetDestinationNode();
+                    }
+
+                    _recipeFlagPublisher.Publish(new ChangeRecipeFlagEvent { _recipeId = clickedWeaponId });
+                    return;
+                }
+            }
+
+            // 3. 기존 경로가 없거나, 연장할 수 없는 다른 노드를 클릭한 경우: 현재 무기부터 새로 경로 탐색
+            RerouteFrom(curWeaponId, clickedWeaponId);
+        }
+
         private void RerouteFrom(uint fromWeaponId, uint targetWeaponId)
         {
             ClearPinnedPath();
             _pinnedRecipeId = targetWeaponId;
 
-            path = WeaponTreePathFinder.FindPath(fromWeaponId, targetWeaponId, _weaponDatabase);
+            path = _pathService.FindPath(fromWeaponId, targetWeaponId);
             if (path == null) return;
 
             for (int i = 0; i < path.Count - 1; i++)
@@ -226,6 +330,19 @@ namespace ElementalBlacksmithStory.UI
             {
                 uint weaponId = kvp.Key;
                 WeaponNodeUI node = kvp.Value;
+                //테스트용 해금
+                // if (node.WeaponData != null && node.WeaponData.recipes != null)
+                // {
+                //     foreach (var recipe in node.WeaponData.recipes)
+                //     {
+                //         if (recipe != null)
+                //         {
+                //             _recipeUnlockService.Unlock(recipe.Id);
+                //         }
+                //     }
+                // }
+                // node.SetNormalNode();
+                // continue;
                 if (IsNodeFullyUnlocked(weaponId))
                 {
                     node.SetNormalNode();
@@ -244,7 +361,7 @@ namespace ElementalBlacksmithStory.UI
         {
             if (targetWeaponId == 10001) return true;
 
-            var fullPath = WeaponTreePathFinder.FindPath(10001, targetWeaponId, _weaponDatabase);
+            var fullPath = _pathService.FindPath(10001, targetWeaponId);
             if (fullPath == null || fullPath.Count < 2) return false;
 
             for (int i = 0; i < fullPath.Count - 1; i++)

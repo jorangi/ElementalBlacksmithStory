@@ -203,8 +203,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: <size=70%><sprite name="CoinSack"></size>100,000,000,000
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 53a4111c9884f8b4fb06aca53edc131f, type: 2}
-  m_sharedMaterial: {fileID: 6567602438545666420, guid: 53a4111c9884f8b4fb06aca53edc131f, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 5c10ed418211926469ff319b6311f8cb, type: 2}
+  m_sharedMaterial: {fileID: -3403148564017090098, guid: 5c10ed418211926469ff319b6311f8cb, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -361,6 +361,7 @@ GameObject:
   - component: {fileID: 8777109971569133270}
   - component: {fileID: 399407221051650118}
   - component: {fileID: 7670709888196597958}
+  - component: {fileID: -5898526687173022100}
   m_Layer: 5
   m_Name: ShopItemCard
   m_TagString: Untagged
@@ -391,7 +392,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_SizeDelta: {x: 310.3, y: 275}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2327565040465042613
 CanvasRenderer:
@@ -492,6 +493,19 @@ MonoBehaviour:
   _amountInPocketText: {fileID: 2562130780990047776}
   _priceText: {fileID: 7686056952520229108}
   _button: {fileID: 4157135164912195367}
+  _canvasGroup: {fileID: 0}
+--- !u!225 &-5898526687173022100
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2264402911976557684}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &3932810675124851699
 GameObject:
   m_ObjectHideFlags: 0
@@ -504,6 +518,7 @@ GameObject:
   - component: {fileID: 71087660120438782}
   - component: {fileID: 3210858509147553868}
   - component: {fileID: 4157135164912195367}
+  - component: {fileID: 5521236456874455139}
   m_Layer: 5
   m_Name: Button
   m_TagString: Untagged
@@ -613,6 +628,20 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &5521236456874455139
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3932810675124851699}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f93987b3db5b794f85b60ad1a43dd3c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ElementalBlacksmithStory.UI.UIButtonSound
+  _soundId: 40106
+  _autoBindOnClick: 1
 --- !u!1 &5965446901304306262
 GameObject:
   m_ObjectHideFlags: 0
@@ -680,8 +709,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "(1,000\uAC1C \uBCF4\uC720)"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 53a4111c9884f8b4fb06aca53edc131f, type: 2}
-  m_sharedMaterial: {fileID: 6567602438545666420, guid: 53a4111c9884f8b4fb06aca53edc131f, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 5c10ed418211926469ff319b6311f8cb, type: 2}
+  m_sharedMaterial: {fileID: -3403148564017090098, guid: 5c10ed418211926469ff319b6311f8cb, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -967,8 +996,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "\uCCB4\uB825 \uBB3C\uC57D"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 53a4111c9884f8b4fb06aca53edc131f, type: 2}
-  m_sharedMaterial: {fileID: 6567602438545666420, guid: 53a4111c9884f8b4fb06aca53edc131f, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 5c10ed418211926469ff319b6311f8cb, type: 2}
+  m_sharedMaterial: {fileID: -3403148564017090098, guid: 5c10ed418211926469ff319b6311f8cb, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []

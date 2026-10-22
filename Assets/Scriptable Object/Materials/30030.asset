@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9729337c99e13bc468b61e15705bcd9c, type: 3}
+  m_Name: 30030
+  m_EditorClassIdentifier: Assembly-CSharp::ElementalBlacksmithStory.Data.SO_MaterialData
+  materialName: "\uC9C4\uD64D \uBE44\uB298"
+  description: "\uB2E8\uB2E8\uD55C \uC9C4\uD64D\uBE5B \uBE44\uB298. \uACE0\uC5F4\uACFC
+    \uCDA9\uACA9\uC744 \uB9CE\uC774 \uD761\uC218\uD55C\uB2E4."
+  value: 1400

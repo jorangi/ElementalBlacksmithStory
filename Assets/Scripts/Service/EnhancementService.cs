@@ -19,6 +19,7 @@ namespace ElementalBlacksmithStory.Core
         private readonly IPublisher<ChangeMoneyEvent> moneyChangePublisher;
         private readonly IPublisher<ChangeSelectedMaterialsEvent> _changedSelectedMaterialPublisher;
         private readonly IPublisher<UpdateEnhanceChanceEvent> _updateEnhanceChancePublisher;
+        private readonly IPublisher<AcquireItemEvent> _acquireItemPublisher;
         IPublisher<PlaySoundEvent> _soundPublisher;
         private readonly IDisposable subscription;
         private SO_WeaponDatabase weaponDatabase;
@@ -28,7 +29,8 @@ namespace ElementalBlacksmithStory.Core
         private readonly RecipeKeyHelper _recipeKeyHelper;
         private readonly RecipeUnlockService _recipeUnlockService;
         private readonly WeaponRollbackService _weaponRollbackService;
-        private ulong money = 5000;
+        private readonly WeaponTreePathService _pathService;
+        private ulong money = 100000000000;
         List<uint> cachedPinnedWeaponEnhancePath = null;
         uint pinnedRecipeId;
         private CompositeDisposable _disposables = new();
@@ -66,6 +68,7 @@ namespace ElementalBlacksmithStory.Core
                                     IPublisher<PlaySoundEvent> soundPublisher,
                                     IPublisher<ChangeSelectedMaterialsEvent> changedSelectedMaterialPublisher,
                                     IPublisher<UpdateEnhanceChanceEvent> updateEnhanceChancePublisher,
+                                    IPublisher<AcquireItemEvent> acquireItemPublisher,
                                     SO_WeaponDatabase weaponDatabase,
                                     SO_MaterialDatabase materialDatabase,
                                     MaterialInventory materialInventory,
@@ -73,6 +76,7 @@ namespace ElementalBlacksmithStory.Core
                                     RecipeKeyHelper recipeKeyHelper,
                                     RecipeUnlockService recipeUnlockService,
                                     WeaponRollbackService weaponRollbackService,
+                                    WeaponTreePathService pathService,
                                     ISubscriber<SellEvent> sellEventSubscriber,
                                     ISubscriber<ChangeRecipeFlagEvent> changeRecipeFlagSubscriber,
                                     ISubscriber<SubmitMaterialEvent> submitMaterialSubscriber
@@ -85,11 +89,13 @@ namespace ElementalBlacksmithStory.Core
             this._recipeKeyHelper = recipeKeyHelper;
             this._recipeUnlockService = recipeUnlockService;
             this._weaponRollbackService = weaponRollbackService;
+            this._pathService = pathService;
             this.weaponChangePublisher = weaponChangePublisher;
             this.moneyChangePublisher = moneyChangePublisher;
             this._soundPublisher = soundPublisher;
             this._changedSelectedMaterialPublisher = changedSelectedMaterialPublisher;
             this._updateEnhanceChancePublisher = updateEnhanceChancePublisher;
+            this._acquireItemPublisher = acquireItemPublisher;
 
             moneyChangeSubscriber.Subscribe(e =>
             {
@@ -133,6 +139,11 @@ namespace ElementalBlacksmithStory.Core
                 _currentWeapon = new Weapon(weaponDatabase.Get(10001));
                 cachedWeaponId = 10001;
 
+                _acquireItemPublisher.Publish(new AcquireItemEvent(
+                    weapon: _currentWeapon,
+                    sender: "EnhancementService",
+                    reason: "Sell_Refund"));
+
                 Debug.Log($"[EnhancementService] 판매됨 -> 레시피 고정: {_fixedRecipe}, 목표 무기: {pinnedRecipeId}");
                 UpdateNextRecipe(autoFillMaterials: true);
 
@@ -150,6 +161,11 @@ namespace ElementalBlacksmithStory.Core
         public void Start()
         {
             _currentWeapon = new Weapon(weaponDatabase.Get(10001));
+            _acquireItemPublisher.Publish(new AcquireItemEvent(
+                weapon: _currentWeapon,
+                sender: "System",
+                reason: "Initial_Default"));
+
             weaponChangePublisher.Publish(new ChangeWeaponEvent(_currentWeapon, 10001, 0));
             cachedWeaponId = 10001;
             UpdateNextRecipe(autoFillMaterials: true, force: true);
@@ -182,7 +198,7 @@ namespace ElementalBlacksmithStory.Core
                 if (cachedPinnedWeaponEnhancePath == null || cachedWeaponId != _currentWeapon.WeaponId)
                 {
                     cachedWeaponId = _currentWeapon.WeaponId;
-                    var path = WeaponTreePathFinder.FindPath(currentWeaponData.Id, pinnedRecipeId, weaponDatabase);
+                    var path = _pathService.FindPath(currentWeaponData.Id, pinnedRecipeId);
                     if (path != null && path.Count > 1)
                     {
                         path.RemoveAt(0);
@@ -409,14 +425,16 @@ namespace ElementalBlacksmithStory.Core
 
                     cachedWeaponId = _currentRecipe.recipeOutcome.resultWeapon.Id;
 
+                    //테스트용 마진 값 설정
                     float margin = _currentRecipe.recipeOutcome.resultWeapon.margin > 1f ? UnityEngine.Random.Range(1.0f, _currentRecipe.recipeOutcome.resultWeapon.margin) : _currentRecipe.recipeOutcome.resultWeapon.margin;
+                    margin = 1f;
                     weapon.SetMargin(margin);
                     Debug.Log($"[EnhancementService] 현재 무기: {_currentRecipe.recipeOutcome.resultWeapon.weaponName}, 가격: {weapon.Price}({weapon.BasePrice}x{margin}) / 총 소모비용: {totalCost}");
                     weaponChangePublisher.Publish(new ChangeWeaponEvent(weapon: weapon, nextWeaponId: _currentRecipe.recipeOutcome.resultWeapon.Id, totalCost: totalCost));
 
                     // 새로운 레시피 해금
                     _recipeUnlockService.Unlock(_currentRecipe.Id);
-                    Debug.Log($"[EnhancementService] 새로운 레시피{_currentRecipe.recipeName}을(를) 발견했습니다.");
+                    Debug.Log($"[EnhancementService] 새로운 레시피{_currentRecipe.RecipeName}을(를) 발견했습니다.");
                     UpdateNextRecipe();
                     return EnhanceResult.SUCESS;
                 }
@@ -511,6 +529,7 @@ namespace ElementalBlacksmithStory.Core
                 cachedWeaponId = currentWeaponData.Id;
 
                 float margin = currentWeaponData.margin > 1f ? UnityEngine.Random.Range(1.0f, currentWeaponData.margin) : currentWeaponData.margin;
+                margin = 1f;
                 weapon.SetMargin(margin);
                 Debug.Log($"[EnhancementService] 현재 무기: {currentWeaponData.weaponName}, 가격: {weapon.Price}({weapon.BasePrice}x{margin}) / 총 소모비용: {totalCost}");
                 weaponChangePublisher.Publish(new ChangeWeaponEvent(weapon: weapon, nextWeaponId: currentWeaponData.Id, totalCost: totalCost));
