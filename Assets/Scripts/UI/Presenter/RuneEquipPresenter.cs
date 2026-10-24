@@ -4,10 +4,12 @@ using System.Threading;
 using Cysharp.Text;
 using Cysharp.Threading.Tasks;
 using ElementalBlacksmithStory.Core;
+using ElementalBlacksmithStory.Data;
 using ElementalBlacksmithStory.Events;
 using MessagePipe;
 using R3;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 using VContainer;
 using VContainer.Unity;
 namespace ElementalBlacksmithStory.UI
@@ -28,6 +30,9 @@ namespace ElementalBlacksmithStory.UI
         private readonly IPublisher<PlaySoundEvent> _soundPublisher;
         [SerializeField] private readonly uint[] runes = new uint[3];
         private readonly uint[] _originalRunes = new uint[3];
+        private readonly Dictionary<uint, SO_DialogueData> _dialogueCache = new();
+        private SO_NPCData _npcData;
+        private readonly CancellationTokenSource _cts = new();
 
         [Inject]
         public RuneEquipPresenter(
@@ -274,45 +279,117 @@ namespace ElementalBlacksmithStory.UI
             Hide();
         }
 
-        private enum DialogueType
+        private enum DialogueType : uint
         {
-            Open,
-            CostChanged,
-            NotEnoughMoney,
-            EquipSuccess
+            Open = 600816,
+            CostChanged = 600817,
+            NotEnoughMoney = 600818,
+            EquipSuccess = 600819
         }
 
         private void PublishDialogue(DialogueType type)
         {
+            Dictionary<string, object> parameters = null;
+
             switch (type)
             {
-                case DialogueType.Open:
-                    _runeEquipView.SetDialogue("룬 장착을 도와드릴게요. 장비의 슬롯에 장착할 룬을 선택해 주세요.");
-                    break;
                 case DialogueType.CostChanged:
                     if (_runeService != null && _currentWeapon != null)
                     {
                         ulong cost = _runeService.CalculateEquipCost(_currentWeapon, runes);
-                        if (cost > 0)
+                        if (cost == 0)
                         {
-                            _runeEquipView.SetDialogue(ZString.Format("공임비와 조율 비용을 계산하니 <b>{0:N0}</b> 골드네요. 확인하시고 결정하세요.", cost));
+                            SetDialogueByIdAsync((uint)DialogueType.Open, ct: _cts.Token).Forget();
+                            return;
                         }
-                        else
+                        parameters = new Dictionary<string, object>
                         {
-                            _runeEquipView.SetDialogue("장비의 슬롯에 장착할 룬을 선택해 주세요.");
-                        }
+                            { "cost", cost },
+                            { "costText", cost.ToString("N0") }
+                        };
+                    }
+                    else
+                    {
+                        SetDialogueByIdAsync((uint)DialogueType.Open, ct: _cts.Token).Forget();
+                        return;
                     }
                     break;
-                case DialogueType.NotEnoughMoney:
-                    _runeEquipView.SetDialogue("골드가 부족하시네요. 정확한 비용을 치르셔야 작업을 진행해 드릴 수 있어요.");
-                    break;
-                case DialogueType.EquipSuccess:
-                    _runeEquipView.SetDialogue("룬 장착이 깔끔하게 끝났어요. 소켓에 룬의 힘이 잘 정착되었네요.");
-                    break;
+            }
+
+            SetDialogueByIdAsync((uint)type, parameters, ct: _cts.Token).Forget();
+        }
+
+        private async UniTask<SO_NPCData> GetNPCDataAsync(uint speakerId, CancellationToken ct = default)
+        {
+            if (speakerId == 0) return null;
+            if (_npcData != null) return _npcData;
+
+            try
+            {
+                var handle = Addressables.LoadAssetAsync<SO_NPCData>(speakerId.ToString());
+                _npcData = await handle.ToUniTask(cancellationToken: ct);
+                return _npcData;
+            }
+            catch (Exception ex)
+            {
+                Debug.LogWarning($"[RuneEquipPresenter] NPC 데이터({speakerId}) 로드 실패: {ex.Message}");
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// 대사 ID로 SO_DialogueData를 로드하고 조건문, 플레이스홀더, 한국어 조사를 파싱하여 출력합니다.
+        /// </summary>
+        public async UniTask SetDialogueByIdAsync(uint dialogueId, IReadOnlyDictionary<string, object> parameters = null, int lineIndex = 0, CancellationToken ct = default)
+        {
+            try
+            {
+                if (!_dialogueCache.TryGetValue(dialogueId, out var dialogueData) || dialogueData == null)
+                {
+                    var handle = Addressables.LoadAssetAsync<SO_DialogueData>(dialogueId.ToString());
+                    dialogueData = await handle.ToUniTask(cancellationToken: ct);
+                    if (dialogueData != null)
+                    {
+                        _dialogueCache[dialogueId] = dialogueData;
+                    }
+                }
+
+                if (dialogueData != null && dialogueData.contents != null && dialogueData.contents.Count > 0)
+                {
+                    if (lineIndex < 0 || lineIndex >= dialogueData.contents.Count)
+                    {
+                        lineIndex = 0;
+                    }
+
+                    var line = dialogueData.contents[lineIndex];
+                    if (line.speakerId != 0)
+                    {
+                        var npcData = await GetNPCDataAsync(line.speakerId, ct);
+                        if (npcData != null)
+                        {
+                            _runeEquipView.SetNPCName(npcData.NpcName);
+                        }
+                    }
+
+                    string formattedText = line.GetFormattedText(parameters);
+                    _runeEquipView.SetDialogue(formattedText);
+                }
+                else
+                {
+                    Debug.LogWarning($"[RuneEquipPresenter] 대사 데이터({dialogueId})를 찾을 수 없습니다.");
+                }
+            }
+            catch (OperationCanceledException) { }
+            catch (Exception ex)
+            {
+                Debug.LogWarning($"[RuneEquipPresenter] 대사 데이터({dialogueId}) 로드 실패: {ex.Message}");
             }
         }
+
         public void Dispose()
         {
+            _cts.Cancel();
+            _cts.Dispose();
             _disposables.Dispose();
             _weaponDisposable.Dispose();
             GC.SuppressFinalize(this);

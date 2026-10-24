@@ -4,6 +4,6 @@ namespace ElementalBlacksmithStory.Data
     {
         GENERAL,
         WEAPON,
-        AUCTION
+        TRADINGPOST
     }
 }

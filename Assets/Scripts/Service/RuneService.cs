@@ -32,31 +32,22 @@ namespace ElementalBlacksmithStory.Core
     /// </summary>
     public class RuneService : IDisposable
     {
+        private readonly PlayerData playerData;
         private readonly CompositeDisposable _disposables = new();
         private readonly SO_RuneDatabase _runeDatabase;
         private readonly RuneInventory _runeInventory;
-        private readonly IPublisher<ChangeMoneyEvent> _moneyPublisher;
-
-        private ulong _currentMoney;
-
-        public ulong CurrentMoney => _currentMoney;
         public RuneInventory RuneInventory => _runeInventory;
 
         [Inject]
         public RuneService(
+            PlayerData playerData,
             SO_RuneDatabase runeDatabase,
-            RuneInventory runeInventory,
-            ISubscriber<ChangeMoneyEvent> moneySubscriber,
-            IPublisher<ChangeMoneyEvent> moneyPublisher)
+            RuneInventory runeInventory
+            )
         {
+            this.playerData = playerData;
             _runeDatabase = runeDatabase;
             _runeInventory = runeInventory;
-            _moneyPublisher = moneyPublisher;
-
-            moneySubscriber.Subscribe(e =>
-            {
-                _currentMoney = e.MoneyChange;
-            }).AddTo(_disposables);
         }
 
         public SO_RuneData GetRuneData(uint id)
@@ -64,7 +55,7 @@ namespace ElementalBlacksmithStory.Core
             return _runeDatabase != null ? _runeDatabase.Get(id) : null;
         }
 
-        public bool CanAfford(ulong cost) => _currentMoney >= cost;
+        public bool CanAfford(ulong cost) => playerData.CanAfford(cost);
 
         /// <summary>
         /// 단일 룬에 대한 장착/해제 비용 산정 (룬 가치의 30% + 무기 가치의 5%, 최소 100골드)
@@ -178,16 +169,10 @@ namespace ElementalBlacksmithStory.Core
             ulong cost = CalculateEquipCost(weapon, runeIds);
             spentCost = cost;
 
-            if (cost > 0 && !CanAfford(cost))
+            if (cost > 0 && !playerData.TrySpend(cost))
             {
                 result = ApplyRuneResult.NotEnoughMoney;
                 return false;
-            }
-
-            if (cost > 0)
-            {
-                _currentMoney -= cost;
-                _moneyPublisher.Publish(new ChangeMoneyEvent(out _, _currentMoney));
             }
 
             for (int i = 0; i < maxSlots; i++)
@@ -260,16 +245,10 @@ namespace ElementalBlacksmithStory.Core
             ulong cost = CalculateSynthesizeCost(runeIds);
             spentCost = cost;
 
-            if (cost > 0 && !CanAfford(cost))
+            if (cost > 0 && !playerData.TrySpend(cost))
             {
-                Debug.LogWarning($"{cost - _currentMoney}골드가 부족합니다.");
+                Debug.LogWarning($"{cost - playerData.Money.CurrentValue}골드가 부족합니다.");
                 return SynthesizeRuneResult.NotEnoughMoney;
-            }
-
-            if (cost > 0)
-            {
-                _currentMoney -= cost;
-                _moneyPublisher.Publish(new ChangeMoneyEvent(out _, _currentMoney));
             }
 
             List<SO_RuneData> runeTable = new();

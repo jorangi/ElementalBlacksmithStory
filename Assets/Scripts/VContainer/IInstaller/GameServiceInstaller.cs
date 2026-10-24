@@ -1,3 +1,4 @@
+using ElementalBlacksmithStory.Data;
 using ElementalBlacksmithStory.Inventory;
 using ElementalBlacksmithStory.UI;
 using VContainer;
@@ -10,6 +11,7 @@ namespace ElementalBlacksmithStory.Core
         public void Install(IContainerBuilder builder)
         {
             builder.RegisterEntryPoint<GameInitializer>();
+            builder.RegisterEntryPoint<PlayerData>(Lifetime.Singleton).AsSelf();
 
             builder.RegisterEntryPoint<EquipmentInventory>(Lifetime.Singleton).AsSelf();
             builder.RegisterEntryPoint<MaterialInventory>(Lifetime.Singleton).AsSelf();
@@ -20,6 +22,7 @@ namespace ElementalBlacksmithStory.Core
             builder.Register<WeaponRollbackService>(Lifetime.Singleton);
             builder.Register<WeaponTreePathService>(Lifetime.Singleton);
             builder.Register<ShopService>(Lifetime.Singleton);
+            builder.Register<TradingPostService>(Lifetime.Singleton);
             builder.Register<RuneService>(Lifetime.Singleton);
             builder.Register<IItemShopFactory, ItemShopFactory>(Lifetime.Singleton);
 

@@ -1,13 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.Threading;
-using System.Threading.Tasks;
 using Cysharp.Threading.Tasks;
 using ElementalBlacksmithStory.Core;
 using ElementalBlacksmithStory.Data;
-using ElementalBlacksmithStory.Events;
 using ElementalBlacksmithStory.Inventory;
+using ElementalBlacksmithStory.UI.Strategy;
 using MessagePipe;
+using ObservableCollections;
 using R3;
 using UnityEngine;
 using VContainer;
@@ -17,6 +17,8 @@ namespace ElementalBlacksmithStory.UI
 {
     public class ShopItemGridPresenter : IAsyncStartable, IDisposable
     {
+        private IItemInteractionStrategy _strategy;
+        private readonly PlayerData _playerData;
         private readonly ShopItemGridView _view;
         private readonly WeaponSpriteLoader _weaponSpriteLoader;
         private readonly MaterialSpriteLoader _materialSpriteLoader;
@@ -27,7 +29,9 @@ namespace ElementalBlacksmithStory.UI
         private readonly IItemShopFactory _itemShopFactory;
         private readonly ShopCartPresenter _shopCartPresenter;
         private readonly ShopService _shopService;
+        private readonly TradingPostService _tradingPostService;
         private readonly Dictionary<uint, ShopItemViewBase> _displayItems = new();
+        private readonly Dictionary<uint, IShopItem> _displayedShopItems = new();
         private readonly Dictionary<uint, IDisposable> _itemDisposables = new();
         private readonly CompositeDisposable _disposables = new();
 
@@ -39,6 +43,7 @@ namespace ElementalBlacksmithStory.UI
 
         [Inject]
         public ShopItemGridPresenter(
+            PlayerData playerData,
             ShopItemGridView view,
             WeaponSpriteLoader weaponSpriteLoader,
             MaterialSpriteLoader materialSpriteLoader,
@@ -48,10 +53,11 @@ namespace ElementalBlacksmithStory.UI
             RuneInventory runeInventory,
             IItemShopFactory itemShopFactory,
             ShopCartPresenter shopCartPresenter,
-            ShopService shopService = null,
-            ISubscriber<ChangeMoneyEvent> moneySubscriber = null
+            ShopService shopService,
+            TradingPostService tradingPostService
         )
         {
+            _playerData = playerData;
             _view = view;
             _weaponSpriteLoader = weaponSpriteLoader;
             _materialSpriteLoader = materialSpriteLoader;
@@ -62,8 +68,9 @@ namespace ElementalBlacksmithStory.UI
             _itemShopFactory = itemShopFactory;
             _shopCartPresenter = shopCartPresenter;
             _shopService = shopService;
+            _tradingPostService = tradingPostService;
 
-            moneySubscriber?.Subscribe(_ =>
+            playerData.Money.Subscribe(_ =>
             {
                 UpdateAllItemsAffordability();
             }).AddTo(_disposables);
@@ -75,21 +82,16 @@ namespace ElementalBlacksmithStory.UI
                 })
                 .AddTo(_disposables);
 
+            _tradingPostService.HighestBids.CollectionChanged += OnHighestBidsChanged;
             // 재료 인벤토리 수량 변경 시 실시간 그리드 갱신
-            if (_materialInventory != null)
-            {
-                _materialInventory.OnItemCountChangedAsObservable
+            _materialInventory?.OnItemCountChangedAsObservable
                     .Subscribe(OnMaterialCountChanged)
                     .AddTo(_disposables);
-            }
 
             // 룬 인벤토리 수량 변경 시 실시간 그리드 갱신
-            if (_runeInventory != null)
-            {
-                _runeInventory.OnItemCountChangedAsObservable
+            _runeInventory?.OnItemCountChangedAsObservable
                     .Subscribe(OnRuneCountChanged)
                     .AddTo(_disposables);
-            }
 
             // 장비(무기) 인벤토리 변경 시 실시간 그리드 갱신
             if (_equipmentInventory != null)
@@ -116,7 +118,15 @@ namespace ElementalBlacksmithStory.UI
                     .AddTo(_disposables);
             }
         }
-
+        private void OnHighestBidsChanged(in NotifyCollectionChangedEventArgs<KeyValuePair<uint, BidContext>> e)
+        {
+            UpdateAllItemsAffordability();
+        }
+        public void SetInteractionStrategy(IItemInteractionStrategy strategy)
+        {
+            _strategy = strategy;
+            UpdateAllItemsAffordability();
+        }
         private void OnMaterialCountChanged((SO_MaterialData item, uint count) data)
         {
             if (data.item == null) return;
@@ -355,55 +365,26 @@ namespace ElementalBlacksmithStory.UI
                     return;
             }
 
-            ShopItemViewBase itemView = _view.CreateItem(item.Id, item.Name, item.Value, icon, isUniqueItem);
+            ulong price = _strategy != null ? _strategy.GetPrice(item) : item.Value;
+            ShopItemViewBase itemView = _view.CreateItem(item.Id, item.Name, price, icon, isUniqueItem);
             if (itemView == null) return;
 
             if (item is Weapon weapon && itemView is EquipmentShopItemView eqView)
             {
                 await SetupWeaponRuneSlotsAsync(weapon, eqView);
             }
-
-            ulong availableMoney = _shopCartPresenter != null
-                ? _shopCartPresenter.ExpectedRemainingMoney
-                : (_shopService != null ? _shopService.CurrentMoney : 0);
-            bool inCartAlready = isUniqueItem && _shopCartPresenter != null && _shopCartPresenter.ContainsCartItem(item.Id);
-            bool canAfford = _isSellMode || (!inCartAlready && availableMoney >= item.Value);
-            itemView.SetInteractable(canAfford);
-
+            bool canInteract = _strategy?.CanInteract(item) ?? true;
+            itemView.SetInteractable(canInteract);
             if (_itemDisposables.TryGetValue(item.Id, out var prevDisp))
             {
                 prevDisp.Dispose();
                 _itemDisposables.Remove(item.Id);
             }
-
             var clickSub = itemView.OnClickAsObservable()
                 .ThrottleFirst(TimeSpan.FromMilliseconds(200))
                 .Subscribe(_ =>
                 {
-                    ulong currentExpected = _shopCartPresenter != null
-                        ? _shopCartPresenter.ExpectedRemainingMoney
-                        : (_shopService != null ? _shopService.CurrentMoney : 0);
-                    if (!_isSellMode && currentExpected < item.Value)
-                    {
-                        return;
-                    }
-
-                    if (isUniqueItem || item is Weapon || itemView is EquipmentShopItemView)
-                    {
-                        // 장비(무기) 아이템은 수량 선택 모달창 없이 1개를 카트에 즉시 추가
-                        if (_shopCartPresenter != null)
-                        {
-                            if (!_isSellMode && _shopCartPresenter.ContainsCartItem(item.Id))
-                            {
-                                return;
-                            }
-                            _shopCartPresenter.AddItem(item, 1).Forget();
-                        }
-                    }
-                    else
-                    {
-                        _shopCartPresenter.OpenAmountModal(item).Forget();
-                    }
+                    _strategy?.OnItemClicked(item);
                 });
             _itemDisposables[item.Id] = clickSub;
 
@@ -421,6 +402,7 @@ namespace ElementalBlacksmithStory.UI
                 }
             }
 
+            _displayedShopItems[item.Id] = item;
             _displayItems[item.Id] = itemView;
         }
 
@@ -432,6 +414,7 @@ namespace ElementalBlacksmithStory.UI
                 _itemDisposables.Remove(id);
             }
 
+            _displayedShopItems.Remove(id);
             _displayItems.Remove(id);
             _view.RemoveItem(id);
         }
@@ -452,15 +435,25 @@ namespace ElementalBlacksmithStory.UI
 
             ulong availableMoney = _shopCartPresenter != null
                 ? _shopCartPresenter.ExpectedRemainingMoney
-                : (_shopService != null ? _shopService.CurrentMoney : 0);
+                : (_shopService != null ? _playerData.Money.CurrentValue : 0);
 
             foreach (var kvp in _displayItems)
             {
-                if (kvp.Value != null)
+                var view = kvp.Value;
+                if (view == null) continue;
+
+                if (_displayedShopItems.TryGetValue(kvp.Key, out var item))
                 {
-                    bool inCartAlready = kvp.Value.IsUniqueItem && _shopCartPresenter != null && _shopCartPresenter.ContainsCartItem(kvp.Key);
-                    kvp.Value.SetInteractable(!inCartAlready && availableMoney >= kvp.Value.Price);
+                    if (_strategy != null)
+                    {
+                        view.SetPrice(_strategy.GetPrice(item));
+                        view.SetInteractable(_strategy.CanInteract(item));
+                        continue;
+                    }
                 }
+
+                bool inCartAlready = view.IsUniqueItem && _shopCartPresenter != null && _shopCartPresenter.ContainsCartItem(kvp.Key);
+                view.SetInteractable(!inCartAlready && availableMoney >= view.Price);
             }
         }
 
@@ -497,6 +490,7 @@ namespace ElementalBlacksmithStory.UI
             }
             _itemDisposables.Clear();
 
+            _displayedShopItems.Clear();
             _displayItems.Clear();
             _view.Clear();
         }
@@ -506,8 +500,8 @@ namespace ElementalBlacksmithStory.UI
             _refreshCts?.Cancel();
             _refreshCts?.Dispose();
             _refreshCts = null;
-
             ClearItems();
+            _tradingPostService.HighestBids.CollectionChanged -= OnHighestBidsChanged;
             _disposables.Dispose();
         }
     }

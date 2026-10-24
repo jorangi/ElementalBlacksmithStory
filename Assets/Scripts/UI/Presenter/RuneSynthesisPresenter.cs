@@ -4,10 +4,12 @@ using System.Threading;
 using Cysharp.Text;
 using Cysharp.Threading.Tasks;
 using ElementalBlacksmithStory.Core;
+using ElementalBlacksmithStory.Data;
 using ElementalBlacksmithStory.Events;
 using MessagePipe;
 using R3;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 using UnityEngine.UI;
 using VContainer;
 using VContainer.Unity;
@@ -25,6 +27,9 @@ namespace ElementalBlacksmithStory.UI
         private readonly IPublisher<PlaySoundEvent> _soundPublisher;
         [SerializeField] private readonly uint[] runes = new uint[3];
         private readonly uint[] _originalRunes = new uint[3];
+        private readonly Dictionary<uint, SO_DialogueData> _dialogueCache = new();
+        private SO_NPCData _npcData;
+        private readonly CancellationTokenSource _cts = new();
 
         [Inject]
         public RuneSynthesisPresenter(
@@ -104,7 +109,16 @@ namespace ElementalBlacksmithStory.UI
 
             Sprite sprite = await _runeSpriteLoader.GetSprite(runeId);
             _runeSynthesisView.SetRuneSprite(selectedSocketIndex, sprite);
-            PublishDialogue(DialogueType.CostChanged);
+
+            if (GetEquippedRuneCount() == 3)
+            {
+                PublishDialogue(DialogueType.CostChanged);
+            }
+            else
+            {
+                PublishDialogue(DialogueType.Open);
+            }
+
             if (selectedSocketIndex < runes.Length - 1)
             {
                 selectedSocketIndex++;
@@ -129,8 +143,21 @@ namespace ElementalBlacksmithStory.UI
             _runeInventoryPresenter.SyncDraftRunes(runes, _originalRunes);
 
             _runeSynthesisView.SetRuneSprite(socketIndex, null);
-            PublishDialogue(DialogueType.CostChanged);
+            PublishDialogue(DialogueType.Open);
             _soundPublisher.Publish(new PlaySoundEvent(40106));
+        }
+
+        private int GetEquippedRuneCount()
+        {
+            int count = 0;
+            for (int i = 0; i < runes.Length; i++)
+            {
+                if (runes[i] != 0)
+                {
+                    count++;
+                }
+            }
+            return count;
         }
 
         /// <summary>
@@ -174,61 +201,129 @@ namespace ElementalBlacksmithStory.UI
                 Sprite sprite = await _runeSpriteLoader.GetSprite(synthesizedRune.Id);
                 _runeSynthesisView.SetResultRune(sprite, synthesizedRune.Name);
             }
-            UnequipRune(0);
-            UnequipRune(1);
-            UnequipRune(2);
+            ClearSynthesisDraftSlots();
+        }
+
+        /// <summary>
+        /// 합성 성공 후 임시 슬롯 룬을 대사 변경 없이 초기화
+        /// </summary>
+        private void ClearSynthesisDraftSlots()
+        {
+            for (int i = 0; i < runes.Length; i++)
+            {
+                runes[i] = 0;
+                _runeSynthesisView.SetRuneSprite(i, null);
+            }
             _runeInventoryPresenter.ClearDraft();
             selectedSocketIndex = 0;
             _runeSynthesisView.SelectSocket(0);
         }
 
-        private enum DialogueType
+        private enum DialogueType : uint
         {
-            Open,
-            CostChanged,
-            NotEnoughMoney,
-            NotEnoughMaterials,
-            MythicalNotAllowed,
-            SynthesizeSuccess
+            Open = 600810,
+            CostChanged = 600811,
+            NotEnoughMoney = 600812,
+            NotEnoughMaterials = 600813,
+            MythicalNotAllowed = 600814,
+            SynthesizeSuccess = 600815
         }
 
         private void PublishDialogue(DialogueType type)
         {
+            Dictionary<string, object> parameters = null;
+
             switch (type)
             {
-                case DialogueType.Open:
-                    _runeSynthesisView.SetDialogue("룬 합성을 도와드릴게요. 슬롯에 합성할 룬 3개를 올려주세요.");
-                    break;
                 case DialogueType.CostChanged:
-                    if (_runeService != null)
+                    ulong cost = _runeService != null ? _runeService.CalculateSynthesizeCost(runes) : 0UL;
+                    if (cost == 0)
                     {
-                        ulong cost = _runeService.CalculateSynthesizeCost(runes);
-                        if (cost > 0)
-                        {
-                            _runeSynthesisView.SetDialogue(ZString.Format("합성 비용을 계산하니 <b>{0:N0}</b> 골드네요. 확인하시고 결정하세요.", cost));
-                        }
-                        else
-                        {
-                            _runeSynthesisView.SetDialogue("슬롯에 합성할 룬 3개를 올려주세요.");
-                        }
+                        PublishDialogue(DialogueType.Open);
+                        return;
                     }
-                    break;
-                case DialogueType.NotEnoughMoney:
-                    _runeSynthesisView.SetDialogue("골드가 부족하시네요. 정확한 비용을 치르셔야 작업을 진행해 드릴 수 있어요.");
-                    break;
-                case DialogueType.NotEnoughMaterials:
-                    _runeSynthesisView.SetDialogue("합성을 진행하려면 룬 세 개를 모두 올려주셔야 해요.");
-                    break;
-                case DialogueType.MythicalNotAllowed:
-                    _runeSynthesisView.SetDialogue("신화(Mythical) 등급의 룬은 합성 재료로 사용할 수 없어요.");
-                    break;
-                case DialogueType.SynthesizeSuccess:
-                    _runeSynthesisView.SetDialogue("룬 합성이 깔끔하게 끝났어요. 새로운 룬의 힘이 잘 깃들었네요.");
+                    parameters = new Dictionary<string, object>
+                    {
+                        { "cost", cost },
+                        { "costText", cost.ToString("N0") }
+                    };
                     break;
             }
+
+            SetDialogueByIdAsync((uint)type, parameters, ct: _cts.Token).Forget();
         }
+
+        private async UniTask<SO_NPCData> GetNPCDataAsync(uint speakerId, CancellationToken ct = default)
+        {
+            if (speakerId == 0) return null;
+            if (_npcData != null) return _npcData;
+
+            try
+            {
+                var handle = Addressables.LoadAssetAsync<SO_NPCData>(speakerId.ToString());
+                _npcData = await handle.ToUniTask(cancellationToken: ct);
+                return _npcData;
+            }
+            catch (Exception ex)
+            {
+                Debug.LogWarning($"[RuneSynthesisPresenter] NPC 데이터({speakerId}) 로드 실패: {ex.Message}");
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// 대사 ID로 SO_DialogueData를 로드하고 조건문, 플레이스홀더, 한국어 조사를 파싱하여 출력합니다.
+        /// </summary>
+        public async UniTask SetDialogueByIdAsync(uint dialogueId, IReadOnlyDictionary<string, object> parameters = null, int lineIndex = 0, CancellationToken ct = default)
+        {
+            try
+            {
+                if (!_dialogueCache.TryGetValue(dialogueId, out var dialogueData) || dialogueData == null)
+                {
+                    var handle = Addressables.LoadAssetAsync<SO_DialogueData>(dialogueId.ToString());
+                    dialogueData = await handle.ToUniTask(cancellationToken: ct);
+                    if (dialogueData != null)
+                    {
+                        _dialogueCache[dialogueId] = dialogueData;
+                    }
+                }
+
+                if (dialogueData != null && dialogueData.contents != null && dialogueData.contents.Count > 0)
+                {
+                    if (lineIndex < 0 || lineIndex >= dialogueData.contents.Count)
+                    {
+                        lineIndex = 0;
+                    }
+
+                    var line = dialogueData.contents[lineIndex];
+                    if (line.speakerId != 0)
+                    {
+                        var npcData = await GetNPCDataAsync(line.speakerId, ct);
+                        if (npcData != null)
+                        {
+                            _runeSynthesisView.SetNPCName(npcData.NpcName);
+                        }
+                    }
+
+                    string formattedText = line.GetFormattedText(parameters);
+                    _runeSynthesisView.SetDialogue(formattedText);
+                }
+                else
+                {
+                    Debug.LogWarning($"[RuneSynthesisPresenter] 대사 데이터({dialogueId})를 찾을 수 없습니다.");
+                }
+            }
+            catch (OperationCanceledException) { }
+            catch (Exception ex)
+            {
+                Debug.LogWarning($"[RuneSynthesisPresenter] 대사 데이터({dialogueId}) 로드 실패: {ex.Message}");
+            }
+        }
+
         public void Dispose()
         {
+            _cts.Cancel();
+            _cts.Dispose();
             _disposables.Dispose();
             GC.SuppressFinalize(this);
         }

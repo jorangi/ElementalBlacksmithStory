@@ -15,7 +15,7 @@ MonoBehaviour:
   runeName: "\uD669\uAE08\uC758 \uC190"
   description: "\uACF5\uACA9 \uC2DC 80% \uD655\uB960\uB85C \uC785\uD78C \uD53C\uD574\uB7C9\uC758
     15%\uB9CC\uD07C\uC758 \uACE8\uB4DC\uB97C \uD68D\uB4DD\uD55C\uB2E4. "
-  grade: 250000
+  grade: 150001
   nextRune: {fileID: 0}
   value: 2000
   effects:
@@ -32,5 +32,5 @@ MonoBehaviour:
     - rid: 700750030001
       type: {class: PlunderAttackEffect, ns: ElementalBlacksmithStory.Effect, asm: Assembly-CSharp}
       data:
-        goldPerDamage: 0.15
         chance: 80
+        goldPerDamage: 0.15

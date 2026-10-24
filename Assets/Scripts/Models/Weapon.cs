@@ -12,28 +12,45 @@ namespace ElementalBlacksmithStory.Core
     {
         private SO_WeaponData _weaponData;
         public SO_WeaponData Data => _weaponData;
-        //Weapon 인스턴스 Id 누적용
+        /// <summary>
+        /// Weapon 인스턴스 Id 누적용
+        /// </summary>
         private static uint lastId;
 
-        //Weapon 인스턴스의 id
+        /// <summary>
+        /// Weapon 인스턴스의 id
+        /// </summary>
         private readonly uint _id;
         public uint Id => _id;
 
-        //Weapon의 데이터 id
+        /// <summary>
+        /// Weapon의 데이터 id
+        /// </summary>
         public uint WeaponId => _weaponData.Id;
 
-        // 최종 비용
+        /// <summary>
+        /// 최종 비용
+        /// </summary>
         private ulong _cost;
         public ulong Cost => _cost;
 
-        // 누적 가격(+최종, 마진 제외)
+        /// <summary>
+        /// 누적 가격(+최종, 마진 제외)
+        /// </summary>
         private ulong _basePrice;
         public ulong BasePrice => _basePrice;
         private ulong _price;
         public ulong Price => _price;
+        /// <summary>
+        /// 최소 금액 보장 횟수
+        /// </summary>
+        private uint _minimumGuarantee = 0;
+        public uint MinimumGuarantee => _minimumGuarantee;
         private readonly SO_WeaponData _baseWeaponData;
         public SO_WeaponData BaseWeaponData => _baseWeaponData;
-        // 강화 히스토리 스택 (무기 ID, 해당 단계에서 추가된 기본 가격, 해당 단계 비용)
+        /// <summary>
+        /// 강화 히스토리 스택 (무기 ID, 해당 단계에서 추가된 기본 가격, 해당 단계 비용)
+        /// </summary>
         private readonly Stack<EnhanceStep> _enhanceHistory = new();
         public Stack<EnhanceStep> EnhanceHistory => _enhanceHistory;
         string IShopItem.Name => Data != null ? Data.weaponName : string.Empty;

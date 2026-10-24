@@ -15,8 +15,8 @@ namespace ElementalBlacksmithStory.Core
 {
     public class EnhancementService : IDisposable, IStartable
     {
+        private readonly PlayerData _playerData;
         private readonly IPublisher<ChangeWeaponEvent> weaponChangePublisher;
-        private readonly IPublisher<ChangeMoneyEvent> moneyChangePublisher;
         private readonly IPublisher<ChangeSelectedMaterialsEvent> _changedSelectedMaterialPublisher;
         private readonly IPublisher<UpdateEnhanceChanceEvent> _updateEnhanceChancePublisher;
         private readonly IPublisher<AcquireItemEvent> _acquireItemPublisher;
@@ -30,7 +30,6 @@ namespace ElementalBlacksmithStory.Core
         private readonly RecipeUnlockService _recipeUnlockService;
         private readonly WeaponRollbackService _weaponRollbackService;
         private readonly WeaponTreePathService _pathService;
-        private ulong money = 100000000000;
         List<uint> cachedPinnedWeaponEnhancePath = null;
         uint pinnedRecipeId;
         private CompositeDisposable _disposables = new();
@@ -62,9 +61,8 @@ namespace ElementalBlacksmithStory.Core
             set => _isHardMode = value;
         }
 
-        public EnhancementService(IPublisher<ChangeWeaponEvent> weaponChangePublisher,
-                                    IPublisher<ChangeMoneyEvent> moneyChangePublisher,
-                                    ISubscriber<ChangeMoneyEvent> moneyChangeSubscriber,
+        public EnhancementService(PlayerData playerData,
+                                    IPublisher<ChangeWeaponEvent> weaponChangePublisher,
                                     IPublisher<PlaySoundEvent> soundPublisher,
                                     IPublisher<ChangeSelectedMaterialsEvent> changedSelectedMaterialPublisher,
                                     IPublisher<UpdateEnhanceChanceEvent> updateEnhanceChancePublisher,
@@ -82,6 +80,7 @@ namespace ElementalBlacksmithStory.Core
                                     ISubscriber<SubmitMaterialEvent> submitMaterialSubscriber
                                     )
         {
+            this._playerData = playerData;
             this.weaponDatabase = weaponDatabase;
             this.materialDatabase = materialDatabase;
             this._materialInventory = materialInventory;
@@ -91,22 +90,15 @@ namespace ElementalBlacksmithStory.Core
             this._weaponRollbackService = weaponRollbackService;
             this._pathService = pathService;
             this.weaponChangePublisher = weaponChangePublisher;
-            this.moneyChangePublisher = moneyChangePublisher;
             this._soundPublisher = soundPublisher;
             this._changedSelectedMaterialPublisher = changedSelectedMaterialPublisher;
             this._updateEnhanceChancePublisher = updateEnhanceChancePublisher;
             this._acquireItemPublisher = acquireItemPublisher;
-
-            moneyChangeSubscriber.Subscribe(e =>
-            {
-                money = e.MoneyChange;
-            }).AddTo(_disposables);
-
             submitMaterialSubscriber.Subscribe(e =>
             {
                 BaseMaterialData mat = RecipeKeyHelper.IsWeaponId(e.MaterialId)
-                    ? (BaseMaterialData)weaponDatabase.Get(e.MaterialId)
-                    : (BaseMaterialData)materialDatabase.Get(e.MaterialId);
+                    ? weaponDatabase.Get(e.MaterialId)
+                    : materialDatabase.Get(e.MaterialId);
 
                 if (mat == null) return;
 
@@ -124,8 +116,7 @@ namespace ElementalBlacksmithStory.Core
 
             sellEventSubscriber.Subscribe(e =>
             {
-                money += e.Price;
-                moneyChangePublisher.Publish(new ChangeMoneyEvent(out uint tempId, money));
+                playerData.AddMoney(e.Price);
                 totalCost = 0;
                 soundPublisher.Publish(new PlaySoundEvent(40103));
 
@@ -169,7 +160,6 @@ namespace ElementalBlacksmithStory.Core
             weaponChangePublisher.Publish(new ChangeWeaponEvent(_currentWeapon, 10001, 0));
             cachedWeaponId = 10001;
             UpdateNextRecipe(autoFillMaterials: true, force: true);
-            this.moneyChangePublisher.Publish(new ChangeMoneyEvent(out uint tempId, money));
         }
         /// <summary>
         /// 다음 레시피 업데이트
@@ -356,16 +346,14 @@ namespace ElementalBlacksmithStory.Core
                         cost += kv.Value * kv.Key.Value;
                     }
 
-                    if (money < cost)
+                    if (_playerData.TrySpend(cost))
                     {
-                        Debug.LogWarning($"[EnhancementService] 강화 비용이 부족합니다. 요구비용: {cost}, 현재보유금액: {money}");
+                        Debug.LogWarning($"[EnhancementService] 강화 비용이 부족합니다. 요구비용: {cost}, 현재보유금액: {_playerData.Money.CurrentValue}");
                         return EnhanceResult.NEEDSMOREMONEY;
                     }
 
                     _soundPublisher.Publish(new PlaySoundEvent(40101));
-                    money -= cost;
                     totalCost += cost;
-                    moneyChangePublisher.Publish(new ChangeMoneyEvent(out uint failDiscoverRecipe, money));
 
                     ConsumeMaterials(materials);
 
@@ -403,15 +391,13 @@ namespace ElementalBlacksmithStory.Core
                     cost += kv.Value * kv.Key.Value;
                 }
 
-                if (money < cost)
+                if (!_playerData.TrySpend(cost))
                 {
-                    Debug.LogWarning($"[EnhancementService] 강화 비용이 부족합니다. 요구비용: {cost}, 현재보유금액: {money}");
+                    Debug.LogWarning($"[EnhancementService] 강화 비용이 부족합니다. 요구비용: {cost}, 현재보유금액: {_playerData.Money.CurrentValue}");
                     return EnhanceResult.NEEDSMOREMONEY;
                 }
 
-                money -= cost;
                 totalCost += cost;
-                moneyChangePublisher.Publish(new ChangeMoneyEvent(out uint discoverRecipe, money));
 
                 ConsumeMaterials(materials);
 
@@ -483,13 +469,11 @@ namespace ElementalBlacksmithStory.Core
             }
 
             cost = weapon.Cost;
-            if (money < cost)
+            if (!_playerData.TrySpend(cost))
             {
-                Debug.LogWarning($"[EnhancementService]강화 비용이 부족합니다. 요구비용: {weapon.Cost}, 현재보유금액: {money}");
+                Debug.LogWarning($"[EnhancementService]강화 비용이 부족합니다. 요구비용: {weapon.Cost}, 현재보유금액: {_playerData.Money.CurrentValue}");
                 return EnhanceResult.NEEDSMOREMONEY;
             }
-            money -= cost;
-            moneyChangePublisher.Publish(new ChangeMoneyEvent(out uint tempId, money));
             totalCost += cost;
 
             if (_currentRecipe.recipeMaterials != null)
@@ -619,13 +603,11 @@ namespace ElementalBlacksmithStory.Core
             }
 
             ulong cost = weapon.Cost;
-            if (money < cost)
+            if (!_playerData.TrySpend(cost))
             {
-                Debug.LogWarning($"[EnhancementService]강화 비용이 부족합니다. 요구비용: {weapon.Cost}, 현재보유금액: {money}");
+                Debug.LogWarning($"[EnhancementService]강화 비용이 부족합니다. 요구비용: {weapon.Cost}, 현재보유금액: {_playerData.Money.CurrentValue}");
                 return;
             }
-            money -= cost;
-            moneyChangePublisher.Publish(new ChangeMoneyEvent(out uint tempId, money));
             totalCost += cost;
 
             if (_currentRecipe.recipeMaterials != null)

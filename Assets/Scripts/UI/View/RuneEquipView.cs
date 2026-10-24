@@ -41,9 +41,9 @@ namespace ElementalBlacksmithStory.UI
         /// 말풍선 텍스트
         /// </summary>
         [SerializeField] TextMeshProUGUI bubbleText;
+        [SerializeField] TextMeshProUGUI npcName;
         private CancellationTokenSource _cts;
         private MotionHandle motionHandle;
-        [SerializeField] private Color rootPanelColor;
         private static readonly Color SELECTED_SLOT_COLOR = new(0.96f, 0.49f, 0.49f);
 
         public Observable<Unit> OnRuneSlotButtonAsObservable(int index)
@@ -173,6 +173,13 @@ namespace ElementalBlacksmithStory.UI
         public void SetDialogue(string text)
         {
             bubbleText.SetText(text);
+        }
+        public void SetNPCName(string name)
+        {
+            if (npcName != null)
+            {
+                npcName.SetText(name);
+            }
         }
         public void SetSocketCount(int socketCount)
         {

@@ -4,6 +4,46 @@
 
 ---
 
+## 2026-10-25
+
+- `ObservableCollections`라이브러리 추가
+  - `ObservableDictionary`등 옵저버형 콜렉션을 지원하기 위함
+  - `Subject`를 이용하여 수동 구현해도 되지만 라이브러리 사용이 Zero-Allocation인 등 이점이 많음
+- `BidContext` 클래스 추가
+  - 경매 입찰가 데이터로 bidder와 price만이 들어가는 가벼운 구조.
+- `TradingPostService`에 로직 추가
+  - 경매에 올라온 물품의 최고 입찰가를 기록하는 uint, BidContext 쌍의 ObservableDictionary를 추가
+    - Add, Remove, Clear 지원
+  - 입찰 함수 추가
+    - 입찰이 없거나 기존 입찰가보다 높은 경우에만 추가됨
+- 버그 수정
+  - 룬 장착·합성시 NPC의 이름이 출력되지 않던 문제
+  - 룬 합성 완료 대사가 즉시 변경되는 문제
+  - 룬 장착·합성 슬롯에서 룬을 해제해도 대사가 변경되지 않던 문제
+
+## 2026-10-24
+
+- 캐릭터 스탠딩 이미지 4종 추가
+  - 포르테
+  - 멜리아
+  - 호룬
+  - 코르크
+- 교역소장 코르크 데이터 일부 수정
+  - 경매장 주인 -> 교역소장
+  - Auction 키워드 -> TradingPost로 변경
+- `TradingPost`를 위한 하위 Presenter와 View, Service 작성
+  - `BidView` 작성
+  - `BidPresenter` 작성
+    - `IShopItem`을 인자로 받아 모든 아이템에 대응하게끔 작성
+    - 버튼을 통한 가격 변동은 점진적으로 델타값이 커지게끔 설정(log10)
+- `ChangeMoneyEvent` 제거
+  - 기존에 여기저기 뿔뿔이 흩어져 있던 money관련 변수를 `PlayerData` 내의 `ReactiveProperty`로 통합
+    - `ChangeMoneyEvent`나 각 서비스 로직에서 개별적으로 사용하던 돈 관련 로직을 통합
+- `ShopItemGridPresenter`에 있던 아이템 선택 로직을 `IItemInteractionStrategy`을 이용하여 전략패턴으로 리팩토링하여 상점별 다르게 대응
+  - 기존에 사용하던 로직은 `ShopCartInteractionStrategy`로 분리
+  - 교역소에서 아이템을 구매하는 경매 해동은 `TradingPostBidInteractionStrategy`로 추가
+  - 후에 `TradingPostNegotiationInteractionStrategy`로 추가할 것
+
 ## 2026-10-23
 
 - 룬 합성 UI 변경

@@ -12,10 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b95dc85e94140ab4a84be25b52aada74, type: 3}
   m_Name: 600705
   m_EditorClassIdentifier: Assembly-CSharp::ElementalBlacksmithStory.Data.SO_DialogueData
-  description: "\uBE44\uC2E4\uD55C \uACBD\uB9E4\uC0AC, \uCF54\uB974\uD06C\n\uC77C\uBC18
+  description: "\uBE44\uC2E4\uD55C \uAD50\uC5ED\uC18C \uAD00\uB9AC\uC778, \uCF54\uB974\uD06C\n\uC77C\uBC18
     \uC120\uBB3C\uC5D0 \uB300\uD55C \uAC10\uC0AC\n\uD638\uAC10\uB3C4 \uBCF4\uD1B5"
   contents:
   - speakerId: 50007
-    text: "\uD638\uC624, \uCC59\uACA8\uC8FC\uC154\uC11C \uAC10\uC0AC\uD569\uB2C8\uB2E4,
-      {username} \uB2D8. \uBCF4\uAD00\uD568\uC5D0 \uC798 \uB123\uC5B4\uB450\uB3C4\uB85D
-      \uD558\uC8E0."
+    text: "챙겨 주셔서 감사합니다, {username} 님. 숫자는 예상을 벗어나지 않는데, 사람은 가끔... 나쁘진 않군요."

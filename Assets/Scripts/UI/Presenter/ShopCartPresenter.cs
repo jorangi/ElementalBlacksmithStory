@@ -17,6 +17,7 @@ namespace ElementalBlacksmithStory.UI
 {
     public class ShopCartPresenter : IAsyncStartable, IDisposable
     {
+        private readonly PlayerData _playerData;
         private readonly ShopCartView _view;
         private readonly SelectShopAmountView _selectShopAmountView;
         private readonly MaterialSpriteLoader _materialSpriteLoader;
@@ -24,7 +25,6 @@ namespace ElementalBlacksmithStory.UI
         private readonly RuneSpriteLoader _runeSpriteLoader;
         private readonly SO_MaterialDatabase _materialDatabase;
         private readonly IPublisher<PlaySoundEvent> _soundPublisher;
-        private readonly ISubscriber<ChangeMoneyEvent> _moneySubscriber;
         private readonly ShopService _shopService;
         private readonly MaterialInventory _materialInventory;
         private readonly EquipmentInventory _equipmentInventory;
@@ -48,17 +48,16 @@ namespace ElementalBlacksmithStory.UI
             {
                 if (_isSellMode)
                 {
-                    return _currentMoney + GetTotalCartCost();
+                    return _playerData.Money.CurrentValue + GetTotalCartCost();
                 }
                 ulong cartCost = GetTotalCartCost();
-                return _currentMoney >= cartCost ? _currentMoney - cartCost : 0;
+                return _playerData.Money.CurrentValue >= cartCost ? _playerData.Money.CurrentValue - cartCost : 0;
             }
         }
 
         private const uint MAX_AMOUNT = 999;
         private SO_ShopData _shopData;
 
-        private ulong _currentMoney = 0;
         private IShopItem _currentModalItem;
         private uint _modalItemId;
         private uint _modalAmount;
@@ -66,6 +65,7 @@ namespace ElementalBlacksmithStory.UI
 
         [Inject]
         public ShopCartPresenter(
+            PlayerData playerData,
             ShopCartView view,
             SelectShopAmountView selectShopAmountView,
             MaterialSpriteLoader materialSpriteLoader,
@@ -73,7 +73,6 @@ namespace ElementalBlacksmithStory.UI
             SO_MaterialDatabase materialDatabase,
             RuneSpriteLoader runeSpriteLoader,
             IPublisher<PlaySoundEvent> soundPublisher,
-            ISubscriber<ChangeMoneyEvent> moneySubscriber,
             ShopService shopService,
             MaterialInventory materialInventory,
             EquipmentInventory equipmentInventory,
@@ -81,6 +80,7 @@ namespace ElementalBlacksmithStory.UI
             RuneInventory runeInventory = null
         )
         {
+            _playerData = playerData;
             _view = view;
             _selectShopAmountView = selectShopAmountView;
             _materialSpriteLoader = materialSpriteLoader;
@@ -88,17 +88,11 @@ namespace ElementalBlacksmithStory.UI
             _runeSpriteLoader = runeSpriteLoader;
             _materialDatabase = materialDatabase;
             _soundPublisher = soundPublisher;
-            _moneySubscriber = moneySubscriber;
             _shopService = shopService;
             _materialInventory = materialInventory;
             _equipmentInventory = equipmentInventory;
             _runeInventory = runeInventory;
             _shopDialoguePublisher = shopDialoguePublisher;
-
-            if (_shopService != null)
-            {
-                _currentMoney = _shopService.CurrentMoney;
-            }
 
             BindAmountModal();
             BindCartButtons();
@@ -169,9 +163,8 @@ namespace ElementalBlacksmithStory.UI
 
         private void BindAmountModal()
         {
-            _moneySubscriber.Subscribe(e =>
+            _playerData.Money.Subscribe(e =>
             {
-                _currentMoney = e.MoneyChange;
                 if (_selectShopAmountView != null && _selectShopAmountView.IsActivated)
                 {
                     UpdateModalPriceAndWallet();
@@ -336,9 +329,9 @@ namespace ElementalBlacksmithStory.UI
             if (unitPrice == 0) return MAX_AMOUNT;
 
             ulong otherCost = GetCartTotalCostExcept(itemId);
-            if (_currentMoney <= otherCost) return 0;
+            if (_playerData.Money.CurrentValue <= otherCost) return 0;
 
-            ulong availableMoney = _currentMoney - otherCost;
+            ulong availableMoney = _playerData.Money.CurrentValue - otherCost;
             ulong maxByMoney = availableMoney / unitPrice;
 
             return (uint)Math.Min((ulong)MAX_AMOUNT, maxByMoney);
@@ -390,11 +383,12 @@ namespace ElementalBlacksmithStory.UI
             ulong totalCartCost = otherCost + currentItemCost;
             if (_isSellMode)
             {
-                _selectShopAmountView.SetRemainingWallet(_currentMoney + totalCartCost);
+                ulong remaining = _playerData.Money.CurrentValue >= totalCartCost ? _playerData.Money.CurrentValue - totalCartCost : 0;
+                _selectShopAmountView.SetRemainingWallet(remaining);
             }
             else
             {
-                ulong remaining = _currentMoney >= totalCartCost ? _currentMoney - totalCartCost : 0;
+                ulong remaining = _playerData.Money.CurrentValue >= totalCartCost ? _playerData.Money.CurrentValue - totalCartCost : 0;
                 _selectShopAmountView.SetRemainingWallet(remaining);
             }
         }

@@ -33,7 +33,7 @@ namespace ElementalBlacksmithStory.Core
         {
             weaponDatabase.Init();
             materialDatabase.Init();
-            runeDatabase?.Init();
+            runeDatabase.Init();
             _acquireItemPublisher = acquireItemPublisher;
             _gameExitPresenter = gameExitPresenter;
             _sfxPublisher = sfxPublisher;

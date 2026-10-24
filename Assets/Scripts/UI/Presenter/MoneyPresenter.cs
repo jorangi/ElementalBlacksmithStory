@@ -1,13 +1,13 @@
 using System;
+using System.Threading;
+using Cysharp.Threading.Tasks;
+using ElementalBlacksmithStory.Data;
+using ElementalBlacksmithStory.Events;
 using MessagePipe;
+using R3;
 using UnityEngine;
 using VContainer;
 using VContainer.Unity;
-using Cysharp.Threading.Tasks;
-using ElementalBlacksmithStory.Events;
-using ElementalBlacksmithStory.Data;
-using System.Threading;
-using R3;
 
 namespace ElementalBlacksmithStory.UI
 {
@@ -17,16 +17,16 @@ namespace ElementalBlacksmithStory.UI
         private readonly CompositeDisposable _disposables = new();
         [Inject]
         public MoneyPresenter(
-            MoneyView view,
-            ISubscriber<ChangeMoneyEvent> subscriber)
+            PlayerData playerData,
+            MoneyView view)
         {
             this._view = view;
-            subscriber.Subscribe(e =>
+            playerData.Money.Subscribe(e =>
             {
-               _view.SetMoney(e.MoneyChange).Forget();
+                _view.SetMoney(e).Forget();
             }).AddTo(_disposables);
         }
-        public void Start(){}
+        public void Start() { }
         public void Dispose()
         {
             _disposables.Dispose();

@@ -1,12 +1,14 @@
 using System;
+using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
+using ElementalBlacksmithStory.Core;
 using ElementalBlacksmithStory.Data;
 using ElementalBlacksmithStory.Events;
-using R3;
+using ElementalBlacksmithStory.UI.Strategy;
 using MessagePipe;
+using R3;
 using VContainer;
 using VContainer.Unity;
-using System.Collections.Generic;
 
 namespace ElementalBlacksmithStory.UI
 {
@@ -20,6 +22,8 @@ namespace ElementalBlacksmithStory.UI
         private readonly ShopItemGridPresenter _itemGridPresenter;
         private readonly ShopKeeperPresenter _shopKeeperPresenter;
         private readonly ShopTabPresenter _tabPresenter;
+        private readonly ShopCartInteractionStrategy _shopCartStrategy;
+        private readonly TradingPostBidInteractionStrategy _tradingPostStrategy;
         private readonly CompositeDisposable _disposable = new();
         private readonly IPublisher<StartShopDialogueEvent> _shopDialoguePublisher;
 
@@ -30,7 +34,10 @@ namespace ElementalBlacksmithStory.UI
             ShopItemGridPresenter itemGridPresenter,
             ShopKeeperPresenter shopKeeperPresenter,
             ShopTabPresenter tabPresenter,
-            IPublisher<StartShopDialogueEvent> shopDialoguePublisher
+            ShopCartPresenter shopCartPresenter,
+            BidPresenter bidPresenter,
+            IPublisher<StartShopDialogueEvent> shopDialoguePublisher,
+            TradingPostService tradingPostService = null
             )
         {
             _view = marketView;
@@ -40,6 +47,15 @@ namespace ElementalBlacksmithStory.UI
             _tabPresenter = tabPresenter;
             _shopDialoguePublisher = shopDialoguePublisher;
 
+            if (shopCartPresenter != null)
+            {
+                _shopCartStrategy = new ShopCartInteractionStrategy(shopCartPresenter);
+            }
+            if (bidPresenter != null)
+            {
+                _tradingPostStrategy = new TradingPostBidInteractionStrategy(bidPresenter, tradingPostService);
+            }
+
             _view.OnGeneralShopBtnClickAsObservable
                 .Subscribe(_ => OpenShop(MarketType.GENERAL))
                 .AddTo(_disposable);
@@ -48,11 +64,8 @@ namespace ElementalBlacksmithStory.UI
                 .Subscribe(_ => OpenShop(MarketType.WEAPON))
                 .AddTo(_disposable);
 
-            _view.OnAuctionBtnClickAsObservable
-                .Subscribe(_ =>
-                {
-                    // TODO: 경매장 세션은 아마 따로 팔 듯
-                })
+            _view.OnTradingPostBtnClickAsObservable
+                .Subscribe(_ => OpenShop(MarketType.TRADINGPOST))
                 .AddTo(_disposable);
 
             _view.OnCloseBtnClickAsObservable
@@ -71,9 +84,18 @@ namespace ElementalBlacksmithStory.UI
         /// </summary>
         private void OpenShop(MarketType type)
         {
+            if (type == MarketType.TRADINGPOST)
+            {
+                _itemGridPresenter.SetInteractionStrategy(_tradingPostStrategy);
+            }
+            else
+            {
+                _itemGridPresenter.SetInteractionStrategy(_shopCartStrategy);
+            }
+
             var shopData = _view.GetShopData(type);
             _shopKeeperPresenter.ClearView();
-            _view.Show(type);
+            _view.Show();
 
             if (shopData != null)
             {

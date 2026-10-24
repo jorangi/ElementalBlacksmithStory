@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 186890aa5fd0ad946a12991833f13e2b, type: 3}
+  m_Name: Trader Post
+  m_EditorClassIdentifier: Assembly-CSharp::ElementalBlacksmithStory.Data.SO_ShopData
+  _shopType: 2
+  _shopName: "\uAD50\uC5ED\uC18C"
+  _npcId: 50007
+  _buyDialogueId: {fileID: 11400000, guid: f08dc0972c590c84aaf36b88d46c69d9, type: 2}
+  _sellDialogueId: {fileID: 11400000, guid: 653afb4814ba4434195ad1900b365d66, type: 2}
+  _purchaseDialogueId: {fileID: 11400000, guid: b058d715d2afca1438bfc337778b5801, type: 2}
+  _categories:
+  - {fileID: 11400000, guid: 753ebb678b33f5c4abb4746776f46872, type: 2}
+  - {fileID: 11400000, guid: c6b7731d4d8bbf443b1874a61c82b578, type: 2}
+  - {fileID: 11400000, guid: 9ea5bcd0d56704345b2e4a8cfba8aab8, type: 2}

@@ -10,6 +10,7 @@ namespace ElementalBlacksmithStory.UI
         [Header("상점 데이터")]
         [SerializeField] private SO_ShopData generalShopData;
         [SerializeField] private SO_ShopData equipmentShopData;
+        [SerializeField] private SO_ShopData tradingPostData;
 
         [Header("상점 세션 오브젝트")]
         [SerializeField] private GameObject bubble;
@@ -19,22 +20,23 @@ namespace ElementalBlacksmithStory.UI
         [Header("버튼")]
         [SerializeField] private Button generalShopBtn;
         [SerializeField] private Button equipmentShopBtn;
-        [SerializeField] private Button auctionBtn;
+        [SerializeField] private Button tradingPostBtn;
         [SerializeField] private Button closeBtn;
 
         public Observable<Unit> OnGeneralShopBtnClickAsObservable => generalShopBtn.OnClickAsObservable();
         public Observable<Unit> OnEquipmentShopBtnClickAsObservable => equipmentShopBtn.OnClickAsObservable();
-        public Observable<Unit> OnAuctionBtnClickAsObservable => auctionBtn.OnClickAsObservable();
+        public Observable<Unit> OnTradingPostBtnClickAsObservable => tradingPostBtn.OnClickAsObservable();
         public Observable<Unit> OnCloseBtnClickAsObservable => closeBtn.OnClickAsObservable();
 
         public SO_ShopData GetShopData(MarketType type) => type switch
         {
             MarketType.GENERAL => generalShopData,
             MarketType.WEAPON => equipmentShopData,
+            MarketType.TRADINGPOST => tradingPostData,
             _ => null
         };
 
-        public void Show(MarketType type)
+        public void Show()
         {
             if (bubble != null) bubble.SetActive(true);
             if (shopKeeper != null) shopKeeper.SetActive(true);
@@ -42,7 +44,7 @@ namespace ElementalBlacksmithStory.UI
 
             if (generalShopBtn != null) generalShopBtn.gameObject.SetActive(false);
             if (equipmentShopBtn != null) equipmentShopBtn.gameObject.SetActive(false);
-            if (auctionBtn != null) auctionBtn.gameObject.SetActive(false);
+            if (tradingPostBtn != null) tradingPostBtn.gameObject.SetActive(false);
         }
 
         public void Hide()
@@ -53,7 +55,7 @@ namespace ElementalBlacksmithStory.UI
 
             if (generalShopBtn != null) generalShopBtn.gameObject.SetActive(true);
             if (equipmentShopBtn != null) equipmentShopBtn.gameObject.SetActive(true);
-            if (auctionBtn != null) auctionBtn.gameObject.SetActive(true);
+            if (tradingPostBtn != null) tradingPostBtn.gameObject.SetActive(true);
         }
     }
 }

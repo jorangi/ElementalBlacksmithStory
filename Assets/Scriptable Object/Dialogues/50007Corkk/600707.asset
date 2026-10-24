@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b95dc85e94140ab4a84be25b52aada74, type: 3}
+  m_Name: 600707
+  m_EditorClassIdentifier: Assembly-CSharp::ElementalBlacksmithStory.Data.SO_DialogueData
+  description: "비실한 교역소 관리인, 코르크\n경매장 입장 대사"
+  contents:
+  - speakerId: 50007
+    text: "{myBidCount > 0 ? 어서 오세요. 입찰해 두신 물건들은 계속 지켜보고 있었습니다. 호가가 어떻게 움직였는지 확인해 보시죠. : 어서 오세요. 한 번 걸어 두시면 사람들이 알아서 숫자를 올려 줍니다. 저는 그걸 보는 게 좋더군요.}"
