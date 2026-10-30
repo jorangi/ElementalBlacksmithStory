@@ -53,6 +53,7 @@ namespace ElementalBlacksmithStory.UI
                 .Subscribe(_ =>
                 {
                     _service.Bid(_currentTargetId, new BidContext("player", _settedPrice));
+                    _playerData.TrySpend(_settedPrice);
                     Hide();
                 }).AddTo(_disposables);
 

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading;
+using Cysharp.Text;
 using Cysharp.Threading.Tasks;
 using ElementalBlacksmithStory.Core;
 using ElementalBlacksmithStory.Data;
@@ -17,7 +18,7 @@ namespace ElementalBlacksmithStory.UI
 {
     public class ShopItemGridPresenter : IAsyncStartable, IDisposable
     {
-        private IItemInteractionStrategy _strategy;
+        private IShopModeStrategy _strategy;
         private readonly PlayerData _playerData;
         private readonly ShopItemGridView _view;
         private readonly WeaponSpriteLoader _weaponSpriteLoader;
@@ -40,6 +41,8 @@ namespace ElementalBlacksmithStory.UI
         private bool _isInitialized = false;
         private CancellationTokenSource _refreshCts;
         private Func<IShopItem, bool> _categoryFilter = _ => true;
+
+        private readonly List<IShopItem> _itemBuffer = new(64);
 
         [Inject]
         public ShopItemGridPresenter(
@@ -122,10 +125,10 @@ namespace ElementalBlacksmithStory.UI
         {
             UpdateAllItemsAffordability();
         }
-        public void SetInteractionStrategy(IItemInteractionStrategy strategy)
+        public void SetInteractionStrategy(IShopModeStrategy strategy)
         {
             _strategy = strategy;
-            UpdateAllItemsAffordability();
+            if (_isInitialized) RefreshGridAsync().Forget();
         }
         private void OnMaterialCountChanged((SO_MaterialData item, uint count) data)
         {
@@ -196,33 +199,6 @@ namespace ElementalBlacksmithStory.UI
             _isInitialized = true;
             await UniTask.CompletedTask;
         }
-
-        /// <summary>
-        /// SO_ShopData 기반으로 상점 판매 물품 목록 교체 (소속 카테고리의 모든 입고 아이템 취합)
-        /// </summary>
-        public void SetShopGoods(SO_ShopData shopData)
-        {
-            _shopBuyGoods.Clear();
-
-            if (shopData != null)
-            {
-                var stockedItems = shopData.GetAllStockedItems();
-                foreach (var entry in stockedItems)
-                {
-                    var item = _itemShopFactory.Create(entry.itemId, entry.stock, 1.0f);
-                    if (item != null)
-                    {
-                        _shopBuyGoods.Add(item);
-                    }
-                }
-            }
-
-            if (_isInitialized && !_isSellMode)
-            {
-                RefreshGridAsync().Forget();
-            }
-        }
-
         /// <summary>
         /// 구매/판매 모드 전환
         /// </summary>
@@ -263,13 +239,18 @@ namespace ElementalBlacksmithStory.UI
 
             try
             {
-                if (_isSellMode)
+                if (_strategy == null) return;
+                _itemBuffer.Clear();
+                await _strategy.GetDisplayItemAsync(_itemBuffer, _isSellMode, ct);
+
+                for (int i = 0; i < _itemBuffer.Count; i++)
                 {
-                    await PopulateSellItemsAsync(ct);
-                }
-                else
-                {
-                    await PopulateBuyItemsAsync(ct);
+                    ct.ThrowIfCancellationRequested();
+                    var item = _itemBuffer[i];
+
+                    if (_categoryFilter != null && !_categoryFilter(item)) continue;
+
+                    await AddItem(item);
                 }
             }
             catch (OperationCanceledException)
@@ -277,71 +258,6 @@ namespace ElementalBlacksmithStory.UI
                 // 빠른 탭 전환 등으로 취소된 경우 무시
             }
         }
-
-        /// <summary>
-        /// 구매 탭 아이템 목록 생성 (상점 판매 상품 중 현재 카테고리 필터를 만족하는 항목)
-        /// </summary>
-        private async UniTask PopulateBuyItemsAsync(CancellationToken ct)
-        {
-            for (int i = 0; i < _shopBuyGoods.Count; i++)
-            {
-                ct.ThrowIfCancellationRequested();
-                var item = _shopBuyGoods[i];
-                if (_categoryFilter != null && !_categoryFilter(item)) continue;
-                await AddItem(item);
-            }
-        }
-
-        /// <summary>
-        /// 판매 탭 아이템 목록 생성 (보유 재료, 룬, 무기 중 현재 카테고리 필터를 만족하는 항목)
-        /// </summary>
-        private async UniTask PopulateSellItemsAsync(CancellationToken ct)
-        {
-            // 1. 재료 인벤토리
-            if (_materialInventory != null)
-            {
-                foreach (var pair in _materialInventory.GetAll())
-                {
-                    ct.ThrowIfCancellationRequested();
-                    if (pair.Key != null && pair.Value > 0)
-                    {
-                        var item = new MaterialShopItem(pair.Key, pair.Value);
-                        if (_categoryFilter != null && !_categoryFilter(item)) continue;
-                        await AddItem(item);
-                    }
-                }
-            }
-
-            // 2. 룬 인벤토리
-            if (_runeInventory != null)
-            {
-                foreach (var pair in _runeInventory.GetAll())
-                {
-                    ct.ThrowIfCancellationRequested();
-                    if (pair.Key != null && pair.Value > 0)
-                    {
-                        var item = new Rune(pair.Key);
-                        if (_categoryFilter != null && !_categoryFilter(item)) continue;
-                        await AddItem(item);
-                    }
-                }
-            }
-
-            // 3. 장비(무기) 인벤토리
-            if (_equipmentInventory != null)
-            {
-                foreach (var weapon in _equipmentInventory.GetAllActive())
-                {
-                    ct.ThrowIfCancellationRequested();
-                    if (weapon != null)
-                    {
-                        if (_categoryFilter != null && !_categoryFilter(weapon)) continue;
-                        await AddItem(weapon);
-                    }
-                }
-            }
-        }
-
         public async UniTask AddItem(IShopItem item)
         {
             Sprite icon = null;
@@ -365,8 +281,9 @@ namespace ElementalBlacksmithStory.UI
                     return;
             }
 
+            bool isBargain = _strategy?.IsBargainCard ?? false;
             ulong price = _strategy != null ? _strategy.GetPrice(item) : item.Value;
-            ShopItemViewBase itemView = _view.CreateItem(item.Id, item.Name, price, icon, isUniqueItem);
+            ShopItemViewBase itemView = _view.CreateItem(item.Id, item.Name, price, icon, isUniqueItem, isBargain);
             if (itemView == null) return;
 
             if (item is Weapon weapon && itemView is EquipmentShopItemView eqView)

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using ElementalBlacksmithStory.Core;
 using ElementalBlacksmithStory.Data;
+using ElementalBlacksmithStory.Data.DTO;
 using ElementalBlacksmithStory.Events;
 using MessagePipe;
 using R3;
@@ -11,23 +12,26 @@ using VContainer.Unity;
 
 namespace ElementalBlacksmithStory.Inventory
 {
-    public class EquipmentInventory : IInventory, IStartable, IDisposable
+    public class EquipmentInventory : IInventory, IDisposable
     {
         private readonly CompositeDisposable _disposables = new();
         private readonly SO_WeaponDatabase _weaponDatabase;
-        private List<Weapon> _inventory = new();
-        private List<Weapon> _activeInventory = new();
-        private Subject<Weapon> _onAddWeapon = new();
-        private Subject<uint> _onRemoveWeapon = new();
+        private readonly SO_RuneDatabase _runeDatabase;
+        private readonly List<Weapon> _inventory = new();
+        private readonly List<Weapon> _activeInventory = new();
+        private readonly Subject<Weapon> _onAddWeapon = new();
+        private readonly Subject<uint> _onRemoveWeapon = new();
         public Observable<Weapon> OnAddWeapon => _onAddWeapon;
         public Observable<uint> OnRemoveWeapon => _onRemoveWeapon;
 
         [Inject]
         public EquipmentInventory(
             ISubscriber<AcquireItemEvent> acquireSubscriber,
-            SO_WeaponDatabase weaponDatabase)
+            SO_WeaponDatabase weaponDatabase,
+            SO_RuneDatabase runeDatabase)
         {
             _weaponDatabase = weaponDatabase;
+            _runeDatabase = runeDatabase;
 
             acquireSubscriber.Subscribe(e =>
             {
@@ -162,10 +166,6 @@ namespace ElementalBlacksmithStory.Inventory
             }
             return true;
         }
-        public void Start()
-        {
-
-        }
         /// <summary>
         /// 인벤토리 클리어
         /// </summary>
@@ -189,6 +189,41 @@ namespace ElementalBlacksmithStory.Inventory
             }
             Debug.Log($"[EquipmentInventory]마지막 인덱스로부터 총 {n}개의 빈 슬롯을 정리했습니다.");
         }
+        public List<WeaponSaveData> ToSaveData()
+        {
+            var list = new List<WeaponSaveData>(_inventory.Count);
+            for (int i = 0; i < _inventory.Count; i++)
+            {
+                var weapon = _inventory[i];
+                list.Add(weapon?.ToSaveData());
+            }
+            return list;
+        }
+
+        public void LoadSaveData(List<WeaponSaveData> data)
+        {
+            _inventory.Clear();
+            _activeInventory.Clear();
+            if (data == null || _weaponDatabase == null) return;
+            for (int i = 0; i < data.Count; i++)
+            {
+                var saveData = data[i];
+                if (saveData == null)
+                {
+                    _inventory.Add(null);
+                    continue;
+                }
+                var weaponData = _weaponDatabase.Get(saveData.WeaponDataId);
+                var baseWeaponData = _weaponDatabase.Get(saveData.BaseWeaponDataId);
+                var weapon = Weapon.FromSaveData(saveData, weaponData, baseWeaponData, _runeDatabase);
+                _inventory.Add(weapon);
+                if (weapon != null)
+                {
+                    _activeInventory.Add(weapon);
+                }
+            }
+        }
+
         public void Dispose()
         {
             _disposables.Dispose();

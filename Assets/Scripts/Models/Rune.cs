@@ -10,16 +10,23 @@ namespace ElementalBlacksmithStory.Core
         private readonly SO_RuneData _data;
 
         public SO_RuneData Data => _data;
+        public readonly uint _count;
+
         public uint Id => _data != null ? _data.Id : 0;
         public string Name => _data != null ? _data.Name : string.Empty;
         public ulong Value => _data != null ? _data.Value : 0;
         public uint SpriteId => _data != null ? _data.Id : 0;
-        public uint Count => 1;
+        public uint Count => _count;
 
         [Inject]
-        public Rune(SO_RuneData data)
+        public Rune(SO_RuneData data) : this(data, 1)
         {
             _data = data;
+        }
+        public Rune(SO_RuneData data, uint count)
+        {
+            _data = data;
+            _count = count > 0 ? count : 1;
         }
 
         public void OnPurchased(IInventoryContext context, uint amount)

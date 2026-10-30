@@ -22,10 +22,13 @@ namespace ElementalBlacksmithStory.UI
         private readonly ShopItemGridPresenter _itemGridPresenter;
         private readonly ShopKeeperPresenter _shopKeeperPresenter;
         private readonly ShopTabPresenter _tabPresenter;
-        private readonly ShopCartInteractionStrategy _shopCartStrategy;
-        private readonly TradingPostBidInteractionStrategy _tradingPostStrategy;
         private readonly CompositeDisposable _disposable = new();
         private readonly IPublisher<StartShopDialogueEvent> _shopDialoguePublisher;
+        private MarketType _currentMarketType;
+
+        private readonly StandardShopModeStrategy _standardShopStrategy;
+        private readonly BidModeStrategy _bidStrategy;
+        private readonly BargainModeStrategy _bargainStrategy;
 
         [Inject]
         public MarketPresenter(
@@ -34,10 +37,10 @@ namespace ElementalBlacksmithStory.UI
             ShopItemGridPresenter itemGridPresenter,
             ShopKeeperPresenter shopKeeperPresenter,
             ShopTabPresenter tabPresenter,
-            ShopCartPresenter shopCartPresenter,
-            BidPresenter bidPresenter,
             IPublisher<StartShopDialogueEvent> shopDialoguePublisher,
-            TradingPostService tradingPostService = null
+            StandardShopModeStrategy standardShopStrategy,
+            BidModeStrategy bidStrategy,
+            BargainModeStrategy bargainStrategy
             )
         {
             _view = marketView;
@@ -47,14 +50,14 @@ namespace ElementalBlacksmithStory.UI
             _tabPresenter = tabPresenter;
             _shopDialoguePublisher = shopDialoguePublisher;
 
-            if (shopCartPresenter != null)
-            {
-                _shopCartStrategy = new ShopCartInteractionStrategy(shopCartPresenter);
-            }
-            if (bidPresenter != null)
-            {
-                _tradingPostStrategy = new TradingPostBidInteractionStrategy(bidPresenter, tradingPostService);
-            }
+            _standardShopStrategy = standardShopStrategy;
+            _bidStrategy = bidStrategy;
+            _bargainStrategy = bargainStrategy;
+
+
+            _tabPresenter.OnTabSwitchedAsObservable()
+                .Subscribe(isSellMode => UpdateShopModeStrategy(isSellMode))
+                .AddTo(_disposable);
 
             _view.OnGeneralShopBtnClickAsObservable
                 .Subscribe(_ => OpenShop(MarketType.GENERAL))
@@ -84,18 +87,17 @@ namespace ElementalBlacksmithStory.UI
         /// </summary>
         private void OpenShop(MarketType type)
         {
-            if (type == MarketType.TRADINGPOST)
-            {
-                _itemGridPresenter.SetInteractionStrategy(_tradingPostStrategy);
-            }
-            else
-            {
-                _itemGridPresenter.SetInteractionStrategy(_shopCartStrategy);
-            }
-
+            _currentMarketType = type;
             var shopData = _view.GetShopData(type);
+
+            if (type != MarketType.TRADINGPOST && shopData != null)
+            {
+                _standardShopStrategy.SetShopData(shopData);
+            }
             _shopKeeperPresenter.ClearView();
             _view.Show();
+
+
 
             if (shopData != null)
             {
@@ -104,7 +106,6 @@ namespace ElementalBlacksmithStory.UI
                     _shopKeeperPresenter.SetNPCAsync(shopData.NpcId).Forget();
                 }
 
-                _itemGridPresenter.SetShopGoods(shopData);
                 _categoriesPresenter.SetCategories(shopData.Categories);
                 _tabPresenter.SetShop(shopData);
 
@@ -121,6 +122,26 @@ namespace ElementalBlacksmithStory.UI
                     };
                     _shopDialoguePublisher.Publish(new StartShopDialogueEvent(shopData.BuyDialogueId, parameters));
                 }
+            }
+            UpdateShopModeStrategy(false);
+        }
+
+        private void UpdateShopModeStrategy(bool isSellMode)
+        {
+            if (_currentMarketType == MarketType.TRADINGPOST)
+            {
+                if (isSellMode && _bargainStrategy != null)
+                {
+                    _itemGridPresenter.SetInteractionStrategy(_bargainStrategy);
+                }
+                else
+                {
+                    _itemGridPresenter.SetInteractionStrategy(_bidStrategy);
+                }
+            }
+            else
+            {
+                _itemGridPresenter.SetInteractionStrategy(_standardShopStrategy);
             }
         }
 

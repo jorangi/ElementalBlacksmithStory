@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Threading;
 using Cysharp.Threading.Tasks;
 using ElementalBlacksmithStory.Core;
 using ElementalBlacksmithStory.Data;
@@ -6,7 +8,7 @@ using VContainer;
 
 namespace ElementalBlacksmithStory.UI.Strategy
 {
-    public class TradingPostBidInteractionStrategy : IItemInteractionStrategy
+    public class BidModeStrategy : IShopModeStrategy
     {
         public const float STARTING_BID_RATIO = 0.1f;
 
@@ -14,7 +16,7 @@ namespace ElementalBlacksmithStory.UI.Strategy
         private readonly TradingPostService _tradingPostService;
 
         [Inject]
-        public TradingPostBidInteractionStrategy(
+        public BidModeStrategy(
             BidPresenter presenter,
             TradingPostService tradingPostService = null
         )
@@ -51,6 +53,11 @@ namespace ElementalBlacksmithStory.UI.Strategy
             if (item == null) return;
             _presenter.SetItem(item).Forget();
             _presenter.Show();
+        }
+
+        public UniTask GetDisplayItemAsync(List<IShopItem> results, bool isSellMode, CancellationToken ct = default)
+        {
+            return UniTask.CompletedTask;
         }
     }
 }

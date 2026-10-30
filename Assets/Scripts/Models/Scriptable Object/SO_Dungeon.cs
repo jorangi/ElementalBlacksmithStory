@@ -11,6 +11,6 @@ namespace ElementalBlacksmithStory.Data
         /// <summary>
         /// 엔티티 배치 번호
         /// </summary>
-        [SerializeField] private Dictionary<uint, List<uint>> _placeEntity;
+        private readonly Dictionary<uint, List<uint>> _placeEntity = new();
     }
 }

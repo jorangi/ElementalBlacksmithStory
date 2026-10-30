@@ -1,8 +1,8 @@
+using Cysharp.Text;
+using R3;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
-using R3;
-using Cysharp.Text;
 
 namespace ElementalBlacksmithStory.UI
 {
@@ -12,18 +12,18 @@ namespace ElementalBlacksmithStory.UI
     /// </summary>
     public abstract class ShopItemViewBase : MonoBehaviour
     {
-        [Header("Common Elements")]
+        [Header("기본 요소")]
         [SerializeField] private Image _iconImage;
         [SerializeField] private TextMeshProUGUI _nameText;
-        [SerializeField] private TextMeshProUGUI _priceText;
+        [SerializeField] protected TextMeshProUGUI _priceText;
         [SerializeField] private Button _button;
 
-        [Tooltip("구매 불가 시 반투명(Alpha: 0.55) 연출용 컴포넌트. (비워둘 시 Awake에서 자동 부착/연결됩니다.)")]
+        [Tooltip("구매 불가 시 반투명")]
         [SerializeField] private CanvasGroup _canvasGroup;
 
-        public uint ItemId { get; private set; }
-        public ulong Price { get; private set; }
-        public string ItemName { get; private set; }
+        public uint ItemId { get; protected set; }
+        public ulong Price { get; protected set; }
+        public string ItemName { get; protected set; }
         public bool IsUniqueItem { get; protected set; }
 
         protected virtual void Awake()
@@ -86,7 +86,7 @@ namespace ElementalBlacksmithStory.UI
             }
         }
 
-        public void SetPrice(ulong price)
+        public virtual void SetPrice(ulong price)
         {
             Price = price;
             if (_priceText != null)

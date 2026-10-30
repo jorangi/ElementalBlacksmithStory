@@ -114,7 +114,32 @@ namespace ElementalBlacksmithStory.Inventory
         {
             _inventory.Clear();
         }
+        public Dictionary<uint, uint> ToSaveData()
+        {
+            var saveData = new Dictionary<uint, uint>(_inventory.Count);
+            foreach (var data in _inventory)
+            {
+                if (data.Key != null && data.Value > 0)
+                {
+                    saveData[data.Key.Id] = data.Value;
+                }
+            }
+            return saveData;
+        }
+        public void LoadSaveData(Dictionary<uint, uint> datas)
+        {
+            Clear();
+            if (datas == null) return;
 
+            foreach (var data in datas)
+            {
+                T item = Resolve(data.Key);
+                if (item != null && data.Value > 0)
+                {
+                    Add(item, data.Value);
+                }
+            }
+        }
         public virtual void Dispose()
         {
             _onItemCountChangedSubject.Dispose();

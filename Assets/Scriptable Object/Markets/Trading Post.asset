@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 186890aa5fd0ad946a12991833f13e2b, type: 3}
-  m_Name: Trader Post
+  m_Name: Trading Post
   m_EditorClassIdentifier: Assembly-CSharp::ElementalBlacksmithStory.Data.SO_ShopData
   _shopType: 2
   _shopName: "\uAD50\uC5ED\uC18C"
@@ -19,6 +19,7 @@ MonoBehaviour:
   _sellDialogueId: {fileID: 11400000, guid: 653afb4814ba4434195ad1900b365d66, type: 2}
   _purchaseDialogueId: {fileID: 11400000, guid: b058d715d2afca1438bfc337778b5801, type: 2}
   _categories:
-  - {fileID: 11400000, guid: 753ebb678b33f5c4abb4746776f46872, type: 2}
-  - {fileID: 11400000, guid: c6b7731d4d8bbf443b1874a61c82b578, type: 2}
-  - {fileID: 11400000, guid: 9ea5bcd0d56704345b2e4a8cfba8aab8, type: 2}
+  - {fileID: 11400000, guid: 15f3be866e5fc044283b422aad00820b, type: 2}
+  - {fileID: 11400000, guid: f95499121911fa840bd0d46cb2af8695, type: 2}
+  - {fileID: 11400000, guid: d7c401971510c85449a3fab6e61397dd, type: 2}
+  - {fileID: 11400000, guid: cb7011216f1be794ab725e283e1eaff6, type: 2}

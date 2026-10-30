@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using ElementalBlacksmithStory.Data;
+using ElementalBlacksmithStory.Data.DTO;
 using ElementalBlacksmithStory.Events;
 using ElementalBlacksmithStory.Inventory;
 using R3;
@@ -59,7 +61,28 @@ namespace ElementalBlacksmithStory.Core
         uint IShopItem.SpriteId => Data != null ? WeaponId : 0;
 
         uint IShopItem.Count => 1;
-
+        private Weapon(WeaponSaveData saveData, SO_WeaponData weaponData, SO_WeaponData baseWeaponData)
+        {
+            _id = saveData.InstanceId;
+            if (lastId <= saveData.InstanceId)
+            {
+                lastId = saveData.InstanceId + 1;
+            }
+            _weaponData = weaponData;
+            _baseWeaponData = baseWeaponData;
+            _cost = saveData.Cost;
+            _basePrice = saveData.BasePrice;
+            _minimumGuarantee = saveData.MinimunGuarantee;
+            _runeSlot = saveData.RuneSlot;
+            if (saveData.EnhanceHistory != null)
+            {
+                for (int i = 0; i < saveData.EnhanceHistory.Count; i++)
+                {
+                    var step = saveData.EnhanceHistory[i];
+                    _enhanceHistory.Push(new EnhanceStep(step.WeaponId, step.AddedBasePrice, step.Cost));
+                }
+            }
+        }
         public void OnPurchased(IInventoryContext context, uint amount)
         {
             var publisher = context.AcquireItemPublisher;
@@ -272,6 +295,64 @@ namespace ElementalBlacksmithStory.Core
         {
             _onRuneSlotChanged.Dispose();
             _onRuneChanged.Dispose();
+        }
+        public WeaponSaveData ToSaveData()
+        {
+            uint[] runeIds = new uint[_runes.Length];
+            for (int i = 0; i < _runes.Length; i++)
+            {
+                runeIds[i] = _runes[i] != null ? _runes[i].Id : 0;
+            }
+            var historyList = new List<EnhanceStepSaveData>(_enhanceHistory.Count);
+            var steps = _enhanceHistory.ToArray();
+            for (int i = steps.Length - 1; i >= 0; i--)
+            {
+                historyList.Add(new EnhanceStepSaveData
+                {
+                    WeaponId = steps[i].WeaponId,
+                    AddedBasePrice = steps[i].AddedBasePrice,
+                    Cost = steps[i].Cost,
+                });
+            }
+            return new WeaponSaveData
+            {
+                InstanceId = Id,
+                WeaponDataId = _weaponData != null ? _weaponData.Id : 0,
+                BaseWeaponDataId = _baseWeaponData != null ? _baseWeaponData.Id : 0,
+                Cost = _cost,
+                BasePrice = _basePrice,
+                Price = _price,
+                MinimunGuarantee = _minimumGuarantee,
+                RuneSlot = _runeSlot,
+                SocketedRuneIds = runeIds,
+                EnhanceHistory = historyList
+            };
+        }
+        public static Weapon FromSaveData(WeaponSaveData saveData, SO_WeaponData weaponData, SO_WeaponData baseWeaponData, SO_RuneDatabase runeDatabase = null)
+        {
+            if (saveData == null)
+            {
+                Debug.LogError("[Weapon] SaveData가 비어있습니다.");
+                return null;
+            }
+            var weapon = new Weapon(saveData, weaponData, baseWeaponData);
+
+            if (runeDatabase != null && saveData.SocketedRuneIds != null)
+            {
+                for (int i = 0; i < saveData.SocketedRuneIds.Length; i++)
+                {
+                    var runeId = saveData.SocketedRuneIds[i];
+                    if (runeId > 0)
+                    {
+                        var rune = runeDatabase.Get(runeId);
+                        if (rune != null)
+                        {
+                            weapon.EquipRune(new Rune(rune), i);
+                        }
+                    }
+                }
+            }
+            return weapon;
         }
     }
 

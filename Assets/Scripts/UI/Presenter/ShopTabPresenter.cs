@@ -20,11 +20,13 @@ namespace ElementalBlacksmithStory.UI
         private readonly ShopItemGridPresenter _gridPresenter;
         private readonly IPublisher<PlaySoundEvent> _soundPublisher;
         private readonly IPublisher<StartShopDialogueEvent> _shopDialoguePublisher;
+        private readonly Subject<bool> _tabSwitchedSubject = new();
         private readonly CompositeDisposable _disposables = new();
 
         private SO_ShopData _currentShopData;
         private bool _isSellMode = false;
         public bool IsSellMode => _isSellMode;
+        public Observable<bool> OnTabSwitchedAsObservable() => _tabSwitchedSubject.AsObservable();
 
         [Inject]
         public ShopTabPresenter(
@@ -71,6 +73,7 @@ namespace ElementalBlacksmithStory.UI
             _cartPresenter?.SetShop(shopData);
             _cartPresenter?.SetSellMode(_isSellMode);
             _gridPresenter?.SetSellMode(_isSellMode);
+            _tabSwitchedSubject.OnNext(_isSellMode);
         }
 
         /// <summary>
@@ -84,6 +87,7 @@ namespace ElementalBlacksmithStory.UI
             _view.SetTabVisual(_isSellMode);
             _cartPresenter.SetSellMode(_isSellMode);
             _gridPresenter.SetSellMode(_isSellMode);
+            _tabSwitchedSubject.OnNext(_isSellMode);
 
             // 탭 전환 시 해당 탭(구매/판매)의 첫 입장 대사 발행
             PublishTabDialogue(_isSellMode);
@@ -111,6 +115,7 @@ namespace ElementalBlacksmithStory.UI
 
         public void Dispose()
         {
+            _tabSwitchedSubject.Dispose();
             _disposables.Dispose();
         }
     }

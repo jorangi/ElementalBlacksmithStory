@@ -8,8 +8,15 @@ namespace ElementalBlacksmithStory.UI
         [SerializeField] private Transform _gridContainer;
         [SerializeField] private GameObject _itemPrefab;
         [SerializeField] private GameObject _equipmentItemPrefab;
+        [SerializeField] private GameObject _bargainItemPrefab;
+        [SerializeField] private GameObject _bargainEquipmentItemPrefab;
 
         private readonly Dictionary<uint, ShopItemViewBase> _itemViews = new();
+
+        private void Awake()
+        {
+            Debug.Log($"[ShopItemGridView] Awake - _gridContainer: {_gridContainer}, _itemPrefab: {_itemPrefab}, _equipmentItemPrefab: {_equipmentItemPrefab}");
+        }
 
         /// <summary>
         /// 특정 아이템 ID의 뷰 반환
@@ -24,11 +31,11 @@ namespace ElementalBlacksmithStory.UI
         /// <summary>
         /// 그리드에 새 아이템을 생성하여 배치
         /// </summary>
-        public ShopItemViewBase CreateItem(uint itemId, string itemName, ulong price, Sprite icon, bool isUniqueItem = false)
+        public ShopItemViewBase CreateItem(uint itemId, string itemName, ulong price, Sprite icon, bool isUniqueItem = false, bool isBargain = false)
         {
             if (_gridContainer == null || _itemPrefab == null)
             {
-                Debug.LogWarning("[ShopItemGridView] _gridContainer 또는 _itemPrefab이 설정되지 않았습니다.");
+                Debug.LogWarning($"[ShopItemGridView] _gridContainer is null: {_gridContainer == null}, _itemPrefab is null: {_itemPrefab == null}");
                 return null;
             }
 
@@ -38,7 +45,23 @@ namespace ElementalBlacksmithStory.UI
                 RemoveItem(itemId);
             }
 
-            GameObject prefabToUse = (isUniqueItem && _equipmentItemPrefab != null) ? _equipmentItemPrefab : _itemPrefab;
+            GameObject prefabToUse;
+            if (isBargain)
+            {
+                if (isUniqueItem)
+                {
+                    prefabToUse = _bargainEquipmentItemPrefab != null ? _bargainEquipmentItemPrefab : _equipmentItemPrefab;
+                }
+                else
+                {
+                    prefabToUse = _bargainItemPrefab != null ? _bargainItemPrefab : _itemPrefab;
+                }
+            }
+            else
+            {
+                prefabToUse = (isUniqueItem && _equipmentItemPrefab != null) ? _equipmentItemPrefab : _itemPrefab;
+            }
+
             GameObject instance = Instantiate(prefabToUse, _gridContainer);
             instance.name = $"{itemName}_{itemId}";
 

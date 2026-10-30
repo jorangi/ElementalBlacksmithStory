@@ -44,6 +44,7 @@ namespace ElementalBlacksmithStory.UI
         [SerializeField] private TextMeshProUGUI _remainingWallet;
         [SerializeField] private Button _increaseButton;
         [SerializeField] private Button _decreaseButton;
+        [SerializeField] private RectTransform _auctionUI;
         [SerializeField] private RectTransform _bidUI;
 
         private void Awake()
@@ -173,10 +174,11 @@ namespace ElementalBlacksmithStory.UI
             {
                 motionHandle.Cancel();
             }
+            _auctionUI.gameObject.SetActive(true);
             _bidUI.gameObject.SetActive(true);
             motionHandle = LMotion.Create(Vector3.zero, Vector3.one, ANIM_DURATION)
                             .WithEase(Ease.InOutBack)
-                            .BindToLocalScale(_bidUI)
+                            .BindToLocalScale(_auctionUI)
                             .AddTo(gameObject);
 
             await motionHandle.ToUniTask(_cts.Token)
@@ -194,12 +196,13 @@ namespace ElementalBlacksmithStory.UI
             }
             motionHandle = LMotion.Create(Vector3.one, Vector3.zero, ANIM_DURATION)
                 .WithEase(Ease.InOutBack)
-                .BindToLocalScale(_bidUI)
+                .BindToLocalScale(_auctionUI)
                 .AddTo(gameObject);
 
             await motionHandle.ToUniTask(_cts.Token)
                             .SuppressCancellationThrow();
             _bidUI.gameObject.SetActive(false);
+            _auctionUI.gameObject.SetActive(false);
         }
 
 
