@@ -13,12 +13,12 @@ namespace ElementalBlacksmithStory.Data
         public string Name => Data != null ? Data.materialName : string.Empty;
         public ulong Value => Data != null ? Data.Value : 0;
         public uint SpriteId => Data != null ? Data.Id : 0;
-        public uint Count { get; set; }
+        public uint Count => _count;
 
         public MaterialShopItem(SO_MaterialData materialData, uint count = 1)
         {
             _materialData = materialData;
-            _count = count;
+            _count = count > 0 ? count : 1;
         }
 
         public void OnPurchased(IInventoryContext context, uint amount)

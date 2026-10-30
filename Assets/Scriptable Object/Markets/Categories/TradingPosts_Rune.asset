@@ -17,4 +17,85 @@ MonoBehaviour:
   _icon: {fileID: 21300000, guid: 01ce25e29d83b384a857476def0de14f, type: 3}
   _minRandomPickCount: 0
   _maxRandomPickCount: 1
-  _items: []
+  _items:
+  - itemId: 70001
+    stock: 1
+    isFixed: 0
+  - itemId: 70002
+    stock: 1
+    isFixed: 0
+  - itemId: 70003
+    stock: 1
+    isFixed: 0
+  - itemId: 71001
+    stock: 1
+    isFixed: 0
+  - itemId: 71002
+    stock: 1
+    isFixed: 0
+  - itemId: 71003
+    stock: 1
+    isFixed: 0
+  - itemId: 72001
+    stock: 1
+    isFixed: 0
+  - itemId: 72002
+    stock: 1
+    isFixed: 0
+  - itemId: 72003
+    stock: 1
+    isFixed: 0
+  - itemId: 73001
+    stock: 1
+    isFixed: 0
+  - itemId: 73002
+    stock: 1
+    isFixed: 0
+  - itemId: 73003
+    stock: 1
+    isFixed: 0
+  - itemId: 73004
+    stock: 1
+    isFixed: 0
+  - itemId: 74001
+    stock: 1
+    isFixed: 0
+  - itemId: 74002
+    stock: 1
+    isFixed: 0
+  - itemId: 74003
+    stock: 1
+    isFixed: 0
+  - itemId: 74004
+    stock: 1
+    isFixed: 0
+  - itemId: 74101
+    stock: 1
+    isFixed: 0
+  - itemId: 74102
+    stock: 1
+    isFixed: 0
+  - itemId: 74103
+    stock: 1
+    isFixed: 0
+  - itemId: 74104
+    stock: 1
+    isFixed: 0
+  - itemId: 74105
+    stock: 1
+    isFixed: 0
+  - itemId: 74106
+    stock: 1
+    isFixed: 0
+  - itemId: 74107
+    stock: 1
+    isFixed: 0
+  - itemId: 75001
+    stock: 1
+    isFixed: 0
+  - itemId: 75002
+    stock: 1
+    isFixed: 0
+  - itemId: 75003
+    stock: 1
+    isFixed: 0

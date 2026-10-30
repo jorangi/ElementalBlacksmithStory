@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using ElementalBlacksmithStory.Data;
 using ElementalBlacksmithStory.Data.DTO;
 using ElementalBlacksmithStory.Events;
@@ -140,6 +139,7 @@ namespace ElementalBlacksmithStory.Core
             _weaponData = weaponData;
             _baseWeaponData = weaponData;
             _cost = weaponData != null ? weaponData.cost : 0;
+            _basePrice = weaponData != null ? weaponData.basePrice : 0;
             SetMargin(1f);
         }
         /// <summary>

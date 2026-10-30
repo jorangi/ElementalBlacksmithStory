@@ -18,6 +18,9 @@ namespace ElementalBlacksmithStory.UI
         [SerializeField] protected TextMeshProUGUI _priceText;
         [SerializeField] private Button _button;
 
+        [Tooltip("아이템 묶음 수량 텍스트 (아이콘 하단 등, null이면 무시됨)")]
+        [SerializeField] private TextMeshProUGUI _bundleCountText;
+
         [Tooltip("구매 불가 시 반투명")]
         [SerializeField] private CanvasGroup _canvasGroup;
 
@@ -25,6 +28,7 @@ namespace ElementalBlacksmithStory.UI
         public ulong Price { get; protected set; }
         public string ItemName { get; protected set; }
         public bool IsUniqueItem { get; protected set; }
+        public uint Count { get; protected set; } = 1;
 
         protected virtual void Awake()
         {
@@ -61,15 +65,17 @@ namespace ElementalBlacksmithStory.UI
             }
         }
 
-        public virtual void SetData(uint itemId, string itemName, ulong price, Sprite icon, bool isUniqueItem = false)
+        public virtual void SetData(uint itemId, string itemName, ulong price, Sprite icon, bool isUniqueItem = false, uint count = 1)
         {
             ItemId = itemId;
             ItemName = itemName;
             Price = price;
             IsUniqueItem = isUniqueItem;
-            SetName(itemName);
+            Count = count;
+            SetName(itemName, count);
             SetPrice(price);
             SetIcon(icon);
+            SetBundleCount(count);
         }
 
         public virtual void SetAmountInPocket(uint amount)
@@ -95,12 +101,36 @@ namespace ElementalBlacksmithStory.UI
             }
         }
 
-        public void SetName(string itemName)
+        public void SetName(string itemName, uint count = 1)
         {
             ItemName = itemName;
             if (_nameText != null)
             {
-                _nameText.SetText(itemName);
+                if (count > 1)
+                {
+                    _nameText.SetText(ZString.Format("{0} (x{1})", itemName, count));
+                }
+                else
+                {
+                    _nameText.SetText(itemName);
+                }
+            }
+        }
+
+        public void SetBundleCount(uint count)
+        {
+            Count = count;
+            if (_bundleCountText != null)
+            {
+                if (count > 1)
+                {
+                    _bundleCountText.gameObject.SetActive(true);
+                    _bundleCountText.SetText(ZString.Format("x{0}", count));
+                }
+                else
+                {
+                    _bundleCountText.gameObject.SetActive(false);
+                }
             }
         }
 

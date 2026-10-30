@@ -114,6 +114,13 @@ namespace ElementalBlacksmithStory.UI
         public async UniTask SetItem(IShopItem item)
         {
             if (item == null) return;
+
+            _currentTargetId = item.Id;
+            if (_service.HighestBids.TryGetValue(_currentTargetId, out var bid))
+            {
+                SetHighestBid(bid);
+            }
+
             Sprite sprite = null;
             switch (ItemIdHelper.GetCategory(item.SpriteId))
             {
@@ -129,12 +136,7 @@ namespace ElementalBlacksmithStory.UI
                 default:
                     break;
             }
-            _currentTargetId = item.Id;
             _view.SetItem(item.Name, sprite, item.Count);
-            if (_service.HighestBids.TryGetValue(_currentTargetId, out var bid))
-            {
-                SetHighestBid(bid);
-            }
         }
         public void SetHighestBid(BidContext bid)
         {

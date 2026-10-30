@@ -488,6 +488,7 @@ MonoBehaviour:
   materialDatabase: {fileID: 11400000, guid: 362b0846d3ffa1f498fd84a324b72dc4, type: 2}
   runeDatabase: {fileID: 11400000, guid: 655c90af38354094cb0345c45e0357b1, type: 2}
   spriteSettings: {fileID: 11400000, guid: b2598fdeba0dedb4092e9d4dcdde65ea, type: 2}
+  progressionSettings: {fileID: 11400000, guid: f1b2c3d4e5a64789b0123456789abcde, type: 2}
 --- !u!4 &144748153
 Transform:
   m_ObjectHideFlags: 0

@@ -17,4 +17,124 @@ MonoBehaviour:
   _icon: {fileID: 21300000, guid: d4e2ac198e8b49848bdb0cfe56393421, type: 3}
   _minRandomPickCount: 0
   _maxRandomPickCount: 1
-  _items: []
+  _items:
+  - itemId: 10001
+    stock: 1
+    isFixed: 0
+  - itemId: 10002
+    stock: 1
+    isFixed: 0
+  - itemId: 10003
+    stock: 1
+    isFixed: 0
+  - itemId: 10004
+    stock: 1
+    isFixed: 0
+  - itemId: 10005
+    stock: 1
+    isFixed: 0
+  - itemId: 10101
+    stock: 1
+    isFixed: 0
+  - itemId: 10102
+    stock: 1
+    isFixed: 0
+  - itemId: 10103
+    stock: 1
+    isFixed: 0
+  - itemId: 10104
+    stock: 1
+    isFixed: 0
+  - itemId: 10105
+    stock: 1
+    isFixed: 0
+  - itemId: 10201
+    stock: 1
+    isFixed: 0
+  - itemId: 10202
+    stock: 1
+    isFixed: 0
+  - itemId: 10203
+    stock: 1
+    isFixed: 0
+  - itemId: 10204
+    stock: 1
+    isFixed: 0
+  - itemId: 10205
+    stock: 1
+    isFixed: 0
+  - itemId: 10301
+    stock: 1
+    isFixed: 0
+  - itemId: 10302
+    stock: 1
+    isFixed: 0
+  - itemId: 10303
+    stock: 1
+    isFixed: 0
+  - itemId: 10304
+    stock: 1
+    isFixed: 0
+  - itemId: 10305
+    stock: 1
+    isFixed: 0
+  - itemId: 10401
+    stock: 1
+    isFixed: 0
+  - itemId: 10402
+    stock: 1
+    isFixed: 0
+  - itemId: 10403
+    stock: 1
+    isFixed: 0
+  - itemId: 10404
+    stock: 1
+    isFixed: 0
+  - itemId: 10405
+    stock: 1
+    isFixed: 0
+  - itemId: 10501
+    stock: 1
+    isFixed: 0
+  - itemId: 10502
+    stock: 1
+    isFixed: 0
+  - itemId: 10503
+    stock: 1
+    isFixed: 0
+  - itemId: 10504
+    stock: 1
+    isFixed: 0
+  - itemId: 10505
+    stock: 1
+    isFixed: 0
+  - itemId: 10601
+    stock: 1
+    isFixed: 0
+  - itemId: 10602
+    stock: 1
+    isFixed: 0
+  - itemId: 10603
+    stock: 1
+    isFixed: 0
+  - itemId: 10604
+    stock: 1
+    isFixed: 0
+  - itemId: 10605
+    stock: 1
+    isFixed: 0
+  - itemId: 10701
+    stock: 1
+    isFixed: 0
+  - itemId: 10702
+    stock: 1
+    isFixed: 0
+  - itemId: 10703
+    stock: 1
+    isFixed: 0
+  - itemId: 10704
+    stock: 1
+    isFixed: 0
+  - itemId: 10705
+    stock: 1
+    isFixed: 0

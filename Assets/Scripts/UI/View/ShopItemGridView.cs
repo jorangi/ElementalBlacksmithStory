@@ -31,7 +31,7 @@ namespace ElementalBlacksmithStory.UI
         /// <summary>
         /// 그리드에 새 아이템을 생성하여 배치
         /// </summary>
-        public ShopItemViewBase CreateItem(uint itemId, string itemName, ulong price, Sprite icon, bool isUniqueItem = false, bool isBargain = false)
+        public ShopItemViewBase CreateItem(uint itemId, string itemName, ulong price, Sprite icon, bool isUniqueItem = false, bool isBargain = false, uint count = 1)
         {
             if (_gridContainer == null || _itemPrefab == null)
             {
@@ -67,7 +67,7 @@ namespace ElementalBlacksmithStory.UI
 
             if (instance.TryGetComponent<ShopItemViewBase>(out var itemView))
             {
-                itemView.SetData(itemId, itemName, price, icon, isUniqueItem);
+                itemView.SetData(itemId, itemName, price, icon, isUniqueItem, count);
                 _itemViews[itemId] = itemView;
                 return itemView;
             }

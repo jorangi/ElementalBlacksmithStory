@@ -153,9 +153,91 @@ namespace ElementalBlacksmithStory.Editor
             }
 
             EditorGUILayout.Space(8);
+            DrawDatabaseAutoRegisterSection();
+
+            EditorGUILayout.Space(8);
             _reorderableList.DoLayoutList();
 
             serializedObject.ApplyModifiedProperties();
+        }
+
+        private void DrawDatabaseAutoRegisterSection()
+        {
+            EditorGUILayout.LabelField("DB 기반 품목 일괄 등록 (교역소/상점 카테고리용)", EditorStyles.boldLabel);
+            using (new EditorGUILayout.VerticalScope(EditorStyles.helpBox))
+            {
+                EditorGUILayout.BeginHorizontal();
+                if (GUILayout.Button("검(Sword) 전체 등록"))
+                {
+                    AutoRegisterWeaponsByRange(10000, 10999);
+                }
+                if (GUILayout.Button("활(Bow) 전체 등록"))
+                {
+                    AutoRegisterWeaponsByRange(11000, 11999);
+                }
+                if (GUILayout.Button("재료 전체 등록"))
+                {
+                    AutoRegisterAllFromDatabase(_materialDatabase);
+                }
+                if (GUILayout.Button("룬 전체 등록"))
+                {
+                    AutoRegisterAllFromDatabase(_runeDatabase);
+                }
+                EditorGUILayout.EndHorizontal();
+
+                if (GUILayout.Button("목록 전체 비우기"))
+                {
+                    _itemsProp.ClearArray();
+                }
+            }
+        }
+
+        private void AutoRegisterWeaponsByRange(uint minId, uint maxId)
+        {
+            if (_weaponDatabase == null || _weaponDatabase.Items == null)
+            {
+                LoadDatabases();
+            }
+            if (_weaponDatabase == null || _weaponDatabase.Items == null) return;
+
+            _itemsProp.ClearArray();
+            var items = _weaponDatabase.Items;
+            for (int i = 0; i < items.Count; i++)
+            {
+                var wep = items[i];
+                if (wep == null || wep.Id < minId || wep.Id > maxId) continue;
+
+                int idx = _itemsProp.arraySize;
+                _itemsProp.InsertArrayElementAtIndex(idx);
+                var elem = _itemsProp.GetArrayElementAtIndex(idx);
+                elem.FindPropertyRelative("itemId").longValue = wep.Id;
+                elem.FindPropertyRelative("stock").longValue = 1;
+                elem.FindPropertyRelative("isFixed").boolValue = false;
+            }
+        }
+
+        private void AutoRegisterAllFromDatabase<T>(SO_BaseDatabase<T> database) where T : ScriptableObject, IIdentifiable
+        {
+            if (database == null || database.Items == null)
+            {
+                LoadDatabases();
+            }
+            if (database == null || database.Items == null) return;
+
+            _itemsProp.ClearArray();
+            var items = database.Items;
+            for (int i = 0; i < items.Count; i++)
+            {
+                var entry = items[i];
+                if (entry == null) continue;
+
+                int idx = _itemsProp.arraySize;
+                _itemsProp.InsertArrayElementAtIndex(idx);
+                var elem = _itemsProp.GetArrayElementAtIndex(idx);
+                elem.FindPropertyRelative("itemId").longValue = entry.Id;
+                elem.FindPropertyRelative("stock").longValue = 1;
+                elem.FindPropertyRelative("isFixed").boolValue = false;
+            }
         }
 
         private void LoadDatabases()

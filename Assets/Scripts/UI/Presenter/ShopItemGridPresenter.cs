@@ -283,7 +283,7 @@ namespace ElementalBlacksmithStory.UI
 
             bool isBargain = _strategy?.IsBargainCard ?? false;
             ulong price = _strategy != null ? _strategy.GetPrice(item) : item.Value;
-            ShopItemViewBase itemView = _view.CreateItem(item.Id, item.Name, price, icon, isUniqueItem, isBargain);
+            ShopItemViewBase itemView = _view.CreateItem(item.Id, item.Name, price, icon, isUniqueItem, isBargain, item.Count);
             if (itemView == null) return;
 
             if (item is Weapon weapon && itemView is EquipmentShopItemView eqView)

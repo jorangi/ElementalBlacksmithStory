@@ -33,7 +33,8 @@ namespace ElementalBlacksmithStory.Core
         }
         public void Bid(uint targetId, BidContext bidContext)
         {
-            if (!_highestBids.TryGetValue(targetId, out var current) || current.Price < bidContext.Price)
+            if (!_highestBids.TryGetValue(targetId, out var current)
+                || (string.IsNullOrEmpty(current.Bidder) ? bidContext.Price >= current.Price : bidContext.Price > current.Price))
             {
                 AddItem(targetId, bidContext);
             }
