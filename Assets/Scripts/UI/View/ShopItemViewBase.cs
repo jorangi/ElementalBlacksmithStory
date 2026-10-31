@@ -14,6 +14,7 @@ namespace ElementalBlacksmithStory.UI
     {
         [Header("기본 요소")]
         [SerializeField] private Image _iconImage;
+        [SerializeField] private Image _baseImage;
         [SerializeField] private TextMeshProUGUI _nameText;
         [SerializeField] protected TextMeshProUGUI _priceText;
         [SerializeField] private Button _button;
@@ -28,7 +29,12 @@ namespace ElementalBlacksmithStory.UI
         public ulong Price { get; protected set; }
         public string ItemName { get; protected set; }
         public bool IsUniqueItem { get; protected set; }
-        public uint Count { get; protected set; } = 1;
+
+        /// <summary>
+        /// 번들(고정 묶음) 판매 단위 수량입니다. 1이면 낱개 판매(번들 아님)입니다.
+        /// </summary>
+        public uint BundleCount { get; protected set; } = 1;
+        public uint Count => BundleCount;
 
         protected virtual void Awake()
         {
@@ -65,17 +71,17 @@ namespace ElementalBlacksmithStory.UI
             }
         }
 
-        public virtual void SetData(uint itemId, string itemName, ulong price, Sprite icon, bool isUniqueItem = false, uint count = 1)
+        public virtual void SetData(uint itemId, string itemName, ulong price, Sprite icon, bool isUniqueItem = false, uint bundleCount = 1)
         {
             ItemId = itemId;
             ItemName = itemName;
             Price = price;
             IsUniqueItem = isUniqueItem;
-            Count = count;
-            SetName(itemName, count);
+            BundleCount = bundleCount > 0 ? bundleCount : 1u;
+            SetName(itemName, BundleCount);
             SetPrice(price);
             SetIcon(icon);
-            SetBundleCount(count);
+            SetBundleCount(BundleCount);
         }
 
         public virtual void SetAmountInPocket(uint amount)
@@ -100,15 +106,19 @@ namespace ElementalBlacksmithStory.UI
                 _priceText.SetText(ZString.Format("<size=70%><sprite name=\"CoinSack\">{0:N0}</size>", price));
             }
         }
+        public void SetBaseColor(bool isOn)
+        {
+            _baseImage.color = isOn ? Color.orange : Color.white;
+        }
 
-        public void SetName(string itemName, uint count = 1)
+        public void SetName(string itemName, uint bundleCount = 1)
         {
             ItemName = itemName;
             if (_nameText != null)
             {
-                if (count > 1)
+                if (bundleCount > 1)
                 {
-                    _nameText.SetText(ZString.Format("{0} (x{1})", itemName, count));
+                    _nameText.SetText(ZString.Format("{0} (x{1})", itemName, bundleCount));
                 }
                 else
                 {
@@ -117,15 +127,15 @@ namespace ElementalBlacksmithStory.UI
             }
         }
 
-        public void SetBundleCount(uint count)
+        public void SetBundleCount(uint bundleCount)
         {
-            Count = count;
+            BundleCount = bundleCount > 0 ? bundleCount : 1u;
             if (_bundleCountText != null)
             {
-                if (count > 1)
+                if (BundleCount > 1)
                 {
                     _bundleCountText.gameObject.SetActive(true);
-                    _bundleCountText.SetText(ZString.Format("x{0}", count));
+                    _bundleCountText.SetText(ZString.Format("x{0}", BundleCount));
                 }
                 else
                 {

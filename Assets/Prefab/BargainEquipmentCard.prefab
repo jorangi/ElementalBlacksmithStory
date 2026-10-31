@@ -504,9 +504,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ElementalBlacksmithStory.UI.BargainEquipmentItemView
   _iconImage: {fileID: 5250522685192569494}
+  _baseImage: {fileID: 398392800775378659}
   _nameText: {fileID: 5895546081544994841}
   _priceText: {fileID: 7455968042470737065}
   _button: {fileID: 3052781743082813040}
+  _bundleCountText: {fileID: 0}
   _canvasGroup: {fileID: 4597516364843910521}
   _runeSlotRoots:
   - {fileID: 8885785641545185643}

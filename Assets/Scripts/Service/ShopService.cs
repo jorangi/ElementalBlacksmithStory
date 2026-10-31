@@ -32,6 +32,11 @@ namespace ElementalBlacksmithStory.Core
         private readonly Subject<IReadOnlyDictionary<uint, uint>> _onPurchaseSuccessSubject = new();
         public Observable<IReadOnlyDictionary<uint, uint>> OnPurchaseSuccessAsObservable => _onPurchaseSuccessSubject;
 
+        /// <summary>
+        /// 상점별 타이머
+        /// </summary>
+        private readonly Dictionary<MarketType, DateTime> _nextRefreshTime = new();
+
         [Inject]
         public ShopService(
             PlayerData playerData,
@@ -57,6 +62,39 @@ namespace ElementalBlacksmithStory.Core
             _sellEventPublisher = sellEventPublisher;
         }
 
+        public void InitializeShop(SO_ShopData shopData)
+        {
+            if (shopData == null) return;
+            if (!_nextRefreshTime.ContainsKey(shopData.ShopType) || shopData.AllStockedItems.Count == 0)
+            {
+                RefreshShop(shopData);
+            }
+        }
+        /// <summary>
+        /// 특정 상점의 갱신 시간 조회
+        /// </summary>
+        /// <returns></returns>
+        public TimeSpan GetRemainingRefreshTime(SO_ShopData shopData)
+        {
+            if (shopData == null) return TimeSpan.Zero;
+            if (!_nextRefreshTime.TryGetValue(shopData.ShopType, out var time))
+            {
+                time = DateTime.UtcNow + shopData.RefreshInterval;
+                _nextRefreshTime[shopData.ShopType] = time;
+            }
+            var remaining = time - DateTime.UtcNow;
+            return remaining > TimeSpan.Zero ? remaining : TimeSpan.Zero;
+        }
+        /// <summary>
+        /// 특정 상점 새로고침
+        /// </summary>
+        /// <param name="shopData"></param>
+        public void RefreshShop(SO_ShopData shopData)
+        {
+            if (shopData == null) return;
+            _nextRefreshTime[shopData.ShopType] = DateTime.UtcNow + shopData.RefreshInterval;
+            shopData.RefreshStockedItems();
+        }
         /// <summary>
         /// 장바구니 IShopItem 목록 일괄 구매 시도
         /// </summary>

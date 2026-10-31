@@ -140,7 +140,7 @@ namespace ElementalBlacksmithStory.UI
         }
         public void SetHighestBid(BidContext bid)
         {
-            _view.SetHighestBid(bid.Bidder, bid.Price);
+            _view.SetHighestBid(bid.Bidder, bid.Price, bid.Bidder == "player");
         }
         public ulong GetPriceStep(ulong price)
         {

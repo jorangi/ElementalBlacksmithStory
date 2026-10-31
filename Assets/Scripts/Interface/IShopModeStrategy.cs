@@ -36,5 +36,11 @@ namespace ElementalBlacksmithStory.UI.Strategy
         /// 흥정(Bargain) 전용 카드 프리팹을 사용할지 여부
         /// </summary>
         public bool IsBargainCard => false;
+
+        /// <summary>
+        /// 아이템의 묶음(번들) 판매 단위 수량을 반환합니다.
+        /// 단순 재고/소지량(Amount)이 아닌 고정 묶음 거래(Bundle)일 때만 2 이상을 반환합니다.
+        /// </summary>
+        public uint GetBundleCount(IShopItem item) => 1;
     }
 }

@@ -14,18 +14,12 @@ namespace ElementalBlacksmithStory.UI.Strategy
     /// </summary>
     public class BidModeStrategy : IShopModeStrategy
     {
-        // =====================================================================
-        // 경매 시작가 및 출품 개수 상수
-        // =====================================================================
         public const float MIN_STARTING_BID_RATIO = 0.02f; // 표준가의 최소 2%
         public const float MAX_STARTING_BID_RATIO = 0.40f; // 표준가의 최대 40%
 
         public const int MIN_AUCTION_ITEM_COUNT = 6;       // 회차당 최소 출품 개수
         public const int MAX_AUCTION_ITEM_COUNT = 10;      // 회차당 최대 출품 개수
 
-        // =====================================================================
-        // 재료 묶음(Bulk) 산출 관련 상수
-        // =====================================================================
         public const uint MIN_MATERIAL_BUNDLE_COUNT = 1;     // 최소 1개
         public const uint MAX_MATERIAL_BUNDLE_COUNT = 200;   // 하급 재료 최대 200개
 
@@ -35,9 +29,6 @@ namespace ElementalBlacksmithStory.UI.Strategy
         public const float BUNDLE_LUCK_MIN_MULTIPLIER = 0.35f; // 최소 운 계수 (1개까지 하락 가능)
         public const float BUNDLE_LUCK_MAX_MULTIPLIER = 2.20f; // 최대 대박 계수 (최상급 재료도 운 좋으면 10개 등장)
 
-        // =====================================================================
-        // 진행도 및 제작 트리 기반 가중치 상수
-        // =====================================================================
         public const float MIN_CANDIDATE_WEIGHT = 0.05f;
         public const float TIER_DISTANCE_PENALTY = 1.35f;
         public const float ENDGAME_LOW_TIER_PENALTY_MULTIPLIER = 0.15f;
@@ -78,7 +69,6 @@ namespace ElementalBlacksmithStory.UI.Strategy
         private readonly SO_MaterialDatabase _materialDatabase;
         private readonly SO_RuneDatabase _runeDatabase;
 
-        // GC-Free 재사용 컬렉션 버퍼
         private readonly List<IShopItem> _bidGoods = new(16);
         private readonly List<AuctionCandidate> _candidateBuffer = new(128);
         private readonly HashSet<uint> _currentBranchDeficitMatIds = new(16);
@@ -88,6 +78,7 @@ namespace ElementalBlacksmithStory.UI.Strategy
         private ulong _cachedMaxMaterialValue;
         private ulong _cachedMaxRuneValue;
 
+        public bool CanRefresh => false;
         [Inject]
         public BidModeStrategy(
             BidPresenter presenter,
@@ -132,6 +123,11 @@ namespace ElementalBlacksmithStory.UI.Strategy
         public bool CanInteract(IShopItem item) => item != null;
 
         /// <summary>
+        /// 경매 품목은 통째로 입찰/낙찰받는 고정 묶음(번들) 단위이므로 item.Count를 번들 수량으로 반환
+        /// </summary>
+        public uint GetBundleCount(IShopItem item) => item != null && item.Count > 0 ? item.Count : 1u;
+
+        /// <summary>
         /// 아이템 클릭 시 경매 입찰 모달을 오픈
         /// </summary>
         public void OnItemClicked(IShopItem item)
@@ -160,7 +156,7 @@ namespace ElementalBlacksmithStory.UI.Strategy
         }
 
         /// <summary>
-        /// 새로운 경매 회차의 출품 목록(6~10개)을 플레이어 진행도 및 제작 브랜치 상황에 맞춰 추첨하고 시작가를 등록합니다.
+        /// 새로운 경매 회차의 출품 목록(6~10개)을 플레이어 진행도 및 제작 브랜치 상황에 맞춰 추첨하고 시작가를 등록
         /// </summary>
         public void RefreshAuctionItems()
         {
@@ -214,7 +210,7 @@ namespace ElementalBlacksmithStory.UI.Strategy
         }
 
         /// <summary>
-        /// 아이템 표준 가치(재료의 경우 단가 * 묶음 수량)의 2% ~ 40% 사이로 시작 입찰가를 책정합니다.
+        /// 아이템 표준 가치(재료의 경우 단가 * 묶음 수량)의 2% ~ 40% 사이로 시작 입찰가를 책정
         /// </summary>
         public static ulong CalculateStartingBid(IShopItem item)
         {
@@ -228,7 +224,7 @@ namespace ElementalBlacksmithStory.UI.Strategy
         }
 
         /// <summary>
-        /// 재료 단가에 반비례하고 DB 최고가 재료 및 진행도에 연동되는 동적 묶음 수량(1~200개)을 계산합니다.
+        /// 재료 단가에 반비례하고 DB 최고가 재료 및 진행도에 연동되는 동적 묶음 수량(1~200개)을 계산
         /// </summary>
         private uint CalculateMaterialBundleCount(ulong materialUnitValue, float progression)
         {
@@ -253,7 +249,7 @@ namespace ElementalBlacksmithStory.UI.Strategy
         }
 
         /// <summary>
-        /// 현재 모루 위 무기의 직속 파생 레시피(부족한 재료)와 차상위 티어 레시피에 필요한 재료 ID를 수집합니다.
+        /// 현재 모루 위 무기의 직속 파생 레시피(부족한 재료)와 차상위 티어 레시피에 필요한 재료 ID를 수집
         /// </summary>
         private void CollectBranchMaterialNeeds()
         {
@@ -272,7 +268,7 @@ namespace ElementalBlacksmithStory.UI.Strategy
                 SO_CraftRecipe recipe = directRecipes[i];
                 if (recipe == null) continue;
 
-                // 1. 현재 단계에서 바로 다음 무기로 갈 때 부족한 재료 파악
+                // 현재 단계에서 바로 다음 무기로 갈 때 부족한 재료 파악
                 if (recipe.recipeMaterials != null)
                 {
                     for (int m = 0; m < recipe.recipeMaterials.Count; m++)
@@ -291,7 +287,7 @@ namespace ElementalBlacksmithStory.UI.Strategy
                     }
                 }
 
-                // 2. 해당 브랜치의 상위 티어(다음 결과 무기의 파생 레시피들)에 필요한 재료 파악
+                //해당 브랜치의 상위 티어(다음 결과 무기의 파생 레시피들)에 필요한 재료 파악
                 SO_WeaponData nextWeapon = recipe.recipeOutcome.resultWeapon;
                 if (nextWeapon != null && nextWeapon.recipes != null)
                 {
@@ -321,7 +317,7 @@ namespace ElementalBlacksmithStory.UI.Strategy
         {
             _candidateBuffer.Clear();
 
-            // 1. 무기 풀 추가
+            // 무기 풀 추가
             if (_weaponDatabase != null && _weaponDatabase.Items != null)
             {
                 var weapons = _weaponDatabase.Items;
@@ -336,7 +332,7 @@ namespace ElementalBlacksmithStory.UI.Strategy
                 }
             }
 
-            // 2. 재료 풀 추가 (현재 브랜치 부족 재료 및 상위 티어 재료에 은근한 가중치 보정 적용)
+            // 재료 풀 추가 (현재 브랜치 부족 재료 및 상위 티어 재료에 은근한 가중치 보정 적용)
             if (_materialDatabase != null && _materialDatabase.Items != null)
             {
                 var materials = _materialDatabase.Items;
@@ -361,7 +357,7 @@ namespace ElementalBlacksmithStory.UI.Strategy
                 }
             }
 
-            // 3. 룬 풀 추가
+            // 룬 풀 추가
             if (_runeDatabase != null && _runeDatabase.Items != null)
             {
                 var runes = _runeDatabase.Items;

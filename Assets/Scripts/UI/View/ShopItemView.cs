@@ -14,9 +14,9 @@ namespace ElementalBlacksmithStory.UI
         [Tooltip("보유 수량 텍스트 (예: '(1,000개 보유)')")]
         [SerializeField] private TextMeshProUGUI _amountInPocketText;
 
-        public override void SetData(uint itemId, string itemName, ulong price, Sprite icon, bool isUniqueItem = false, uint count = 1)
+        public override void SetData(uint itemId, string itemName, ulong price, Sprite icon, bool isUniqueItem = false, uint bundleCount = 1)
         {
-            base.SetData(itemId, itemName, price, icon, isUniqueItem, count);
+            base.SetData(itemId, itemName, price, icon, isUniqueItem, bundleCount);
             if (isUniqueItem && _amountInPocketText != null)
             {
                 _amountInPocketText.gameObject.SetActive(false);

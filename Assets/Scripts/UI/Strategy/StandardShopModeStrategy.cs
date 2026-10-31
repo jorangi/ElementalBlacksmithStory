@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using Cysharp.Threading.Tasks;
@@ -10,40 +11,41 @@ namespace ElementalBlacksmithStory.UI.Strategy
     /// <summary>
     /// 일반 상점 모드(장바구니 담기 및 수량 모달 오픈)의 아이템 상호작용 전략
     /// </summary>
-    public class StandardShopModeStrategy : IShopModeStrategy
+    public class StandardShopModeStrategy : IShopModeStrategy, IRefreshableShopMode
     {
         private readonly ShopCartPresenter _cartPresenter;
         private readonly PlayerData _playerData;
         private readonly IItemShopFactory _itemShopFactory;
 
         private readonly List<IShopItem> _shopBuyGoods = new();
+        private readonly ShopService _shopService;
+        private SO_ShopData _shopData;
+
+        public TimeSpan RemainingTime => _shopService.GetRemainingRefreshTime(_shopData);
 
         [Inject]
         public StandardShopModeStrategy(
             ShopCartPresenter cartPresenter,
             PlayerData playerData,
-            IItemShopFactory itemShopFactory
+            IItemShopFactory itemShopFactory,
+            ShopService shopService
             )
         {
             _cartPresenter = cartPresenter;
             _playerData = playerData;
             _itemShopFactory = itemShopFactory;
+            _shopService = shopService;
         }
         public void SetShopData(SO_ShopData shopData)
         {
-            _shopBuyGoods.Clear();
             if (shopData == null) return;
+            _shopData = shopData;
 
-            var stockedItem = shopData.GetAllStockedItems();
-            for (int i = 0; i < stockedItem.Count; i++)
+            if (_shopService.GetRemainingRefreshTime(_shopData) <= TimeSpan.Zero)
             {
-                var entry = stockedItem[i];
-                var item = _itemShopFactory.Create(entry.itemId, entry.stock, 1.0f);
-                if (item != null)
-                {
-                    _shopBuyGoods.Add(item);
-                }
+                _shopService.RefreshShop(_shopData);
             }
+            LoadShopGoods();
         }
         public ulong GetPrice(IShopItem item) => item?.Value ?? 0;
 
@@ -121,6 +123,26 @@ namespace ElementalBlacksmithStory.UI.Strategy
                 }
             }
             return UniTask.CompletedTask;
+        }
+        public void OnRefresh()
+        {
+            if (_shopData == null) return;
+            _shopService.RefreshShop(_shopData);
+            LoadShopGoods();
+        }
+        private void LoadShopGoods()
+        {
+            _shopBuyGoods.Clear();
+            var stockedItem = _shopData.AllStockedItems;
+            for (int i = 0; i < stockedItem.Count; i++)
+            {
+                var entry = stockedItem[i];
+                var item = _itemShopFactory.Create(entry.itemId, entry.stock, 1.0f);
+                if (item != null)
+                {
+                    _shopBuyGoods.Add(item);
+                }
+            }
         }
     }
 }

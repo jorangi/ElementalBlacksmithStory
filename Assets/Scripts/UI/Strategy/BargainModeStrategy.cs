@@ -5,6 +5,7 @@ using Cysharp.Threading.Tasks;
 using ElementalBlacksmithStory.Core;
 using ElementalBlacksmithStory.Data;
 using ElementalBlacksmithStory.Inventory;
+using ElementalBlacksmithStory.UI;
 using VContainer;
 
 namespace ElementalBlacksmithStory.UI.Strategy
@@ -12,11 +13,12 @@ namespace ElementalBlacksmithStory.UI.Strategy
     /// <summary>
     /// 교역소(TradingPost) 판매 모드(흥정 출품 및 손님 대기열)의 아이템 상호작용 전략
     /// </summary>
-    public class BargainModeStrategy : IShopModeStrategy
+    public class BargainModeStrategy : IShopModeStrategy, IItemRegisterableShopMode
     {
         private readonly CustomerListPresenter _customerListPresenter;
         private readonly TradingPostService _tradingPostService;
         private readonly PlayerData _playerData;
+        public bool CanRefresh => false;
 
         [Inject]
         public BargainModeStrategy(
@@ -57,8 +59,16 @@ namespace ElementalBlacksmithStory.UI.Strategy
         {
             if (item == null || _customerListPresenter == null) return;
             _customerListPresenter.SetItem(item).Forget();
-            // TODO: CustomerListPresenter에 대상 아이템(item) 정보 전달 및 목록 갱신
             _customerListPresenter.Show();
+        }
+
+        /// <summary>
+        /// 판매 등록(+ 버튼) 카드 클릭 시 호출
+        /// </summary>
+        public void OnRegisterCardClicked()
+        {
+            // TODO: 판매 등록 모달/인벤토리 열기
+            UnityEngine.Debug.Log("[BargainModeStrategy] 판매 등록(+ 카드) 클릭됨");
         }
 
         /// <summary>

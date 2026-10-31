@@ -35,14 +35,14 @@ namespace ElementalBlacksmithStory.UI
         private readonly Dictionary<uint, IShopItem> _displayedShopItems = new();
         private readonly Dictionary<uint, IDisposable> _itemDisposables = new();
         private readonly CompositeDisposable _disposables = new();
-
-        private readonly List<IShopItem> _shopBuyGoods = new();
+        private IDisposable _registerCardDisposable;
         private bool _isSellMode = false;
         private bool _isInitialized = false;
         private CancellationTokenSource _refreshCts;
         private Func<IShopItem, bool> _categoryFilter = _ => true;
 
         private readonly List<IShopItem> _itemBuffer = new(64);
+        private IDisposable _timerDisposable;
 
         [Inject]
         public ShopItemGridPresenter(
@@ -120,6 +120,18 @@ namespace ElementalBlacksmithStory.UI
                     })
                     .AddTo(_disposables);
             }
+
+            _view.OnRefreshButtonAsObservable()
+                .Subscribe(_ =>
+                {
+                    if (_strategy is IRefreshableShopMode refreshStrategy)
+                    {
+                        refreshStrategy.OnRefresh();
+                        RefreshGridAsync().Forget();
+                        StartRefreshTimer();
+                    }
+                })
+                .AddTo(_disposables);
         }
         private void OnHighestBidsChanged(in NotifyCollectionChangedEventArgs<KeyValuePair<uint, BidContext>> e)
         {
@@ -199,6 +211,14 @@ namespace ElementalBlacksmithStory.UI
             _isInitialized = true;
             await UniTask.CompletedTask;
         }
+        public void OpenShop()
+        {
+            StartRefreshTimer();
+        }
+        public void HideShop()
+        {
+            StopRefreshTimer();
+        }
         /// <summary>
         /// 구매/판매 모드 전환
         /// </summary>
@@ -252,6 +272,20 @@ namespace ElementalBlacksmithStory.UI
 
                     await AddItem(item);
                 }
+                if (_strategy is IRefreshableShopMode refreshableShopMode) _view.ShowRefreshButton();
+                else _view.HideRefreshButton();
+
+                if (_strategy is IItemRegisterableShopMode bargainStrategy)
+                {
+                    var registerCard = _view.CreateRegisterCard();
+                    if (registerCard != null)
+                    {
+                        _registerCardDisposable?.Dispose();
+                        _registerCardDisposable = registerCard.OnClickAsObservable()
+                            .ThrottleFirst(TimeSpan.FromMilliseconds(200))
+                            .Subscribe(_ => bargainStrategy.OnRegisterCardClicked());
+                    }
+                }
             }
             catch (OperationCanceledException)
             {
@@ -283,7 +317,8 @@ namespace ElementalBlacksmithStory.UI
 
             bool isBargain = _strategy?.IsBargainCard ?? false;
             ulong price = _strategy != null ? _strategy.GetPrice(item) : item.Value;
-            ShopItemViewBase itemView = _view.CreateItem(item.Id, item.Name, price, icon, isUniqueItem, isBargain, item.Count);
+            uint bundleCount = _strategy != null ? _strategy.GetBundleCount(item) : 1;
+            ShopItemViewBase itemView = _view.CreateItem(item.Id, item.Name, price, icon, isUniqueItem, isBargain, bundleCount);
             if (itemView == null) return;
 
             if (item is Weapon weapon && itemView is EquipmentShopItemView eqView)
@@ -358,7 +393,7 @@ namespace ElementalBlacksmithStory.UI
             {
                 var view = kvp.Value;
                 if (view == null) continue;
-
+                if (_tradingPostService.HighestBids.TryGetValue(kvp.Key, out var bidContext)) view.SetBaseColor(bidContext.Bidder == "player");
                 if (_displayedShopItems.TryGetValue(kvp.Key, out var item))
                 {
                     if (_strategy != null)
@@ -407,16 +442,38 @@ namespace ElementalBlacksmithStory.UI
             }
             _itemDisposables.Clear();
 
+            _registerCardDisposable?.Dispose();
+            _registerCardDisposable = null;
+
             _displayedShopItems.Clear();
             _displayItems.Clear();
             _view.Clear();
         }
-
+        private void StartRefreshTimer()
+        {
+            _timerDisposable?.Dispose();
+            _timerDisposable = Observable.Timer(TimeSpan.Zero, TimeSpan.FromSeconds(1))
+                .Subscribe(this, static (_, self) =>
+                {
+                    if (self._strategy is IRefreshableShopMode refreshableShopMode)
+                    {
+                        TimeSpan remaining = refreshableShopMode.RemainingTime;
+                        self._view.SetRefreshTimer(remaining.Minutes, remaining.Seconds);
+                    }
+                });
+        }
+        private void StopRefreshTimer()
+        {
+            _timerDisposable?.Dispose();
+            _timerDisposable = null;
+        }
         public void Dispose()
         {
             _refreshCts?.Cancel();
             _refreshCts?.Dispose();
             _refreshCts = null;
+
+            StopRefreshTimer();
             ClearItems();
             _tradingPostService.HighestBids.CollectionChanged -= OnHighestBidsChanged;
             _disposables.Dispose();

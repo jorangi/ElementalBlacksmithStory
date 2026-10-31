@@ -30,6 +30,8 @@ namespace ElementalBlacksmithStory.UI
         private readonly BidModeStrategy _bidStrategy;
         private readonly BargainModeStrategy _bargainStrategy;
 
+        private readonly ShopService _shopService;
+
         [Inject]
         public MarketPresenter(
             MarketView marketView,
@@ -40,7 +42,8 @@ namespace ElementalBlacksmithStory.UI
             IPublisher<StartShopDialogueEvent> shopDialoguePublisher,
             StandardShopModeStrategy standardShopStrategy,
             BidModeStrategy bidStrategy,
-            BargainModeStrategy bargainStrategy
+            BargainModeStrategy bargainStrategy,
+            ShopService shopService
             )
         {
             _view = marketView;
@@ -53,6 +56,7 @@ namespace ElementalBlacksmithStory.UI
             _standardShopStrategy = standardShopStrategy;
             _bidStrategy = bidStrategy;
             _bargainStrategy = bargainStrategy;
+            _shopService = shopService;
 
 
             _tabPresenter.OnTabSwitchedAsObservable()
@@ -75,12 +79,25 @@ namespace ElementalBlacksmithStory.UI
                 .Subscribe(_ =>
                 {
                     _shopKeeperPresenter.ClearView();
+                    _itemGridPresenter.HideShop();
                     _view.Hide();
                 })
                 .AddTo(_disposable);
         }
 
-        public void Start() { }
+        public void Start()
+        {
+            InitializeShop(MarketType.GENERAL);
+            InitializeShop(MarketType.WEAPON);
+        }
+        private void InitializeShop(MarketType type)
+        {
+            var shopData = _view.GetShopData(type);
+            if (shopData != null)
+            {
+                _shopService.InitializeShop(shopData);
+            }
+        }
 
         /// <summary>
         /// 특정 상점 타입에 맞는 데이터로 세션을 열고 UI를 초기화
@@ -94,6 +111,7 @@ namespace ElementalBlacksmithStory.UI
             {
                 _standardShopStrategy.SetShopData(shopData);
             }
+            _itemGridPresenter.OpenShop();
             _shopKeeperPresenter.ClearView();
             _view.Show();
 
