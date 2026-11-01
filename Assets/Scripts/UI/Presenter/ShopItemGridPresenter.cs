@@ -296,22 +296,22 @@ namespace ElementalBlacksmithStory.UI
         {
             Sprite icon = null;
             bool isUniqueItem = false;
-            switch (ItemIdHelper.GetCategory(item.SpriteId))
+            switch (ItemIdHelper.GetCategory(item.ItemId))
             {
                 case ItemCategory.Weapon:
-                    icon = await _weaponSpriteLoader.GetSprite(item.SpriteId);
+                    icon = await _weaponSpriteLoader.GetSprite(item.ItemId);
                     isUniqueItem = true;
                     break;
                 case ItemCategory.Material:
-                    icon = await _materialSpriteLoader.GetSprite(item.SpriteId);
+                    icon = await _materialSpriteLoader.GetSprite(item.ItemId);
                     isUniqueItem = false;
                     break;
                 case ItemCategory.Rune:
-                    icon = await _runeSpriteLoader.GetSprite(item.SpriteId);
+                    icon = await _runeSpriteLoader.GetSprite(item.ItemId);
                     isUniqueItem = false;
                     break;
                 default:
-                    Debug.LogError($"[ShopItemGridPresenter]: {item.SpriteId}은 유효한 Sprite ID가 아닙니다.");
+                    Debug.LogError($"[ShopItemGridPresenter]: {item.ItemId}은 유효한 Sprite ID가 아닙니다.");
                     return;
             }
 

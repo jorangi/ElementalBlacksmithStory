@@ -122,16 +122,16 @@ namespace ElementalBlacksmithStory.UI
             }
 
             Sprite sprite = null;
-            switch (ItemIdHelper.GetCategory(item.SpriteId))
+            switch (ItemIdHelper.GetCategory(item.ItemId))
             {
                 case ItemCategory.Weapon:
-                    sprite = await _weaponSpriteLoader.GetSprite(item.SpriteId);
+                    sprite = await _weaponSpriteLoader.GetSprite(item.ItemId);
                     break;
                 case ItemCategory.Material:
-                    sprite = await _materialSpriteLoader.GetSprite(item.SpriteId);
+                    sprite = await _materialSpriteLoader.GetSprite(item.ItemId);
                     break;
                 case ItemCategory.Rune:
-                    sprite = await _runeSpriteLoader.GetSprite(item.SpriteId);
+                    sprite = await _runeSpriteLoader.GetSprite(item.ItemId);
                     break;
                 default:
                     break;

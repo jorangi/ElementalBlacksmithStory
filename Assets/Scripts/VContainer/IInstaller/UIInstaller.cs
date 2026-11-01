@@ -34,6 +34,8 @@ namespace ElementalBlacksmithStory.Core
             builder.RegisterComponentInHierarchy<BidView>();
             builder.RegisterComponentInHierarchy<BargainView>();
             builder.RegisterComponentInHierarchy<CustomerListView>();
+            builder.RegisterComponentInHierarchy<BargainItemGridView>();
+
 
             // Presenter 등록
             builder.RegisterEntryPoint<MoneyPresenter>();
@@ -59,6 +61,8 @@ namespace ElementalBlacksmithStory.Core
             builder.Register<BidPresenter>(Lifetime.Singleton).AsSelf();
             builder.Register<BargainPresenter>(Lifetime.Singleton).AsSelf();
             builder.Register<CustomerListPresenter>(Lifetime.Singleton).AsSelf();
+            builder.Register<BargainItemGridPresenter>(Lifetime.Singleton).AsSelf();
+
 
             //Strategy 등록
             builder.Register<StandardShopModeStrategy>(Lifetime.Singleton);

@@ -12,7 +12,7 @@ namespace ElementalBlacksmithStory.Data
         public uint Id => _materialData != null ? _materialData.Id : 0;
         public string Name => Data != null ? Data.materialName : string.Empty;
         public ulong Value => Data != null ? Data.Value : 0;
-        public uint SpriteId => Data != null ? Data.Id : 0;
+        public uint ItemId => Data != null ? Data.Id : 0;
         public uint Count => _count;
 
         public MaterialShopItem(SO_MaterialData materialData, uint count = 1)

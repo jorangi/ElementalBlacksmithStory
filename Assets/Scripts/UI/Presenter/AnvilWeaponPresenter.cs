@@ -84,13 +84,13 @@ namespace ElementalBlacksmithStory.UI
             if (_runeSpriteLoader != null)
             {
                 var r0 = weapon.GetRune(0);
-                if (r0 != null) s0 = await _runeSpriteLoader.GetSprite(r0.SpriteId, ct);
+                if (r0 != null) s0 = await _runeSpriteLoader.GetSprite(r0.ItemId, ct);
 
                 var r1 = weapon.GetRune(1);
-                if (r1 != null) s1 = await _runeSpriteLoader.GetSprite(r1.SpriteId, ct);
+                if (r1 != null) s1 = await _runeSpriteLoader.GetSprite(r1.ItemId, ct);
 
                 var r2 = weapon.GetRune(2);
-                if (r2 != null) s2 = await _runeSpriteLoader.GetSprite(r2.SpriteId, ct);
+                if (r2 != null) s2 = await _runeSpriteLoader.GetSprite(r2.ItemId, ct);
             }
 
             _anvilWeaponView.ChangeRuneStatus(weapon.RuneSlot, s0, s1, s2);
@@ -101,7 +101,7 @@ namespace ElementalBlacksmithStory.UI
             Sprite runeSprite = null;
             if (rune != null && _runeSpriteLoader != null)
             {
-                runeSprite = await _runeSpriteLoader.GetSprite(rune.SpriteId, ct);
+                runeSprite = await _runeSpriteLoader.GetSprite(rune.ItemId, ct);
             }
             _anvilWeaponView.SetRune(socketIndex, runeSprite);
         }

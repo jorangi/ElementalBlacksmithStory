@@ -4,6 +4,26 @@
 
 ---
 
+## 2026-11-01
+
+- 교역소(TradingPost) 경매 입찰 및 정산 시스템 구현
+  - `TradingPostService`의 입찰 로직
+    - 기존 플레이어 누적 입찰액을 추적하여 차액만 차감하도록 처리
+    - 최고 입찰자가 본인인 경우 추가 지출 없이 입찰 갱신 가능하도록 개선
+  - 경매 종료 후 낙찰 정산 로직 구현
+    - 최종 낙찰자가 플레이어일 경우 이벤트 발행으로 인벤토리 즉각 수령 연동
+    - 패찰 시 기존 입찰 누적금을 전액 플레이어 잔고로 환급 처리
+- 교역소 흥정(Bargain) 물품 등록 UI 및 프레젠터 구현
+  - 플레이어가 소지한 장비/재료/룬을 교역소에 등록할 수 있는 UI 제작 (`BargainItemGridView`, `BargainRegisterItemView`)
+  - `ObjectPool<BargainRegisterItemView>`을 활용한 카드 슬롯 재사용 및 GC Alloc 방지
+  - 카테고리 전환(무기/재료/룬) 기능 및 인벤토리 실시간 조회 연동
+  - 복수 선택 체크박스 토글 및 일괄 등록 연동 (`TradingPostService.RegisterBargainItems`)
+- 버그 수정 및 최적화
+  - 런타임 동적 생성 슬롯 프리팹(`BargainRegisterItemView`)이 씬 바인딩(`RegisterComponentInHierarchy`)에 등록되어 발생하던 VContainer 예외 해결
+  - `IReadOnlyCollection<Weapon>` 인덱서 접근 불가에 따른 순회 방식 수정
+
+---
+
 ## 2026-10-31
 
 - 상점 아이템 묶음(번들) 수량과 일반 재고 수량 분리

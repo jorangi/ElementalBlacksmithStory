@@ -15,7 +15,7 @@ namespace ElementalBlacksmithStory.Data
         /// <summary>
         /// 스프라이트 아틀라스 로드에 사용되는 원본 데이터 ID
         /// </summary>
-        public uint SpriteId { get; }
+        public uint ItemId { get; }
 
         /// <summary>
         /// 아이템 수량

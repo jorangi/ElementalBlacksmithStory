@@ -404,7 +404,7 @@ namespace ElementalBlacksmithStory.UI
             uint currentCartAmount = _cartItems.TryGetValue(item.Id, out var entry) ? entry.ea : 1;
             _modalAmount = isWeapon ? 1 : currentCartAmount;
 
-            Sprite sprite = await GetItemSpriteAsync(item.SpriteId);
+            Sprite sprite = await GetItemSpriteAsync(item.ItemId);
 
             string itemName = item.Name;
             _modalUnitPrice = item.Value;
@@ -476,7 +476,7 @@ namespace ElementalBlacksmithStory.UI
                 return;
             }
 
-            Sprite sprite = await GetItemSpriteAsync(item.SpriteId);
+            Sprite sprite = await GetItemSpriteAsync(item.ItemId);
 
             var newItem = _view.Create(item.Id, ea, sprite);
             _cartItems.Add(item.Id, (newItem, item, ea));

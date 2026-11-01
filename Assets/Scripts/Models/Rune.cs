@@ -15,7 +15,7 @@ namespace ElementalBlacksmithStory.Core
         public uint Id => _data != null ? _data.Id : 0;
         public string Name => _data != null ? _data.Name : string.Empty;
         public ulong Value => _data != null ? _data.Value : 0;
-        public uint SpriteId => _data != null ? _data.Id : 0;
+        public uint ItemId => _data != null ? _data.Id : 0;
         public uint Count => _count;
 
         [Inject]

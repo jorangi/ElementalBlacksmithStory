@@ -57,7 +57,7 @@ namespace ElementalBlacksmithStory.UI.Strategy
             if (_cartPresenter.IsSellMode) return true;
 
             // 구매
-            bool isUniqueItem = item is Weapon || ItemIdHelper.GetCategory(item.SpriteId) == ItemCategory.Weapon;
+            bool isUniqueItem = item is Weapon || ItemIdHelper.GetCategory(item.ItemId) == ItemCategory.Weapon;
             bool inCartAlready = isUniqueItem && _cartPresenter.ContainsCartItem(item.Id);
 
             // 장비(amount를 사용하지 않음)가 이미 카트에 있거나, 잔여 소지금이 아이템 가격보다 부족하면 비활성화
@@ -69,7 +69,7 @@ namespace ElementalBlacksmithStory.UI.Strategy
             if (item == null || _cartPresenter == null) return;
             if (!CanInteract(item)) return;
 
-            bool isUniqueItem = item is Weapon || ItemIdHelper.GetCategory(item.SpriteId) == ItemCategory.Weapon;
+            bool isUniqueItem = item is Weapon || ItemIdHelper.GetCategory(item.ItemId) == ItemCategory.Weapon;
 
             if (isUniqueItem)
             {

@@ -18,18 +18,21 @@ namespace ElementalBlacksmithStory.UI.Strategy
         private readonly CustomerListPresenter _customerListPresenter;
         private readonly TradingPostService _tradingPostService;
         private readonly PlayerData _playerData;
+        private readonly BargainItemGridPresenter _bargainItemGridPresenter;
         public bool CanRefresh => false;
 
         [Inject]
         public BargainModeStrategy(
             CustomerListPresenter customerListPresenter,
             PlayerData playerData,
+            BargainItemGridPresenter bargainItemGridPresenter,
             TradingPostService tradingPostService = null
         )
         {
             _customerListPresenter = customerListPresenter;
             _playerData = playerData;
             _tradingPostService = tradingPostService;
+            _bargainItemGridPresenter = bargainItemGridPresenter;
         }
 
         public bool IsBargainCard => true;
@@ -67,7 +70,7 @@ namespace ElementalBlacksmithStory.UI.Strategy
         /// </summary>
         public void OnRegisterCardClicked()
         {
-            // TODO: 판매 등록 모달/인벤토리 열기
+            _bargainItemGridPresenter.Show();
             UnityEngine.Debug.Log("[BargainModeStrategy] 판매 등록(+ 카드) 클릭됨");
         }
 

@@ -57,7 +57,7 @@ namespace ElementalBlacksmithStory.Core
         string IShopItem.Name => Data != null ? Data.weaponName : string.Empty;
         public ulong Value => _price;
 
-        uint IShopItem.SpriteId => Data != null ? WeaponId : 0;
+        uint IShopItem.ItemId => Data != null ? WeaponId : 0;
 
         uint IShopItem.Count => 1;
         private Weapon(WeaponSaveData saveData, SO_WeaponData weaponData, SO_WeaponData baseWeaponData)
