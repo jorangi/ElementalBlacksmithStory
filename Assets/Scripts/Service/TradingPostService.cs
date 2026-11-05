@@ -5,6 +5,7 @@ using ElementalBlacksmithStory.Events;
 using MessagePipe;
 using ObservableCollections;
 using R3;
+using Unity.VisualScripting;
 using UnityEngine;
 using VContainer;
 
@@ -20,15 +21,21 @@ namespace ElementalBlacksmithStory.Core
         private readonly Dictionary<uint, ulong> _playerBids = new();
         private readonly IPublisher<AcquireItemEvent> _acquireItemPublisher;
         private readonly Dictionary<ItemCategory, List<IShopItem>> _bargainItems = new();
+        private readonly SO_MaterialDatabase _materialDatabase;
+        private readonly SO_RuneDatabase _runeDatabase;
 
         [Inject]
         public TradingPostService(
             PlayerData playerData,
-            IPublisher<AcquireItemEvent> acquireItemPublisher
+            IPublisher<AcquireItemEvent> acquireItemPublisher,
+            SO_MaterialDatabase materialDatabase,
+            SO_RuneDatabase runeDatabase
         )
         {
             _playerData = playerData;
             _acquireItemPublisher = acquireItemPublisher;
+            _materialDatabase = materialDatabase;
+            _runeDatabase = runeDatabase;
 
             _bargainItems[ItemCategory.Weapon] = new List<IShopItem>();
             _bargainItems[ItemCategory.Material] = new List<IShopItem>();
@@ -117,10 +124,38 @@ namespace ElementalBlacksmithStory.Core
                     Debug.LogWarning($"[TradingPostService] {item.ItemId} 아이템이 유효하지 않아 등록할 수 없습니다.");
                     continue;
                 }
-                ItemCategory category = ItemIdHelper.GetCategory(item.ItemId);
+                IShopItem registeredItem = item;
+                ItemCategory category = ItemCategory.Unknown;
+                switch (item.Category)
+                {
+                    case ShopItemCategory.Sword:
+                    case ShopItemCategory.Bow:
+                        category = ItemCategory.Weapon;
+                        _playerData.EquipmentInventory.Remove(item.Id);
+                        break;
+                    case ShopItemCategory.Material:
+                        category = ItemCategory.Material;
+                        _playerData.MaterialInventory.Get(_materialDatabase.Get(item.ItemId), item.Count);
+                        if (item.Id == item.ItemId && item is MaterialShopItem matItem)
+                        {
+                            registeredItem = new MaterialShopItem(matItem.Data, item.Count, MaterialShopItem.GenerateInstanceId());
+                        }
+                        break;
+                    case ShopItemCategory.Rune:
+                        category = ItemCategory.Rune;
+                        _playerData.RuneInventory.Get(_runeDatabase.Get(item.ItemId), item.Count);
+                        if (item.Id == item.ItemId && item is Rune runeItem)
+                        {
+                            registeredItem = new Rune(runeItem.Data, item.Count, Rune.GenerateInstanceId());
+                        }
+                        break;
+                    default:
+                        Debug.LogWarning($"[TradingPostService] {item.ItemId} ({item.Category}) 아이템이 유효하지 않습니다.");
+                        break;
+                }
                 if (_bargainItems.TryGetValue(category, out var list))
                 {
-                    list.Add(item);
+                    list.Add(registeredItem);
                 }
             }
         }

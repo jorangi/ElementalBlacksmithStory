@@ -87,7 +87,17 @@ namespace ElementalBlacksmithStory.UI.Strategy
 
         public UniTask GetDisplayItemAsync(List<IShopItem> results, bool isSellMode, CancellationToken ct = default)
         {
+            if (isSellMode)
+            {
+                var weapons = _tradingPostService.GetBargainItems(ItemCategory.Weapon);
+                results.AddRange(weapons);
+                var materials = _tradingPostService.GetBargainItems(ItemCategory.Material);
+                results.AddRange(materials);
+                var runes = _tradingPostService.GetBargainItems(ItemCategory.Rune);
+                results.AddRange(runes);
+            }
             return UniTask.CompletedTask;
         }
+        public uint GetBundleCount(IShopItem item) => item.Count;
     }
 }

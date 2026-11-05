@@ -4,6 +4,7 @@ using System.Threading;
 using Cysharp.Threading.Tasks;
 using ElementalBlacksmithStory.Core;
 using ElementalBlacksmithStory.Data;
+using ElementalBlacksmithStory.UI;
 using VContainer;
 
 namespace ElementalBlacksmithStory.UI.Strategy
@@ -22,19 +23,21 @@ namespace ElementalBlacksmithStory.UI.Strategy
         private SO_ShopData _shopData;
 
         public TimeSpan RemainingTime => _shopService.GetRemainingRefreshTime(_shopData);
-
+        private readonly UIBackPanelPresenter _uiBackPanelPresenter;
         [Inject]
         public StandardShopModeStrategy(
             ShopCartPresenter cartPresenter,
             PlayerData playerData,
             IItemShopFactory itemShopFactory,
-            ShopService shopService
+            ShopService shopService,
+            UIBackPanelPresenter uiBackPanelPresenter
             )
         {
             _cartPresenter = cartPresenter;
             _playerData = playerData;
             _itemShopFactory = itemShopFactory;
             _shopService = shopService;
+            _uiBackPanelPresenter = uiBackPanelPresenter;
         }
         public void SetShopData(SO_ShopData shopData)
         {
@@ -57,7 +60,7 @@ namespace ElementalBlacksmithStory.UI.Strategy
             if (_cartPresenter.IsSellMode) return true;
 
             // 구매
-            bool isUniqueItem = item is Weapon || ItemIdHelper.GetCategory(item.ItemId) == ItemCategory.Weapon;
+            bool isUniqueItem = item.Category == ShopItemCategory.Sword || item.Category == ShopItemCategory.Bow;
             bool inCartAlready = isUniqueItem && _cartPresenter.ContainsCartItem(item.Id);
 
             // 장비(amount를 사용하지 않음)가 이미 카트에 있거나, 잔여 소지금이 아이템 가격보다 부족하면 비활성화
@@ -69,7 +72,7 @@ namespace ElementalBlacksmithStory.UI.Strategy
             if (item == null || _cartPresenter == null) return;
             if (!CanInteract(item)) return;
 
-            bool isUniqueItem = item is Weapon || ItemIdHelper.GetCategory(item.ItemId) == ItemCategory.Weapon;
+            bool isUniqueItem = item.Category == ShopItemCategory.Sword || item.Category == ShopItemCategory.Bow;
 
             if (isUniqueItem)
             {
@@ -83,6 +86,7 @@ namespace ElementalBlacksmithStory.UI.Strategy
             else
             {
                 // 이외 아이템은 수량 선택 모달창 오픈
+                _uiBackPanelPresenter.Show();
                 _cartPresenter.OpenAmountModal(item).Forget();
             }
         }

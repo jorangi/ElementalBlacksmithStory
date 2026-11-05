@@ -1,0 +1,143 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b32617f483474c042a505f5b4002c486, type: 3}
+  m_Name: 80005
+  m_EditorClassIdentifier: Assembly-CSharp::ElementalBlacksmithStory.Data.SO_CustomerGroup
+  _customerGroupTitle: 학회 마법학자
+  _customerGroupName: 비전의 눈 학술회
+  _description: 고대 원소와 마도공학, 룬 각인을 연구하는 상아탑의 마법학자들. 세속적인 금전 감각이 다소 둔하며 원소 반응에 흥분한다.
+  minEstimateRatio: 1.1
+  maxEstimateRatio: 1.75
+  minFirstOfferRatio: 0.7
+  maxFirstOfferRatio: 0.85
+  minInterpolation: 0.2
+  maxInterpolation: 0.35
+  minPatience: 65
+  maxPatience: 95
+  greedSensitivity: 0.8
+  _customerNames:
+  - 알베르트
+  - 테오도르
+  - 엘리노어
+  - 메르센
+  - 키리안
+  - 오펠리아
+  - 세라핀
+  - 이그니스
+  - 루미
+  - 누마
+  _customerSprites: []
+  _firstOffer:
+  - speakerId: 0
+    text: '{itemType == sword ? "검에서 마력의 흐름이 느껴져요!" : {itemType == bow ? "활에 마력이 흐르는 게 느껴져요!" : {itemType == rune ? "룬의 마력 반응이 정말 선명해요!" : {itemType == material ? "재료의 마력 결정 상태가 놀라워요!" : "이 물건, 마력의 결이 정말 흥미로워요!"}}}} {price}골드면 될까요?'
+  - speakerId: 0
+    text: '{itemElement == flame ? "불의 원소 반응이 이렇게 선명하다니!" : {itemElement == cold ? "냉기의 응결이 정말 아름다워요!" : {itemElement == lightning ? "번개 기운이 튀는 것 좀 보세요!" : {itemElement == wind ? "바람의 공명이 귓가에 들리는 것 같아요!" : {itemElement == earth ? "대지의 원소가 묵직하게 울려요!" : {itemElement == holy ? "신성한 기운이 맑게 퍼지네요!" : {itemElement == dark ? "어둠의 기운이 이렇게 깊다니, 흥미로워요!" : "마력의 흐름이 정말 흥미로워요!"}}}}}}} {price}골드, 이 정도면 되겠죠?'
+  - speakerId: 0
+    text: '{price}골드 드릴게요. 금액은 잘 모르겠지만, 연구에 보탬이 되면 그걸로 충분해요!'
+  - speakerId: 0
+    text: '{itemCount > 1 ? "{itemCount}개나 있다니, 비교 연구가 가능하겠어요! 전부 합쳐 {price}골드 어때요?" : "딱 하나라 더 소중하네요! {price}골드 어때요?"}'
+  - speakerId: 0
+    text: '저는 {groupName}의 {npcName}. {itemName}에 {price}골드를 드리고 싶어요!'
+  - speakerId: 0
+    text: '{price >= baseValue ? "{baseValue}골드가 기본 가치라던데, 이 정도 물건이면 더 드려야죠. {price}골드 어때요?" : "{itemName}의 가치를 제대로 모르겠어서... 일단 {price}골드 어때요?"}'
+  - speakerId: 0
+    text: '{itemName}(을/를) 보자마자 가슴이 뛰었어요! {price}골드, 받아주실래요?'
+  - speakerId: 0
+    text: '{itemType == material ? "이 재료로 실험해 보고 싶은 게 산더미예요! {price}골드면 될까요?" : {itemType == rune ? "이 룬을 해석해 볼 생각을 하니 설레요! {price}골드면 될까요?" : "연구해 볼 생각을 하니 설레요! {price}골드면 될까요?"}}'
+  - speakerId: 0
+    text: '학자의 눈으로 보면 놓칠 수 없는 물건이에요. {price}골드를 드릴게요!'
+  - speakerId: 0
+    text: '값은 잘 몰라서요... {price}골드면 적당한가요? 부족하면 말씀해 주세요!'
+  _negotiation:
+  - speakerId: 0
+    text: '아, 그 정도면 될까요? {price}골드까지 올려 볼게요!'
+  - speakerId: 0
+    text: '{askPrice}골드요? 그만한 가치가 있겠죠! {prevPrice}골드에서 {price}골드로 올릴게요.'
+  - speakerId: 0
+    text: '{bargainCount >= 2 ? "계속 올리고 있는데 맞는 건가요? 어쨌든 {price}골드 드릴게요!" : "{price}골드로 어때요? 금액에 서툴러서 부족하면 말씀해 주세요."}'
+  - speakerId: 0
+    text: '{askRatio >= 1.5 ? "꽤 높게 부르셨지만 이런 물건이라면 그럴 만하죠. {price}골드로 맞춰 볼게요!" : "그 정도는 충분히 낼 만해요. {price}골드로 할게요!"}'
+  - speakerId: 0
+    text: '{itemElement == flame ? "불 원소 반응을 더 보고 싶으니" : {itemElement == cold ? "냉기 반응을 더 보고 싶으니" : {itemElement == lightning ? "번개 반응을 더 보고 싶으니" : {itemElement == wind ? "바람 반응을 더 보고 싶으니" : {itemElement == earth ? "대지 반응을 더 보고 싶으니" : {itemElement == holy ? "신성 반응을 더 보고 싶으니" : {itemElement == dark ? "어둠 반응을 더 보고 싶으니" : "더 연구해 보고 싶으니"}}}}}}} {price}골드까지 드릴게요!'
+  - speakerId: 0
+    text: '{priceGap}골드 정도 차이야 연구 성과에 비하면 작은 거죠. {price}골드로 할게요!'
+  - speakerId: 0
+    text: '{itemCount > 1 ? "{itemCount}개면 개당 {unitPrice}골드네요. 전부 합쳐 {price}골드로 할게요!" : "하나뿐인 물건이니 {price}골드로 할게요!"}'
+  - speakerId: 0
+    text: '{price >= baseValue ? "{baseValue}골드 이상은 드려야 예의죠. {price}골드 어때요?" : "{price}골드면 어때요? 조금 부족한가요?"}'
+  - speakerId: 0
+    text: '{npcName}(은/는) 계산에 약해서요... 그래도 {price}골드면 되겠죠?'
+  - speakerId: 0
+    text: '{itemName}(을/를) 연구할 수 있다면 {price}골드쯤이야! 이 정도로 어떠세요?'
+  _finalOffer:
+  - speakerId: 0
+    text: '죄송해요, 연구비 한도가 여기까지예요. {price}골드, 부탁드려요!'
+  - speakerId: 0
+    text: '{firstPrice}골드에서 {price}골드까지 올렸어요. 이게 제 한도예요, 정말로요!'
+  - speakerId: 0
+    text: '이 이상은 연구비 편성이 안 돼요... {price}골드, 어떠세요?'
+  - speakerId: 0
+    text: '{itemCount > 1 ? "{itemCount}개를 한꺼번에 {price}골드, 이게 최선이에요!" : "하나에 {price}골드, 이게 최선이에요!"} 부탁드려요.'
+  - speakerId: 0
+    text: '{askPrice}골드는 연구비로 감당이 안 돼요. {price}골드로 부탁드려요!'
+  - speakerId: 0
+    text: '{npcName}의 마지막 제안이에요. {price}골드, 받아주시면 정말 감사하겠어요!'
+  - speakerId: 0
+    text: '{itemType == material ? "재료 하나에 이 이상은 연구비가 허락하지 않아요." : {itemType == rune ? "룬 하나에 이 이상은 연구비가 허락하지 않아요." : "이 물건 하나에 이 이상은 연구비가 허락하지 않아요."}} {price}골드가 마지막이에요.'
+  - speakerId: 0
+    text: '{askRatio >= 1.5 ? "{priceGap}골드나 차이가 나네요... 아쉽지만 {price}골드가 최선이에요!" : "{price}골드로 안 될까요? 정말 이게 최선이에요!"}'
+  - speakerId: 0
+    text: '{itemName}(이/가) 탐나지만, 연구비에도 끝이 있어요. {price}골드가 마지막이에요.'
+  - speakerId: 0
+    text: '{price}골드로 결정해 주세요. 안 되면 아쉽지만 포기할게요...'
+  _acception:
+  - speakerId: 0
+    text: '와, 정말요?! 감사합니다! 바로 연구해 볼게요!'
+  - speakerId: 0
+    text: '{itemType == sword ? "이 검의 마력 흐름을 분석하고 싶어서 못 참겠어요!" : {itemType == bow ? "이 활의 마력 반응을 빨리 분석해 보고 싶어요!" : "이 물건을 빨리 분석해 보고 싶어요!"}}'
+  - speakerId: 0
+    text: '{price}골드, 여기 있어요! 정확히 세어 주세요!'
+  - speakerId: 0
+    text: '{itemName}(을/를) 손에 넣다니! 오늘은 정말 운이 좋은 날이에요!'
+  - speakerId: 0
+    text: '{itemCount > 1 ? "{itemCount}개 전부 가져갈게요! 비교 연구가 기대돼요!" : "소중히 가져갈게요! 연구가 기대돼요!"} 감사합니다!'
+  - speakerId: 0
+    text: '{itemElement == flame ? "불 원소를 직접 다뤄 볼 수 있다니!" : {itemElement == cold ? "냉기 반응을 직접 관찰할 수 있다니!" : {itemElement == lightning ? "번개 반응을 직접 일으켜 볼 수 있다니!" : {itemElement == wind ? "바람의 공명을 직접 들어 볼 수 있다니!" : {itemElement == earth ? "대지의 울림을 직접 느껴 볼 수 있다니!" : {itemElement == holy ? "신성한 기운을 직접 접해 볼 수 있다니!" : {itemElement == dark ? "어둠의 기운을 직접 관찰할 수 있다니!" : "이 물건을 직접 연구할 수 있다니!"}}}}}}} 정말 기대돼요, 감사합니다!'
+  - speakerId: 0
+    text: '{groupName}에 가져가면 모두 놀랄 거예요! 감사합니다!'
+  - speakerId: 0
+    text: '{npcName}, 이 거래 오래 기억할게요! 정말 고마워요!'
+  - speakerId: 0
+    text: '{price >= baseValue ? "기본 가치 이상으로 쳐드렸는데도 받아 주셔서 감사해요!" : "이 가격에 양보해 주시다니, 정말 감사해요!"}'
+  - speakerId: 0
+    text: '후후, 이번 연구는 큰 성과가 나올 것 같아요! 감사합니다!'
+  _rejection:
+  - speakerId: 0
+    text: '아... 정말 아쉬워요. 연구비가 모자라네요.'
+  - speakerId: 0
+    text: '{askPrice}골드는 도저히 마련할 수 없어요. 아쉽지만 물러날게요...'
+  - speakerId: 0
+    text: '{itemCount > 1 ? "{itemCount}개나 들이고 싶었는데, 값이 맞지 않네요..." : "꼭 연구해 보고 싶었는데, 값이 맞지 않네요..."} 아쉬워요.'
+  - speakerId: 0
+    text: '{itemName}(이/가) 정말 탐났는데... 연구비가 더 모이면 다시 올게요!'
+  - speakerId: 0
+    text: '{itemElement != none ? "그 원소 반응을 직접 보지 못하다니, 너무 아쉬워요..." : "마력의 흐름을 분석해 보지 못하다니, 너무 아쉬워요..."}'
+  - speakerId: 0
+    text: '{groupName}에 돌아가서 연구비를 더 청해 봐야겠어요. 다시 올게요...'
+  - speakerId: 0
+    text: '{npcName}(은/는) 이만 돌아갈게요. 이 물건이 좋은 주인을 만나길 바라요.'
+  - speakerId: 0
+    text: '{itemType == sword ? "좋은 검인데 아쉽네요..." : {itemType == bow ? "좋은 활인데 아쉽네요..." : "좋은 물건인데 아쉽네요..."}} 다음에 또 볼 수 있길 바라요.'
+  - speakerId: 0
+    text: '{askRatio >= 1.5 ? "역시 그만한 가치였군요... 제 형편으로는 어려워요. 실례했어요." : "아쉽지만 이번엔 물러날게요. 다음에 또 봐요."}'
+  - speakerId: 0
+    text: '죄송해요, 오늘은 여기까지 할게요. 또 만나요!'

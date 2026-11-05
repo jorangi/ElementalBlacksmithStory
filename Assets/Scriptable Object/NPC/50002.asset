@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1e51982b598c1394687beeb615b406a3, type: 3}
   m_Name: 50002
   m_EditorClassIdentifier: Assembly-CSharp::ElementalBlacksmithStory.Data.SO_NPCData
-  npcName: "\uC6A9\uBCD1 \uAD00\uB9AC\uC778"
-  npcFriendlyName: "\uC6A9\uBCD1 \uAD00\uB9AC\uC778, \uC18C\uD53C\uC544"
+  npcName: "\uAE38\uB4DC \uD30C\uACAC\uAD00\uB9AC\uC778"
+  npcFriendlyName: "\uAE38\uB4DC \uD30C\uACAC\uAD00\uB9AC\uC778, \uC18C\uD53C\uC544"
   dialogues:
   - {fileID: 11400000, guid: 473a039f77d231f41be9b80954b976af, type: 2}
   - {fileID: 11400000, guid: 3f89001557c17d24c9989abd482dfc62, type: 2}
@@ -24,7 +24,7 @@ MonoBehaviour:
   preferGift: 
   memo: "\uB2E4\uC18C \uBB34\uB69D\uB69D\uD558\uACE0 \uCC28\uAC00\uC6B4 \uC131\uACA9.
     4\uB0A8 1\uB140 \uC9D1\uC548\uC758 \uC14B\uC9F8. \uD604\uC7AC\uB294 \uAC00\uC871
-    \uBD80\uC591\uC744 \uC704\uD574 \uC548\uC804\uBB38\uC81C\uB85C \uC6A9\uBCD1 \uAD00\uB9AC\uC778\uC73C\uB85C
+    \uBD80\uC591\uC744 \uC704\uD574 \uC548\uC804\uBB38\uC81C\uB85C \uAE38\uB4DC \uD30C\uACAC\uAD00\uB9AC\uC778\uC73C\uB85C
     \uC77C\uD558\uACE0 \uC788\uC9C0\uB9CC, \uBCF8\uB798 \uC6A9\uBCD1\uC73C\uB85C
     \uC77C\uD560 \uB54C\uB294 \uB9E4\uC6B0 \uB192\uC740 \uBA85\uC131\uC744 \uC9C0\uB154\uB2E4.
     \uB9CE\uC740 \uC6A9\uBCD1\uB4E4\uC740 \uACE0\uC9D1\uB3C4 \uAC15\uD558\uACE0 \uC8FC\uC7A5\uB3C4

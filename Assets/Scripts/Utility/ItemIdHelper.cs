@@ -13,6 +13,7 @@ namespace ElementalBlacksmithStory.Core
         NPC = 5,    //NPC 데이터
         Dialogue = 6,  // 600000 ~ 699999 (대사)
         Rune = 7,      //(룬)
+        CustomerGroup = 8, // 손님 그룹 (80000 ~ 89999)
     }
 
     /// <summary>

@@ -1,0 +1,143 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b32617f483474c042a505f5b4002c486, type: 3}
+  m_Name: 80007
+  m_EditorClassIdentifier: Assembly-CSharp::ElementalBlacksmithStory.Data.SO_CustomerGroup
+  _customerGroupTitle: 부유한 귀족
+  _customerGroupName: 벨베티아 사교 클럽
+  _description: 막대한 영지와 재력을 자랑하는 호화 수집가 귀족들. 예술성과 희귀성이 돋보인다면 가격표를 보지 않고 지갑을 연다.
+  minEstimateRatio: 1.35
+  maxEstimateRatio: 2.3
+  minFirstOfferRatio: 0.8
+  maxFirstOfferRatio: 1.0
+  minInterpolation: 0.25
+  maxInterpolation: 0.45
+  minPatience: 45
+  maxPatience: 80
+  greedSensitivity: 0.6
+  _customerNames:
+  - 에드워드
+  - 레오폴드
+  - 베아트리스
+  - 빅토리아
+  - 알폰스
+  - 샬롯
+  - 오귀스트
+  - 세실리아
+  - 필립
+  - 아델
+  _customerSprites: []
+  _firstOffer:
+  - speakerId: 0
+    text: '{itemType == sword ? "검의 기품이 남다르군." : {itemType == bow ? "활의 자태가 곱군." : {itemType == rune ? "룬의 광채가 눈부시군." : {itemType == material ? "재료의 빛깔이 범상치 않군." : "눈이 번쩍 뜨이는 물건이군."}}}} {price}골드를 내지. 값은 신경 쓰지 말게.'
+  - speakerId: 0
+    text: '{itemName}(이/가) 내 눈에 들었네. {price}골드면 충분하겠지?'
+  - speakerId: 0
+    text: '가격표는 필요 없네. {price}골드를 받고 물건을 넘기게.'
+  - speakerId: 0
+    text: '{itemCount > 1 ? "{itemCount}개 전부 내 소장품으로 삼겠네. 개당 {unitPrice}골드, 합쳐 {price}골드를 내지." : "단 하나뿐이라니 더 탐나는군. {price}골드를 내지."}'
+  - speakerId: 0
+    text: '{groupName}의 {npcName}일세. {itemName}에 {price}골드를 내지.'
+  - speakerId: 0
+    text: '{price > baseValue ? "{baseValue}골드라고? 그 값으론 이 물건에 실례일세. {price}골드를 내지." : "{itemName}(은/는) 값어치가 있어 보이는군. {price}골드를 내지."}'
+  - speakerId: 0
+    text: '{itemElement == flame ? "타오르는 불꽃의 자태가 일품이군." : {itemElement == cold ? "서리가 맺힌 듯한 빛깔이 곱군." : {itemElement == lightning ? "번뜩이는 뇌광이 눈을 사로잡는군." : {itemElement == wind ? "바람결이 감도는 모습이 우아하군." : {itemElement == earth ? "대지의 묵직한 품격이 느껴지는군." : {itemElement == holy ? "성스러운 광휘가 은은하군." : {itemElement == dark ? "어둠이 깃든 자태가 매혹적이군." : "자태가 남다르군."}}}}}}} {price}골드면 내 소장품으로 들일 만하지.'
+  - speakerId: 0
+    text: '이런 물건은 아무에게나 넘기지 말게. {price}골드, 나에게 넘기게.'
+  - speakerId: 0
+    text: '{itemType == material ? "이만한 재료는 수집품으로 둘 가치가 있군." : {itemType == rune ? "이런 룬은 진열해 둘 만하군." : "이만한 물건은 진열해 둘 만하군."}} {price}골드, 어떤가.'
+  - speakerId: 0
+    text: '긴 말은 싫네. {price}골드, 지금 답하게.'
+  _negotiation:
+  - speakerId: 0
+    text: '그 정도면 되겠나. {price}골드로 올려 주지.'
+  - speakerId: 0
+    text: '{askPrice}골드? 흠, 나쁘지 않군. {prevPrice}골드에서 {price}골드로 올리겠네.'
+  - speakerId: 0
+    text: '{bargainCount >= 2 ? "실랑이가 길어지는군. 번거로우니 {price}골드로 끝내세." : "{price}골드로 올리지. 이 정도면 흡족하겠지?"}'
+  - speakerId: 0
+    text: '{askRatio >= 1.5 ? "{askPrice}골드라니, 배짱 한번 좋군. 마음에 드네. {price}골드까지 쓰지." : "{askPrice}골드쯤이야 푼돈이지. {price}골드로 하세."}'
+  - speakerId: 0
+    text: '{priceGap}골드 차이로 실랑이할 생각은 없네. {price}골드로 올리지.'
+  - speakerId: 0
+    text: '{itemCount > 1 ? "{itemCount}개를 들이는 값이니 넉넉히 쳐주지. {price}골드일세." : "단 하나를 위한 값이니 넉넉히 쳐주지. {price}골드일세."}'
+  - speakerId: 0
+    text: '{itemElement != none ? "깃든 기운이 마음에 드는군. 값은 더 쳐주지. {price}골드일세." : "{itemName}(이/가) 마음에 드는군. 값은 더 쳐주지. {price}골드일세."}'
+  - speakerId: 0
+    text: '{price > baseValue ? "{baseValue}골드로는 이 물건에 어울리지 않지. {price}골드로 하세." : "{price}골드를 쳐주지. 어서 정하게."}'
+  - speakerId: 0
+    text: '{npcName}(은/는) 한번 마음먹으면 값을 따지지 않네. {price}골드를 받게.'
+  - speakerId: 0
+    text: '시간 끌지 말게. {price}골드면 충분하지 않나.'
+  _finalOffer:
+  - speakerId: 0
+    text: '이게 마지막일세. {price}골드, 더는 기다리지 않겠네.'
+  - speakerId: 0
+    text: '{firstPrice}골드에서 {price}골드까지 올렸네. 이쯤에서 그만하게.'
+  - speakerId: 0
+    text: '{price}골드, 지체는 질색일세. 지금 답하게.'
+  - speakerId: 0
+    text: '{itemCount > 1 ? "{itemCount}개 전부에 {price}골드를 내지. 더 기다리게 하지 말게." : "이 하나에 {price}골드를 내지. 더 기다리게 하지 말게."}'
+  - speakerId: 0
+    text: '{askPrice}골드는 과하네. {price}골드, 이것으로 끝일세.'
+  - speakerId: 0
+    text: '{npcName}의 마지막 제안일세. {price}골드. 거절하면 후회할 걸세.'
+  - speakerId: 0
+    text: '{itemType == material ? "재료에 이 이상은 내지 않겠네." : {itemType == rune ? "룬에 이 이상은 내지 않겠네." : "이 물건에 이 이상은 내지 않겠네."}} {price}골드일세.'
+  - speakerId: 0
+    text: '{askRatio >= 1.5 ? "{priceGap}골드나 벌어졌군. 아무리 나라도 그건 과하네. {price}골드가 끝일세." : "{price}골드로 정하세. 이 정도면 충분히 후하지 않나."}'
+  - speakerId: 0
+    text: '{itemName}(이/가) 탐나지만 기다림에도 한계가 있네. {price}골드일세.'
+  - speakerId: 0
+    text: '{price}골드, 받을 텐가 말 텐가. 오래 기다리게 하지 말게.'
+  _acception:
+  - speakerId: 0
+    text: '좋네. 그 값에 거래하지.'
+  - speakerId: 0
+    text: '{itemType == sword ? "이 검은 내 진열장에서 가장 빛나겠군." : {itemType == bow ? "이 활은 내 진열장에서 가장 빛나겠군." : "이 물건은 내 진열장에서 가장 빛나겠군."}}'
+  - speakerId: 0
+    text: '{price}골드, 받게. 세어 볼 필요도 없네.'
+  - speakerId: 0
+    text: '{itemName}(을/를) 손에 넣었으니 오늘은 기분이 좋군.'
+  - speakerId: 0
+    text: '{itemCount > 1 ? "{itemCount}개 전부 내 소장품으로 올려 두게." : "내 소장품으로 올려 두게."} 수고했네.'
+  - speakerId: 0
+    text: '{itemElement == flame ? "불꽃의 자태를 곁에 두게 되었군." : {itemElement == cold ? "서리의 빛을 곁에 두게 되었군." : {itemElement == holy ? "성스러운 광휘를 곁에 두게 되었군." : {itemElement == dark ? "어둠의 매혹을 곁에 두게 되었군." : "이런 물건을 곁에 두게 되다니."}}}} 흡족하군.'
+  - speakerId: 0
+    text: '{groupName}의 벗들에게 자랑해야겠군. 잘 받겠네.'
+  - speakerId: 0
+    text: '{npcName}(은/는) 마음에 든 물건에 값을 아끼지 않네. 기억해 두게.'
+  - speakerId: 0
+    text: '{price > baseValue ? "{baseValue}골드 따위로는 이 물건이 아깝지. 후하게 쳐서 다행이군." : "합리적인 값이군. 마음에 드네."}'
+  - speakerId: 0
+    text: '깔끔해서 좋군. 이래야 거래지.'
+  _rejection:
+  - speakerId: 0
+    text: '흥이 깨졌군. 이만 가겠네.'
+  - speakerId: 0
+    text: '{askPrice}골드가 문제가 아니네. 지체가 마음에 들지 않을 뿐이지.'
+  - speakerId: 0
+    text: '{itemCount > 1 ? "{itemCount}개나 들일 생각이었는데, 기분이 상했군." : "마음에 들었는데, 기분이 상했군."} 이만 가네.'
+  - speakerId: 0
+    text: '{itemName}(이/가) 아깝지만 더 기다릴 수는 없네.'
+  - speakerId: 0
+    text: '{itemElement != none ? "그 기운이 아깝긴 하군. 그래도 이만 가네." : "아깝긴 하군. 그래도 이만 가네."}'
+  - speakerId: 0
+    text: '{groupName}(은/는) 오래 기다리는 법이 없네. 이만 가지.'
+  - speakerId: 0
+    text: '{npcName}(을/를) 기다리게 한 대가일세. 다른 물건을 찾아보지.'
+  - speakerId: 0
+    text: '{itemType == sword ? "이만한 검은 또 나오겠지. 이만 가겠네." : {itemType == bow ? "이만한 활은 또 나오겠지. 이만 가겠네." : "이만한 물건은 또 나오겠지. 이만 가겠네."}}'
+  - speakerId: 0
+    text: '{askRatio >= 1.5 ? "내가 아무리 너그러워도 그 값은 과하군. 이만 가겠네." : "더는 못 기다리겠군. 이만 가겠네."}'
+  - speakerId: 0
+    text: '기분이 상했네. 다시 볼 일은 없길 바라지.'

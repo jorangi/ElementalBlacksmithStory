@@ -3,7 +3,7 @@ using ElementalBlacksmithStory.Data;
 using R3;
 using UnityEngine;
 
-namespace ElementalBlacksmithStory.Models
+namespace ElementalBlacksmithStory.Data
 {
     public class CustomerData : IDisposable
     {
@@ -41,8 +41,12 @@ namespace ElementalBlacksmithStory.Models
             _patience = UnityEngine.Random.Range(group.minPatience, group.maxPatience);
             _patienceNoise = UnityEngine.Random.Range(0.85f, 1.15f);
             _interpolationNoise = UnityEngine.Random.Range(0.85f, 1.15f);
-            _name = group._customerNames[UnityEngine.Random.Range(0, group._customerNames.Count)];
-            _sprite = group._customerSprites[UnityEngine.Random.Range(0, group._customerSprites.Count)];
+            _name = (group._customerNames != null && group._customerNames.Count > 0)
+                ? group._customerNames[UnityEngine.Random.Range(0, group._customerNames.Count)]
+                : group._customerGroupName;
+            _sprite = (group._customerSprites != null && group._customerSprites.Count > 0)
+                ? group._customerSprites[UnityEngine.Random.Range(0, group._customerSprites.Count)]
+                : null;
         }
         public ulong Bargain(ulong price)
         {

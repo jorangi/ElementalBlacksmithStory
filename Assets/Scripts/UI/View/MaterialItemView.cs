@@ -1,8 +1,8 @@
-using UnityEngine;
-using UnityEngine.UI;
+using Cysharp.Text;
 using R3;
 using TMPro;
-using Cysharp.Text;
+using UnityEngine;
+using UnityEngine.UI;
 
 namespace ElementalBlacksmithStory.UI
 {
@@ -28,7 +28,8 @@ namespace ElementalBlacksmithStory.UI
         {
             MaterialId = id;
             MaterialCount = count;
-            countText?.SetText(ZString.Format("x{0:N0}", count));
+            if (countText != null)
+                countText.SetText(ZString.Format("x{0:N0}", count));
         }
 
         public void SetIcon(Sprite icon)
@@ -46,12 +47,14 @@ namespace ElementalBlacksmithStory.UI
         }
         public void Check()
         {
-            checkedImage?.gameObject.SetActive(true);
+            if (checkedImage != null)
+                checkedImage.gameObject.SetActive(true);
             IsSelected = true;
         }
         public void UnCheck()
         {
-            checkedImage?.gameObject.SetActive(false);
+            if (checkedImage != null)
+                checkedImage.gameObject.SetActive(false);
             IsSelected = false;
         }
         public uint Select()
@@ -69,7 +72,8 @@ namespace ElementalBlacksmithStory.UI
         }
         public void SetAmount(uint amount)
         {
-            countText?.SetText(ZString.Format("x{0:N0}", amount));
+            if (countText != null)
+                countText.SetText(ZString.Format("x{0:N0}", amount));
         }
     }
 }

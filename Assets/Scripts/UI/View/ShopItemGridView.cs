@@ -178,15 +178,20 @@ namespace ElementalBlacksmithStory.UI
         }
         public void ShowRefreshButton()
         {
-            _refreshButton.gameObject.SetActive(true);
+            if (_refreshButton != null) _refreshButton.gameObject.SetActive(true);
         }
         public void HideRefreshButton()
         {
-            _refreshButton.gameObject.SetActive(false);
+            if (_refreshButton != null) _refreshButton.gameObject.SetActive(false);
         }
-        public void SetRefreshTimer(int min, int sec)
+        public void SetRefreshButtonInteractable(bool interactable)
         {
-            _refreshTimer.SetText(ZString.Format("재입고 ({0:00}:{1:00})", min, sec));
+            if (_refreshButton != null) _refreshButton.interactable = interactable;
+        }
+        public void SetRefreshTimer(int min, int sec, string prefix = "재입고")
+        {
+            if (_refreshTimer == null) return;
+            _refreshTimer.SetText(ZString.Format("{0} ({1:00}:{2:00})", prefix, min, sec));
         }
     }
 }

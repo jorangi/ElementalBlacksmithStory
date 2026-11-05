@@ -213,10 +213,10 @@ namespace ElementalBlacksmithStory.UI
                 motionHandle.Cancel();
             }
             motionHandle = LSequence.Create()
-                                .Join(LMotion.Create(Vector3.zero, Vector3.one, ANIM_DURATION)
+                                .Append(LMotion.Create(Vector3.zero, Vector3.one, ANIM_DURATION)
                                         .WithEase(Ease.InOutBack)
                                         .BindToLocalScale(_warningUI))
-                                .Join(LMotion.Create(Color.clear, rootPanelColor, ANIM_DURATION)
+                                .Append(LMotion.Create(Color.clear, rootPanelColor, ANIM_DURATION)
                                         .WithEase(Ease.InOutBack)
                                         .BindToColor(_warningPanel))
                                 .Run()
@@ -235,10 +235,10 @@ namespace ElementalBlacksmithStory.UI
                 motionHandle.Cancel();
             }
             motionHandle = LSequence.Create()
-                                .Join(LMotion.Create(Vector3.one, Vector3.zero, ANIM_DURATION)
+                                .Append(LMotion.Create(Vector3.one, Vector3.zero, ANIM_DURATION)
                                         .WithEase(Ease.InOutBack)
                                         .BindToLocalScale(_warningUI))
-                                .Join(LMotion.Create(rootPanelColor, Color.clear, ANIM_DURATION)
+                                .Append(LMotion.Create(rootPanelColor, Color.clear, ANIM_DURATION)
                                         .WithEase(Ease.InOutBack)
                                         .BindToColor(_warningPanel))
                                 .Run()

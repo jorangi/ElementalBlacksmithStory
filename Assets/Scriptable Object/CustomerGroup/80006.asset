@@ -1,0 +1,143 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b32617f483474c042a505f5b4002c486, type: 3}
+  m_Name: 80006
+  m_EditorClassIdentifier: Assembly-CSharp::ElementalBlacksmithStory.Data.SO_CustomerGroup
+  _customerGroupTitle: 물자보급관
+  _customerGroupName: 모험가 길드 보급부서
+  _description: 거점 주점의 용병 관리인과 연계된 물자 담당관. 사무적이고 건조함. 단 1개라도 길드 규정 매입가에 맞춰 사겠다는 깐깐한 사무적 톤.
+  minEstimateRatio: 0.9
+  maxEstimateRatio: 1.2
+  minFirstOfferRatio: 0.7
+  maxFirstOfferRatio: 0.85
+  minInterpolation: 0.15
+  maxInterpolation: 0.25
+  minPatience: 80
+  maxPatience: 120
+  greedSensitivity: 1.5
+  _customerNames:
+  - 아놀드
+  - 베스
+  - 콜린
+  - 더스틴
+  - 엘라
+  - 프랭크
+  - 그레이스
+  - 휴
+  - 이안
+  - 주디
+  _customerSprites: []
+  _firstOffer:
+  - speakerId: 0
+    text: '{itemType == material ? "재료 반입 확인했습니다. 재고 대장에 빈칸이 하나 남아 있었는데 마침 맞습니다." : {itemType == rune ? "룬 반입 확인했습니다. 지난 분기 감사에서 룬 재고 부족을 지적받은 터라 반갑군요." : {itemType == consumable ? "소모품 반입 확인했습니다. 이번 주 소진량이 많아 기준선 아래였습니다." : "반입 확인했습니다. 재고 대장에 빈칸이 하나 남아 있었습니다."}}} 길드 규정 매입가에 맞춰 {price}골드입니다.'
+  - speakerId: 0
+    text: '{itemCount > 1 ? "{itemCount}개 일괄 접수합니다. 수량이 많아도 단가 기준은 같습니다. 총 {price}골드입니다." : "1개든 100개든 적용 기준은 같습니다. 길드 규정 매입가로 {price}골드입니다."}'
+  - speakerId: 0
+    text: '{itemName}(을/를) 접수합니다. {price >= baseValue ? "규정 매입가 상한 안에서 {price}골드로 산정했습니다." : "규정 매입가 산정표대로 {price}골드입니다."}'
+  - speakerId: 0
+    text: '{groupName}의 {npcName}입니다. {itemName}(을/를) 규정 매입가 {price}골드로 접수하겠습니다.'
+  - speakerId: 0
+    text: '{itemType == consumable ? "소모품은 소진이 빨라서 재고 기준선을 매주 확인합니다. 이번 건은 기준선 아래라 반갑습니다." : {itemType == material ? "재료는 납품 일정이 어긋나기 쉬운 분류입니다. 이번 건이 일정 공백을 메워 줍니다." : "재고 기준선 아래였던 항목입니다. 이번 건으로 메워집니다."}} 규정 매입가는 {price}골드입니다.'
+  - speakerId: 0
+    text: '감정가 협의는 하지 않습니다. 규정표에 적힌 숫자가 {price}골드입니다.'
+  - speakerId: 0
+    text: '규정 밖의 금액은 제 권한으로 지급할 수 없습니다. {price}골드, 규정 안의 금액입니다.'
+  - speakerId: 0
+    text: '{itemType == material ? "재료는 수량과 상태만 확인하면 됩니다. 규정상 {price}골드입니다." : {itemType == rune ? "룬은 기운 상태만 확인하면 됩니다. 이상 없습니다. 규정상 {price}골드입니다." : {itemType == consumable ? "소모품은 수량과 포장 상태만 확인하면 됩니다. 이상 없습니다. 규정상 {price}골드입니다." : "상태 확인은 끝났습니다. 규정상 {price}골드입니다."}}}'
+  - speakerId: 0
+    text: '오늘 접수 마감 전에 처리해야 합니다. {price}골드로 바로 진행하시죠.'
+  - speakerId: 0
+    text: '용병 관리인 쪽에서 올라온 요청 물량과 대조했습니다. {price}골드로 진행하겠습니다.'
+  _negotiation:
+  - speakerId: 0
+    text: '{prevPrice}골드에서 {price}골드로 정정합니다. 정정 사유는 서식에 적어 두겠습니다.'
+  - speakerId: 0
+    text: '{askPrice}골드는 규정 범위를 벗어납니다. {price}골드까지만 처리 가능합니다.'
+  - speakerId: 0
+    text: '{bargainCount >= 2 ? "같은 협의가 반복되고 있습니다. 규정은 그대로이고 {price}골드가 조정 한도입니다." : "조정 가능한 범위에서 {price}골드로 올리겠습니다."}'
+  - speakerId: 0
+    text: '{askRatio >= 1.3 ? "{askPrice}골드는 반려 대상입니다. 서식에 적을 수 없는 숫자입니다. {price}골드로 하겠습니다." : "{askPrice}골드는 재량 범위를 조금 넘습니다. {price}골드로 맞추겠습니다."}'
+  - speakerId: 0
+    text: '{priceGap}골드 차이는 규정상 보전이 안 됩니다. 제 재량으로는 {price}골드까지입니다.'
+  - speakerId: 0
+    text: '{itemCount > 1 ? "{itemCount}개 일괄 건이라 개당 {unitPrice}골드로 계산했습니다. 총 {price}골드입니다." : "1개 건이어도 계산 방식은 같습니다. {price}골드입니다."}'
+  - speakerId: 0
+    text: '{price >= baseValue ? "이미 규정 매입가 이상입니다. 이 이상은 감사에 걸립니다. {price}골드가 한도입니다." : "규정 범위 안에서 {price}골드까지 올렸습니다."}'
+  - speakerId: 0
+    text: '{itemType == consumable ? "소모품은 회전이 빠른 분류라 규정상 가산 항목이 없습니다. 단가표 기준으로 {price}골드입니다." : "분류별 단가표 기준으로 {price}골드입니다."}'
+  - speakerId: 0
+    text: '{itemType == material ? "재료는 시세 변동이 큰 분류라 월말 정산 기준으로 {price}골드입니다." : {itemType == rune ? "룬은 고가 항목이라 결재선이 길어집니다. {price}골드가 현실적인 선입니다." : {itemType == consumable ? "소모품은 대량 처리 건이 많아 단가를 고정해 둡니다. {price}골드입니다." : "분류상 처리 가능한 선은 {price}골드입니다."}}}'
+  - speakerId: 0
+    text: '{npcName}(은/는) 규정을 바꿀 권한이 없습니다. 바꿔 드릴 수 있는 건 {price}골드까지입니다.'
+  _finalOffer:
+  - speakerId: 0
+    text: '이 숫자가 최종입니다. {price}골드, 이후 협의는 접수하지 않습니다.'
+  - speakerId: 0
+    text: '{firstPrice}골드에서 {price}골드로 정정했습니다. 정정은 여기까지입니다.'
+  - speakerId: 0
+    text: '{price}골드가 제 결재 가능한 상한입니다. 이 위는 상부 결재가 필요한데, 올릴 생각은 없습니다.'
+  - speakerId: 0
+    text: '{itemCount > 1 ? "{itemCount}개 일괄 처리에 {price}골드가 상한입니다." : "1개 건에 {price}골드가 상한입니다."} 수락 여부만 말씀해 주십시오.'
+  - speakerId: 0
+    text: '{askPrice}골드는 서식에 적을 수 없습니다. {price}골드로 처리할지 답해 주십시오.'
+  - speakerId: 0
+    text: '{npcName}의 최종 안내입니다. {price}골드, 수락 여부만 말씀해 주십시오.'
+  - speakerId: 0
+    text: '{itemType == material ? "재료 분류의 상한은 {price}골드입니다. 이 이상은 규정에 없습니다." : {itemType == rune ? "룬 분류의 상한은 {price}골드입니다. 이 이상은 규정에 없습니다." : {itemType == consumable ? "소모품 분류의 상한은 {price}골드입니다. 이 이상은 규정에 없습니다." : "해당 분류의 상한은 {price}골드입니다. 이 이상은 규정에 없습니다."}}}'
+  - speakerId: 0
+    text: '{askRatio >= 1.3 ? "{priceGap}골드나 벌어지면 접수 자체가 안 됩니다. {price}골드가 최종입니다." : "{price}골드로 정리하겠습니다. 이 정도 차이는 규정 허용 오차입니다."}'
+  - speakerId: 0
+    text: '다음 접수 건이 밀려 있습니다. {price}골드로 결정해 주십시오.'
+  - speakerId: 0
+    text: '{price >= baseValue ? "규정 매입가 이상으로 이미 처리했습니다. 더는 못 올립니다. {price}골드입니다." : "규정 범위 최대치로 {price}골드입니다. 이 이상은 불가합니다."}'
+  _acception:
+  - speakerId: 0
+    text: '접수 완료입니다. 서식은 제가 작성하겠습니다.'
+  - speakerId: 0
+    text: '{itemType == material ? "재료 입고 처리하겠습니다. 재고 대장의 빈칸이 채워졌습니다." : {itemType == rune ? "룬 입고 처리하겠습니다. 감사에서 지적받은 부분이 메워졌습니다." : {itemType == consumable ? "소모품 입고 처리하겠습니다. 이번 주 기준선은 맞췄습니다." : "입고 처리하겠습니다. 재고 대장에 반영하겠습니다."}}}'
+  - speakerId: 0
+    text: '{price}골드, 지급 서식 확인했습니다. 수령 확인만 해 주십시오.'
+  - speakerId: 0
+    text: '{itemName}(을/를) 입고하고 재고 대장에 기재했습니다. 거래 증빙은 보관합니다.'
+  - speakerId: 0
+    text: '{itemCount > 1 ? "{itemCount}개 전부 입고 처리합니다. 수량 대조도 끝났습니다." : "1개 입고 처리합니다. 수량 대조도 끝났습니다."} 협조 감사합니다.'
+  - speakerId: 0
+    text: '{itemType == consumable ? "소모품 분류로 입고합니다. 소진 예상 시점에 맞춰 배분 목록에 올리겠습니다." : "분류표에 맞춰 입고합니다."} 처리 끝났습니다.'
+  - speakerId: 0
+    text: '{groupName}(은/는) 규정대로만 처리합니다. 오늘은 규정과 숫자가 맞았습니다.'
+  - speakerId: 0
+    text: '{npcName}, 접수 번호 부여했습니다. 다음 건도 같은 기준으로 처리됩니다.'
+  - speakerId: 0
+    text: '{price >= baseValue ? "규정 매입가 이상으로 처리했으니 감사에서 문제될 일은 없겠습니다." : "규정 범위 안에서 처리했으니 감사에서 문제될 일은 없겠습니다."}'
+  - speakerId: 0
+    text: '마감 전에 끝났군요. 협조 감사합니다.'
+  _rejection:
+  - speakerId: 0
+    text: '해당 금액은 접수 불가입니다. 서식을 닫겠습니다.'
+  - speakerId: 0
+    text: '{askPrice}골드는 규정 외 금액입니다. 접수하지 않겠습니다.'
+  - speakerId: 0
+    text: '{itemCount > 1 ? "{itemCount}개 일괄 건이어도 규정 매입가는 바뀌지 않습니다." : "1개 건이어도 규정 매입가는 바뀌지 않습니다."} 접수 종결합니다.'
+  - speakerId: 0
+    text: '{itemName}(은/는) 입고 대상이지만 그 금액으로는 승인이 나지 않습니다.'
+  - speakerId: 0
+    text: '{itemType == consumable ? "소모품 재고가 아쉽긴 합니다. 그래도 단가표를 벗어날 수는 없습니다." : "입고가 아쉽긴 합니다. 그래도 단가표를 벗어날 수는 없습니다."}'
+  - speakerId: 0
+    text: '{groupName}(은/는) 규정 밖의 매입은 하지 않습니다. 접수 종결합니다.'
+  - speakerId: 0
+    text: '{npcName}(은/는) 반려 처리하겠습니다. 재신청은 규정 매입가로 가능합니다.'
+  - speakerId: 0
+    text: '{itemType == material ? "재료는 정기 납품으로도 채울 수 있어서 무리할 이유가 없습니다." : {itemType == rune ? "룬은 다음 입고 일정이 따로 있어서 무리할 이유가 없습니다." : {itemType == consumable ? "소모품은 정기 보급분으로 버틸 수 있어서 무리할 이유가 없습니다." : "다른 입고 일정이 있어서 무리할 이유가 없습니다."}}}'
+  - speakerId: 0
+    text: '{askRatio >= 1.3 ? "이 금액은 서식에 적는 것부터가 불가능합니다. 반려합니다." : "규정과 조금 어긋났습니다. 다음 접수 때 다시 뵙겠습니다."}'
+  - speakerId: 0
+    text: '다음 접수 건을 처리하겠습니다. 이만 종결합니다.'

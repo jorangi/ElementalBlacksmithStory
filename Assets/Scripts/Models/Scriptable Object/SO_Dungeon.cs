@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 namespace ElementalBlacksmithStory.Data
 {
-    [CreateAssetMenu(fileName = "SO_Dungeon", menuName = "Scriptable Object/SO_Dungeon")]
+    [CreateAssetMenu(fileName = "SO_Dungeon", menuName = "Scriptable Objects/SO_Dungeon")]
     public class SO_Dungeon : ScriptableObject, IIdentifiable
     {
         public uint Id => uint.Parse(this.name);

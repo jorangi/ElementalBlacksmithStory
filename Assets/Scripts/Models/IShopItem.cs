@@ -2,6 +2,14 @@ using ElementalBlacksmithStory.Inventory;
 
 namespace ElementalBlacksmithStory.Data
 {
+    public enum ShopItemCategory
+    {
+        Sword,
+        Bow,
+        Material,
+        Rune,
+        Consumable
+    }
     /// <summary>
     /// 상점에서 판매/구매 가능한 아이템 인터페이스
     /// </summary>
@@ -21,6 +29,11 @@ namespace ElementalBlacksmithStory.Data
         /// 아이템 수량
         /// </summary>
         public uint Count { get; }
+
+        /// <summary>
+        /// 아이템 카테고리
+        /// </summary>
+        public ShopItemCategory Category { get; }
 
         /// <summary>
         /// 구매 완료 시 플레이어 인벤토리에 지급

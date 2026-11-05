@@ -272,8 +272,15 @@ namespace ElementalBlacksmithStory.UI
 
                     await AddItem(item);
                 }
-                if (_strategy is IRefreshableShopMode refreshableShopMode) _view.ShowRefreshButton();
-                else _view.HideRefreshButton();
+                if (_strategy is ITimedShopMode timedShopMode)
+                {
+                    _view.ShowRefreshButton();
+                    _view.SetRefreshButtonInteractable(_strategy is IRefreshableShopMode);
+                }
+                else
+                {
+                    _view.HideRefreshButton();
+                }
 
                 if (_strategy is IItemRegisterableShopMode bargainStrategy)
                 {
@@ -296,22 +303,23 @@ namespace ElementalBlacksmithStory.UI
         {
             Sprite icon = null;
             bool isUniqueItem = false;
-            switch (ItemIdHelper.GetCategory(item.ItemId))
+            switch (item.Category)
             {
-                case ItemCategory.Weapon:
+                case ShopItemCategory.Sword:
+                case ShopItemCategory.Bow:
                     icon = await _weaponSpriteLoader.GetSprite(item.ItemId);
                     isUniqueItem = true;
                     break;
-                case ItemCategory.Material:
+                case ShopItemCategory.Material:
                     icon = await _materialSpriteLoader.GetSprite(item.ItemId);
                     isUniqueItem = false;
                     break;
-                case ItemCategory.Rune:
+                case ShopItemCategory.Rune:
                     icon = await _runeSpriteLoader.GetSprite(item.ItemId);
                     isUniqueItem = false;
                     break;
                 default:
-                    Debug.LogError($"[ShopItemGridPresenter]: {item.ItemId}은 유효한 Sprite ID가 아닙니다.");
+                    Debug.LogError($"[ShopItemGridPresenter]: {item.ItemId} ({item.Category})은 유효한 카테고리가 아닙니다.");
                     return;
             }
 
@@ -455,10 +463,10 @@ namespace ElementalBlacksmithStory.UI
             _timerDisposable = Observable.Timer(TimeSpan.Zero, TimeSpan.FromSeconds(1))
                 .Subscribe(this, static (_, self) =>
                 {
-                    if (self._strategy is IRefreshableShopMode refreshableShopMode)
+                    if (self._strategy is ITimedShopMode timedShopMode)
                     {
-                        TimeSpan remaining = refreshableShopMode.RemainingTime;
-                        self._view.SetRefreshTimer(remaining.Minutes, remaining.Seconds);
+                        TimeSpan remaining = timedShopMode.RemainingTime;
+                        self._view.SetRefreshTimer(remaining.Minutes, remaining.Seconds, timedShopMode.TimerPrefix);
                     }
                 });
         }

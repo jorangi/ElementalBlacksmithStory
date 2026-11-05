@@ -13,6 +13,8 @@ namespace ElementalBlacksmithStory.UI
         [SerializeField] private TextMeshProUGUI _amountCount;
         [SerializeField] private GameObject _checkObject;
         [SerializeField] private Button _button;
+        private bool isMultiple = false;
+        private uint _cachedAmount;
 
         public uint ItemId { get; private set; }
 
@@ -29,6 +31,7 @@ namespace ElementalBlacksmithStory.UI
         {
             _itemIcon.sprite = sprite;
         }
+        public bool IsMutitple => isMultiple;
         public void SetAmount(uint amount)
         {
             _amountCount.SetText(ZString.Format("x{0}", amount));
@@ -36,11 +39,17 @@ namespace ElementalBlacksmithStory.UI
         public void Check(bool isCheck)
         {
             _checkObject.SetActive(isCheck);
+            if (!isCheck)
+            {
+                SetAmount(_cachedAmount);
+            }
         }
 
         public void SetData(uint id, Sprite sprite, uint amount = 1)
         {
             ItemId = id;
+            _cachedAmount = amount;
+            isMultiple = amount > 1;
             SetIcon(sprite);
             SetAmount(amount);
             Check(false);

@@ -1,0 +1,146 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b32617f483474c042a505f5b4002c486, type: 3}
+  m_Name: 80004
+  m_EditorClassIdentifier: Assembly-CSharp::ElementalBlacksmithStory.Data.SO_CustomerGroup
+  _customerGroupTitle: 유랑 상인
+  _customerGroupName: 황금 원반 카라반
+  _description: "\uB300\uB959 \uC804\uC5ED\uC758 \uC2DC\uC138 \uCC28\uC775\uC744
+    \uB178\uB9AC\uB294 \uC57D\uC0AD\uBE60\uB978 \uD589\uC0C1\uB4E4. \uD760\uC9D1
+    \uD558\uB098\uB97C \uD2B8\uC9D1 \uC7A1\uC73C\uBA70 \uD6C4\uB824\uCE58\uAE30\uC5D0
+    \uB2A5\uD558\uACE0 \uADF9\uB3C4\uB85C \uB048\uC9C8\uAE30\uB2E4."
+  minEstimateRatio: 0.65
+  maxEstimateRatio: 0.95
+  minFirstOfferRatio: 0.4
+  maxFirstOfferRatio: 0.6
+  minInterpolation: 0.08
+  maxInterpolation: 0.16
+  minPatience: 85
+  maxPatience: 130
+  greedSensitivity: 2.2
+  _customerNames:
+  - 바르나바
+  - 실라스
+  - 말릭
+  - 펠릭스
+  - 자파르
+  - 가스통
+  - 오마르
+  - 두카트
+  - 로제
+  - 피에로
+  _customerSprites: []
+  _firstOffer:
+  - speakerId: 0
+    text: '{itemType == sword ? "어디 보자... 날에 이가 나간 것 같은데요?" : {itemType == bow ? "시위가 좀 늘어진 것 같은데요?" : {itemType == rune ? "룬 빛이 좀 흐릿한데요?" : {itemType == material ? "재료에 잡티가 섞여 있네요?" : "이거, 여기저기 티가 보이는데요?"}}}} {price}골드면 충분하죠?'
+  - speakerId: 0
+    text: '{itemName}(이/가) 딱 봐도 상태가 영 별로네요. {price}골드, 그 이상은 못 드려요.'
+  - speakerId: 0
+    text: '에이, 이런 건 어디서나 굴러다니는데... {price}골드면 감지덕지 아니에요?'
+  - speakerId: 0
+    text: '{itemCount > 1 ? "{itemCount}개나 되는데 하나같이 티가 있네요. 싸게 쳐서 합쳐 {price}골드." : "딱 하나뿐이네요. 이 정도면 {price}골드가 적당해요."}'
+  - speakerId: 0
+    text: '{itemElement == flame ? "불 속성이라지만 열기가 영 시원찮네요." : {itemElement == cold ? "냉기가 약해서 금방 녹겠어요." : {itemElement == lightning ? "번개 기운이 들쭉날쭉한데요?" : "{itemName}(이/가) 영 별로네요."}}} {price}골드, 이게 제 최대치예요.'
+  - speakerId: 0
+    text: '{groupName} 소속, {npcName}. 대륙 시세는 제가 제일 잘 알죠. {itemName}에 {price}골드, 이게 적정가예요.'
+  - speakerId: 0
+    text: '시세가 요즘 바닥이에요. {itemName}(은/는) {price}골드가 정가나 다름없죠.'
+  - speakerId: 0
+    text: '{npcTitle}(은/는) 눈이 정확하거든요. {price}골드, 이 이상 쳐주면 제가 손해예요.'
+  - speakerId: 0
+    text: '{itemType == material ? "재료는 넘쳐나서 값이 안 나가요. {price}골드가 한계죠." : {itemType == rune ? "룬은 보는 사람 따라 값이 천차만별이라, 저한텐 {price}골드면 많이 쳐준 거예요." : "이런 건 흔해서 {price}골드면 많이 쳐준 거예요."}}'
+  - speakerId: 0
+    text: '일단 {price}골드부터 시작해 볼까요? 아, 이것도 많이 쓴 거예요.'
+  _negotiation:
+  - speakerId: 0
+    text: '아이고, 그렇게 부르시면 곤란해요... {price}골드까지만 올릴게요. 정말 큰 양보예요.'
+  - speakerId: 0
+    text: '{askPrice}골드요? 간이 철렁했네요. {prevPrice}골드에서 {price}골드로, 이만큼 올려드린 거예요.'
+  - speakerId: 0
+    text: '{bargainCount >= 2 ? "벌써 이만큼이나 양보했는데도... {price}골드, 더는 쥐어짜도 안 나와요." : "자, 아주 조금만 올려서 {price}골드. 이것도 큰 인심이에요."}'
+  - speakerId: 0
+    text: '{itemCount > 1 ? "{itemCount}개 사는 건데도 {askPrice}골드는 무리예요. {price}골드로 하죠." : "한 개 값으로 {askPrice}골드는 무리예요. {price}골드로 하죠."}'
+  - speakerId: 0
+    text: '{askRatio >= 1.5 ? "{askPrice}골드라니, 지금 농담하시는 거죠? 저는 {price}골드까지만 봐요." : "{askPrice}골드는 좀 높아요. {price}골드로 합시다."}'
+  - speakerId: 0
+    text: '{priceGap}골드 차이라... 그걸 메꾸면 제 이문이 사라져요. {price}골드로 타협하죠.'
+  - speakerId: 0
+    text: '{itemElement == flame ? "불 속성이라고 비싸게 쳐줄 순 없죠." : {itemElement == cold ? "냉기가 깃들었다고 값을 더 얹을 순 없죠." : {itemElement == lightning ? "번개 기운은 금방 새 나가는 법이에요." : "{itemName}에 이 정도면 충분히 쳐준 거예요."}}} {price}골드까지 올릴게요.'
+  - speakerId: 0
+    text: '제 지갑 사정도 좀 봐주세요. {price}골드, 눈물 머금고 올립니다.'
+  - speakerId: 0
+    text: '{npcName}(은/는) 남는 게 없으면 안 사요. {price}골드, 이게 마지노선에 가까워요.'
+  - speakerId: 0
+    text: '자, 한 푼만 더 얹어서 {price}골드. 이런 인심은 쉽게 안 나온다고요.'
+  _finalOffer:
+  - speakerId: 0
+    text: '진짜 진짜 마지막이에요. {price}골드, 더 올리면 제가 굶어요.'
+  - speakerId: 0
+    text: '{firstPrice}골드에서 {price}골드까지 왔어요. 이건 거의 기부 수준이에요.'
+  - speakerId: 0
+    text: '{price}골드, 이게 끝이에요. 안 팔면 저는 다른 데로 가면 그만이고요.'
+  - speakerId: 0
+    text: '{itemCount > 1 ? "{itemCount}개 한꺼번에 {price}골드. 이 이상은 한 푼도 못 내요." : "한 개에 {price}골드. 이 이상은 한 푼도 못 내요."}'
+  - speakerId: 0
+    text: '{askPrice}골드는 꿈에서나 가능해요. {price}골드, 지금 결정하세요.'
+  - speakerId: 0
+    text: '{npcName}의 마지막 제안이에요. {price}골드. 이걸 놓치면 후회할걸요?'
+  - speakerId: 0
+    text: '{itemName}(이/가) 아무리 좋아도 {price}골드가 끝이에요. 정말로요.'
+  - speakerId: 0
+    text: '{askRatio >= 1.5 ? "{priceGap}골드나 벌어졌는데 어떻게 메워요. 저는 {price}골드가 전부예요." : "이제 {price}골드 말고는 못 드려요. 어쩌시겠어요?"}'
+  - speakerId: 0
+    text: '{itemType == material ? "재료에 이 이상은 못 써요." : {itemType == rune ? "룬에 이 이상은 못 써요." : "이런 물건에 이 이상은 못 써요."}} {price}골드예요.'
+  - speakerId: 0
+    text: '슬슬 짐 싸야겠네요. {price}골드, 마지막으로 물을게요.'
+  _acception:
+  - speakerId: 0
+    text: '좋아요, 좋아! 아이고, 이거 완전 밑지는 장사네요.'
+  - speakerId: 0
+    text: '{itemType == sword ? "이 검이라면 어디서든 팔리겠네요." : {itemType == bow ? "이 활이라면 어디서든 팔리겠네요." : "이 물건이라면 어디서든 팔리겠네요."}}'
+  - speakerId: 0
+    text: '여기 {price}골드예요. 두 번 세어 보세요. 한 푼이라도 틀리면 안 되니까요.'
+  - speakerId: 0
+    text: '후, 오늘은 남는 게 없네요. 그래도 거래는 거래죠.'
+  - speakerId: 0
+    text: '{itemCount > 1 ? "{itemCount}개 전부 싣고 갈게요." : "잘 싣고 갈게요."} 다음에도 잘 부탁해요!'
+  - speakerId: 0
+    text: '{itemName}(은/는) 제가 잘 팔아 볼게요. 이문은 비밀이에요.'
+  - speakerId: 0
+    text: '{npcTitle}(은/는) 한번 한 약속은 지켜요. 값은 바로 치를게요.'
+  - speakerId: 0
+    text: '{npcName}, 이 거래 기억해 둘게요. 다음에도 이렇게 봐주세요.'
+  - speakerId: 0
+    text: '{itemElement == flame ? "불 속성이면 추운 지방에서 잘 팔리겠어요." : {itemElement == cold ? "냉기 속성이면 더운 지방에서 잘 팔리겠어요." : "좋아요, {groupName}(은/는) 값만 맞으면 뒤끝 없어요."}}'
+  - speakerId: 0
+    text: '이 가격이면 눈 딱 감고 사죠. 오늘은 제가 졌어요!'
+  _rejection:
+  - speakerId: 0
+    text: '이 값엔 안 돼요. 다른 데 가면 더 싸게 살 수 있어요.'
+  - speakerId: 0
+    text: '{askPrice}골드엔 못 사요. 이만 가볼게요.'
+  - speakerId: 0
+    text: '{itemCount > 1 ? "{itemCount}개나 사는데도 그 값이라니... 접을게요." : "그 값이라니... 접을게요."} 아쉽네요.'
+  - speakerId: 0
+    text: '{itemName}(이/가) 나쁘진 않지만 그 값은 아니죠. 다음에 봐요.'
+  - speakerId: 0
+    text: '휴, 끈질기시네요. 저도 질 수 없어서요. 접을게요.'
+  - speakerId: 0
+    text: '{groupName}(은/는) 밑지는 장사는 안 해요. 이만 가요.'
+  - speakerId: 0
+    text: '{npcName}(은/는) 안 사는 쪽이 이득이면 안 사요. 안녕히.'
+  - speakerId: 0
+    text: '{itemType == sword ? "검은 시장에 널렸어요. 굳이 이 값에 안 사요." : {itemType == bow ? "활은 시장에 널렸어요. 굳이 이 값에 안 사요." : "이런 건 시장에 널렸어요. 굳이 이 값에 안 사요."}}'
+  - speakerId: 0
+    text: '{askRatio >= 1.5 ? "그 값을 부르시다니, 장난이 심하시네요. 저는 가요." : "아쉽지만 값이 안 맞네요. 또 봐요."}'
+  - speakerId: 0
+    text: '짐 쌀게요. 마음 바뀌면 불러요. 값만 맞으면 언제든지요.'

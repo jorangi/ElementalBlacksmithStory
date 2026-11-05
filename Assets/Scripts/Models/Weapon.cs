@@ -60,6 +60,7 @@ namespace ElementalBlacksmithStory.Core
         uint IShopItem.ItemId => Data != null ? WeaponId : 0;
 
         uint IShopItem.Count => 1;
+        public ShopItemCategory Category => (WeaponId >= 11000 && WeaponId <= 11999) ? ShopItemCategory.Bow : ShopItemCategory.Sword;
         private Weapon(WeaponSaveData saveData, SO_WeaponData weaponData, SO_WeaponData baseWeaponData)
         {
             _id = saveData.InstanceId;

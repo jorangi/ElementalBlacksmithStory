@@ -4,6 +4,7 @@ using System.Threading;
 using Cysharp.Threading.Tasks;
 using ElementalBlacksmithStory.Core;
 using ElementalBlacksmithStory.Data;
+using ElementalBlacksmithStory.UI;
 using UnityEngine;
 using VContainer;
 
@@ -12,7 +13,7 @@ namespace ElementalBlacksmithStory.UI.Strategy
     /// <summary>
     /// 교역소(TradingPost) 경매 입찰 모드의 출품 추첨, 묶음 산출, 시작가 책정 및 상호작용 전략
     /// </summary>
-    public class BidModeStrategy : IShopModeStrategy
+    public class BidModeStrategy : IShopModeStrategy, ITimedShopMode
     {
         public const float MIN_STARTING_BID_RATIO = 0.02f; // 표준가의 최소 2%
         public const float MAX_STARTING_BID_RATIO = 0.40f; // 표준가의 최대 40%
@@ -28,6 +29,23 @@ namespace ElementalBlacksmithStory.UI.Strategy
 
         public const float BUNDLE_LUCK_MIN_MULTIPLIER = 0.35f; // 최소 운 계수 (1개까지 하락 가능)
         public const float BUNDLE_LUCK_MAX_MULTIPLIER = 2.20f; // 최대 대박 계수 (최상급 재료도 운 좋으면 10개 등장)
+
+        private static readonly TimeSpan DefaultAuctionInterval = TimeSpan.FromMinutes(5);
+        private DateTime _nextAuctionEndTime;
+
+        public string TimerPrefix => "입찰 마감";
+        public TimeSpan RemainingTime
+        {
+            get
+            {
+                if (_nextAuctionEndTime == default)
+                {
+                    _nextAuctionEndTime = DateTime.UtcNow + DefaultAuctionInterval;
+                }
+                TimeSpan diff = _nextAuctionEndTime - DateTime.UtcNow;
+                return diff > TimeSpan.Zero ? diff : TimeSpan.Zero;
+            }
+        }
 
         public const float MIN_CANDIDATE_WEIGHT = 0.05f;
         public const float TIER_DISTANCE_PENALTY = 1.35f;
@@ -189,7 +207,6 @@ namespace ElementalBlacksmithStory.UI.Strategy
 
                 AuctionCandidate picked = _candidateBuffer[selectedIndex];
 
-                // 중복 추첨 방지를 위해 선택된 항목을 마지막 원소와 스왑 후 제거 (O(1), 무할당)
                 int lastIndex = _candidateBuffer.Count - 1;
                 _candidateBuffer[selectedIndex] = _candidateBuffer[lastIndex];
                 _candidateBuffer.RemoveAt(lastIndex);

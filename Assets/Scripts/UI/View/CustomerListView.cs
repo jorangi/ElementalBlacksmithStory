@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Threading;
 using Cysharp.Text;
 using Cysharp.Threading.Tasks;
-using ElementalBlacksmithStory.Models;
+using ElementalBlacksmithStory.Data;
 using LitMotion;
 using LitMotion.Extensions;
 using R3;

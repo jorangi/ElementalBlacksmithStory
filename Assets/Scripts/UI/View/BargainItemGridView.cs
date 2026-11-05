@@ -34,6 +34,8 @@ namespace ElementalBlacksmithStory.UI
         [SerializeField] TextMeshProUGUI bubbleText;
         [SerializeField] TextMeshProUGUI npcName;
 
+
+
         private void Awake()
         {
             _itemCardPool = new ObjectPool<BargainRegisterItemView>(
@@ -46,9 +48,18 @@ namespace ElementalBlacksmithStory.UI
                         .AddTo(card);
                     return card;
                 },
-                actionOnGet: card => card.gameObject.SetActive(true),
-                actionOnRelease: card => card.gameObject.SetActive(false),
-                actionOnDestroy: card => Destroy(card.gameObject),
+                actionOnGet: card =>
+                {
+                    if (card != null) card.gameObject.SetActive(true);
+                },
+                actionOnRelease: card =>
+                {
+                    if (card != null) card.gameObject.SetActive(false);
+                },
+                actionOnDestroy: card =>
+                {
+                    if (card != null) Destroy(card.gameObject);
+                },
                 defaultCapacity: 20,
                 maxSize: 100
             );
@@ -105,6 +116,25 @@ namespace ElementalBlacksmithStory.UI
             _itemCards.Add(card);
             return card;
         }
+        public void SetCardChecked(uint id, bool isChecked, uint amount = 1)
+        {
+            for (int i = 0; i < _itemCards.Count; i++)
+            {
+                if (_itemCards[i].ItemId == id)
+                {
+                    if (isChecked)
+                    {
+                        _itemCards[i].SetAmount(amount);
+                        _itemCards[i].Check(true);
+                    }
+                    else
+                    {
+                        _itemCards[i].Check(false);
+                    }
+                    break;
+                }
+            }
+        }
         public void UnCheckAll()
         {
             for (int i = 0; i < _itemCards.Count; i++)
@@ -134,7 +164,8 @@ namespace ElementalBlacksmithStory.UI
                                 .WithEase(Ease.InOutBack)
                                 .BindToLocalScale(_rect)
                                 .AddTo(gameObject);
-            await _motionHandle.ToUniTask(_cts.Token);
+            await _motionHandle.ToUniTask(_cts.Token)
+                            .SuppressCancellationThrow();
         }
         public async UniTask Hide(CancellationToken ct = default)
         {
@@ -148,7 +179,8 @@ namespace ElementalBlacksmithStory.UI
                                 .WithEase(Ease.InOutBack)
                                 .BindToLocalScale(_rect)
                                 .AddTo(gameObject);
-            await _motionHandle.ToUniTask(_cts.Token);
+            await _motionHandle.ToUniTask(_cts.Token)
+                                .SuppressCancellationThrow();
             _rect.gameObject.SetActive(false);
             _registerUI.gameObject.SetActive(false);
         }

@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ElementalBlacksmithStory.Data.SO_ShopCategory
   _categoryId: Sword
   _displayName: "\uAC80"
-  _icon: {fileID: 21300000, guid: d4e2ac198e8b49848bdb0cfe56393421, type: 3}
+  _icon: {fileID: 21300000, guid: a32ebf46352b91249875080f2095c1b8, type: 3}
   _minRandomPickCount: 0
   _maxRandomPickCount: 1
   _items:
