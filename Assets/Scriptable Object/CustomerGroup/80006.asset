@@ -12,9 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b32617f483474c042a505f5b4002c486, type: 3}
   m_Name: 80006
   m_EditorClassIdentifier: Assembly-CSharp::ElementalBlacksmithStory.Data.SO_CustomerGroup
-  _customerGroupTitle: 물자보급관
-  _customerGroupName: 모험가 길드 보급부서
-  _description: 거점 주점의 용병 관리인과 연계된 물자 담당관. 사무적이고 건조함. 단 1개라도 길드 규정 매입가에 맞춰 사겠다는 깐깐한 사무적 톤.
+  _customerGroupTitle: "\uBB3C\uC790\uBCF4\uAE09\uAD00"
+  _customerGroupName: "\uBAA8\uD5D8\uAC00 \uAE38\uB4DC \uBCF4\uAE09\uBD80\uC11C"
+  _description: "\uAC70\uC810 \uC8FC\uC810\uC758 \uC6A9\uBCD1 \uAD00\uB9AC\uC778\uACFC
+    \uC5F0\uACC4\uB41C \uBB3C\uC790 \uB2F4\uB2F9\uAD00. \uC0AC\uBB34\uC801\uC774\uACE0
+    \uAC74\uC870\uD568. \uB2E8 1\uAC1C\uB77C\uB3C4 \uAE38\uB4DC \uADDC\uC815 \uB9E4\uC785\uAC00\uC5D0
+    \uB9DE\uCDB0 \uC0AC\uACA0\uB2E4\uB294 \uAE50\uAE50\uD55C \uC0AC\uBB34\uC801 \uD1A4."
   minEstimateRatio: 0.9
   maxEstimateRatio: 1.2
   minFirstOfferRatio: 0.7
@@ -24,120 +27,268 @@ MonoBehaviour:
   minPatience: 80
   maxPatience: 120
   greedSensitivity: 1.5
+  itemPreferenceData:
+    allowedCategories: 0200000004000000
+    preferredCategories: 
+    preferredElements: 
+    dislikedElements: 
   _customerNames:
-  - 아놀드
-  - 베스
-  - 콜린
-  - 더스틴
-  - 엘라
-  - 프랭크
-  - 그레이스
-  - 휴
-  - 이안
-  - 주디
+  - "\uC544\uB180\uB4DC"
+  - "\uBCA0\uC2A4"
+  - "\uCF5C\uB9B0"
+  - "\uB354\uC2A4\uD2F4"
+  - "\uC5D8\uB77C"
+  - "\uD504\uB7AD\uD06C"
+  - "\uADF8\uB808\uC774\uC2A4"
+  - "\uD734"
+  - "\uC774\uC548"
+  - "\uC8FC\uB514"
   _customerSprites: []
   _firstOffer:
   - speakerId: 0
-    text: '{itemType == material ? "재료 반입 확인했습니다. 재고 대장에 빈칸이 하나 남아 있었는데 마침 맞습니다." : {itemType == rune ? "룬 반입 확인했습니다. 지난 분기 감사에서 룬 재고 부족을 지적받은 터라 반갑군요." : {itemType == consumable ? "소모품 반입 확인했습니다. 이번 주 소진량이 많아 기준선 아래였습니다." : "반입 확인했습니다. 재고 대장에 빈칸이 하나 남아 있었습니다."}}} 길드 규정 매입가에 맞춰 {price}골드입니다.'
+    text: "{itemType == material ? \"\uC7AC\uB8CC \uBC18\uC785 \uD655\uC778\uD588\uC2B5\uB2C8\uB2E4.
+      \uC7AC\uACE0 \uB300\uC7A5\uC5D0 \uBE48\uCE78\uC774 \uD558\uB098 \uB0A8\uC544
+      \uC788\uC5C8\uB294\uB370 \uB9C8\uCE68 \uB9DE\uC2B5\uB2C8\uB2E4.\" : {itemType
+      == rune ? \"\uB8EC \uBC18\uC785 \uD655\uC778\uD588\uC2B5\uB2C8\uB2E4. \uC9C0\uB09C
+      \uBD84\uAE30 \uAC10\uC0AC\uC5D0\uC11C \uB8EC \uC7AC\uACE0 \uBD80\uC871\uC744
+      \uC9C0\uC801\uBC1B\uC740 \uD130\uB77C \uBC18\uAC11\uAD70\uC694.\" : {itemType
+      == consumable ? \"\uC18C\uBAA8\uD488 \uBC18\uC785 \uD655\uC778\uD588\uC2B5\uB2C8\uB2E4.
+      \uC774\uBC88 \uC8FC \uC18C\uC9C4\uB7C9\uC774 \uB9CE\uC544 \uAE30\uC900\uC120
+      \uC544\uB798\uC600\uC2B5\uB2C8\uB2E4.\" : \"\uBC18\uC785 \uD655\uC778\uD588\uC2B5\uB2C8\uB2E4.
+      \uC7AC\uACE0 \uB300\uC7A5\uC5D0 \uBE48\uCE78\uC774 \uD558\uB098 \uB0A8\uC544
+      \uC788\uC5C8\uC2B5\uB2C8\uB2E4.\"}}} \uAE38\uB4DC \uADDC\uC815 \uB9E4\uC785\uAC00\uC5D0
+      \uB9DE\uCDB0 {price}\uACE8\uB4DC\uC785\uB2C8\uB2E4."
   - speakerId: 0
-    text: '{itemCount > 1 ? "{itemCount}개 일괄 접수합니다. 수량이 많아도 단가 기준은 같습니다. 총 {price}골드입니다." : "1개든 100개든 적용 기준은 같습니다. 길드 규정 매입가로 {price}골드입니다."}'
+    text: "{itemCount > 1 ? \"{itemCount}\uAC1C \uC77C\uAD04 \uC811\uC218\uD569\uB2C8\uB2E4.
+      \uC218\uB7C9\uC774 \uB9CE\uC544\uB3C4 \uB2E8\uAC00 \uAE30\uC900\uC740 \uAC19\uC2B5\uB2C8\uB2E4.
+      \uCD1D {price}\uACE8\uB4DC\uC785\uB2C8\uB2E4.\" : \"1\uAC1C\uB4E0 100\uAC1C\uB4E0
+      \uC801\uC6A9 \uAE30\uC900\uC740 \uAC19\uC2B5\uB2C8\uB2E4. \uAE38\uB4DC \uADDC\uC815
+      \uB9E4\uC785\uAC00\uB85C {price}\uACE8\uB4DC\uC785\uB2C8\uB2E4.\"}"
   - speakerId: 0
-    text: '{itemName}(을/를) 접수합니다. {price >= baseValue ? "규정 매입가 상한 안에서 {price}골드로 산정했습니다." : "규정 매입가 산정표대로 {price}골드입니다."}'
+    text: "{itemName}(\uC744/\uB97C) \uC811\uC218\uD569\uB2C8\uB2E4. {price >= baseValue
+      ? \"\uADDC\uC815 \uB9E4\uC785\uAC00 \uC0C1\uD55C \uC548\uC5D0\uC11C {price}\uACE8\uB4DC\uB85C
+      \uC0B0\uC815\uD588\uC2B5\uB2C8\uB2E4.\" : \"\uADDC\uC815 \uB9E4\uC785\uAC00
+      \uC0B0\uC815\uD45C\uB300\uB85C {price}\uACE8\uB4DC\uC785\uB2C8\uB2E4.\"}"
   - speakerId: 0
-    text: '{groupName}의 {npcName}입니다. {itemName}(을/를) 규정 매입가 {price}골드로 접수하겠습니다.'
+    text: "{groupName}\uC758 {npcName}\uC785\uB2C8\uB2E4. {itemName}(\uC744/\uB97C)
+      \uADDC\uC815 \uB9E4\uC785\uAC00 {price}\uACE8\uB4DC\uB85C \uC811\uC218\uD558\uACA0\uC2B5\uB2C8\uB2E4."
   - speakerId: 0
-    text: '{itemType == consumable ? "소모품은 소진이 빨라서 재고 기준선을 매주 확인합니다. 이번 건은 기준선 아래라 반갑습니다." : {itemType == material ? "재료는 납품 일정이 어긋나기 쉬운 분류입니다. 이번 건이 일정 공백을 메워 줍니다." : "재고 기준선 아래였던 항목입니다. 이번 건으로 메워집니다."}} 규정 매입가는 {price}골드입니다.'
+    text: "{itemType == consumable ? \"\uC18C\uBAA8\uD488\uC740 \uC18C\uC9C4\uC774
+      \uBE68\uB77C\uC11C \uC7AC\uACE0 \uAE30\uC900\uC120\uC744 \uB9E4\uC8FC \uD655\uC778\uD569\uB2C8\uB2E4.
+      \uC774\uBC88 \uAC74\uC740 \uAE30\uC900\uC120 \uC544\uB798\uB77C \uBC18\uAC11\uC2B5\uB2C8\uB2E4.\"
+      : {itemType == material ? \"\uC7AC\uB8CC\uB294 \uB0A9\uD488 \uC77C\uC815\uC774
+      \uC5B4\uAE0B\uB098\uAE30 \uC26C\uC6B4 \uBD84\uB958\uC785\uB2C8\uB2E4. \uC774\uBC88
+      \uAC74\uC774 \uC77C\uC815 \uACF5\uBC31\uC744 \uBA54\uC6CC \uC90D\uB2C8\uB2E4.\"
+      : \"\uC7AC\uACE0 \uAE30\uC900\uC120 \uC544\uB798\uC600\uB358 \uD56D\uBAA9\uC785\uB2C8\uB2E4.
+      \uC774\uBC88 \uAC74\uC73C\uB85C \uBA54\uC6CC\uC9D1\uB2C8\uB2E4.\"}} \uADDC\uC815
+      \uB9E4\uC785\uAC00\uB294 {price}\uACE8\uB4DC\uC785\uB2C8\uB2E4."
   - speakerId: 0
-    text: '감정가 협의는 하지 않습니다. 규정표에 적힌 숫자가 {price}골드입니다.'
+    text: "\uAC10\uC815\uAC00 \uD611\uC758\uB294 \uD558\uC9C0 \uC54A\uC2B5\uB2C8\uB2E4.
+      \uADDC\uC815\uD45C\uC5D0 \uC801\uD78C \uC22B\uC790\uAC00 {price}\uACE8\uB4DC\uC785\uB2C8\uB2E4."
   - speakerId: 0
-    text: '규정 밖의 금액은 제 권한으로 지급할 수 없습니다. {price}골드, 규정 안의 금액입니다.'
+    text: "\uADDC\uC815 \uBC16\uC758 \uAE08\uC561\uC740 \uC81C \uAD8C\uD55C\uC73C\uB85C
+      \uC9C0\uAE09\uD560 \uC218 \uC5C6\uC2B5\uB2C8\uB2E4. {price}\uACE8\uB4DC, \uADDC\uC815
+      \uC548\uC758 \uAE08\uC561\uC785\uB2C8\uB2E4."
   - speakerId: 0
-    text: '{itemType == material ? "재료는 수량과 상태만 확인하면 됩니다. 규정상 {price}골드입니다." : {itemType == rune ? "룬은 기운 상태만 확인하면 됩니다. 이상 없습니다. 규정상 {price}골드입니다." : {itemType == consumable ? "소모품은 수량과 포장 상태만 확인하면 됩니다. 이상 없습니다. 규정상 {price}골드입니다." : "상태 확인은 끝났습니다. 규정상 {price}골드입니다."}}}'
+    text: "{itemType == material ? \"\uC7AC\uB8CC\uB294 \uC218\uB7C9\uACFC \uC0C1\uD0DC\uB9CC
+      \uD655\uC778\uD558\uBA74 \uB429\uB2C8\uB2E4. \uADDC\uC815\uC0C1 {price}\uACE8\uB4DC\uC785\uB2C8\uB2E4.\"
+      : {itemType == rune ? \"\uB8EC\uC740 \uAE30\uC6B4 \uC0C1\uD0DC\uB9CC \uD655\uC778\uD558\uBA74
+      \uB429\uB2C8\uB2E4. \uC774\uC0C1 \uC5C6\uC2B5\uB2C8\uB2E4. \uADDC\uC815\uC0C1
+      {price}\uACE8\uB4DC\uC785\uB2C8\uB2E4.\" : {itemType == consumable ? \"\uC18C\uBAA8\uD488\uC740
+      \uC218\uB7C9\uACFC \uD3EC\uC7A5 \uC0C1\uD0DC\uB9CC \uD655\uC778\uD558\uBA74
+      \uB429\uB2C8\uB2E4. \uC774\uC0C1 \uC5C6\uC2B5\uB2C8\uB2E4. \uADDC\uC815\uC0C1
+      {price}\uACE8\uB4DC\uC785\uB2C8\uB2E4.\" : \"\uC0C1\uD0DC \uD655\uC778\uC740
+      \uB05D\uB0AC\uC2B5\uB2C8\uB2E4. \uADDC\uC815\uC0C1 {price}\uACE8\uB4DC\uC785\uB2C8\uB2E4.\"}}}"
   - speakerId: 0
-    text: '오늘 접수 마감 전에 처리해야 합니다. {price}골드로 바로 진행하시죠.'
+    text: "\uC624\uB298 \uC811\uC218 \uB9C8\uAC10 \uC804\uC5D0 \uCC98\uB9AC\uD574\uC57C
+      \uD569\uB2C8\uB2E4. {price}\uACE8\uB4DC\uB85C \uBC14\uB85C \uC9C4\uD589\uD558\uC2DC\uC8E0."
   - speakerId: 0
-    text: '용병 관리인 쪽에서 올라온 요청 물량과 대조했습니다. {price}골드로 진행하겠습니다.'
+    text: "\uC6A9\uBCD1 \uAD00\uB9AC\uC778 \uCABD\uC5D0\uC11C \uC62C\uB77C\uC628
+      \uC694\uCCAD \uBB3C\uB7C9\uACFC \uB300\uC870\uD588\uC2B5\uB2C8\uB2E4. {price}\uACE8\uB4DC\uB85C
+      \uC9C4\uD589\uD558\uACA0\uC2B5\uB2C8\uB2E4."
   _negotiation:
   - speakerId: 0
-    text: '{prevPrice}골드에서 {price}골드로 정정합니다. 정정 사유는 서식에 적어 두겠습니다.'
+    text: "{prevPrice}\uACE8\uB4DC\uC5D0\uC11C {price}\uACE8\uB4DC\uB85C \uC815\uC815\uD569\uB2C8\uB2E4.
+      \uC815\uC815 \uC0AC\uC720\uB294 \uC11C\uC2DD\uC5D0 \uC801\uC5B4 \uB450\uACA0\uC2B5\uB2C8\uB2E4."
   - speakerId: 0
-    text: '{askPrice}골드는 규정 범위를 벗어납니다. {price}골드까지만 처리 가능합니다.'
+    text: "{askPrice}\uACE8\uB4DC\uB294 \uADDC\uC815 \uBC94\uC704\uB97C \uBC97\uC5B4\uB0A9\uB2C8\uB2E4.
+      {price}\uACE8\uB4DC\uAE4C\uC9C0\uB9CC \uCC98\uB9AC \uAC00\uB2A5\uD569\uB2C8\uB2E4."
   - speakerId: 0
-    text: '{bargainCount >= 2 ? "같은 협의가 반복되고 있습니다. 규정은 그대로이고 {price}골드가 조정 한도입니다." : "조정 가능한 범위에서 {price}골드로 올리겠습니다."}'
+    text: "{bargainCount >= 2 ? \"\uAC19\uC740 \uD611\uC758\uAC00 \uBC18\uBCF5\uB418\uACE0
+      \uC788\uC2B5\uB2C8\uB2E4. \uADDC\uC815\uC740 \uADF8\uB300\uB85C\uC774\uACE0
+      {price}\uACE8\uB4DC\uAC00 \uC870\uC815 \uD55C\uB3C4\uC785\uB2C8\uB2E4.\" :
+      \"\uC870\uC815 \uAC00\uB2A5\uD55C \uBC94\uC704\uC5D0\uC11C {price}\uACE8\uB4DC\uB85C
+      \uC62C\uB9AC\uACA0\uC2B5\uB2C8\uB2E4.\"}"
   - speakerId: 0
-    text: '{askRatio >= 1.3 ? "{askPrice}골드는 반려 대상입니다. 서식에 적을 수 없는 숫자입니다. {price}골드로 하겠습니다." : "{askPrice}골드는 재량 범위를 조금 넘습니다. {price}골드로 맞추겠습니다."}'
+    text: "{askRatio >= 1.3 ? \"{askPrice}\uACE8\uB4DC\uB294 \uBC18\uB824 \uB300\uC0C1\uC785\uB2C8\uB2E4.
+      \uC11C\uC2DD\uC5D0 \uC801\uC744 \uC218 \uC5C6\uB294 \uC22B\uC790\uC785\uB2C8\uB2E4.
+      {price}\uACE8\uB4DC\uB85C \uD558\uACA0\uC2B5\uB2C8\uB2E4.\" : \"{askPrice}\uACE8\uB4DC\uB294
+      \uC7AC\uB7C9 \uBC94\uC704\uB97C \uC870\uAE08 \uB118\uC2B5\uB2C8\uB2E4. {price}\uACE8\uB4DC\uB85C
+      \uB9DE\uCD94\uACA0\uC2B5\uB2C8\uB2E4.\"}"
   - speakerId: 0
-    text: '{priceGap}골드 차이는 규정상 보전이 안 됩니다. 제 재량으로는 {price}골드까지입니다.'
+    text: "{priceGap}\uACE8\uB4DC \uCC28\uC774\uB294 \uADDC\uC815\uC0C1 \uBCF4\uC804\uC774
+      \uC548 \uB429\uB2C8\uB2E4. \uC81C \uC7AC\uB7C9\uC73C\uB85C\uB294 {price}\uACE8\uB4DC\uAE4C\uC9C0\uC785\uB2C8\uB2E4."
   - speakerId: 0
-    text: '{itemCount > 1 ? "{itemCount}개 일괄 건이라 개당 {unitPrice}골드로 계산했습니다. 총 {price}골드입니다." : "1개 건이어도 계산 방식은 같습니다. {price}골드입니다."}'
+    text: "{itemCount > 1 ? \"{itemCount}\uAC1C \uC77C\uAD04 \uAC74\uC774\uB77C \uAC1C\uB2F9
+      {unitPrice}\uACE8\uB4DC\uB85C \uACC4\uC0B0\uD588\uC2B5\uB2C8\uB2E4. \uCD1D
+      {price}\uACE8\uB4DC\uC785\uB2C8\uB2E4.\" : \"1\uAC1C \uAC74\uC774\uC5B4\uB3C4
+      \uACC4\uC0B0 \uBC29\uC2DD\uC740 \uAC19\uC2B5\uB2C8\uB2E4. {price}\uACE8\uB4DC\uC785\uB2C8\uB2E4.\"}"
   - speakerId: 0
-    text: '{price >= baseValue ? "이미 규정 매입가 이상입니다. 이 이상은 감사에 걸립니다. {price}골드가 한도입니다." : "규정 범위 안에서 {price}골드까지 올렸습니다."}'
+    text: "{price >= baseValue ? \"\uC774\uBBF8 \uADDC\uC815 \uB9E4\uC785\uAC00 \uC774\uC0C1\uC785\uB2C8\uB2E4.
+      \uC774 \uC774\uC0C1\uC740 \uAC10\uC0AC\uC5D0 \uAC78\uB9BD\uB2C8\uB2E4. {price}\uACE8\uB4DC\uAC00
+      \uD55C\uB3C4\uC785\uB2C8\uB2E4.\" : \"\uADDC\uC815 \uBC94\uC704 \uC548\uC5D0\uC11C
+      {price}\uACE8\uB4DC\uAE4C\uC9C0 \uC62C\uB838\uC2B5\uB2C8\uB2E4.\"}"
   - speakerId: 0
-    text: '{itemType == consumable ? "소모품은 회전이 빠른 분류라 규정상 가산 항목이 없습니다. 단가표 기준으로 {price}골드입니다." : "분류별 단가표 기준으로 {price}골드입니다."}'
+    text: "{itemType == consumable ? \"\uC18C\uBAA8\uD488\uC740 \uD68C\uC804\uC774
+      \uBE60\uB978 \uBD84\uB958\uB77C \uADDC\uC815\uC0C1 \uAC00\uC0B0 \uD56D\uBAA9\uC774
+      \uC5C6\uC2B5\uB2C8\uB2E4. \uB2E8\uAC00\uD45C \uAE30\uC900\uC73C\uB85C {price}\uACE8\uB4DC\uC785\uB2C8\uB2E4.\"
+      : \"\uBD84\uB958\uBCC4 \uB2E8\uAC00\uD45C \uAE30\uC900\uC73C\uB85C {price}\uACE8\uB4DC\uC785\uB2C8\uB2E4.\"}"
   - speakerId: 0
-    text: '{itemType == material ? "재료는 시세 변동이 큰 분류라 월말 정산 기준으로 {price}골드입니다." : {itemType == rune ? "룬은 고가 항목이라 결재선이 길어집니다. {price}골드가 현실적인 선입니다." : {itemType == consumable ? "소모품은 대량 처리 건이 많아 단가를 고정해 둡니다. {price}골드입니다." : "분류상 처리 가능한 선은 {price}골드입니다."}}}'
+    text: "{itemType == material ? \"\uC7AC\uB8CC\uB294 \uC2DC\uC138 \uBCC0\uB3D9\uC774
+      \uD070 \uBD84\uB958\uB77C \uC6D4\uB9D0 \uC815\uC0B0 \uAE30\uC900\uC73C\uB85C
+      {price}\uACE8\uB4DC\uC785\uB2C8\uB2E4.\" : {itemType == rune ? \"\uB8EC\uC740
+      \uACE0\uAC00 \uD56D\uBAA9\uC774\uB77C \uACB0\uC7AC\uC120\uC774 \uAE38\uC5B4\uC9D1\uB2C8\uB2E4.
+      {price}\uACE8\uB4DC\uAC00 \uD604\uC2E4\uC801\uC778 \uC120\uC785\uB2C8\uB2E4.\"
+      : {itemType == consumable ? \"\uC18C\uBAA8\uD488\uC740 \uB300\uB7C9 \uCC98\uB9AC
+      \uAC74\uC774 \uB9CE\uC544 \uB2E8\uAC00\uB97C \uACE0\uC815\uD574 \uB461\uB2C8\uB2E4.
+      {price}\uACE8\uB4DC\uC785\uB2C8\uB2E4.\" : \"\uBD84\uB958\uC0C1 \uCC98\uB9AC
+      \uAC00\uB2A5\uD55C \uC120\uC740 {price}\uACE8\uB4DC\uC785\uB2C8\uB2E4.\"}}}"
   - speakerId: 0
-    text: '{npcName}(은/는) 규정을 바꿀 권한이 없습니다. 바꿔 드릴 수 있는 건 {price}골드까지입니다.'
+    text: "{npcName}(\uC740/\uB294) \uADDC\uC815\uC744 \uBC14\uAFC0 \uAD8C\uD55C\uC774
+      \uC5C6\uC2B5\uB2C8\uB2E4. \uBC14\uAFD4 \uB4DC\uB9B4 \uC218 \uC788\uB294 \uAC74
+      {price}\uACE8\uB4DC\uAE4C\uC9C0\uC785\uB2C8\uB2E4."
   _finalOffer:
   - speakerId: 0
-    text: '이 숫자가 최종입니다. {price}골드, 이후 협의는 접수하지 않습니다.'
+    text: "\uC774 \uC22B\uC790\uAC00 \uCD5C\uC885\uC785\uB2C8\uB2E4. {price}\uACE8\uB4DC,
+      \uC774\uD6C4 \uD611\uC758\uB294 \uC811\uC218\uD558\uC9C0 \uC54A\uC2B5\uB2C8\uB2E4."
   - speakerId: 0
-    text: '{firstPrice}골드에서 {price}골드로 정정했습니다. 정정은 여기까지입니다.'
+    text: "{firstPrice}\uACE8\uB4DC\uC5D0\uC11C {price}\uACE8\uB4DC\uB85C \uC815\uC815\uD588\uC2B5\uB2C8\uB2E4.
+      \uC815\uC815\uC740 \uC5EC\uAE30\uAE4C\uC9C0\uC785\uB2C8\uB2E4."
   - speakerId: 0
-    text: '{price}골드가 제 결재 가능한 상한입니다. 이 위는 상부 결재가 필요한데, 올릴 생각은 없습니다.'
+    text: "{price}\uACE8\uB4DC\uAC00 \uC81C \uACB0\uC7AC \uAC00\uB2A5\uD55C \uC0C1\uD55C\uC785\uB2C8\uB2E4.
+      \uC774 \uC704\uB294 \uC0C1\uBD80 \uACB0\uC7AC\uAC00 \uD544\uC694\uD55C\uB370,
+      \uC62C\uB9B4 \uC0DD\uAC01\uC740 \uC5C6\uC2B5\uB2C8\uB2E4."
   - speakerId: 0
-    text: '{itemCount > 1 ? "{itemCount}개 일괄 처리에 {price}골드가 상한입니다." : "1개 건에 {price}골드가 상한입니다."} 수락 여부만 말씀해 주십시오.'
+    text: "{itemCount > 1 ? \"{itemCount}\uAC1C \uC77C\uAD04 \uCC98\uB9AC\uC5D0 {price}\uACE8\uB4DC\uAC00
+      \uC0C1\uD55C\uC785\uB2C8\uB2E4.\" : \"1\uAC1C \uAC74\uC5D0 {price}\uACE8\uB4DC\uAC00
+      \uC0C1\uD55C\uC785\uB2C8\uB2E4.\"} \uC218\uB77D \uC5EC\uBD80\uB9CC \uB9D0\uC500\uD574
+      \uC8FC\uC2ED\uC2DC\uC624."
   - speakerId: 0
-    text: '{askPrice}골드는 서식에 적을 수 없습니다. {price}골드로 처리할지 답해 주십시오.'
+    text: "{askPrice}\uACE8\uB4DC\uB294 \uC11C\uC2DD\uC5D0 \uC801\uC744 \uC218 \uC5C6\uC2B5\uB2C8\uB2E4.
+      {price}\uACE8\uB4DC\uB85C \uCC98\uB9AC\uD560\uC9C0 \uB2F5\uD574 \uC8FC\uC2ED\uC2DC\uC624."
   - speakerId: 0
-    text: '{npcName}의 최종 안내입니다. {price}골드, 수락 여부만 말씀해 주십시오.'
+    text: "{npcName}\uC758 \uCD5C\uC885 \uC548\uB0B4\uC785\uB2C8\uB2E4. {price}\uACE8\uB4DC,
+      \uC218\uB77D \uC5EC\uBD80\uB9CC \uB9D0\uC500\uD574 \uC8FC\uC2ED\uC2DC\uC624."
   - speakerId: 0
-    text: '{itemType == material ? "재료 분류의 상한은 {price}골드입니다. 이 이상은 규정에 없습니다." : {itemType == rune ? "룬 분류의 상한은 {price}골드입니다. 이 이상은 규정에 없습니다." : {itemType == consumable ? "소모품 분류의 상한은 {price}골드입니다. 이 이상은 규정에 없습니다." : "해당 분류의 상한은 {price}골드입니다. 이 이상은 규정에 없습니다."}}}'
+    text: "{itemType == material ? \"\uC7AC\uB8CC \uBD84\uB958\uC758 \uC0C1\uD55C\uC740
+      {price}\uACE8\uB4DC\uC785\uB2C8\uB2E4. \uC774 \uC774\uC0C1\uC740 \uADDC\uC815\uC5D0
+      \uC5C6\uC2B5\uB2C8\uB2E4.\" : {itemType == rune ? \"\uB8EC \uBD84\uB958\uC758
+      \uC0C1\uD55C\uC740 {price}\uACE8\uB4DC\uC785\uB2C8\uB2E4. \uC774 \uC774\uC0C1\uC740
+      \uADDC\uC815\uC5D0 \uC5C6\uC2B5\uB2C8\uB2E4.\" : {itemType == consumable ?
+      \"\uC18C\uBAA8\uD488 \uBD84\uB958\uC758 \uC0C1\uD55C\uC740 {price}\uACE8\uB4DC\uC785\uB2C8\uB2E4.
+      \uC774 \uC774\uC0C1\uC740 \uADDC\uC815\uC5D0 \uC5C6\uC2B5\uB2C8\uB2E4.\" :
+      \"\uD574\uB2F9 \uBD84\uB958\uC758 \uC0C1\uD55C\uC740 {price}\uACE8\uB4DC\uC785\uB2C8\uB2E4.
+      \uC774 \uC774\uC0C1\uC740 \uADDC\uC815\uC5D0 \uC5C6\uC2B5\uB2C8\uB2E4.\"}}}"
   - speakerId: 0
-    text: '{askRatio >= 1.3 ? "{priceGap}골드나 벌어지면 접수 자체가 안 됩니다. {price}골드가 최종입니다." : "{price}골드로 정리하겠습니다. 이 정도 차이는 규정 허용 오차입니다."}'
+    text: "{askRatio >= 1.3 ? \"{priceGap}\uACE8\uB4DC\uB098 \uBC8C\uC5B4\uC9C0\uBA74
+      \uC811\uC218 \uC790\uCCB4\uAC00 \uC548 \uB429\uB2C8\uB2E4. {price}\uACE8\uB4DC\uAC00
+      \uCD5C\uC885\uC785\uB2C8\uB2E4.\" : \"{price}\uACE8\uB4DC\uB85C \uC815\uB9AC\uD558\uACA0\uC2B5\uB2C8\uB2E4.
+      \uC774 \uC815\uB3C4 \uCC28\uC774\uB294 \uADDC\uC815 \uD5C8\uC6A9 \uC624\uCC28\uC785\uB2C8\uB2E4.\"}"
   - speakerId: 0
-    text: '다음 접수 건이 밀려 있습니다. {price}골드로 결정해 주십시오.'
+    text: "\uB2E4\uC74C \uC811\uC218 \uAC74\uC774 \uBC00\uB824 \uC788\uC2B5\uB2C8\uB2E4.
+      {price}\uACE8\uB4DC\uB85C \uACB0\uC815\uD574 \uC8FC\uC2ED\uC2DC\uC624."
   - speakerId: 0
-    text: '{price >= baseValue ? "규정 매입가 이상으로 이미 처리했습니다. 더는 못 올립니다. {price}골드입니다." : "규정 범위 최대치로 {price}골드입니다. 이 이상은 불가합니다."}'
+    text: "{price >= baseValue ? \"\uADDC\uC815 \uB9E4\uC785\uAC00 \uC774\uC0C1\uC73C\uB85C
+      \uC774\uBBF8 \uCC98\uB9AC\uD588\uC2B5\uB2C8\uB2E4. \uB354\uB294 \uBABB \uC62C\uB9BD\uB2C8\uB2E4.
+      {price}\uACE8\uB4DC\uC785\uB2C8\uB2E4.\" : \"\uADDC\uC815 \uBC94\uC704 \uCD5C\uB300\uCE58\uB85C
+      {price}\uACE8\uB4DC\uC785\uB2C8\uB2E4. \uC774 \uC774\uC0C1\uC740 \uBD88\uAC00\uD569\uB2C8\uB2E4.\"}"
   _acception:
   - speakerId: 0
-    text: '접수 완료입니다. 서식은 제가 작성하겠습니다.'
+    text: "\uC811\uC218 \uC644\uB8CC\uC785\uB2C8\uB2E4. \uC11C\uC2DD\uC740 \uC81C\uAC00
+      \uC791\uC131\uD558\uACA0\uC2B5\uB2C8\uB2E4."
   - speakerId: 0
-    text: '{itemType == material ? "재료 입고 처리하겠습니다. 재고 대장의 빈칸이 채워졌습니다." : {itemType == rune ? "룬 입고 처리하겠습니다. 감사에서 지적받은 부분이 메워졌습니다." : {itemType == consumable ? "소모품 입고 처리하겠습니다. 이번 주 기준선은 맞췄습니다." : "입고 처리하겠습니다. 재고 대장에 반영하겠습니다."}}}'
+    text: "{itemType == material ? \"\uC7AC\uB8CC \uC785\uACE0 \uCC98\uB9AC\uD558\uACA0\uC2B5\uB2C8\uB2E4.
+      \uC7AC\uACE0 \uB300\uC7A5\uC758 \uBE48\uCE78\uC774 \uCC44\uC6CC\uC84C\uC2B5\uB2C8\uB2E4.\"
+      : {itemType == rune ? \"\uB8EC \uC785\uACE0 \uCC98\uB9AC\uD558\uACA0\uC2B5\uB2C8\uB2E4.
+      \uAC10\uC0AC\uC5D0\uC11C \uC9C0\uC801\uBC1B\uC740 \uBD80\uBD84\uC774 \uBA54\uC6CC\uC84C\uC2B5\uB2C8\uB2E4.\"
+      : {itemType == consumable ? \"\uC18C\uBAA8\uD488 \uC785\uACE0 \uCC98\uB9AC\uD558\uACA0\uC2B5\uB2C8\uB2E4.
+      \uC774\uBC88 \uC8FC \uAE30\uC900\uC120\uC740 \uB9DE\uCDC4\uC2B5\uB2C8\uB2E4.\"
+      : \"\uC785\uACE0 \uCC98\uB9AC\uD558\uACA0\uC2B5\uB2C8\uB2E4. \uC7AC\uACE0 \uB300\uC7A5\uC5D0
+      \uBC18\uC601\uD558\uACA0\uC2B5\uB2C8\uB2E4.\"}}}"
   - speakerId: 0
-    text: '{price}골드, 지급 서식 확인했습니다. 수령 확인만 해 주십시오.'
+    text: "{price}\uACE8\uB4DC, \uC9C0\uAE09 \uC11C\uC2DD \uD655\uC778\uD588\uC2B5\uB2C8\uB2E4.
+      \uC218\uB839 \uD655\uC778\uB9CC \uD574 \uC8FC\uC2ED\uC2DC\uC624."
   - speakerId: 0
-    text: '{itemName}(을/를) 입고하고 재고 대장에 기재했습니다. 거래 증빙은 보관합니다.'
+    text: "{itemName}(\uC744/\uB97C) \uC785\uACE0\uD558\uACE0 \uC7AC\uACE0 \uB300\uC7A5\uC5D0
+      \uAE30\uC7AC\uD588\uC2B5\uB2C8\uB2E4. \uAC70\uB798 \uC99D\uBE59\uC740 \uBCF4\uAD00\uD569\uB2C8\uB2E4."
   - speakerId: 0
-    text: '{itemCount > 1 ? "{itemCount}개 전부 입고 처리합니다. 수량 대조도 끝났습니다." : "1개 입고 처리합니다. 수량 대조도 끝났습니다."} 협조 감사합니다.'
+    text: "{itemCount > 1 ? \"{itemCount}\uAC1C \uC804\uBD80 \uC785\uACE0 \uCC98\uB9AC\uD569\uB2C8\uB2E4.
+      \uC218\uB7C9 \uB300\uC870\uB3C4 \uB05D\uB0AC\uC2B5\uB2C8\uB2E4.\" : \"1\uAC1C
+      \uC785\uACE0 \uCC98\uB9AC\uD569\uB2C8\uB2E4. \uC218\uB7C9 \uB300\uC870\uB3C4
+      \uB05D\uB0AC\uC2B5\uB2C8\uB2E4.\"} \uD611\uC870 \uAC10\uC0AC\uD569\uB2C8\uB2E4."
   - speakerId: 0
-    text: '{itemType == consumable ? "소모품 분류로 입고합니다. 소진 예상 시점에 맞춰 배분 목록에 올리겠습니다." : "분류표에 맞춰 입고합니다."} 처리 끝났습니다.'
+    text: "{itemType == consumable ? \"\uC18C\uBAA8\uD488 \uBD84\uB958\uB85C \uC785\uACE0\uD569\uB2C8\uB2E4.
+      \uC18C\uC9C4 \uC608\uC0C1 \uC2DC\uC810\uC5D0 \uB9DE\uCDB0 \uBC30\uBD84 \uBAA9\uB85D\uC5D0
+      \uC62C\uB9AC\uACA0\uC2B5\uB2C8\uB2E4.\" : \"\uBD84\uB958\uD45C\uC5D0 \uB9DE\uCDB0
+      \uC785\uACE0\uD569\uB2C8\uB2E4.\"} \uCC98\uB9AC \uB05D\uB0AC\uC2B5\uB2C8\uB2E4."
   - speakerId: 0
-    text: '{groupName}(은/는) 규정대로만 처리합니다. 오늘은 규정과 숫자가 맞았습니다.'
+    text: "{groupName}(\uC740/\uB294) \uADDC\uC815\uB300\uB85C\uB9CC \uCC98\uB9AC\uD569\uB2C8\uB2E4.
+      \uC624\uB298\uC740 \uADDC\uC815\uACFC \uC22B\uC790\uAC00 \uB9DE\uC558\uC2B5\uB2C8\uB2E4."
   - speakerId: 0
-    text: '{npcName}, 접수 번호 부여했습니다. 다음 건도 같은 기준으로 처리됩니다.'
+    text: "{npcName}, \uC811\uC218 \uBC88\uD638 \uBD80\uC5EC\uD588\uC2B5\uB2C8\uB2E4.
+      \uB2E4\uC74C \uAC74\uB3C4 \uAC19\uC740 \uAE30\uC900\uC73C\uB85C \uCC98\uB9AC\uB429\uB2C8\uB2E4."
   - speakerId: 0
-    text: '{price >= baseValue ? "규정 매입가 이상으로 처리했으니 감사에서 문제될 일은 없겠습니다." : "규정 범위 안에서 처리했으니 감사에서 문제될 일은 없겠습니다."}'
+    text: "{price >= baseValue ? \"\uADDC\uC815 \uB9E4\uC785\uAC00 \uC774\uC0C1\uC73C\uB85C
+      \uCC98\uB9AC\uD588\uC73C\uB2C8 \uAC10\uC0AC\uC5D0\uC11C \uBB38\uC81C\uB420
+      \uC77C\uC740 \uC5C6\uACA0\uC2B5\uB2C8\uB2E4.\" : \"\uADDC\uC815 \uBC94\uC704
+      \uC548\uC5D0\uC11C \uCC98\uB9AC\uD588\uC73C\uB2C8 \uAC10\uC0AC\uC5D0\uC11C
+      \uBB38\uC81C\uB420 \uC77C\uC740 \uC5C6\uACA0\uC2B5\uB2C8\uB2E4.\"}"
   - speakerId: 0
-    text: '마감 전에 끝났군요. 협조 감사합니다.'
+    text: "\uB9C8\uAC10 \uC804\uC5D0 \uB05D\uB0AC\uAD70\uC694. \uD611\uC870 \uAC10\uC0AC\uD569\uB2C8\uB2E4."
   _rejection:
   - speakerId: 0
-    text: '해당 금액은 접수 불가입니다. 서식을 닫겠습니다.'
+    text: "\uD574\uB2F9 \uAE08\uC561\uC740 \uC811\uC218 \uBD88\uAC00\uC785\uB2C8\uB2E4.
+      \uC11C\uC2DD\uC744 \uB2EB\uACA0\uC2B5\uB2C8\uB2E4."
   - speakerId: 0
-    text: '{askPrice}골드는 규정 외 금액입니다. 접수하지 않겠습니다.'
+    text: "{askPrice}\uACE8\uB4DC\uB294 \uADDC\uC815 \uC678 \uAE08\uC561\uC785\uB2C8\uB2E4.
+      \uC811\uC218\uD558\uC9C0 \uC54A\uACA0\uC2B5\uB2C8\uB2E4."
   - speakerId: 0
-    text: '{itemCount > 1 ? "{itemCount}개 일괄 건이어도 규정 매입가는 바뀌지 않습니다." : "1개 건이어도 규정 매입가는 바뀌지 않습니다."} 접수 종결합니다.'
+    text: "{itemCount > 1 ? \"{itemCount}\uAC1C \uC77C\uAD04 \uAC74\uC774\uC5B4\uB3C4
+      \uADDC\uC815 \uB9E4\uC785\uAC00\uB294 \uBC14\uB00C\uC9C0 \uC54A\uC2B5\uB2C8\uB2E4.\"
+      : \"1\uAC1C \uAC74\uC774\uC5B4\uB3C4 \uADDC\uC815 \uB9E4\uC785\uAC00\uB294
+      \uBC14\uB00C\uC9C0 \uC54A\uC2B5\uB2C8\uB2E4.\"} \uC811\uC218 \uC885\uACB0\uD569\uB2C8\uB2E4."
   - speakerId: 0
-    text: '{itemName}(은/는) 입고 대상이지만 그 금액으로는 승인이 나지 않습니다.'
+    text: "{itemName}(\uC740/\uB294) \uC785\uACE0 \uB300\uC0C1\uC774\uC9C0\uB9CC
+      \uADF8 \uAE08\uC561\uC73C\uB85C\uB294 \uC2B9\uC778\uC774 \uB098\uC9C0 \uC54A\uC2B5\uB2C8\uB2E4."
   - speakerId: 0
-    text: '{itemType == consumable ? "소모품 재고가 아쉽긴 합니다. 그래도 단가표를 벗어날 수는 없습니다." : "입고가 아쉽긴 합니다. 그래도 단가표를 벗어날 수는 없습니다."}'
+    text: "{itemType == consumable ? \"\uC18C\uBAA8\uD488 \uC7AC\uACE0\uAC00 \uC544\uC27D\uAE34
+      \uD569\uB2C8\uB2E4. \uADF8\uB798\uB3C4 \uB2E8\uAC00\uD45C\uB97C \uBC97\uC5B4\uB0A0
+      \uC218\uB294 \uC5C6\uC2B5\uB2C8\uB2E4.\" : \"\uC785\uACE0\uAC00 \uC544\uC27D\uAE34
+      \uD569\uB2C8\uB2E4. \uADF8\uB798\uB3C4 \uB2E8\uAC00\uD45C\uB97C \uBC97\uC5B4\uB0A0
+      \uC218\uB294 \uC5C6\uC2B5\uB2C8\uB2E4.\"}"
   - speakerId: 0
-    text: '{groupName}(은/는) 규정 밖의 매입은 하지 않습니다. 접수 종결합니다.'
+    text: "{groupName}(\uC740/\uB294) \uADDC\uC815 \uBC16\uC758 \uB9E4\uC785\uC740
+      \uD558\uC9C0 \uC54A\uC2B5\uB2C8\uB2E4. \uC811\uC218 \uC885\uACB0\uD569\uB2C8\uB2E4."
   - speakerId: 0
-    text: '{npcName}(은/는) 반려 처리하겠습니다. 재신청은 규정 매입가로 가능합니다.'
+    text: "{npcName}(\uC740/\uB294) \uBC18\uB824 \uCC98\uB9AC\uD558\uACA0\uC2B5\uB2C8\uB2E4.
+      \uC7AC\uC2E0\uCCAD\uC740 \uADDC\uC815 \uB9E4\uC785\uAC00\uB85C \uAC00\uB2A5\uD569\uB2C8\uB2E4."
   - speakerId: 0
-    text: '{itemType == material ? "재료는 정기 납품으로도 채울 수 있어서 무리할 이유가 없습니다." : {itemType == rune ? "룬은 다음 입고 일정이 따로 있어서 무리할 이유가 없습니다." : {itemType == consumable ? "소모품은 정기 보급분으로 버틸 수 있어서 무리할 이유가 없습니다." : "다른 입고 일정이 있어서 무리할 이유가 없습니다."}}}'
+    text: "{itemType == material ? \"\uC7AC\uB8CC\uB294 \uC815\uAE30 \uB0A9\uD488\uC73C\uB85C\uB3C4
+      \uCC44\uC6B8 \uC218 \uC788\uC5B4\uC11C \uBB34\uB9AC\uD560 \uC774\uC720\uAC00
+      \uC5C6\uC2B5\uB2C8\uB2E4.\" : {itemType == rune ? \"\uB8EC\uC740 \uB2E4\uC74C
+      \uC785\uACE0 \uC77C\uC815\uC774 \uB530\uB85C \uC788\uC5B4\uC11C \uBB34\uB9AC\uD560
+      \uC774\uC720\uAC00 \uC5C6\uC2B5\uB2C8\uB2E4.\" : {itemType == consumable ?
+      \"\uC18C\uBAA8\uD488\uC740 \uC815\uAE30 \uBCF4\uAE09\uBD84\uC73C\uB85C \uBC84\uD2F8
+      \uC218 \uC788\uC5B4\uC11C \uBB34\uB9AC\uD560 \uC774\uC720\uAC00 \uC5C6\uC2B5\uB2C8\uB2E4.\"
+      : \"\uB2E4\uB978 \uC785\uACE0 \uC77C\uC815\uC774 \uC788\uC5B4\uC11C \uBB34\uB9AC\uD560
+      \uC774\uC720\uAC00 \uC5C6\uC2B5\uB2C8\uB2E4.\"}}}"
   - speakerId: 0
-    text: '{askRatio >= 1.3 ? "이 금액은 서식에 적는 것부터가 불가능합니다. 반려합니다." : "규정과 조금 어긋났습니다. 다음 접수 때 다시 뵙겠습니다."}'
+    text: "{askRatio >= 1.3 ? \"\uC774 \uAE08\uC561\uC740 \uC11C\uC2DD\uC5D0 \uC801\uB294
+      \uAC83\uBD80\uD130\uAC00 \uBD88\uAC00\uB2A5\uD569\uB2C8\uB2E4. \uBC18\uB824\uD569\uB2C8\uB2E4.\"
+      : \"\uADDC\uC815\uACFC \uC870\uAE08 \uC5B4\uAE0B\uB0AC\uC2B5\uB2C8\uB2E4. \uB2E4\uC74C
+      \uC811\uC218 \uB54C \uB2E4\uC2DC \uBD59\uACA0\uC2B5\uB2C8\uB2E4.\"}"
   - speakerId: 0
-    text: '다음 접수 건을 처리하겠습니다. 이만 종결합니다.'
+    text: "\uB2E4\uC74C \uC811\uC218 \uAC74\uC744 \uCC98\uB9AC\uD558\uACA0\uC2B5\uB2C8\uB2E4.
+      \uC774\uB9CC \uC885\uACB0\uD569\uB2C8\uB2E4."
+  _minTimer: 0
+  _maxTimer: 0

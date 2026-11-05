@@ -12,132 +12,242 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b32617f483474c042a505f5b4002c486, type: 3}
   m_Name: 80007
   m_EditorClassIdentifier: Assembly-CSharp::ElementalBlacksmithStory.Data.SO_CustomerGroup
-  _customerGroupTitle: 부유한 귀족
-  _customerGroupName: 벨베티아 사교 클럽
-  _description: 막대한 영지와 재력을 자랑하는 호화 수집가 귀족들. 예술성과 희귀성이 돋보인다면 가격표를 보지 않고 지갑을 연다.
+  _customerGroupTitle: "\uBD80\uC720\uD55C \uADC0\uC871"
+  _customerGroupName: "\uBCA8\uBCA0\uD2F0\uC544 \uC0AC\uAD50 \uD074\uB7FD"
+  _description: "\uB9C9\uB300\uD55C \uC601\uC9C0\uC640 \uC7AC\uB825\uC744 \uC790\uB791\uD558\uB294
+    \uD638\uD654 \uC218\uC9D1\uAC00 \uADC0\uC871\uB4E4. \uC608\uC220\uC131\uACFC
+    \uD76C\uADC0\uC131\uC774 \uB3CB\uBCF4\uC778\uB2E4\uBA74 \uAC00\uACA9\uD45C\uB97C
+    \uBCF4\uC9C0 \uC54A\uACE0 \uC9C0\uAC11\uC744 \uC5F0\uB2E4."
   minEstimateRatio: 1.35
   maxEstimateRatio: 2.3
   minFirstOfferRatio: 0.8
-  maxFirstOfferRatio: 1.0
+  maxFirstOfferRatio: 1
   minInterpolation: 0.25
   maxInterpolation: 0.45
   minPatience: 45
   maxPatience: 80
   greedSensitivity: 0.6
+  itemPreferenceData:
+    allowedCategories: 
+    preferredCategories: 
+    preferredElements: 
+    dislikedElements: 
   _customerNames:
-  - 에드워드
-  - 레오폴드
-  - 베아트리스
-  - 빅토리아
-  - 알폰스
-  - 샬롯
-  - 오귀스트
-  - 세실리아
-  - 필립
-  - 아델
+  - "\uC5D0\uB4DC\uC6CC\uB4DC"
+  - "\uB808\uC624\uD3F4\uB4DC"
+  - "\uBCA0\uC544\uD2B8\uB9AC\uC2A4"
+  - "\uBE45\uD1A0\uB9AC\uC544"
+  - "\uC54C\uD3F0\uC2A4"
+  - "\uC0EC\uB86F"
+  - "\uC624\uADC0\uC2A4\uD2B8"
+  - "\uC138\uC2E4\uB9AC\uC544"
+  - "\uD544\uB9BD"
+  - "\uC544\uB378"
   _customerSprites: []
   _firstOffer:
   - speakerId: 0
-    text: '{itemType == sword ? "검의 기품이 남다르군." : {itemType == bow ? "활의 자태가 곱군." : {itemType == rune ? "룬의 광채가 눈부시군." : {itemType == material ? "재료의 빛깔이 범상치 않군." : "눈이 번쩍 뜨이는 물건이군."}}}} {price}골드를 내지. 값은 신경 쓰지 말게.'
+    text: "{itemType == sword ? \"\uAC80\uC758 \uAE30\uD488\uC774 \uB0A8\uB2E4\uB974\uAD70.\"
+      : {itemType == bow ? \"\uD65C\uC758 \uC790\uD0DC\uAC00 \uACF1\uAD70.\" : {itemType
+      == rune ? \"\uB8EC\uC758 \uAD11\uCC44\uAC00 \uB208\uBD80\uC2DC\uAD70.\" : {itemType
+      == material ? \"\uC7AC\uB8CC\uC758 \uBE5B\uAE54\uC774 \uBC94\uC0C1\uCE58 \uC54A\uAD70.\"
+      : \"\uB208\uC774 \uBC88\uCA4D \uB728\uC774\uB294 \uBB3C\uAC74\uC774\uAD70.\"}}}}
+      {price}\uACE8\uB4DC\uB97C \uB0B4\uC9C0. \uAC12\uC740 \uC2E0\uACBD \uC4F0\uC9C0
+      \uB9D0\uAC8C."
   - speakerId: 0
-    text: '{itemName}(이/가) 내 눈에 들었네. {price}골드면 충분하겠지?'
+    text: "{itemName}(\uC774/\uAC00) \uB0B4 \uB208\uC5D0 \uB4E4\uC5C8\uB124. {price}\uACE8\uB4DC\uBA74
+      \uCDA9\uBD84\uD558\uACA0\uC9C0?"
   - speakerId: 0
-    text: '가격표는 필요 없네. {price}골드를 받고 물건을 넘기게.'
+    text: "\uAC00\uACA9\uD45C\uB294 \uD544\uC694 \uC5C6\uB124. {price}\uACE8\uB4DC\uB97C
+      \uBC1B\uACE0 \uBB3C\uAC74\uC744 \uB118\uAE30\uAC8C."
   - speakerId: 0
-    text: '{itemCount > 1 ? "{itemCount}개 전부 내 소장품으로 삼겠네. 개당 {unitPrice}골드, 합쳐 {price}골드를 내지." : "단 하나뿐이라니 더 탐나는군. {price}골드를 내지."}'
+    text: "{itemCount > 1 ? \"{itemCount}\uAC1C \uC804\uBD80 \uB0B4 \uC18C\uC7A5\uD488\uC73C\uB85C
+      \uC0BC\uACA0\uB124. \uAC1C\uB2F9 {unitPrice}\uACE8\uB4DC, \uD569\uCCD0 {price}\uACE8\uB4DC\uB97C
+      \uB0B4\uC9C0.\" : \"\uB2E8 \uD558\uB098\uBFD0\uC774\uB77C\uB2C8 \uB354 \uD0D0\uB098\uB294\uAD70.
+      {price}\uACE8\uB4DC\uB97C \uB0B4\uC9C0.\"}"
   - speakerId: 0
-    text: '{groupName}의 {npcName}일세. {itemName}에 {price}골드를 내지.'
+    text: "{groupName}\uC758 {npcName}\uC77C\uC138. {itemName}\uC5D0 {price}\uACE8\uB4DC\uB97C
+      \uB0B4\uC9C0."
   - speakerId: 0
-    text: '{price > baseValue ? "{baseValue}골드라고? 그 값으론 이 물건에 실례일세. {price}골드를 내지." : "{itemName}(은/는) 값어치가 있어 보이는군. {price}골드를 내지."}'
+    text: "{price > baseValue ? \"{baseValue}\uACE8\uB4DC\uB77C\uACE0? \uADF8 \uAC12\uC73C\uB860
+      \uC774 \uBB3C\uAC74\uC5D0 \uC2E4\uB840\uC77C\uC138. {price}\uACE8\uB4DC\uB97C
+      \uB0B4\uC9C0.\" : \"{itemName}(\uC740/\uB294) \uAC12\uC5B4\uCE58\uAC00 \uC788\uC5B4
+      \uBCF4\uC774\uB294\uAD70. {price}\uACE8\uB4DC\uB97C \uB0B4\uC9C0.\"}"
   - speakerId: 0
-    text: '{itemElement == flame ? "타오르는 불꽃의 자태가 일품이군." : {itemElement == cold ? "서리가 맺힌 듯한 빛깔이 곱군." : {itemElement == lightning ? "번뜩이는 뇌광이 눈을 사로잡는군." : {itemElement == wind ? "바람결이 감도는 모습이 우아하군." : {itemElement == earth ? "대지의 묵직한 품격이 느껴지는군." : {itemElement == holy ? "성스러운 광휘가 은은하군." : {itemElement == dark ? "어둠이 깃든 자태가 매혹적이군." : "자태가 남다르군."}}}}}}} {price}골드면 내 소장품으로 들일 만하지.'
+    text: "{itemElement == flame ? \"\uD0C0\uC624\uB974\uB294 \uBD88\uAF43\uC758
+      \uC790\uD0DC\uAC00 \uC77C\uD488\uC774\uAD70.\" : {itemElement == cold ? \"\uC11C\uB9AC\uAC00
+      \uB9FA\uD78C \uB4EF\uD55C \uBE5B\uAE54\uC774 \uACF1\uAD70.\" : {itemElement
+      == lightning ? \"\uBC88\uB729\uC774\uB294 \uB1CC\uAD11\uC774 \uB208\uC744 \uC0AC\uB85C\uC7A1\uB294\uAD70.\"
+      : {itemElement == wind ? \"\uBC14\uB78C\uACB0\uC774 \uAC10\uB3C4\uB294 \uBAA8\uC2B5\uC774
+      \uC6B0\uC544\uD558\uAD70.\" : {itemElement == earth ? \"\uB300\uC9C0\uC758
+      \uBB35\uC9C1\uD55C \uD488\uACA9\uC774 \uB290\uAEF4\uC9C0\uB294\uAD70.\" : {itemElement
+      == holy ? \"\uC131\uC2A4\uB7EC\uC6B4 \uAD11\uD718\uAC00 \uC740\uC740\uD558\uAD70.\"
+      : {itemElement == dark ? \"\uC5B4\uB460\uC774 \uAE43\uB4E0 \uC790\uD0DC\uAC00
+      \uB9E4\uD639\uC801\uC774\uAD70.\" : \"\uC790\uD0DC\uAC00 \uB0A8\uB2E4\uB974\uAD70.\"}}}}}}}
+      {price}\uACE8\uB4DC\uBA74 \uB0B4 \uC18C\uC7A5\uD488\uC73C\uB85C \uB4E4\uC77C
+      \uB9CC\uD558\uC9C0."
   - speakerId: 0
-    text: '이런 물건은 아무에게나 넘기지 말게. {price}골드, 나에게 넘기게.'
+    text: "\uC774\uB7F0 \uBB3C\uAC74\uC740 \uC544\uBB34\uC5D0\uAC8C\uB098 \uB118\uAE30\uC9C0
+      \uB9D0\uAC8C. {price}\uACE8\uB4DC, \uB098\uC5D0\uAC8C \uB118\uAE30\uAC8C."
   - speakerId: 0
-    text: '{itemType == material ? "이만한 재료는 수집품으로 둘 가치가 있군." : {itemType == rune ? "이런 룬은 진열해 둘 만하군." : "이만한 물건은 진열해 둘 만하군."}} {price}골드, 어떤가.'
+    text: "{itemType == material ? \"\uC774\uB9CC\uD55C \uC7AC\uB8CC\uB294 \uC218\uC9D1\uD488\uC73C\uB85C
+      \uB458 \uAC00\uCE58\uAC00 \uC788\uAD70.\" : {itemType == rune ? \"\uC774\uB7F0
+      \uB8EC\uC740 \uC9C4\uC5F4\uD574 \uB458 \uB9CC\uD558\uAD70.\" : \"\uC774\uB9CC\uD55C
+      \uBB3C\uAC74\uC740 \uC9C4\uC5F4\uD574 \uB458 \uB9CC\uD558\uAD70.\"}} {price}\uACE8\uB4DC,
+      \uC5B4\uB5A4\uAC00."
   - speakerId: 0
-    text: '긴 말은 싫네. {price}골드, 지금 답하게.'
+    text: "\uAE34 \uB9D0\uC740 \uC2EB\uB124. {price}\uACE8\uB4DC, \uC9C0\uAE08 \uB2F5\uD558\uAC8C."
   _negotiation:
   - speakerId: 0
-    text: '그 정도면 되겠나. {price}골드로 올려 주지.'
+    text: "\uADF8 \uC815\uB3C4\uBA74 \uB418\uACA0\uB098. {price}\uACE8\uB4DC\uB85C
+      \uC62C\uB824 \uC8FC\uC9C0."
   - speakerId: 0
-    text: '{askPrice}골드? 흠, 나쁘지 않군. {prevPrice}골드에서 {price}골드로 올리겠네.'
+    text: "{askPrice}\uACE8\uB4DC? \uD760, \uB098\uC058\uC9C0 \uC54A\uAD70. {prevPrice}\uACE8\uB4DC\uC5D0\uC11C
+      {price}\uACE8\uB4DC\uB85C \uC62C\uB9AC\uACA0\uB124."
   - speakerId: 0
-    text: '{bargainCount >= 2 ? "실랑이가 길어지는군. 번거로우니 {price}골드로 끝내세." : "{price}골드로 올리지. 이 정도면 흡족하겠지?"}'
+    text: "{bargainCount >= 2 ? \"\uC2E4\uB791\uC774\uAC00 \uAE38\uC5B4\uC9C0\uB294\uAD70.
+      \uBC88\uAC70\uB85C\uC6B0\uB2C8 {price}\uACE8\uB4DC\uB85C \uB05D\uB0B4\uC138.\"
+      : \"{price}\uACE8\uB4DC\uB85C \uC62C\uB9AC\uC9C0. \uC774 \uC815\uB3C4\uBA74
+      \uD761\uC871\uD558\uACA0\uC9C0?\"}"
   - speakerId: 0
-    text: '{askRatio >= 1.5 ? "{askPrice}골드라니, 배짱 한번 좋군. 마음에 드네. {price}골드까지 쓰지." : "{askPrice}골드쯤이야 푼돈이지. {price}골드로 하세."}'
+    text: "{askRatio >= 1.5 ? \"{askPrice}\uACE8\uB4DC\uB77C\uB2C8, \uBC30\uC9F1
+      \uD55C\uBC88 \uC88B\uAD70. \uB9C8\uC74C\uC5D0 \uB4DC\uB124. {price}\uACE8\uB4DC\uAE4C\uC9C0
+      \uC4F0\uC9C0.\" : \"{askPrice}\uACE8\uB4DC\uCBE4\uC774\uC57C \uD47C\uB3C8\uC774\uC9C0.
+      {price}\uACE8\uB4DC\uB85C \uD558\uC138.\"}"
   - speakerId: 0
-    text: '{priceGap}골드 차이로 실랑이할 생각은 없네. {price}골드로 올리지.'
+    text: "{priceGap}\uACE8\uB4DC \uCC28\uC774\uB85C \uC2E4\uB791\uC774\uD560 \uC0DD\uAC01\uC740
+      \uC5C6\uB124. {price}\uACE8\uB4DC\uB85C \uC62C\uB9AC\uC9C0."
   - speakerId: 0
-    text: '{itemCount > 1 ? "{itemCount}개를 들이는 값이니 넉넉히 쳐주지. {price}골드일세." : "단 하나를 위한 값이니 넉넉히 쳐주지. {price}골드일세."}'
+    text: "{itemCount > 1 ? \"{itemCount}\uAC1C\uB97C \uB4E4\uC774\uB294 \uAC12\uC774\uB2C8
+      \uB109\uB109\uD788 \uCCD0\uC8FC\uC9C0. {price}\uACE8\uB4DC\uC77C\uC138.\" :
+      \"\uB2E8 \uD558\uB098\uB97C \uC704\uD55C \uAC12\uC774\uB2C8 \uB109\uB109\uD788
+      \uCCD0\uC8FC\uC9C0. {price}\uACE8\uB4DC\uC77C\uC138.\"}"
   - speakerId: 0
-    text: '{itemElement != none ? "깃든 기운이 마음에 드는군. 값은 더 쳐주지. {price}골드일세." : "{itemName}(이/가) 마음에 드는군. 값은 더 쳐주지. {price}골드일세."}'
+    text: "{itemElement != none ? \"\uAE43\uB4E0 \uAE30\uC6B4\uC774 \uB9C8\uC74C\uC5D0
+      \uB4DC\uB294\uAD70. \uAC12\uC740 \uB354 \uCCD0\uC8FC\uC9C0. {price}\uACE8\uB4DC\uC77C\uC138.\"
+      : \"{itemName}(\uC774/\uAC00) \uB9C8\uC74C\uC5D0 \uB4DC\uB294\uAD70. \uAC12\uC740
+      \uB354 \uCCD0\uC8FC\uC9C0. {price}\uACE8\uB4DC\uC77C\uC138.\"}"
   - speakerId: 0
-    text: '{price > baseValue ? "{baseValue}골드로는 이 물건에 어울리지 않지. {price}골드로 하세." : "{price}골드를 쳐주지. 어서 정하게."}'
+    text: "{price > baseValue ? \"{baseValue}\uACE8\uB4DC\uB85C\uB294 \uC774 \uBB3C\uAC74\uC5D0
+      \uC5B4\uC6B8\uB9AC\uC9C0 \uC54A\uC9C0. {price}\uACE8\uB4DC\uB85C \uD558\uC138.\"
+      : \"{price}\uACE8\uB4DC\uB97C \uCCD0\uC8FC\uC9C0. \uC5B4\uC11C \uC815\uD558\uAC8C.\"}"
   - speakerId: 0
-    text: '{npcName}(은/는) 한번 마음먹으면 값을 따지지 않네. {price}골드를 받게.'
+    text: "{npcName}(\uC740/\uB294) \uD55C\uBC88 \uB9C8\uC74C\uBA39\uC73C\uBA74 \uAC12\uC744
+      \uB530\uC9C0\uC9C0 \uC54A\uB124. {price}\uACE8\uB4DC\uB97C \uBC1B\uAC8C."
   - speakerId: 0
-    text: '시간 끌지 말게. {price}골드면 충분하지 않나.'
+    text: "\uC2DC\uAC04 \uB04C\uC9C0 \uB9D0\uAC8C. {price}\uACE8\uB4DC\uBA74 \uCDA9\uBD84\uD558\uC9C0
+      \uC54A\uB098."
   _finalOffer:
   - speakerId: 0
-    text: '이게 마지막일세. {price}골드, 더는 기다리지 않겠네.'
+    text: "\uC774\uAC8C \uB9C8\uC9C0\uB9C9\uC77C\uC138. {price}\uACE8\uB4DC, \uB354\uB294
+      \uAE30\uB2E4\uB9AC\uC9C0 \uC54A\uACA0\uB124."
   - speakerId: 0
-    text: '{firstPrice}골드에서 {price}골드까지 올렸네. 이쯤에서 그만하게.'
+    text: "{firstPrice}\uACE8\uB4DC\uC5D0\uC11C {price}\uACE8\uB4DC\uAE4C\uC9C0 \uC62C\uB838\uB124.
+      \uC774\uCBE4\uC5D0\uC11C \uADF8\uB9CC\uD558\uAC8C."
   - speakerId: 0
-    text: '{price}골드, 지체는 질색일세. 지금 답하게.'
+    text: "{price}\uACE8\uB4DC, \uC9C0\uCCB4\uB294 \uC9C8\uC0C9\uC77C\uC138. \uC9C0\uAE08
+      \uB2F5\uD558\uAC8C."
   - speakerId: 0
-    text: '{itemCount > 1 ? "{itemCount}개 전부에 {price}골드를 내지. 더 기다리게 하지 말게." : "이 하나에 {price}골드를 내지. 더 기다리게 하지 말게."}'
+    text: "{itemCount > 1 ? \"{itemCount}\uAC1C \uC804\uBD80\uC5D0 {price}\uACE8\uB4DC\uB97C
+      \uB0B4\uC9C0. \uB354 \uAE30\uB2E4\uB9AC\uAC8C \uD558\uC9C0 \uB9D0\uAC8C.\"
+      : \"\uC774 \uD558\uB098\uC5D0 {price}\uACE8\uB4DC\uB97C \uB0B4\uC9C0. \uB354
+      \uAE30\uB2E4\uB9AC\uAC8C \uD558\uC9C0 \uB9D0\uAC8C.\"}"
   - speakerId: 0
-    text: '{askPrice}골드는 과하네. {price}골드, 이것으로 끝일세.'
+    text: "{askPrice}\uACE8\uB4DC\uB294 \uACFC\uD558\uB124. {price}\uACE8\uB4DC,
+      \uC774\uAC83\uC73C\uB85C \uB05D\uC77C\uC138."
   - speakerId: 0
-    text: '{npcName}의 마지막 제안일세. {price}골드. 거절하면 후회할 걸세.'
+    text: "{npcName}\uC758 \uB9C8\uC9C0\uB9C9 \uC81C\uC548\uC77C\uC138. {price}\uACE8\uB4DC.
+      \uAC70\uC808\uD558\uBA74 \uD6C4\uD68C\uD560 \uAC78\uC138."
   - speakerId: 0
-    text: '{itemType == material ? "재료에 이 이상은 내지 않겠네." : {itemType == rune ? "룬에 이 이상은 내지 않겠네." : "이 물건에 이 이상은 내지 않겠네."}} {price}골드일세.'
+    text: "{itemType == material ? \"\uC7AC\uB8CC\uC5D0 \uC774 \uC774\uC0C1\uC740
+      \uB0B4\uC9C0 \uC54A\uACA0\uB124.\" : {itemType == rune ? \"\uB8EC\uC5D0 \uC774
+      \uC774\uC0C1\uC740 \uB0B4\uC9C0 \uC54A\uACA0\uB124.\" : \"\uC774 \uBB3C\uAC74\uC5D0
+      \uC774 \uC774\uC0C1\uC740 \uB0B4\uC9C0 \uC54A\uACA0\uB124.\"}} {price}\uACE8\uB4DC\uC77C\uC138."
   - speakerId: 0
-    text: '{askRatio >= 1.5 ? "{priceGap}골드나 벌어졌군. 아무리 나라도 그건 과하네. {price}골드가 끝일세." : "{price}골드로 정하세. 이 정도면 충분히 후하지 않나."}'
+    text: "{askRatio >= 1.5 ? \"{priceGap}\uACE8\uB4DC\uB098 \uBC8C\uC5B4\uC84C\uAD70.
+      \uC544\uBB34\uB9AC \uB098\uB77C\uB3C4 \uADF8\uAC74 \uACFC\uD558\uB124. {price}\uACE8\uB4DC\uAC00
+      \uB05D\uC77C\uC138.\" : \"{price}\uACE8\uB4DC\uB85C \uC815\uD558\uC138. \uC774
+      \uC815\uB3C4\uBA74 \uCDA9\uBD84\uD788 \uD6C4\uD558\uC9C0 \uC54A\uB098.\"}"
   - speakerId: 0
-    text: '{itemName}(이/가) 탐나지만 기다림에도 한계가 있네. {price}골드일세.'
+    text: "{itemName}(\uC774/\uAC00) \uD0D0\uB098\uC9C0\uB9CC \uAE30\uB2E4\uB9BC\uC5D0\uB3C4
+      \uD55C\uACC4\uAC00 \uC788\uB124. {price}\uACE8\uB4DC\uC77C\uC138."
   - speakerId: 0
-    text: '{price}골드, 받을 텐가 말 텐가. 오래 기다리게 하지 말게.'
+    text: "{price}\uACE8\uB4DC, \uBC1B\uC744 \uD150\uAC00 \uB9D0 \uD150\uAC00. \uC624\uB798
+      \uAE30\uB2E4\uB9AC\uAC8C \uD558\uC9C0 \uB9D0\uAC8C."
   _acception:
   - speakerId: 0
-    text: '좋네. 그 값에 거래하지.'
+    text: "\uC88B\uB124. \uADF8 \uAC12\uC5D0 \uAC70\uB798\uD558\uC9C0."
   - speakerId: 0
-    text: '{itemType == sword ? "이 검은 내 진열장에서 가장 빛나겠군." : {itemType == bow ? "이 활은 내 진열장에서 가장 빛나겠군." : "이 물건은 내 진열장에서 가장 빛나겠군."}}'
+    text: "{itemType == sword ? \"\uC774 \uAC80\uC740 \uB0B4 \uC9C4\uC5F4\uC7A5\uC5D0\uC11C
+      \uAC00\uC7A5 \uBE5B\uB098\uACA0\uAD70.\" : {itemType == bow ? \"\uC774 \uD65C\uC740
+      \uB0B4 \uC9C4\uC5F4\uC7A5\uC5D0\uC11C \uAC00\uC7A5 \uBE5B\uB098\uACA0\uAD70.\"
+      : \"\uC774 \uBB3C\uAC74\uC740 \uB0B4 \uC9C4\uC5F4\uC7A5\uC5D0\uC11C \uAC00\uC7A5
+      \uBE5B\uB098\uACA0\uAD70.\"}}"
   - speakerId: 0
-    text: '{price}골드, 받게. 세어 볼 필요도 없네.'
+    text: "{price}\uACE8\uB4DC, \uBC1B\uAC8C. \uC138\uC5B4 \uBCFC \uD544\uC694\uB3C4
+      \uC5C6\uB124."
   - speakerId: 0
-    text: '{itemName}(을/를) 손에 넣었으니 오늘은 기분이 좋군.'
+    text: "{itemName}(\uC744/\uB97C) \uC190\uC5D0 \uB123\uC5C8\uC73C\uB2C8 \uC624\uB298\uC740
+      \uAE30\uBD84\uC774 \uC88B\uAD70."
   - speakerId: 0
-    text: '{itemCount > 1 ? "{itemCount}개 전부 내 소장품으로 올려 두게." : "내 소장품으로 올려 두게."} 수고했네.'
+    text: "{itemCount > 1 ? \"{itemCount}\uAC1C \uC804\uBD80 \uB0B4 \uC18C\uC7A5\uD488\uC73C\uB85C
+      \uC62C\uB824 \uB450\uAC8C.\" : \"\uB0B4 \uC18C\uC7A5\uD488\uC73C\uB85C \uC62C\uB824
+      \uB450\uAC8C.\"} \uC218\uACE0\uD588\uB124."
   - speakerId: 0
-    text: '{itemElement == flame ? "불꽃의 자태를 곁에 두게 되었군." : {itemElement == cold ? "서리의 빛을 곁에 두게 되었군." : {itemElement == holy ? "성스러운 광휘를 곁에 두게 되었군." : {itemElement == dark ? "어둠의 매혹을 곁에 두게 되었군." : "이런 물건을 곁에 두게 되다니."}}}} 흡족하군.'
+    text: "{itemElement == flame ? \"\uBD88\uAF43\uC758 \uC790\uD0DC\uB97C \uACC1\uC5D0
+      \uB450\uAC8C \uB418\uC5C8\uAD70.\" : {itemElement == cold ? \"\uC11C\uB9AC\uC758
+      \uBE5B\uC744 \uACC1\uC5D0 \uB450\uAC8C \uB418\uC5C8\uAD70.\" : {itemElement
+      == holy ? \"\uC131\uC2A4\uB7EC\uC6B4 \uAD11\uD718\uB97C \uACC1\uC5D0 \uB450\uAC8C
+      \uB418\uC5C8\uAD70.\" : {itemElement == dark ? \"\uC5B4\uB460\uC758 \uB9E4\uD639\uC744
+      \uACC1\uC5D0 \uB450\uAC8C \uB418\uC5C8\uAD70.\" : \"\uC774\uB7F0 \uBB3C\uAC74\uC744
+      \uACC1\uC5D0 \uB450\uAC8C \uB418\uB2E4\uB2C8.\"}}}} \uD761\uC871\uD558\uAD70."
   - speakerId: 0
-    text: '{groupName}의 벗들에게 자랑해야겠군. 잘 받겠네.'
+    text: "{groupName}\uC758 \uBC97\uB4E4\uC5D0\uAC8C \uC790\uB791\uD574\uC57C\uACA0\uAD70.
+      \uC798 \uBC1B\uACA0\uB124."
   - speakerId: 0
-    text: '{npcName}(은/는) 마음에 든 물건에 값을 아끼지 않네. 기억해 두게.'
+    text: "{npcName}(\uC740/\uB294) \uB9C8\uC74C\uC5D0 \uB4E0 \uBB3C\uAC74\uC5D0
+      \uAC12\uC744 \uC544\uB07C\uC9C0 \uC54A\uB124. \uAE30\uC5B5\uD574 \uB450\uAC8C."
   - speakerId: 0
-    text: '{price > baseValue ? "{baseValue}골드 따위로는 이 물건이 아깝지. 후하게 쳐서 다행이군." : "합리적인 값이군. 마음에 드네."}'
+    text: "{price > baseValue ? \"{baseValue}\uACE8\uB4DC \uB530\uC704\uB85C\uB294
+      \uC774 \uBB3C\uAC74\uC774 \uC544\uAE5D\uC9C0. \uD6C4\uD558\uAC8C \uCCD0\uC11C
+      \uB2E4\uD589\uC774\uAD70.\" : \"\uD569\uB9AC\uC801\uC778 \uAC12\uC774\uAD70.
+      \uB9C8\uC74C\uC5D0 \uB4DC\uB124.\"}"
   - speakerId: 0
-    text: '깔끔해서 좋군. 이래야 거래지.'
+    text: "\uAE54\uB054\uD574\uC11C \uC88B\uAD70. \uC774\uB798\uC57C \uAC70\uB798\uC9C0."
   _rejection:
   - speakerId: 0
-    text: '흥이 깨졌군. 이만 가겠네.'
+    text: "\uD765\uC774 \uAE68\uC84C\uAD70. \uC774\uB9CC \uAC00\uACA0\uB124."
   - speakerId: 0
-    text: '{askPrice}골드가 문제가 아니네. 지체가 마음에 들지 않을 뿐이지.'
+    text: "{askPrice}\uACE8\uB4DC\uAC00 \uBB38\uC81C\uAC00 \uC544\uB2C8\uB124. \uC9C0\uCCB4\uAC00
+      \uB9C8\uC74C\uC5D0 \uB4E4\uC9C0 \uC54A\uC744 \uBFD0\uC774\uC9C0."
   - speakerId: 0
-    text: '{itemCount > 1 ? "{itemCount}개나 들일 생각이었는데, 기분이 상했군." : "마음에 들었는데, 기분이 상했군."} 이만 가네.'
+    text: "{itemCount > 1 ? \"{itemCount}\uAC1C\uB098 \uB4E4\uC77C \uC0DD\uAC01\uC774\uC5C8\uB294\uB370,
+      \uAE30\uBD84\uC774 \uC0C1\uD588\uAD70.\" : \"\uB9C8\uC74C\uC5D0 \uB4E4\uC5C8\uB294\uB370,
+      \uAE30\uBD84\uC774 \uC0C1\uD588\uAD70.\"} \uC774\uB9CC \uAC00\uB124."
   - speakerId: 0
-    text: '{itemName}(이/가) 아깝지만 더 기다릴 수는 없네.'
+    text: "{itemName}(\uC774/\uAC00) \uC544\uAE5D\uC9C0\uB9CC \uB354 \uAE30\uB2E4\uB9B4
+      \uC218\uB294 \uC5C6\uB124."
   - speakerId: 0
-    text: '{itemElement != none ? "그 기운이 아깝긴 하군. 그래도 이만 가네." : "아깝긴 하군. 그래도 이만 가네."}'
+    text: "{itemElement != none ? \"\uADF8 \uAE30\uC6B4\uC774 \uC544\uAE5D\uAE34
+      \uD558\uAD70. \uADF8\uB798\uB3C4 \uC774\uB9CC \uAC00\uB124.\" : \"\uC544\uAE5D\uAE34
+      \uD558\uAD70. \uADF8\uB798\uB3C4 \uC774\uB9CC \uAC00\uB124.\"}"
   - speakerId: 0
-    text: '{groupName}(은/는) 오래 기다리는 법이 없네. 이만 가지.'
+    text: "{groupName}(\uC740/\uB294) \uC624\uB798 \uAE30\uB2E4\uB9AC\uB294 \uBC95\uC774
+      \uC5C6\uB124. \uC774\uB9CC \uAC00\uC9C0."
   - speakerId: 0
-    text: '{npcName}(을/를) 기다리게 한 대가일세. 다른 물건을 찾아보지.'
+    text: "{npcName}(\uC744/\uB97C) \uAE30\uB2E4\uB9AC\uAC8C \uD55C \uB300\uAC00\uC77C\uC138.
+      \uB2E4\uB978 \uBB3C\uAC74\uC744 \uCC3E\uC544\uBCF4\uC9C0."
   - speakerId: 0
-    text: '{itemType == sword ? "이만한 검은 또 나오겠지. 이만 가겠네." : {itemType == bow ? "이만한 활은 또 나오겠지. 이만 가겠네." : "이만한 물건은 또 나오겠지. 이만 가겠네."}}'
+    text: "{itemType == sword ? \"\uC774\uB9CC\uD55C \uAC80\uC740 \uB610 \uB098\uC624\uACA0\uC9C0.
+      \uC774\uB9CC \uAC00\uACA0\uB124.\" : {itemType == bow ? \"\uC774\uB9CC\uD55C
+      \uD65C\uC740 \uB610 \uB098\uC624\uACA0\uC9C0. \uC774\uB9CC \uAC00\uACA0\uB124.\"
+      : \"\uC774\uB9CC\uD55C \uBB3C\uAC74\uC740 \uB610 \uB098\uC624\uACA0\uC9C0.
+      \uC774\uB9CC \uAC00\uACA0\uB124.\"}}"
   - speakerId: 0
-    text: '{askRatio >= 1.5 ? "내가 아무리 너그러워도 그 값은 과하군. 이만 가겠네." : "더는 못 기다리겠군. 이만 가겠네."}'
+    text: "{askRatio >= 1.5 ? \"\uB0B4\uAC00 \uC544\uBB34\uB9AC \uB108\uADF8\uB7EC\uC6CC\uB3C4
+      \uADF8 \uAC12\uC740 \uACFC\uD558\uAD70. \uC774\uB9CC \uAC00\uACA0\uB124.\"
+      : \"\uB354\uB294 \uBABB \uAE30\uB2E4\uB9AC\uACA0\uAD70. \uC774\uB9CC \uAC00\uACA0\uB124.\"}"
   - speakerId: 0
-    text: '기분이 상했네. 다시 볼 일은 없길 바라지.'
+    text: "\uAE30\uBD84\uC774 \uC0C1\uD588\uB124. \uB2E4\uC2DC \uBCFC \uC77C\uC740
+      \uC5C6\uAE38 \uBC14\uB77C\uC9C0."
+  _minTimer: 0
+  _maxTimer: 0

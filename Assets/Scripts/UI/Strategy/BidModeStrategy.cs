@@ -343,7 +343,7 @@ namespace ElementalBlacksmithStory.UI.Strategy
                     SO_WeaponData wep = weapons[i];
                     if (wep == null || wep.basePrice == 0) continue;
 
-                    float tier = CalculateNormalizedLogTier(wep.basePrice, _cachedMaxWeaponValue);
+                    float tier = ItemTierService.CalculateNormalizedLogTier(wep.basePrice, _cachedMaxWeaponValue);
                     float weight = CalculateProgressionTierWeight(progression, tier);
                     _candidateBuffer.Add(new AuctionCandidate(wep.Id, ItemCategory.Weapon, wep.basePrice, weight));
                 }
@@ -358,7 +358,7 @@ namespace ElementalBlacksmithStory.UI.Strategy
                     SO_MaterialData mat = materials[i];
                     if (mat == null || mat.Value == 0) continue;
 
-                    float tier = CalculateNormalizedLogTier(mat.Value, _cachedMaxMaterialValue);
+                    float tier = ItemTierService.CalculateNormalizedLogTier(mat.Value, _cachedMaxMaterialValue);
                     float weight = CalculateProgressionTierWeight(progression, tier);
 
                     if (_currentBranchDeficitMatIds.Contains(mat.Id))
@@ -383,22 +383,12 @@ namespace ElementalBlacksmithStory.UI.Strategy
                     SO_RuneData rune = runes[i];
                     if (rune == null || rune.Value == 0) continue;
 
-                    float tier = CalculateNormalizedLogTier(rune.Value, _cachedMaxRuneValue);
+                    float tier = ItemTierService.CalculateNormalizedLogTier(rune.Value, _cachedMaxRuneValue);
                     float weight = CalculateProgressionTierWeight(progression, tier);
                     _candidateBuffer.Add(new AuctionCandidate(rune.Id, ItemCategory.Rune, rune.Value, weight));
                 }
             }
         }
-
-        private static float CalculateNormalizedLogTier(ulong value, ulong maxValue)
-        {
-            if (value <= 1 || maxValue <= 1) return 0f;
-            double logVal = Math.Log10(value);
-            double logMax = Math.Log10(maxValue);
-            if (logMax <= 0.0001) return 0f;
-            return Mathf.Clamp01((float)(logVal / logMax));
-        }
-
         private static float CalculateProgressionTierWeight(float progression, float itemTier)
         {
             float distance = Mathf.Abs(progression - itemTier);

@@ -29,7 +29,7 @@ MonoBehaviour:
   greedSensitivity: 1.1
   itemPreferenceData:
     allowedCategories: 
-    preferredCategories: 
+    preferredCategories: 00000000
     preferredElements: 05000000
     dislikedElements: 06000000
   _customerNames:

@@ -1,7 +1,7 @@
+using ElementalBlacksmithStory.Data;
 using UnityEngine;
 using VContainer;
 using VContainer.Unity;
-using ElementalBlacksmithStory.Data;
 
 namespace ElementalBlacksmithStory.Core
 {
@@ -10,6 +10,7 @@ namespace ElementalBlacksmithStory.Core
         [SerializeField] private SO_WeaponDatabase weaponDatabase;
         [SerializeField] private SO_MaterialDatabase materialDatabase;
         [SerializeField] private SO_RuneDatabase runeDatabase;
+        [SerializeField] private SO_CustomerGroupDatabase customerGroupDatabase;
         [SerializeField] private SO_SpriteSettings spriteSettings;
         [SerializeField] private SO_ProgressionSettings progressionSettings;
         protected override void Configure(IContainerBuilder builder)
@@ -19,12 +20,9 @@ namespace ElementalBlacksmithStory.Core
             builder.RegisterInstance(weaponDatabase);
             builder.RegisterInstance(materialDatabase);
             builder.RegisterInstance(runeDatabase);
+            builder.RegisterInstance(customerGroupDatabase);
             builder.RegisterInstance(spriteSettings);
-            if (progressionSettings != null)
-            {
-                builder.RegisterInstance(progressionSettings);
-            }
-
+            builder.RegisterInstance(progressionSettings);
             new MessagePipeInstaller().Install(builder);
             new GameServiceInstaller().Install(builder);
             new UIInstaller().Install(builder);

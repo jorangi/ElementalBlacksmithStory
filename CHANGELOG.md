@@ -2,13 +2,11 @@
 
 > Elemental Blacksmith Story 프로젝트의 일자별 개발 일지 및 주요 변경 사항 기록입니다.
 
-
-
 ## 2026-11-06
 
-- 고객군(CustomerGroup) 대사 데이터 구축 완료
-  - 11~13번 고객군(은퇴한 모험가, 마을 주민, 루미너스 순례자) 에셋 생성 및 대사 작성 완료 (총 13종 완성)
-  - 고객군별 아이템 선호/기피 필터(`ItemPreferenceData`) 및 무할당 판별 로직(`IsItemEligible`, `IsItemPreferred`) 추가
+- 손님그룹(CustomerGroup) 대사 데이터 구축 완료
+  - 11~13번 손님그룹(은퇴한 모험가, 마을 주민, 루미너스 순례자) 에셋 생성 및 대사 작성 완료 (총 13종 완성)
+  - 손님그룹별 아이템 선호/기피 필터(`ItemPreferenceData`) 및 무할당 판별 로직(`IsItemEligible`, `IsItemPreferred`) 추가
 - 경매 입찰자 및 시뮬레이션 모델 설계
   - `AuctionBidder` 도메인 모델 생성 (시그모이드 기반 입찰 확률 및 호가 증액 계산, 개인 타이머 구조)
   - `AuctionSimulatingService` 기본 스캐폴딩 구성
@@ -16,21 +14,19 @@
   - `IShopItem`에 `ShopItemCategory` Enum (`Sword, Bow, Material, Rune, Consumable`) 및 `Category` 프로퍼티 추가
   - 구현체(`MaterialShopItem`, `Rune`, `Weapon`)별 자체 카테고리 반환 구현 (검/활 ID 범위 판별)
   - 상점 및 교역소 프레젠터/전략 클래스(`StandardShopModeStrategy`, `BidPresenter`, `CustomerListPresenter`, `ShopItemGridPresenter`, `TradingPostService`)에서 `ItemIdHelper.GetCategory` 및 `is Weapon` 패턴 매칭을 `item.Category` 기반으로 교체
-
-
+- 기존 `BidStrategy`가 갖던 아이템에 대한 티어 매기기 관련 로직을 `ItemTierHelper`로 추출
+  - 추후 진행도 계산 등 사용처가 많음
 
 ## 2026-11-03
 
-- 고객군(CustomerGroup) 기본 시스템 및 1~10번 데이터 구축
+- 손님그룹(CustomerGroup) 기본 시스템 및 1~10번 데이터 구축
   - `SO_CustomerGroup` 및 `SO_CustomerGroupDatabase` 데이터 모델 설계
-  - 1~10번 고객군(초보 모험가, 왕실 기사, 베테랑 용병, 유랑 상인, 마법학자, 보급관, 귀족, 중견 모험가, 사냥꾼, 수집가) 에셋 생성 (각 10명 고유 이름 및 단계별 50문장 대사 작성)
+  - 1~10번 손님그룹(초보 모험가, 왕실 기사, 베테랑 용병, 유랑 상인, 마법학자, 보급관, 귀족, 중견 모험가, 사냥꾼, 수집가) 에셋 생성 (각 10명 고유 이름 및 단계별 50문장 대사 작성)
   - `CustomerData` 런타임 손님 인스턴스 생성 및 흥정(`Bargain`) 인내심 감소/제안가 산출 로직 구현
-  - 고객군 에셋 어드레서블 그룹 등록 및 `ItemIdHelper.CustomerGroup` 카테고리 ID(8) 추가
+  - 손님그룹 에셋 어드레서블 그룹 등록 및 `ItemIdHelper.CustomerGroup` 카테고리 ID(8) 추가
 - 상점 인터페이스 및 타이머 구조 개선
   - 타이머가 필요한 상점 모드를 위해 `ITimedShopMode` 인터페이스 분리 (`TimerPrefix`, `RemainingTime`)
   - `IItemShopFactory` 인터페이스 네임스페이스 및 디렉토리 위치 정리
-
-
 
 ## 2026-11-02
 
@@ -40,13 +36,11 @@
   - 모달 오픈 시 뒷배경 딤드 처리(`UIBackPanelPresenter`) 연동
   - VContainer DI 컨테이너에 신규 뷰 및 프레젠터 등록
 
-
-
 ## 2026-11-06
 
-- 고객그룹(CustomerGroup) 대사 데이터 구축 완료
-  - 11~13번 고객그룹(은퇴한 모험가, 마을 주민, 루미너스 순례자) 에셋 생성 및 대사 작성 완료 (총 13종 완성)
-  - 고객그룹별 아이템 선호/기피 필터(`ItemPreferenceData`) 및 무할당 판별 로직(`IsItemEligible`, `IsItemPreferred`) 추가
+- 손님그룹(CustomerGroup) 대사 데이터 구축 완료
+  - 11~13번 손님그룹(은퇴한 모험가, 마을 주민, 루미너스 순례자) 에셋 생성 및 대사 작성 완료 (총 13종 완성)
+  - 손님그룹별 아이템 선호/기피 필터(`ItemPreferenceData`) 및 무할당 판별 로직(`IsItemEligible`, `IsItemPreferred`) 추가
 - 경매 입찰자 및 시뮬레이션 모델 설계
   - `AuctionBidder` 도메인 모델 생성 (시그모이드 기반 입찰 확률 및 호가 증액 계산, 개인 타이머 구조)
   - `AuctionSimulatingService` 기본 스캐폴딩 구성
@@ -55,20 +49,16 @@
   - 구현체(`MaterialShopItem`, `Rune`, `Weapon`)별 자체 카테고리 반환 구현 (검/활 ID 범위 판별)
   - 상점 및 교역소 프레젠터/전략 클래스(`StandardShopModeStrategy`, `BidPresenter`, `CustomerListPresenter`, `ShopItemGridPresenter`, `TradingPostService`)에서 `ItemIdHelper.GetCategory` 및 `is Weapon` 패턴 매칭을 `item.Category` 기반으로 교체
 
-
-
 ## 2026-11-03
 
-- 고객그룹(CustomerGroup) 기본 시스템 및 1~10번 데이터 구축
+- 손님그룹(CustomerGroup) 기본 시스템 및 1~10번 데이터 구축
   - `SO_CustomerGroup` 및 `SO_CustomerGroupDatabase` 데이터 모델 설계
-  - 1~10번 고객그룹(초보 모험가, 왕실 기사, 베테랑 용병, 유랑 상인, 마법학자, 보급관, 귀족, 중견 모험가, 사냥꾼, 수집가) 에셋 생성 (각 10명 고유 이름 및 단계별 50문장 대사 작성)
+  - 1~10번 손님그룹(초보 모험가, 왕실 기사, 베테랑 용병, 유랑 상인, 마법학자, 보급관, 귀족, 중견 모험가, 사냥꾼, 수집가) 에셋 생성 (각 10명 고유 이름 및 단계별 50문장 대사 작성)
   - `CustomerData` 런타임 손님 인스턴스 생성 및 흥정(`Bargain`) 인내심 감소/제안가 산출 로직 구현
-  - 고객그룹 에셋 어드레서블 그룹 등록 및 `ItemIdHelper.CustomerGroup` 카테고리 ID(8) 추가
+  - 손님그룹 에셋 어드레서블 그룹 등록 및 `ItemIdHelper.CustomerGroup` 카테고리 ID(8) 추가
 - 상점 인터페이스 및 타이머 구조 개선
   - 타이머가 필요한 상점 모드를 위해 `ITimedShopMode` 인터페이스 분리 (`TimerPrefix`, `RemainingTime`)
   - `IItemShopFactory` 인터페이스 네임스페이스 및 디렉토리 위치 정리
-
-
 
 ## 2026-11-02
 
@@ -77,8 +67,6 @@
   - 아이템 등록 시 발생하는 `RegisterBargainItemEvent` 정의 및 MessagePipe 연동
   - 모달 오픈 시 뒷배경 딤드 처리(`UIBackPanelPresenter`) 연동
   - VContainer DI 컨테이너에 신규 뷰 및 프레젠터 등록
-
-
 
 ## 2026-11-01
 
@@ -97,8 +85,6 @@
 - 버그 수정 및 최적화
   - 런타임 동적 생성 슬롯 프리팹(`BargainRegisterItemView`)이 씬 바인딩(`RegisterComponentInHierarchy`)에 등록되어 발생하던 VContainer 예외 해결
   - `IReadOnlyCollection<Weapon>` 인덱서 접근 불가에 따른 순회 방식 수정
-
-
 
 ## 2026-10-31
 
