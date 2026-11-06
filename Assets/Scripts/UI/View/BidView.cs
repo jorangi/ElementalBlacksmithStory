@@ -122,9 +122,9 @@ namespace ElementalBlacksmithStory.UI
         }
         public void SetHighestBid(string bidder = "", ulong price = 0, bool isMe = false)
         {
-            _highestBidder.SetText(ZString.Format("상위 입찰자: {0}", string.IsNullOrEmpty(bidder) ? "없음" : bidder == "player" ? "나" : bidder));
+            _highestBidder.SetText(ZString.Format("<color=white>상위 입찰자:</color> {0}", string.IsNullOrEmpty(bidder) ? "없음" : bidder == "player" ? "나" : bidder));
             _highestBidder.color = isMe ? _goodColor : bidder == "" ? Color.white : _badColor;
-            _highestBidPrice.SetText(ZString.Format("현재 입찰액: {0:N0}", price));
+            _highestBidPrice.SetText(ZString.Format("<color=white>현재 입찰액:</color> {0:N0}", price));
             _highestBidPrice.color = isMe ? _goodColor : bidder == "" ? Color.white : _badColor;
         }
         public void SetBidPrice(ulong price)

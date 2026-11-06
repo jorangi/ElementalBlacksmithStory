@@ -141,3 +141,5 @@ MonoBehaviour:
     text: '괜히 시간만 뺏었네요. 죄송해요. 다음에 또 올게요.'
   - speakerId: 0
     text: '오늘은 그냥 돌아갈게요. 아쉬움은 잠들면 사라지겠죠.'
+  _minTimer: 70
+  _maxTimer: 140

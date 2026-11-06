@@ -35,7 +35,7 @@ namespace ElementalBlacksmithStory.Core
                         var mat = _materialDatabase.Get(id);
                         if (mat != null)
                         {
-                            return new MaterialShopItem(mat, stock);
+                            return new MaterialShopItem(mat, stock, MaterialShopItem.GenerateInstanceId());
                         }
                     }
                     break;
@@ -62,7 +62,7 @@ namespace ElementalBlacksmithStory.Core
                         var runeData = _runeDatabase.Get(id);
                         if (runeData != null)
                         {
-                            return new Rune(runeData);
+                            return new Rune(runeData, stock, Rune.GenerateInstanceId());
                         }
                     }
                     break;

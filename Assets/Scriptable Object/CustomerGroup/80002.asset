@@ -141,3 +141,5 @@ MonoBehaviour:
     text: '무리한 거래는 서로에게 득이 되지 않습니다. 접겠습니다.'
   - speakerId: 0
     text: '마음은 감사하나 이번에는 사양하겠습니다.'
+  _minTimer: 90
+  _maxTimer: 180

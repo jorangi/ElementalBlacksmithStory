@@ -89,6 +89,7 @@ namespace ElementalBlacksmithStory.UI
         {
             InitializeShop(MarketType.GENERAL);
             InitializeShop(MarketType.WEAPON);
+            _bidStrategy.Initialize();
         }
         private void InitializeShop(MarketType type)
         {

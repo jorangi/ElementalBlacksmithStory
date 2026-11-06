@@ -159,11 +159,14 @@ namespace ElementalBlacksmithStory.Data
         [Header("거절 대사")]
         public List<DialogueLine> _rejection;
 
-        [Header("경매 정보")]
-        [Header("최소 타이머")]
-        public int _minTimer;
-        [Header("최대 타이머")]
-        public int _maxTimer;
+        [Header("경매 정보 (입찰 대기 타이머, 초 단위)")]
+        [Tooltip("경매 입찰 대기 최소 시간 (초)")]
+        [Range(5, 300)]
+        public int _minTimer = 45;
+
+        [Tooltip("경매 입찰 대기 최대 시간 (초)")]
+        [Range(10, 300)]
+        public int _maxTimer = 120;
         public uint Id => uint.Parse(this.name);
 
         /// <summary>

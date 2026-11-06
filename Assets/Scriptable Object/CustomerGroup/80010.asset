@@ -141,3 +141,5 @@ MonoBehaviour:
     text: '{askRatio >= 1.5 ? "그 값을 부를 줄은 몰랐어. 웃음은 나는데 지갑은 안 열려." : "조금만 더 맞았으면 좋았을 텐데. 흥이 깨졌네."}'
   - speakerId: 0
     text: '밤이 되면 또 생각나겠지. 그래도 오늘은 접을게.'
+  _minTimer: 90
+  _maxTimer: 180

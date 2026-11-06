@@ -467,6 +467,15 @@ namespace ElementalBlacksmithStory.UI
                     {
                         TimeSpan remaining = timedShopMode.RemainingTime;
                         self._view.SetRefreshTimer(remaining.Minutes, remaining.Seconds, timedShopMode.TimerPrefix);
+
+                        if (remaining <= TimeSpan.Zero)
+                        {
+                            if (self._strategy is IRefreshableShopMode refreshStrategy)
+                            {
+                                refreshStrategy.OnRefresh();
+                            }
+                            self.RefreshGridAsync().Forget();
+                        }
                     }
                 });
         }

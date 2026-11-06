@@ -19,14 +19,17 @@ namespace ElementalBlacksmithStory.Core
         private readonly ObservableDictionary<uint, BidContext> _highestBids = new();
         public ObservableDictionary<uint, BidContext> HighestBids => _highestBids;
         private readonly Dictionary<uint, ulong> _playerBids = new();
+        private readonly List<uint> _settleBuffer = new(16);
         private readonly IPublisher<AcquireItemEvent> _acquireItemPublisher;
         private readonly Dictionary<ItemCategory, List<IShopItem>> _bargainItems = new();
         private readonly SO_MaterialDatabase _materialDatabase;
         private readonly SO_RuneDatabase _runeDatabase;
+        private readonly AuctionSimulatingService _auctionSimulateService;
 
         [Inject]
         public TradingPostService(
             PlayerData playerData,
+            AuctionSimulatingService auctionSimulateService,
             IPublisher<AcquireItemEvent> acquireItemPublisher,
             SO_MaterialDatabase materialDatabase,
             SO_RuneDatabase runeDatabase
@@ -36,6 +39,12 @@ namespace ElementalBlacksmithStory.Core
             _acquireItemPublisher = acquireItemPublisher;
             _materialDatabase = materialDatabase;
             _runeDatabase = runeDatabase;
+            _auctionSimulateService = auctionSimulateService;
+
+            _auctionSimulateService.SetAuctionHandler(
+                getCurerentPrice: itemId => _highestBids.TryGetValue(itemId, out var bid) ? bid.Price : 0,
+                onBidAction: (itemId, bidContext) => Bid(itemId, bidContext)
+            );
 
             _bargainItems[ItemCategory.Weapon] = new List<IShopItem>();
             _bargainItems[ItemCategory.Material] = new List<IShopItem>();
@@ -45,14 +54,38 @@ namespace ElementalBlacksmithStory.Core
         {
             _auctionItems[item.Id] = item;
             _highestBids[item.Id] = bidContext;
+            _auctionSimulateService.InitBidSetting(item);
         }
         public void RemoveItem(uint itemId)
         {
             _highestBids.Remove(itemId);
+            _auctionItems.Remove(itemId);
+            _playerBids.Remove(itemId);
+            _auctionSimulateService.RemoveBidders(itemId);
         }
         public void ClearItem()
         {
+            ClearAuction();
+        }
+        public void ClearAuction()
+        {
+            _settleBuffer.Clear();
+            foreach (var kvp in _auctionItems)
+            {
+                _settleBuffer.Add(kvp.Key);
+            }
+
+            for (int i = 0; i < _settleBuffer.Count; i++)
+            {
+                uint id = _settleBuffer[i];
+                SettleAuction(id);
+                _auctionSimulateService.RemoveBidders(id);
+            }
+            _settleBuffer.Clear();
+
+            _auctionItems.Clear();
             _highestBids.Clear();
+            _playerBids.Clear();
         }
         public bool Bid(uint targetId, BidContext bidContext)
         {
@@ -82,32 +115,34 @@ namespace ElementalBlacksmithStory.Core
             _playerBids.TryGetValue(targetId, out ulong playerSpent);
             if (highestBid.Bidder == "player")
             {
-                IShopItem item = _auctionItems[targetId];
-                if (item is Weapon _weapon)
+                if (_auctionItems.TryGetValue(targetId, out var item) && item != null)
                 {
-                    _acquireItemPublisher.Publish(new AcquireItemEvent(
-                        weapon: _weapon,
-                        sender: "TradingPost",
-                        target: "player",
-                        reason: "AuctionSettle"
-                    ));
-                }
-                else
-                {
-                    _acquireItemPublisher.Publish(new AcquireItemEvent(
-                        itemId: item.ItemId,
-                        amount: item.Count,
-                        sender: "TradingPost",
-                        target: "player",
-                        reason: "AuctionSettle"
-                    ));
+                    if (item is Weapon _weapon)
+                    {
+                        _acquireItemPublisher.Publish(new AcquireItemEvent(
+                            weapon: _weapon,
+                            sender: "TradingPost",
+                            target: "player",
+                            reason: "AuctionSettle"
+                        ));
+                    }
+                    else
+                    {
+                        _acquireItemPublisher.Publish(new AcquireItemEvent(
+                            itemId: item.ItemId,
+                            amount: item.Count,
+                            sender: "TradingPost",
+                            target: "player",
+                            reason: "AuctionSettle"
+                        ));
+                    }
                 }
                 Debug.LogWarning($"[TradingPostService] {targetId} 아이템 낙찰에 성공했습니다. 낙찰액: {playerSpent}");
             }
             else if (playerSpent > 0)
             {
                 _playerData.AddMoney(playerSpent);
-                Debug.LogWarning($"[TradingPostService] {targetId} 아이템 낙찰에 실패했습니다. 입찰금: {playerSpent}, 낙찰액: {highestBid}");
+                Debug.LogWarning($"[TradingPostService] {targetId} 아이템 낙찰에 실패했습니다. 환불액: {playerSpent}, 낙찰자: {highestBid.Bidder}");
             }
         }
         public void RegisterBargainItems(IReadOnlyList<IShopItem> items)

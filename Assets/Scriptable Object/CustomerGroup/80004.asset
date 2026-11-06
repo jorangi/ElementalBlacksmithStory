@@ -144,3 +144,5 @@ MonoBehaviour:
     text: '{askRatio >= 1.5 ? "그 값을 부르시다니, 장난이 심하시네요. 저는 가요." : "아쉽지만 값이 안 맞네요. 또 봐요."}'
   - speakerId: 0
     text: '짐 쌀게요. 마음 바뀌면 불러요. 값만 맞으면 언제든지요.'
+  _minTimer: 60
+  _maxTimer: 130

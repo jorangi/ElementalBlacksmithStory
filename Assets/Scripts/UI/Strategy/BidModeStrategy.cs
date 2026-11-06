@@ -13,7 +13,7 @@ namespace ElementalBlacksmithStory.UI.Strategy
     /// <summary>
     /// 교역소(TradingPost) 경매 입찰 모드의 출품 추첨, 묶음 산출, 시작가 책정 및 상호작용 전략
     /// </summary>
-    public class BidModeStrategy : IShopModeStrategy, ITimedShopMode
+    public class BidModeStrategy : IShopModeStrategy, IRefreshableShopMode
     {
         public const float MIN_STARTING_BID_RATIO = 0.02f; // 표준가의 최소 2%
         public const float MAX_STARTING_BID_RATIO = 0.40f; // 표준가의 최대 40%
@@ -30,7 +30,7 @@ namespace ElementalBlacksmithStory.UI.Strategy
         public const float BUNDLE_LUCK_MIN_MULTIPLIER = 0.35f; // 최소 운 계수 (1개까지 하락 가능)
         public const float BUNDLE_LUCK_MAX_MULTIPLIER = 2.20f; // 최대 대박 계수 (최상급 재료도 운 좋으면 10개 등장)
 
-        private static readonly TimeSpan DefaultAuctionInterval = TimeSpan.FromMinutes(5);
+        private static readonly TimeSpan DefaultAuctionInterval = TimeSpan.FromMinutes(30);
         private DateTime _nextAuctionEndTime;
 
         public string TimerPrefix => "입찰 마감";
@@ -40,11 +40,32 @@ namespace ElementalBlacksmithStory.UI.Strategy
             {
                 if (_nextAuctionEndTime == default)
                 {
-                    _nextAuctionEndTime = DateTime.UtcNow + DefaultAuctionInterval;
+                    Initialize();
                 }
                 TimeSpan diff = _nextAuctionEndTime - DateTime.UtcNow;
                 return diff > TimeSpan.Zero ? diff : TimeSpan.Zero;
             }
+        }
+
+        public void Initialize()
+        {
+            if (_nextAuctionEndTime == default)
+            {
+                _nextAuctionEndTime = DateTime.UtcNow + DefaultAuctionInterval;
+                RefreshAuctionItems();
+            }
+        }
+
+        public void OnRefresh()
+        {
+            OnAuctionExpired();
+        }
+
+        public void OnAuctionExpired()
+        {
+            _tradingPostService?.ClearAuction();
+            _nextAuctionEndTime = DateTime.UtcNow + DefaultAuctionInterval;
+            RefreshAuctionItems();
         }
 
         public const float MIN_CANDIDATE_WEIGHT = 0.05f;
@@ -160,9 +181,13 @@ namespace ElementalBlacksmithStory.UI.Strategy
             results.Clear();
             if (isSellMode) return UniTask.CompletedTask;
 
-            if (_bidGoods.Count == 0)
+            if (_nextAuctionEndTime == default)
             {
-                RefreshAuctionItems();
+                Initialize();
+            }
+            else if (_nextAuctionEndTime <= DateTime.UtcNow || _bidGoods.Count == 0)
+            {
+                OnAuctionExpired();
             }
 
             for (int i = 0; i < _bidGoods.Count; i++)

@@ -141,3 +141,5 @@ MonoBehaviour:
     text: '제 실력에 맞는 걸 먼저 찾아봐야겠어요... 죄송합니다!'
   - speakerId: 0
     text: '오늘은 구경만 한 걸로 할게요! 다음엔 꼭 살 거예요!'
+  _minTimer: 40
+  _maxTimer: 90

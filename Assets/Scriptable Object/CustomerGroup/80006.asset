@@ -290,5 +290,5 @@ MonoBehaviour:
   - speakerId: 0
     text: "\uB2E4\uC74C \uC811\uC218 \uAC74\uC744 \uCC98\uB9AC\uD558\uACA0\uC2B5\uB2C8\uB2E4.
       \uC774\uB9CC \uC885\uACB0\uD569\uB2C8\uB2E4."
-  _minTimer: 0
-  _maxTimer: 0
+  _minTimer: 50
+  _maxTimer: 110

@@ -487,6 +487,7 @@ MonoBehaviour:
   weaponDatabase: {fileID: 11400000, guid: 23ba30dc6c2056840b53f72c44ce4189, type: 2}
   materialDatabase: {fileID: 11400000, guid: 362b0846d3ffa1f498fd84a324b72dc4, type: 2}
   runeDatabase: {fileID: 11400000, guid: 655c90af38354094cb0345c45e0357b1, type: 2}
+  customerGroupDatabase: {fileID: 11400000, guid: dba24559b9464e47b055f63f932fa449, type: 2}
   spriteSettings: {fileID: 11400000, guid: b2598fdeba0dedb4092e9d4dcdde65ea, type: 2}
   progressionSettings: {fileID: 11400000, guid: f1b2c3d4e5a64789b0123456789abcde, type: 2}
 --- !u!4 &144748153
@@ -8038,6 +8039,14 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4409944130350001310, guid: 023ceea11c1bb2d43971d266e6fbc865, type: 3}
+      propertyPath: m_fontSizeMax
+      value: 34
+      objectReference: {fileID: 0}
+    - target: {fileID: 4409944130350001310, guid: 023ceea11c1bb2d43971d266e6fbc865, type: 3}
+      propertyPath: m_enableAutoSizing
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4883693913227198720, guid: 023ceea11c1bb2d43971d266e6fbc865, type: 3}
       propertyPath: m_Colors.m_DisabledColor.a
       value: 1
@@ -8052,6 +8061,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5116845936729964485, guid: 023ceea11c1bb2d43971d266e6fbc865, type: 3}
       propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5116845936729964485, guid: 023ceea11c1bb2d43971d266e6fbc865, type: 3}
+      propertyPath: m_SizeDelta.y
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5621575143944811283, guid: 023ceea11c1bb2d43971d266e6fbc865, type: 3}

@@ -5,17 +5,31 @@
 ## 2026-11-06
 
 - 손님그룹(CustomerGroup) 대사 데이터 구축 완료
-  - 11~13번 손님그룹(은퇴한 모험가, 마을 주민, 루미너스 순례자) 에셋 생성 및 대사 작성 완료 (총 13종 완성)
-  - 손님그룹별 아이템 선호/기피 필터(`ItemPreferenceData`) 및 무할당 판별 로직(`IsItemEligible`, `IsItemPreferred`) 추가
+  - 11~13번 손님그룹(은퇴한 모험가, 마을 주민, 루미너스 순례자) 에셋 생성 및 대사 작성 완료
+  - 손님그룹별 아이템 선호/기피 필터 및 무할당 판별 로직 추가
 - 경매 입찰자 및 시뮬레이션 모델 설계
   - `AuctionBidder` 도메인 모델 생성 (시그모이드 기반 입찰 확률 및 호가 증액 계산, 개인 타이머 구조)
   - `AuctionSimulatingService` 기본 스캐폴딩 구성
 - 상점 아이템 카테고리 일원화 및 레거시 ID 판별 리팩토링
-  - `IShopItem`에 `ShopItemCategory` Enum (`Sword, Bow, Material, Rune, Consumable`) 및 `Category` 프로퍼티 추가
-  - 구현체(`MaterialShopItem`, `Rune`, `Weapon`)별 자체 카테고리 반환 구현 (검/활 ID 범위 판별)
-  - 상점 및 교역소 프레젠터/전략 클래스(`StandardShopModeStrategy`, `BidPresenter`, `CustomerListPresenter`, `ShopItemGridPresenter`, `TradingPostService`)에서 `ItemIdHelper.GetCategory` 및 `is Weapon` 패턴 매칭을 `item.Category` 기반으로 교체
+  - `IShopItem`에 `ShopItemCategory` Enum 및 `Category` 프로퍼티 추가
+  - 구현체별 자체 카테고리 반환 구현 (검/활 ID 범위 판별)
+  - 상점 및 교역소 프레젠터/전략 클래스에서 `ItemIdHelper.GetCategory` 및 `is Weapon` 패턴 매칭을 `item.Category` 기반으로 교체
 - 기존 `BidStrategy`가 갖던 아이템에 대한 티어 매기기 관련 로직을 `ItemTierHelper`로 추출
   - 추후 진행도 계산 등 사용처가 많음
+- `ItemShopFactory` 상점 아이템 생성 시 고유 인스턴스 ID 부여
+  - `MaterialShopItem` 및 `Rune` 생성 시 동일 재료/룬이 경매 및 상점에 복수 출품될 때 발생하는 ID 키 충돌 문제 해결
+- 경매 진행 시간 및 손님별 입찰 타이머 밸런싱
+  - `BidModeStrategy` 경매 1회 주기를 기존 5분에서 30분으로 현실적인 마켓 호흡에 맞추어 상향
+  - `SO_CustomerGroup`의 입찰 대기 타이머 기본값 및 범위를 초 단위로 설정
+  - 손님그룹 에셋에 그룹 특성별(성급함: 30~60초, 신중한: 100~200초 등) 입찰 쿨다운 타이머 세팅 완료
+- `AuctionBidder` 모델 최적화 및 타이머 필드 정돈
+  - 힙 할당 유발 요소인 튜플 제거
+  - `RemainingSeconds`, `IsFolded` 프로퍼티 추가
+  - 쿨다운 차감 및 타이머 재설정, 상한가 초과 시 자동 포기 로직 추가
+- 경매 타이머 시작 시점 및 마감 시 자동 갱신/정산 구현
+  - 게임 실행 시점부터 30분 경매 타이머 및 1회차 물품/입찰 시뮬레이션 즉시 가동
+  - 경매 마감(00:00) 시 낙찰/유찰 자동 정산 및 새 회차 경매 자동 갱신
+  - 상점 UI 열람 중 마감 시 그리드 실시간 갱신 처리
 
 ## 2026-11-03
 

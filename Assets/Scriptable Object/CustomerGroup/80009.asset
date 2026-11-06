@@ -214,5 +214,5 @@ MonoBehaviour:
   - speakerId: 0
     text: "\uD574\uAC00 \uAE30\uC6B8\uACE0 \uC788\uC5B4. \uAE38\uC744 \uAC00\uC57C
       \uD574."
-  _minTimer: 0
-  _maxTimer: 0
+  _minTimer: 35
+  _maxTimer: 75

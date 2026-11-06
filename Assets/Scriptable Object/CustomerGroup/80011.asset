@@ -141,3 +141,5 @@ MonoBehaviour:
     text: '이 나이엔 아쉬움도 오래 안 가네. 훌훌 털고 가지.'
   - speakerId: 0
     text: '인연이 닿으면 또 만나겠지. 건강하게 지내게나.'
+  _minTimer: 110
+  _maxTimer: 190

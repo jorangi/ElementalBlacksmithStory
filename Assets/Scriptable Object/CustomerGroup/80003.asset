@@ -141,3 +141,5 @@ MonoBehaviour:
     text: '{askRatio >= 1.5 ? "그 값을 부르는 놈이랑은 말 섞기 싫군. 간다." : "답이 늦군. 기다리는 건 성미에 안 맞아."}'
   - speakerId: 0
     text: '결판 못 내는 상대랑은 안 해. 이만 가지.'
+  _minTimer: 30
+  _maxTimer: 60
