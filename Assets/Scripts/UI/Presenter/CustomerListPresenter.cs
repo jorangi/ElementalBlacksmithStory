@@ -17,6 +17,8 @@ namespace ElementalBlacksmithStory.UI
         private readonly MaterialSpriteLoader _materialSpriteLoader;
         private readonly RuneSpriteLoader _runeSpriteLoader;
         private readonly CompositeDisposable _disposables = new();
+        private IShopItem _currentItem;
+
         [Inject]
         public CustomerListPresenter(
             CustomerListView view,
@@ -35,12 +37,32 @@ namespace ElementalBlacksmithStory.UI
             _runeSpriteLoader = runeSpriteLoader;
 
             _view.OnCloseButtonAsObservable()
-                .Subscribe(_ => { Hide(); })
+                .Subscribe(this, static (_, self) => { self.Hide(); })
                 .AddTo(_disposables);
+
+
+            _service.OnCustomerArrived.
+                Subscribe(this, static (e, self) =>
+                {
+                    if (self._currentItem != null && self._currentItem.Id == e.itemId)
+                    {
+                        self._view.Create(e.customer);
+                    }
+                }).AddTo(_disposables);
+
+            _service.OnCustomerLeft
+                .Subscribe(this, static (e, self) =>
+                {
+                    if (self._currentItem != null && self._currentItem.Id == e.itemId)
+                    {
+                        self._view.Remove(e.customer);
+                    }
+                }).AddTo(_disposables);
         }
         public async UniTask SetItem(IShopItem item)
         {
             if (item == null) return;
+            _currentItem = item;
             Sprite sprite = null;
             switch (item.Category)
             {
@@ -58,9 +80,11 @@ namespace ElementalBlacksmithStory.UI
                     break;
             }
             _view.SetItem(item.Name, sprite, item.Count);
+            RefreshList();
         }
         public void Show()
         {
+            RefreshList();
             _uiBackPanelPresenter.Show();
             _view.Show().Forget();
         }
@@ -71,8 +95,22 @@ namespace ElementalBlacksmithStory.UI
         }
         public void RefreshList()
         {
+            _view.Clear();
+            if (_currentItem == null || _service == null) return;
 
+            var customers = _service.GetBargainCustomers(_currentItem.Id);
+            _view.ShowNoListAlert(customers.Count == 0);
+            for (int i = 0; i < customers.Count; i++)
+            {
+                _view.Create(customers[i]);
+            }
         }
+        public void RemoveCustomer(CustomerData customer)
+        {
+            if (_currentItem == null || customer == null || _service == null) return;
+            _service.RemoveBargainCustomer(_currentItem.Id, customer);
+        }
+
         public void Dispose()
         {
             _disposables.Dispose();

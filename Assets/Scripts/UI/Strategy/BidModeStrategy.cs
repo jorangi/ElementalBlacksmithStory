@@ -152,7 +152,7 @@ namespace ElementalBlacksmithStory.UI.Strategy
             }
 
             ulong startPrice = CalculateStartingBid(item);
-            _tradingPostService?.AddItem(item, new BidContext(string.Empty, startPrice));
+            _tradingPostService?.RegisterBidItem(item, new BidContext(string.Empty, startPrice));
             return startPrice;
         }
 
@@ -204,7 +204,7 @@ namespace ElementalBlacksmithStory.UI.Strategy
         public void RefreshAuctionItems()
         {
             _bidGoods.Clear();
-            _tradingPostService?.ClearItem();
+            _tradingPostService?.ClearAuction();
 
             if (_itemShopFactory == null) return;
 
@@ -246,7 +246,7 @@ namespace ElementalBlacksmithStory.UI.Strategy
                 if (shopItem == null) continue;
 
                 ulong startPrice = CalculateStartingBid(shopItem);
-                _tradingPostService?.AddItem(shopItem, new BidContext(string.Empty, startPrice));
+                _tradingPostService?.RegisterBidItem(shopItem, new BidContext(string.Empty, startPrice));
                 _bidGoods.Add(shopItem);
             }
         }

@@ -180,5 +180,24 @@ namespace ElementalBlacksmithStory.Data
         /// </summary>
         public bool IsItemPreferred(ShopItemCategory category, List<ElementType> elementTypes = null)
             => itemPreferenceData.IsPreferred(category, elementTypes);
+
+        public int RegisterDelay(IShopItem item)
+        {
+            int timer = 5 * UnityEngine.Random.Range(_minTimer, _maxTimer); // 기본 등록 딜레이 = 랜덤 타이머 * 5 (최소 25초 ~ 최대 1000초 내외)
+            if (item == null) return timer;
+
+            var elements = (item is Weapon weapon && weapon.Data != null) ? weapon.Data.elementTypes : null;
+            if (IsItemPreferred(item.Category, elements))
+            {
+                // 선호 아이템 시 대기 시간 단축 (0.85 * 인내심 비율)
+                float patienceRatio = maxPatience > 0
+                    ? (float)UnityEngine.Random.Range(minPatience, maxPatience) / maxPatience
+                    : 1.0f;
+
+                timer = Mathf.Max(5, Mathf.RoundToInt(0.85f * timer * patienceRatio));
+            }
+
+            return timer;
+        }
     }
 }

@@ -17,22 +17,27 @@ namespace ElementalBlacksmithStory.UI
         private readonly RuneSpriteLoader _runeSpriteLoader;
         private readonly UIBackPanelPresenter _uiBackPanelPresenter;
         private readonly TradingPostService _tradingPostService;
+        private readonly BargainSimulatingService _bargainService;
         private readonly PlayerData _playerData;
         private readonly CompositeDisposable _disposables = new();
         private ulong _offeredPrice;
         private ulong _cachedOfferPrice;
+        private IShopItem _itemData;
+        private CustomerData _customerData;
         [Inject]
         public BargainPresenter(
             BargainView view,
-            TradingPostService service,
+            TradingPostService tradingPostService,
             PlayerData playerData,
             UIBackPanelPresenter uiBackPanelPresenter,
             WeaponSpriteLoader weaponSpriteLoader,
             MaterialSpriteLoader materialSpriteLoader,
-            RuneSpriteLoader runeSpriteLoader
+            RuneSpriteLoader runeSpriteLoader,
+            BargainSimulatingService bargainService
         )
         {
-            _tradingPostService = service;
+            _tradingPostService = tradingPostService;
+            _bargainService = bargainService;
             _playerData = playerData;
             _uiBackPanelPresenter = uiBackPanelPresenter;
             _view = view;
@@ -41,52 +46,83 @@ namespace ElementalBlacksmithStory.UI
             _runeSpriteLoader = runeSpriteLoader;
 
             _view.OnOfferButtonAsObservable()
-                .Subscribe(_ =>
+                .Subscribe(this, static (_, self) =>
                 {
-                    //TODO: `TradingPostService`에 연결하여 제시가에 따른 흥정 로직 추가
-                    _cachedOfferPrice = _offeredPrice;
+                    if (self._customerData != null && self._offeredPrice < self._customerData.CurrentPrice)
+                    {
+                        self._view.SetOfferPrice(self._offeredPrice, isLower: true);
+                        self.ShowWarning();
+                        return;
+                    }
+                    self._cachedOfferPrice = self._offeredPrice;
+                    string dialogue = self._bargainService.TryBargain(self._itemData, self._customerData, self._offeredPrice, out ulong newPrice);
+                    self._view.SetDialogue(dialogue);
+                    if (newPrice == 0)
+                    {
+                        //결렬
+                        self._view.SetInteract(false);
+                    }
+                    else if (self._cachedOfferPrice == newPrice)
+                    {
+                        //성사
+                        self._view.SetInteract(false);
+                    }
+                    else
+                    {
+                        //역제시
+                        self._view.SetInteract(true);
+                        self._offeredPrice = newPrice;
+                        self._view.SetOfferPrice(newPrice, isLower: false);
+                    }
                 }).AddTo(_disposables);
+
+            //플레이어가 거래 취소
             _view.OnCancelButtonAsObservable()
-        .Subscribe(_ =>
+                .Subscribe(this, static (_, self) =>
                 {
-                    //TODO: `TradingPostService`에 연결하여 흥정 종료 처리
-                    Hide();
+                    self._bargainService.CancelBargain(self._itemData.Id, self._customerData);
+                    self.Hide();
                 }).AddTo(_disposables);
             _view.OnIncreaseButtonAsObservable()
                 .ThrottleFirst(TimeSpan.FromMilliseconds(20))
-                .Subscribe(_ =>
+                .Subscribe(this, static (_, self) =>
                 {
-                    _offeredPrice = Math.Clamp(_offeredPrice + GetPriceStep(_offeredPrice), 0, ulong.MaxValue);
-                    bool isLower = _cachedOfferPrice > _offeredPrice;
-                    _view.SetOfferPrice(_offeredPrice, isLower);
+                    self._offeredPrice = Math.Clamp(self._offeredPrice + self.GetPriceStep(self._offeredPrice), 0, ulong.MaxValue);
+                    bool isLower = self._cachedOfferPrice > self._offeredPrice;
+                    self._view.SetOfferPrice(self._offeredPrice, isLower);
                 }).AddTo(_disposables);
             _view.OnDecreaseButtonAsObservable()
                 .ThrottleFirst(TimeSpan.FromMilliseconds(20))
-                .Subscribe(_ =>
+                .Subscribe(this, static (_, self) =>
                 {
-                    _offeredPrice = Math.Clamp(_offeredPrice - GetPriceStep(_offeredPrice), 0, ulong.MaxValue);
-                    bool isLower = _cachedOfferPrice > _offeredPrice;
-                    _view.SetOfferPrice(_offeredPrice, isLower);
+                    self._offeredPrice = Math.Clamp(self._offeredPrice - self.GetPriceStep(self._offeredPrice), 0, ulong.MaxValue);
+                    bool isLower = self._cachedOfferPrice > self._offeredPrice;
+                    self._view.SetOfferPrice(self._offeredPrice, isLower);
                 }).AddTo(_disposables);
             _view.OnChangedOfferPriceAsObservable()
-                .Subscribe(e =>
+                .Subscribe(this, static (e, self) =>
                 {
-                    _offeredPrice = Math.Clamp(e, 0, ulong.MaxValue);
-                    bool isLower = _cachedOfferPrice > _offeredPrice;
-                    _view.SetOfferPrice(_offeredPrice, isLower);
+                    self._offeredPrice = Math.Clamp(e, 0, ulong.MaxValue);
+                    bool isLower = self._cachedOfferPrice > self._offeredPrice;
+                    self._view.SetOfferPrice(self._offeredPrice, isLower);
                 }).AddTo(_disposables);
             _view.OnWarningAcceptButtonAsObservable()
-                .Subscribe(_ =>
+                .Subscribe(this, static (_, self) =>
                 {
                     //TradingPostService를 통해 인벤토리에서 아이템 제거
-                    _playerData.AddMoney(_offeredPrice);
-                    _view.HideWarning().Forget();
+                    self._playerData.AddMoney(self._offeredPrice);
+                    self._view.HideWarning().Forget();
                 }).AddTo(_disposables);
             _view.OnWarningCancelButtonAsObservable()
-                .Subscribe(_ =>
+                .Subscribe(this, static (_, self) =>
                 {
-                    _view.HideWarning().Forget();
+                    self._view.HideWarning().Forget();
                 }).AddTo(_disposables);
+        }
+        public void SetData(IShopItem item, CustomerData customer)
+        {
+            _itemData = item;
+            _customerData = customer;
         }
         public ulong GetPriceStep(ulong price)
         {

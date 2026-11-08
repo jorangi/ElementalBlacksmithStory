@@ -47,25 +47,25 @@ namespace ElementalBlacksmithStory.UI
         private void BindEvents()
         {
             _view.OnCardClicked
-                .Subscribe(id =>
+                .Subscribe(this, static (id, self) =>
                 {
-                    _uiState.ChangeRune(id);
+                    self._uiState.ChangeRune(id);
                 })
                 .AddTo(_disposables);
 
             _view.OnFavoriteClicked
-                .Subscribe(runeId => OnToggleFavorite(runeId))
+                .Subscribe(this, static (runeId, self) => self.OnToggleFavorite(runeId))
                 .AddTo(_disposables);
 
             _view.OnSearchInputChanged
                 .ThrottleLast(TimeSpan.FromMilliseconds(50))
-                .Subscribe(keyword => _view.FilterByKeyword(keyword))
+                .Subscribe(this, static (keyword, self) => self._view.FilterByKeyword(keyword))
                 .AddTo(_disposables);
 
             _runeInventory.OnItemCountChangedAsObservable
-                .Subscribe(entry =>
+                .Subscribe(this, static (entry, self) =>
                 {
-                    OnRuneCountChangedAsync(entry.item, entry.count).Forget();
+                    self.OnRuneCountChangedAsync(entry.item, entry.count).Forget();
                 })
                 .AddTo(_disposables);
 

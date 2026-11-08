@@ -63,7 +63,7 @@ namespace ElementalBlacksmithStory.UI
             {
                 allBtn.OnClickAsObservable()
                     .ThrottleFirst(TimeSpan.FromMilliseconds(150))
-                    .Subscribe(_ => SelectCategory("all"))
+                    .Subscribe(this, static (_, self) => self.SelectCategory("all"))
                     .AddTo(_buttonDisposables);
             }
 
@@ -80,7 +80,7 @@ namespace ElementalBlacksmithStory.UI
                         string catId = cat.CategoryId;
                         btnView.OnClickAsObservable()
                             .ThrottleFirst(TimeSpan.FromMilliseconds(150))
-                            .Subscribe(_ => SelectCategory(catId))
+                            .Subscribe((this, catId), static (_, state) => state.Item1.SelectCategory(state.catId))
                             .AddTo(_buttonDisposables);
                     }
                 }

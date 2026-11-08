@@ -1,4 +1,5 @@
 using System;
+using System.Threading;
 using ElementalBlacksmithStory.Data;
 using R3;
 using UnityEngine;
@@ -8,17 +9,22 @@ namespace ElementalBlacksmithStory.Data
     public class CustomerData : IDisposable
     {
         private readonly CompositeDisposable _disposables = new();
+        private readonly CancellationTokenSource _cts = new();
+        private bool _isDisposed = false;
+        public CancellationToken CancellationToken => _cts.Token;
+
         public readonly SO_CustomerGroup Group;
         private readonly IShopItem _item;
-        private ulong _estimatePrice;
-        private ulong _firstOfferPrice;
+        private readonly ulong _estimatePrice;
+        private readonly ulong _firstOfferPrice;
         private ulong _currentPrice;
-        private float _interpolation;
+        private readonly float _interpolation;
         private int _patience;
-        private float _patienceNoise;
-        private float _interpolationNoise;
+        private readonly int _lifetime; // 거래 신청리스트에 얼마동안 잔류할지
+        private readonly float _patienceNoise;
+        private readonly float _interpolationNoise;
         private string _name;
-        private Sprite _sprite;
+        private readonly Sprite _sprite;
 
         public ulong FirstOfferPrice { get => _firstOfferPrice; }
         public ulong CurrentPrice { get => _currentPrice; }
@@ -30,6 +36,7 @@ namespace ElementalBlacksmithStory.Data
         public float PatienceNoise { get => _patienceNoise; }
         public float InterpolationNoise { get => _interpolationNoise; }
         public IShopItem Item { get => _item; }
+        public int Lifetime { get => _lifetime; }
         public CustomerData(SO_CustomerGroup group, IShopItem item)
         {
             Group = group;
@@ -41,12 +48,17 @@ namespace ElementalBlacksmithStory.Data
             _patience = UnityEngine.Random.Range(group.minPatience, group.maxPatience);
             _patienceNoise = UnityEngine.Random.Range(0.85f, 1.15f);
             _interpolationNoise = UnityEngine.Random.Range(0.85f, 1.15f);
+            _lifetime = 10 * UnityEngine.Random.Range(group._minTimer, group._maxTimer); // 랜덤 타이머 * 10 = 최소 50초~50분
             _name = (group._customerNames != null && group._customerNames.Count > 0)
                 ? group._customerNames[UnityEngine.Random.Range(0, group._customerNames.Count)]
                 : group._customerGroupName;
             _sprite = (group._customerSprites != null && group._customerSprites.Count > 0)
                 ? group._customerSprites[UnityEngine.Random.Range(0, group._customerSprites.Count)]
                 : null;
+        }
+        public void SetCustomerName(string name)
+        {
+            _name = name;
         }
         public ulong Bargain(ulong price)
         {
@@ -71,10 +83,11 @@ namespace ElementalBlacksmithStory.Data
             // 손님의 기분/상황에 따른 인내심 감소량
             patienceDrain = Mathf.Max(1, Mathf.RoundToInt(patienceDrain * _patienceNoise));
 
-            _patience = Mathf.Max(0, _patience - patienceDrain);
+            // 인내심 0: 최종 제안용
+            _patience = _patience == 0 ? -1 : Mathf.Max(0, _patience - patienceDrain);
 
             // 3. 인내심이 바닥난 경우 (흥정 결렬 -> 0 반환)
-            if (_patience <= 0)
+            if (_patience < 0)
             {
                 return 0UL;
             }
@@ -108,6 +121,10 @@ namespace ElementalBlacksmithStory.Data
         }
         public void Dispose()
         {
+            if (_isDisposed) return;
+            _isDisposed = true;
+            _cts.Cancel();
+            _cts.Dispose();
             _disposables.Dispose();
             GC.SuppressFinalize(this);
         }

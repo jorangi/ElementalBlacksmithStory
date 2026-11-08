@@ -66,56 +66,56 @@ namespace ElementalBlacksmithStory.UI
             _weaponSpriteLoader = weaponSpriteLoader;
             _materialSpriteLoader = materialSpriteLoader;
             _runeSpriteLoader = runeSpriteLoader;
-            _currentCategoryIndex.Subscribe(index =>
+            _currentCategoryIndex.Subscribe(this, static (index, self) =>
             {
                 ItemCategory category = ValideCategories[index];
-                _view.SetCategoryName(GetCategoryName(category));
-                LoadItemsByCategory(category).Forget();
+                self._view.SetCategoryName(GetCategoryName(category));
+                self.LoadItemsByCategory(category).Forget();
             }).AddTo(_disposables);
             _view.OnRegisterButtonAsObservable()
-                        .Subscribe(_ =>
+                        .Subscribe((this, shopItemGridPresenter), static (_, state) =>
                         {
-                            _registeredBuffer.Clear();
-                            foreach (var id in _checkedItemIds)
+                            state.Item1._registeredBuffer.Clear();
+                            foreach (var id in state.Item1._checkedItemIds)
                             {
-                                if (_displayItems.TryGetValue(id, out var item))
+                                if (state.Item1._displayItems.TryGetValue(id, out var item))
                                 {
-                                    uint selectedAmount = _selectedAmounts.TryGetValue(id, out var amt) ? amt : item.Count;
+                                    uint selectedAmount = state.Item1._selectedAmounts.TryGetValue(id, out var amt) ? amt : item.Count;
                                     if (item is MaterialShopItem matItem)
                                     {
-                                        _registeredBuffer.Add(new MaterialShopItem(matItem.Data, selectedAmount, MaterialShopItem.GenerateInstanceId()));
+                                        state.Item1._registeredBuffer.Add(new MaterialShopItem(matItem.Data, selectedAmount, MaterialShopItem.GenerateInstanceId()));
                                     }
                                     else if (item is Rune runeItem)
                                     {
-                                        _registeredBuffer.Add(new Rune(runeItem.Data, selectedAmount, Rune.GenerateInstanceId()));
+                                        state.Item1._registeredBuffer.Add(new Rune(runeItem.Data, selectedAmount, Rune.GenerateInstanceId()));
                                     }
                                     else
                                     {
-                                        _registeredBuffer.Add(item);
+                                        state.Item1._registeredBuffer.Add(item);
                                     }
                                 }
                             }
-                            _tradingPostService.RegisterBargainItems(_registeredBuffer);
-                            Hide();
-                            shopItemGridPresenter.RefreshGridAsync().Forget();
+                            state.Item1._tradingPostService.RegisterBargainItems(state.Item1._registeredBuffer);
+                            state.Item1.Hide();
+                            state.shopItemGridPresenter.RefreshGridAsync().Forget();
                         })
                         .AddTo(_disposables);
             _view.OnCancleButtonAsObservable()
-                        .Subscribe(_ =>
+                        .Subscribe(this, static (_, self) =>
                         {
-                            Hide();
+                            self.Hide();
                         })
                         .AddTo(_disposables);
             _view.OnNextCategoryButtonAsObservable()
-                        .Subscribe(_ =>
+                        .Subscribe(this, static (_, self) =>
                         {
-                            NextCategory();
+                            self.NextCategory();
                         })
                         .AddTo(_disposables);
             _view.OnPrevCategoryButtonAsObservable()
-                        .Subscribe(_ =>
+                        .Subscribe(this, static (_, self) =>
                         {
-                            PrevCategory();
+                            self.PrevCategory();
                         })
                         .AddTo(_disposables);
             _registerEventSubscriber.Subscribe(e =>
@@ -129,20 +129,20 @@ namespace ElementalBlacksmithStory.UI
             }).AddTo(_disposables);
             _view.OnCardClick
                 .ThrottleFirst(TimeSpan.FromMilliseconds(100))
-                        .Subscribe(clickedItem =>
+                        .Subscribe(this, static (clickedItem, self) =>
                         {
-                            if (_checkedItemIds.Remove(clickedItem.ItemId))
+                            if (self._checkedItemIds.Remove(clickedItem.ItemId))
                             {
-                                _selectedAmounts.Remove(clickedItem.ItemId);
+                                self._selectedAmounts.Remove(clickedItem.ItemId);
                                 clickedItem.Check(false);
                                 return;
                             }
                             if (clickedItem.IsMutitple)
                             {
-                                if (_displayItems.TryGetValue(clickedItem.ItemId, out var item))
+                                if (self._displayItems.TryGetValue(clickedItem.ItemId, out var item))
                                 {
-                                    _detailPresenter.SetData(item).Forget();
-                                    _detailPresenter.Show();
+                                    self._detailPresenter.SetData(item).Forget();
+                                    self._detailPresenter.Show();
                                     return;
                                 }
                                 Debug.LogWarning($"[BargainItemGridPresenter] 아이템을 찾을 수 없습니다 ItemId : {clickedItem.ItemId}");
@@ -150,8 +150,8 @@ namespace ElementalBlacksmithStory.UI
                             }
                             else
                             {
-                                _checkedItemIds.Add(clickedItem.ItemId);
-                                _selectedAmounts[clickedItem.ItemId] = 1;
+                                self._checkedItemIds.Add(clickedItem.ItemId);
+                                self._selectedAmounts[clickedItem.ItemId] = 1;
                                 clickedItem.Check(true);
                             }
                         }).AddTo(_disposables);

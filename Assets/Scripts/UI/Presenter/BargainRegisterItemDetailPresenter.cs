@@ -35,41 +35,41 @@ namespace ElementalBlacksmithStory.UI
             _materialSpriteLoader = materialSpriteLoader;
             _runeSpriteLoade = runeSpriteLoader;
             _view.OnRegisterButtonAsObservable()
-                .Subscribe(_ =>
+                .Subscribe((this, registerEventPublisher), static (_, state) =>
                 {
-                    if (_registerAmount > 0)
-                        registerEventPublisher.Publish(new RegisterBargainItemEvent
+                    if (state.Item1._registerAmount > 0)
+                        state.registerEventPublisher.Publish(new RegisterBargainItemEvent
                         {
-                            _itemId = _cachedItem.ItemId,
-                            _amount = _registerAmount
+                            _itemId = state.Item1._cachedItem.ItemId,
+                            _amount = state.Item1._registerAmount
                         });
-                    Hide();
+                    state.Item1.Hide();
                 }).AddTo(_disposables);
             _view.OnCancelButtonAsObservable()
-                .Subscribe(_ =>
+                .Subscribe(this, static (_, self) =>
                 {
-                    Hide();
+                    self.Hide();
                 }).AddTo(_disposables);
             _view.OnIncreaseButtonAsObservable()
                 .ThrottleFirst(TimeSpan.FromMilliseconds(20))
-                .Subscribe(_ =>
+                .Subscribe(this, static (_, self) =>
                 {
-                    if (_registerAmount + 1 > _cachedItem.Count) _registerAmount = 1;
-                    else _registerAmount = Math.Clamp(_registerAmount + 1, 0, _cachedItem.Count);
-                    _view.SetRegisterAmount(_registerAmount);
+                    if (self._registerAmount + 1 > self._cachedItem.Count) self._registerAmount = 1;
+                    else self._registerAmount = Math.Clamp(self._registerAmount + 1, 0, self._cachedItem.Count);
+                    self._view.SetRegisterAmount(self._registerAmount);
                 }).AddTo(_disposables);
             _view.OnDecreaseButtonAsObservable()
                 .ThrottleFirst(TimeSpan.FromMilliseconds(20))
-                .Subscribe(_ =>
+                .Subscribe(this, static (_, self) =>
                 {
-                    _registerAmount = Math.Clamp(_registerAmount - 1, 0, _cachedItem.Count);
-                    _view.SetRegisterAmount(_registerAmount);
+                    self._registerAmount = Math.Clamp(self._registerAmount - 1, 0, self._cachedItem.Count);
+                    self._view.SetRegisterAmount(self._registerAmount);
                 }).AddTo(_disposables);
             _view.OnAmountChangedAsObservable()
-                .Subscribe(amount =>
+                .Subscribe(this, static (amount, self) =>
                 {
-                    _registerAmount = Math.Clamp(amount, 0, _cachedItem.Count);
-                    _view.SetRegisterAmount(_registerAmount);
+                    self._registerAmount = Math.Clamp(amount, 0, self._cachedItem.Count);
+                    self._view.SetRegisterAmount(self._registerAmount);
                 }).AddTo(_disposables);
         }
         public async UniTask SetData(IShopItem item, CancellationToken ct = default)

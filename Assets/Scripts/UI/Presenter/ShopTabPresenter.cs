@@ -54,11 +54,11 @@ namespace ElementalBlacksmithStory.UI
             _gridPresenter.SetSellMode(_isSellMode);
 
             _view.OnClickBuyTabAsObservable()
-                .Subscribe(_ => SwitchTab(isSellMode: false))
+                .Subscribe(this, static (_, self) => self.SwitchTab(isSellMode: false))
                 .AddTo(_disposables);
 
             _view.OnClickSellTabAsObservable()
-                .Subscribe(_ => SwitchTab(isSellMode: true))
+                .Subscribe(this, static (_, self) => self.SwitchTab(isSellMode: true))
                 .AddTo(_disposables);
         }
 

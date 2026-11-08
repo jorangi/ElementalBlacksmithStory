@@ -73,66 +73,87 @@ namespace ElementalBlacksmithStory.UI
             _shopService = shopService;
             _tradingPostService = tradingPostService;
 
-            playerData.Money.Subscribe(_ =>
+            playerData.Money.Subscribe(this, static (_, self) =>
             {
-                UpdateAllItemsAffordability();
+                self.UpdateAllItemsAffordability();
             }).AddTo(_disposables);
 
             _shopCartPresenter?.OnCartChanged
-                .Subscribe(_ =>
+                .Subscribe(this, static (_, self) =>
                 {
-                    UpdateAllItemsAffordability();
+                    self.UpdateAllItemsAffordability();
                 })
                 .AddTo(_disposables);
-
+            _tradingPostService.OnCustomerArrived
+                .Subscribe(this, static (data, self) =>
+                {
+                    self.OnBargainCustomerChanged(data.itemId);
+                }).AddTo(_disposables);
+            _tradingPostService.OnCustomerLeft
+                .Subscribe(this, static (data, self) =>
+                {
+                    self.OnBargainCustomerChanged(data.itemId);
+                }).AddTo(_disposables);
             _tradingPostService.HighestBids.CollectionChanged += OnHighestBidsChanged;
             // 재료 인벤토리 수량 변경 시 실시간 그리드 갱신
             _materialInventory?.OnItemCountChangedAsObservable
-                    .Subscribe(OnMaterialCountChanged)
+                    .Subscribe(this, static (item, self) => self.OnMaterialCountChanged(item))
                     .AddTo(_disposables);
 
             // 룬 인벤토리 수량 변경 시 실시간 그리드 갱신
             _runeInventory?.OnItemCountChangedAsObservable
-                    .Subscribe(OnRuneCountChanged)
+                    .Subscribe(this, static (item, self) => self.OnRuneCountChanged(item))
                     .AddTo(_disposables);
 
             // 장비(무기) 인벤토리 변경 시 실시간 그리드 갱신
             if (_equipmentInventory != null)
             {
                 _equipmentInventory.OnAddWeapon
-                    .Subscribe(weapon =>
+                    .Subscribe(this, static (weapon, self) =>
                     {
-                        if (!_isSellMode || weapon == null) return;
-                        if (_categoryFilter == null || _categoryFilter(weapon))
+                        if (!self._isSellMode || weapon == null) return;
+                        if (self._categoryFilter == null || self._categoryFilter(weapon))
                         {
-                            AddItem(weapon).Forget();
+                            self.AddItem(weapon).Forget();
                         }
                     })
                     .AddTo(_disposables);
 
                 _equipmentInventory.OnRemoveWeapon
-                    .Subscribe(_ =>
+                    .Subscribe(this, static (_, self) =>
                     {
-                        if (_isSellMode)
+                        if (self._isSellMode)
                         {
-                            RefreshGridAsync().Forget();
+                            self.RefreshGridAsync().Forget();
                         }
                     })
                     .AddTo(_disposables);
             }
 
             _view.OnRefreshButtonAsObservable()
-                .Subscribe(_ =>
+                .Subscribe(this, static (_, self) =>
                 {
-                    if (_strategy is IRefreshableShopMode refreshStrategy)
+                    if (self._strategy is IRefreshableShopMode refreshStrategy)
                     {
                         refreshStrategy.OnRefresh();
-                        RefreshGridAsync().Forget();
-                        StartRefreshTimer();
+                        self.RefreshGridAsync().Forget();
+                        self.StartRefreshTimer();
                     }
                 })
                 .AddTo(_disposables);
         }
+
+        private void OnBargainCustomerChanged(uint itemId)
+        {
+            if (_displayItems.TryGetValue(itemId, out var view) && _displayedShopItems.TryGetValue(itemId, out var item))
+            {
+                if (_strategy != null && _strategy.IsBargainCard)
+                {
+                    view.SetPrice(_strategy.GetPrice(item));
+                }
+            }
+        }
+
         private void OnHighestBidsChanged(in NotifyCollectionChangedEventArgs<KeyValuePair<uint, BidContext>> e)
         {
             UpdateAllItemsAffordability();
@@ -290,7 +311,7 @@ namespace ElementalBlacksmithStory.UI
                         _registerCardDisposable?.Dispose();
                         _registerCardDisposable = registerCard.OnClickAsObservable()
                             .ThrottleFirst(TimeSpan.FromMilliseconds(200))
-                            .Subscribe(_ => bargainStrategy.OnRegisterCardClicked());
+                            .Subscribe(bargainStrategy, static (_, strategy) => strategy.OnRegisterCardClicked());
                     }
                 }
             }
@@ -342,9 +363,9 @@ namespace ElementalBlacksmithStory.UI
             }
             var clickSub = itemView.OnClickAsObservable()
                 .ThrottleFirst(TimeSpan.FromMilliseconds(200))
-                .Subscribe(_ =>
+                .Subscribe((this, item), static (_, state) =>
                 {
-                    _strategy?.OnItemClicked(item);
+                    state.Item1._strategy?.OnItemClicked(state.item);
                 });
             _itemDisposables[item.Id] = clickSub;
 

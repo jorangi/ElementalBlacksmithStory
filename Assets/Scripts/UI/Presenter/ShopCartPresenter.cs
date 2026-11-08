@@ -130,131 +130,131 @@ namespace ElementalBlacksmithStory.UI
         private void BindCartButtons()
         {
             _view.OnClickAcceptAsObservable()
-                .Subscribe(_ =>
+                .Subscribe(this, static (_, self) =>
                 {
-                    if (_cartItems.Count == 0) return;
+                    if (self._cartItems.Count == 0) return;
 
                     var purchaseList = new List<(IShopItem item, uint amount)>();
-                    foreach (var entry in _cartItems.Values)
+                    foreach (var entry in self._cartItems.Values)
                     {
                         purchaseList.Add((entry.item, entry.ea));
                     }
 
-                    ulong totalCost = GetTotalCartCost();
-                    bool result = _isSellMode
-                        ? _shopService.TrySell(purchaseList, totalCost)
-                        : _shopService.TryPurchase(purchaseList, totalCost);
+                    ulong totalCost = self.GetTotalCartCost();
+                    bool result = self._isSellMode
+                        ? self._shopService.TrySell(purchaseList, totalCost)
+                        : self._shopService.TryPurchase(purchaseList, totalCost);
 
                     if (result)
                     {
-                        _soundPublisher.Publish(new PlaySoundEvent(40107));
-                        ClearCart(isPurchased: true);
+                        self._soundPublisher.Publish(new PlaySoundEvent(40107));
+                        self.ClearCart(isPurchased: true);
                     }
                 })
                 .AddTo(_disposables);
 
             _view.OnClickCancelAsObservable()
-                .Subscribe(_ =>
+                .Subscribe(this, static (_, self) =>
                 {
-                    ClearCart(isPurchased: false);
+                    self.ClearCart(isPurchased: false);
                 })
                 .AddTo(_disposables);
         }
 
         private void BindAmountModal()
         {
-            _playerData.Money.Subscribe(e =>
+            _playerData.Money.Subscribe(this, static (e, self) =>
             {
-                if (_selectShopAmountView != null && _selectShopAmountView.IsActivated)
+                if (self._selectShopAmountView != null && self._selectShopAmountView.IsActivated)
                 {
-                    UpdateModalPriceAndWallet();
+                    self.UpdateModalPriceAndWallet();
                 }
-                _onCartChanged.OnNext(Unit.Default);
+                self._onCartChanged.OnNext(Unit.Default);
             }).AddTo(_disposables);
 
             _selectShopAmountView.OnIncreaseAsObservable()
                 .ThrottleFirst(TimeSpan.FromMilliseconds(20))
-                .Subscribe(_ =>
+                .Subscribe(this, static (_, self) =>
                 {
-                    if (_currentModalItem is Weapon) return;
+                    if (self._currentModalItem is Weapon) return;
 
-                    int maxAmount = (int)GetModalMaxAmount();
-                    _modalAmount = (uint)Mathf.Min((int)_modalAmount + 1, maxAmount);
-                    _selectShopAmountView.SetAmount(_modalAmount);
-                    UpdateModalPriceAndWallet();
+                    int maxAmount = (int)self.GetModalMaxAmount();
+                    self._modalAmount = (uint)Mathf.Min((int)self._modalAmount + 1, maxAmount);
+                    self._selectShopAmountView.SetAmount(self._modalAmount);
+                    self.UpdateModalPriceAndWallet();
                 })
                 .AddTo(_disposables);
 
             _selectShopAmountView.OnDecreaseAsObservable()
                 .ThrottleFirst(TimeSpan.FromMilliseconds(20))
-                .Subscribe(_ =>
+                .Subscribe(this, static (_, self) =>
                 {
-                    if (_currentModalItem is Weapon) return;
+                    if (self._currentModalItem is Weapon) return;
 
-                    int maxAmount = (int)GetModalMaxAmount();
-                    _modalAmount = (uint)Mathf.Max((int)_modalAmount - 1, 0);
-                    _selectShopAmountView.SetAmount(_modalAmount);
-                    UpdateModalPriceAndWallet();
+                    int maxAmount = (int)self.GetModalMaxAmount();
+                    self._modalAmount = (uint)Mathf.Max((int)self._modalAmount - 1, 0);
+                    self._selectShopAmountView.SetAmount(self._modalAmount);
+                    self.UpdateModalPriceAndWallet();
                 })
                 .AddTo(_disposables);
 
             _selectShopAmountView.OnChangedAmountAsObservable()
                 .ThrottleFirst(TimeSpan.FromMilliseconds(20))
-                .Subscribe(amount =>
+                .Subscribe(this, static (amount, self) =>
                 {
-                    if (_currentModalItem is Weapon) return;
+                    if (self._currentModalItem is Weapon) return;
 
-                    int maxAmount = (int)GetModalMaxAmount();
-                    _modalAmount = (uint)Mathf.Clamp((int)amount, 0, maxAmount);
-                    _selectShopAmountView.SetAmount(_modalAmount);
-                    UpdateModalPriceAndWallet();
+                    int maxAmount = (int)self.GetModalMaxAmount();
+                    self._modalAmount = (uint)Mathf.Clamp((int)amount, 0, maxAmount);
+                    self._selectShopAmountView.SetAmount(self._modalAmount);
+                    self.UpdateModalPriceAndWallet();
                 })
                 .AddTo(_disposables);
 
             _selectShopAmountView.OnPurchaseAsObservable()
                 .ThrottleFirst(TimeSpan.FromMilliseconds(200))
-                .Subscribe(_ =>
+                .Subscribe(this, static (_, self) =>
                 {
-                    if (_modalAmount == 0 || _currentModalItem == null) return;
+                    if (self._modalAmount == 0 || self._currentModalItem == null) return;
 
-                    uint purchaseItemId = _modalItemId;
-                    uint amount = _modalAmount;
-                    ulong totalPrice = _modalUnitPrice * (ulong)amount;
+                    uint purchaseItemId = self._modalItemId;
+                    uint amount = self._modalAmount;
+                    ulong totalPrice = self._modalUnitPrice * (ulong)amount;
 
-                    var singlePurchase = new List<(IShopItem item, uint amount)> { (_currentModalItem, amount) };
-                    bool result = _isSellMode
-                        ? _shopService.TrySell(singlePurchase, totalPrice)
-                        : _shopService.TryPurchase(singlePurchase, totalPrice);
+                    var singlePurchase = new List<(IShopItem item, uint amount)> { (self._currentModalItem, amount) };
+                    bool result = self._isSellMode
+                        ? self._shopService.TrySell(singlePurchase, totalPrice)
+                        : self._shopService.TryPurchase(singlePurchase, totalPrice);
 
                     if (result)
                     {
-                        _soundPublisher.Publish(new PlaySoundEvent(40107));
-                        if (_shopData != null && _shopData.PurchaseDialogueId > 0)
+                        self._soundPublisher.Publish(new PlaySoundEvent(40107));
+                        if (self._shopData != null && self._shopData.PurchaseDialogueId > 0)
                         {
-                            _shopDialoguePublisher.Publish(new StartShopDialogueEvent(_shopData.PurchaseDialogueId));
+                            self._shopDialoguePublisher.Publish(new StartShopDialogueEvent(self._shopData.PurchaseDialogueId));
                         }
-                        if (_cartItems.ContainsKey(purchaseItemId))
+                        if (self._cartItems.ContainsKey(purchaseItemId))
                         {
-                            RemoveItem(purchaseItemId, _cartItems[purchaseItemId].ea);
+                            self.RemoveItem(purchaseItemId, self._cartItems[purchaseItemId].ea);
                         }
-                        _selectShopAmountView.Hide();
+                        self._selectShopAmountView.Hide();
                     }
                 })
                 .AddTo(_disposables);
 
             _selectShopAmountView.OnSubmitAsObservable()
                 .ThrottleFirst(TimeSpan.FromMilliseconds(200))
-                .Subscribe(_ =>
+                .Subscribe(this, static (_, self) =>
                 {
-                    OnModalSubmit();
+                    self.OnModalSubmit();
                 })
                 .AddTo(_disposables);
 
             _selectShopAmountView.OnCancelAsObservable()
                 .ThrottleFirst(TimeSpan.FromMilliseconds(200))
-                .Subscribe(_ =>
+                .Subscribe(this, static (_, self) =>
                 {
-                    _selectShopAmountView.Hide();
+                    self._selectShopAmountView.Hide();
                 })
                 .AddTo(_disposables);
         }
@@ -485,16 +485,16 @@ namespace ElementalBlacksmithStory.UI
 
             CompositeDisposable d = new();
             newItem.OnLongPressAsObservable()
-                .Subscribe(_ =>
+                .Subscribe((this, item), static (_, state) =>
                 {
-                    RemoveItem(item.Id, _cartItems[item.Id].ea);
+                    state.Item1.RemoveItem(state.item.Id, state.Item1._cartItems[state.item.Id].ea);
                 }).AddTo(d);
 
             newItem.OnClickAsObservable()
                 .ThrottleFirst(TimeSpan.FromMilliseconds(200))
-                .Subscribe(_ =>
+                .Subscribe((this, item), static (_, state) =>
                 {
-                    OpenAmountModal(item).Forget();
+                    state.Item1.OpenAmountModal(state.item).Forget();
                 }).AddTo(d);
 
             _itemDisposables[newItem] = d;

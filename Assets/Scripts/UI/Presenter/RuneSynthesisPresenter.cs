@@ -53,32 +53,32 @@ namespace ElementalBlacksmithStory.UI
             {
                 int index = i;
                 _runeSynthesisView.OnRuneSlotButtonAsObservable(index)
-                    .Subscribe(_ =>
+                    .Subscribe((this, index), static (_, state) =>
                     {
-                        selectedSocketIndex = index;
-                        _runeSynthesisView.SelectSocket(index);
+                        state.Item1.selectedSocketIndex = state.index;
+                        state.Item1._runeSynthesisView.SelectSocket(state.index);
                     })
                     .AddTo(_disposables);
 
                 _runeSynthesisView.OnRuneSlotRightClickAsObservable(index)
-                    .Subscribe(_ => UnequipRune(index))
+                    .Subscribe((this, index), static (_, state) => state.Item1.UnequipRune(state.index))
                     .AddTo(_disposables);
             }
             _runeSynthesisView.SelectSocket(0);
 
             _runeSynthesisView.OnCancelButtonAsObservable()
-                .Subscribe(_ =>
+                .Subscribe(this, static (_, self) =>
                 {
-                    CancelDraftRunes();
-                    Hide();
+                    self.CancelDraftRunes();
+                    self.Hide();
                 })
                 .AddTo(_disposables);
 
             _runeSynthesisView.OnSynthesizeButtonAsObservable()
-                .Subscribe(_ =>
+                .Subscribe(this, static (_, self) =>
                 {
-                    SynthesizeRunes().Forget();
-                    soundPublisher.Publish(new PlaySoundEvent(40108));
+                    self.SynthesizeRunes().Forget();
+                    self._soundPublisher.Publish(new PlaySoundEvent(40108));
                 })
                 .AddTo(_disposables);
         }

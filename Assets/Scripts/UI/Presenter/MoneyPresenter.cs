@@ -21,9 +21,9 @@ namespace ElementalBlacksmithStory.UI
             MoneyView view)
         {
             this._view = view;
-            playerData.Money.Subscribe(e =>
+            playerData.Money.Subscribe(this, static (e, self) =>
             {
-                _view.SetMoney(e).Forget();
+                self._view.SetMoney(e).Forget();
             }).AddTo(_disposables);
         }
         public void Start() { }

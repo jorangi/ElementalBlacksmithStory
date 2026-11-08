@@ -33,7 +33,7 @@ namespace ElementalBlacksmithStory.UI
             
             view.OnClickAsObservable()
                 .ThrottleFirst(TimeSpan.FromMilliseconds(300))
-                .Subscribe(_=>Sell())
+                .Subscribe(this, static (_, self) => self.Sell())
                 .AddTo(_disposables);
 
             weaponChangeSubscriber.Subscribe(e =>

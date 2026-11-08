@@ -80,9 +80,7 @@ namespace ElementalBlacksmithStory.UI.Strategy
         private ulong GetCustomerCount(IShopItem item)
         {
             if (item == null || _tradingPostService == null) return 0;
-
-            // TODO: TradingPostService에 추가될 출품 물품별 손님 컬렉션(CustomerData 목록)과 연동
-            return 0;
+            return (ulong)_tradingPostService.GetBargainCustomerCount(item.Id);
         }
 
         public UniTask GetDisplayItemAsync(List<IShopItem> results, bool isSellMode, CancellationToken ct = default)

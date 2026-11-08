@@ -69,11 +69,11 @@ namespace ElementalBlacksmithStory.UI
                 if (runeSlots[i] != null)
                 {
                     runeSlots[i].OnPointerClickAsObservable()
-                        .Subscribe(e =>
+                        .Subscribe((this, index), static (e, state) =>
                         {
                             if (e.button == PointerEventData.InputButton.Right)
                             {
-                                _runeSlotRightClickSubjects[index].OnNext(Unit.Default);
+                                state.Item1._runeSlotRightClickSubjects[state.index].OnNext(Unit.Default);
                             }
                         })
                         .AddTo(this);

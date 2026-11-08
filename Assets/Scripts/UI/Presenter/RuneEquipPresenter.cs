@@ -59,32 +59,32 @@ namespace ElementalBlacksmithStory.UI
             {
                 int index = i;
                 _runeEquipView.OnRuneSlotButtonAsObservable(index)
-                    .Subscribe(_ =>
+                    .Subscribe((this, index), static (_, state) =>
                     {
-                        selectedSocketIndex = index;
-                        _runeEquipView.SelectSocket(index);
+                        state.Item1.selectedSocketIndex = state.index;
+                        state.Item1._runeEquipView.SelectSocket(state.index);
                     })
                     .AddTo(_disposables);
 
                 _runeEquipView.OnRuneSlotRightClickAsObservable(index)
-                    .Subscribe(_ => UnequipRune(index))
+                    .Subscribe((this, index), static (_, state) => state.Item1.UnequipRune(state.index))
                     .AddTo(_disposables);
             }
             _runeEquipView.SelectSocket(0);
 
             _runeEquipView.OnCancelButtonAsObservable()
-                .Subscribe(_ =>
+                .Subscribe(this, static (_, self) =>
                 {
-                    CancelDraftRunes();
-                    Hide();
+                    self.CancelDraftRunes();
+                    self.Hide();
                 })
                 .AddTo(_disposables);
 
             _runeEquipView.OnApplyButtonAsObservable()
-                .Subscribe(_ =>
+                .Subscribe(this, static (_, self) =>
                 {
-                    ApplyRunes();
-                    soundPublisher.Publish(new PlaySoundEvent(40108));
+                    self.ApplyRunes();
+                    self._soundPublisher.Publish(new PlaySoundEvent(40108));
                 })
                 .AddTo(_disposables);
         }
@@ -98,10 +98,10 @@ namespace ElementalBlacksmithStory.UI
                 _runeEquipView.SetSocketCount(_currentWeapon.RuneSlot);
                 UpdateWeaponViewAsync(_currentWeapon).Forget();
 
-                _currentWeapon.OnRuneSlotChanged.Subscribe(e => _runeEquipView.SetSocketCount(e))
+                _currentWeapon.OnRuneSlotChanged.Subscribe(this, static (e, self) => self._runeEquipView.SetSocketCount(e))
                                             .AddTo(_weaponDisposable);
 
-                _currentWeapon.OnRuneChanged.Subscribe(e => RuneChanged(e.socketIndex, e.rune).Forget())
+                _currentWeapon.OnRuneChanged.Subscribe(this, static (e, self) => self.RuneChanged(e.socketIndex, e.rune).Forget())
                                             .AddTo(_weaponDisposable);
 
                 SyncRunesFromWeapon();

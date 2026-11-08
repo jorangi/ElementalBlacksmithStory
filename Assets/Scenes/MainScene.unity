@@ -119,6 +119,17 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!114 &13482175 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1417954823979527918, guid: 023ceea11c1bb2d43971d266e6fbc865, type: 3}
+  m_PrefabInstance: {fileID: 258166883637206803}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Button
 --- !u!1 &55558799
 GameObject:
   m_ObjectHideFlags: 0
@@ -6827,6 +6838,11 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 8012063884432612258, guid: 023ceea11c1bb2d43971d266e6fbc865, type: 3}
   m_PrefabInstance: {fileID: 258166883637206803}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1419986682 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6211322828220891808, guid: 023ceea11c1bb2d43971d266e6fbc865, type: 3}
+  m_PrefabInstance: {fileID: 258166883637206803}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &1439412755 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 3239868006552183839, guid: 023ceea11c1bb2d43971d266e6fbc865, type: 3}
@@ -7817,8 +7833,10 @@ MonoBehaviour:
   _auctionUI: {fileID: 1134216189}
   _customerListUI: {fileID: 929242061}
   _customerListRect: {fileID: 927520428}
+  _noListAlert: {fileID: 1419986682}
   _listItemPrefab: {fileID: 9021264712907660940, guid: d0b3953b320573940a7c1fdb6eab7509, type: 3}
   _closeButton: {fileID: 605804260}
+  _withdrawButton: {fileID: 13482175}
 --- !u!114 &2073992098
 MonoBehaviour:
   m_ObjectHideFlags: 0

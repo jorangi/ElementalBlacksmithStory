@@ -25,6 +25,7 @@ namespace ElementalBlacksmithStory.Core
             builder.Register<TradingPostService>(Lifetime.Singleton);
             builder.Register<ItemTierService>(Lifetime.Singleton);
             builder.Register<AuctionSimulatingService>(Lifetime.Singleton);
+            builder.Register<BargainSimulatingService>(Lifetime.Singleton);
             builder.Register<IPlayerProgressionService, PlayerProgressionService>(Lifetime.Singleton);
             builder.Register<RuneService>(Lifetime.Singleton);
             builder.Register<IItemShopFactory, ItemShopFactory>(Lifetime.Singleton);

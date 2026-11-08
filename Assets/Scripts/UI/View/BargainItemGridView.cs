@@ -44,7 +44,7 @@ namespace ElementalBlacksmithStory.UI
                     var card = Instantiate(_itemCardPrefab, _container).GetComponent<BargainRegisterItemView>();
 
                     card.OnButtonAsObservable()
-                        .Subscribe(_ => _onCardClick.OnNext(card))
+                        .Subscribe((this, card), static (_, state) => state.Item1._onCardClick.OnNext(state.card))
                         .AddTo(card);
                     return card;
                 },

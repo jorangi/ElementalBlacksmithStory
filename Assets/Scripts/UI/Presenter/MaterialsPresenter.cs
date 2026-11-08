@@ -59,9 +59,9 @@ namespace ElementalBlacksmithStory.UI
             RefreshMaterialsView();
 
             _inventory.OnItemCountChangedAsObservable
-                .Subscribe(item =>
+                .Subscribe(this, static (item, self) =>
                 {
-                    _view.UpdateOrAddItem(item.item, item.count, _materialSpriteLoader).Forget();
+                    self._view.UpdateOrAddItem(item.item, item.count, self._materialSpriteLoader).Forget();
                 })
                 .AddTo(_disposables);
 
@@ -69,99 +69,99 @@ namespace ElementalBlacksmithStory.UI
 
             _view.OnMaterialClickAsObservable()
                 .ThrottleFirst(TimeSpan.FromMilliseconds(200))
-                .Subscribe(item =>
+                .Subscribe(this, static (item, self) =>
                 {
-                    OnMaterialItemClicked(item.id, item.count, item.itemView).Forget();
+                    self.OnMaterialItemClicked(item.id, item.count, item.itemView).Forget();
                 })
                 .AddTo(_disposables);
 
             _view.OnBagClickAsObservable()
                 .ThrottleFirst(TimeSpan.FromMilliseconds(200))
-                .Subscribe(_ =>
+                .Subscribe(this, static (_, self) =>
                 {
-                    _view.ShowingMaterialsAnimation().Forget();
-                    _positionPublisher.Publish(new EnhanceButtonPositionEvent(0f));
+                    self._view.ShowingMaterialsAnimation().Forget();
+                    self._positionPublisher.Publish(new EnhanceButtonPositionEvent(0f));
                 })
                 .AddTo(_disposables);
 
             _view.OnHandleDragAsObservable()
-                .Subscribe(e =>
+                .Subscribe(this, static (e, self) =>
                 {
-                    if (isHidingTriggered) return;
+                    if (self.isHidingTriggered) return;
 
-                    dragY = Mathf.Min(0f, dragY + e.delta.y);
-                    if (dragY < -400f)
+                    self.dragY = Mathf.Min(0f, self.dragY + e.delta.y);
+                    if (self.dragY < -400f)
                     {
-                        isHidingTriggered = true;
-                        _view.DisableHandle();
-                        _view.HidingMaterialsAnimation().Forget();
-                        _positionPublisher.Publish(new EnhanceButtonPositionEvent(-1011f));
-                        dragY = 0f;
+                        self.isHidingTriggered = true;
+                        self._view.DisableHandle();
+                        self._view.HidingMaterialsAnimation().Forget();
+                        self._positionPublisher.Publish(new EnhanceButtonPositionEvent(-1011f));
+                        self.dragY = 0f;
                         return;
                     }
-                    _view.SyncYPosition(dragY);
-                    _positionPublisher.Publish(new EnhanceButtonPositionEvent(dragY));
+                    self._view.SyncYPosition(self.dragY);
+                    self._positionPublisher.Publish(new EnhanceButtonPositionEvent(self.dragY));
                 })
                 .AddTo(_disposables);
 
             _view.OnHandleEndDragAsObservable()
-                .Subscribe(e =>
+                .Subscribe(this, static (e, self) =>
                 {
-                    dragY = 0;
-                    if (isHidingTriggered)
+                    self.dragY = 0;
+                    if (self.isHidingTriggered)
                     {
-                        isHidingTriggered = false;
+                        self.isHidingTriggered = false;
                         return;
                     }
-                    _view.ShowingMaterialsAnimation().Forget();
-                    _positionPublisher.Publish(new EnhanceButtonPositionEvent(0f));
+                    self._view.ShowingMaterialsAnimation().Forget();
+                    self._positionPublisher.Publish(new EnhanceButtonPositionEvent(0f));
                 })
                 .AddTo(_disposables);
 
             _selectMaterialAmountView.OnChangedAmountAsObservable()
                 .ThrottleFirst(TimeSpan.FromMilliseconds(20))
-                .Subscribe(e =>
+                .Subscribe(this, static (e, self) =>
                 {
-                    _selectedAmount.Value = Math.Clamp(e, 0, Math.Min(MAX_AMOUNT, _selectedItemView.MaterialCount));
-                    _selectMaterialAmountView.SetAmount(_selectedAmount.Value);
+                    self._selectedAmount.Value = Math.Clamp(e, 0, Math.Min(MAX_AMOUNT, self._selectedItemView.MaterialCount));
+                    self._selectMaterialAmountView.SetAmount(self._selectedAmount.Value);
                 })
                 .AddTo(_disposables);
             _selectMaterialAmountView.OnIncreaseAsObservable()
                 .ThrottleFirst(TimeSpan.FromMilliseconds(20))
-                .Subscribe(_ =>
+                .Subscribe(this, static (_, self) =>
                 {
-                    _selectedAmount.Value = Math.Clamp(_selectedAmount.Value + 1, 0, Math.Min(MAX_AMOUNT, _selectedItemView.MaterialCount));
-                    _selectMaterialAmountView.SetAmount(_selectedAmount.Value);
+                    self._selectedAmount.Value = Math.Clamp(self._selectedAmount.Value + 1, 0, Math.Min(MAX_AMOUNT, self._selectedItemView.MaterialCount));
+                    self._selectMaterialAmountView.SetAmount(self._selectedAmount.Value);
                 })
                 .AddTo(_disposables);
 
             _selectMaterialAmountView.OnDecreaseAsObservable()
                 .ThrottleFirst(TimeSpan.FromMilliseconds(20))
-                .Subscribe(_ =>
+                .Subscribe(this, static (_, self) =>
                 {
-                    _selectedAmount.Value = Math.Clamp(_selectedAmount.Value - 1, 0, Math.Min(MAX_AMOUNT, _selectedItemView.MaterialCount));
-                    _selectMaterialAmountView.SetAmount(_selectedAmount.Value);
+                    self._selectedAmount.Value = Math.Clamp(self._selectedAmount.Value - 1, 0, Math.Min(MAX_AMOUNT, self._selectedItemView.MaterialCount));
+                    self._selectMaterialAmountView.SetAmount(self._selectedAmount.Value);
                 })
                 .AddTo(_disposables);
 
             _selectMaterialAmountView.OnSubmitAsObservable()
                 .ThrottleFirst(TimeSpan.FromMilliseconds(200))
-                .Subscribe(_ =>
+                .Subscribe(this, static (_, self) =>
                 {
-                    if (_selectedAmount.Value == 0) return;
-                    Debug.Log($"[MaterialPresenter] 선택한 재료: {_selectedAmount.Value}개");
-                    _selectedItemView.Select();
-                    _selectedItemView.SetAmount(_selectedAmount.Value);
-                    // _selectedItemView.Check();
-                    _submitMaterialPublisher.Publish(new SubmitMaterialEvent(_selectedMaterialId, _selectedAmount.Value));
-                    _selectMaterialAmountView.Hide();
+                    if (self._selectedAmount.Value == 0) return;
+                    Debug.Log($"[MaterialPresenter] 선택한 재료: {self._selectedAmount.Value}개");
+                    self._selectedItemView.Select();
+                    self._selectedItemView.SetAmount(self._selectedAmount.Value);
+                    // self._selectedItemView.Check();
+                    self._submitMaterialPublisher.Publish(new SubmitMaterialEvent(self._selectedMaterialId, self._selectedAmount.Value));
+                    self._selectMaterialAmountView.Hide();
                 })
                 .AddTo(_disposables);
             _selectMaterialAmountView.OnCancelAsObservable()
                 .ThrottleFirst(TimeSpan.FromMilliseconds(200))
-                .Subscribe(_ =>
+                .Subscribe(this, static (_, self) =>
                 {
-                    _selectMaterialAmountView.Hide();
+                    self._selectMaterialAmountView.Hide();
                 })
                 .AddTo(_disposables);
         }

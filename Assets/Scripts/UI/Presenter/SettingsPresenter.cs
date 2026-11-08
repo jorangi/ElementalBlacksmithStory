@@ -31,27 +31,27 @@ namespace ElementalBlacksmithStory.UI
                 _service.IsScreenShake
             );
 
-            _view.OnBGMValueChanged.Subscribe(val =>
+            _view.OnBGMValueChanged.Subscribe(this, static (val, self) =>
             {
-                _service.SetBGMVolume(val);
-                _view.UpdateBGMPercentText(val);
+                self._service.SetBGMVolume(val);
+                self._view.UpdateBGMPercentText(val);
             }).AddTo(_disposables);
 
-            _view.OnSFXValueChanged.Subscribe(val =>
+            _view.OnSFXValueChanged.Subscribe(this, static (val, self) =>
             {
-                _service.SetSFXVolume(val);
-                _view.UpdateSFXPercentText(val);
+                self._service.SetSFXVolume(val);
+                self._view.UpdateSFXPercentText(val);
             }).AddTo(_disposables);
 
-            _view.OnVibrationChanged.Subscribe(val => _service.SetVibration(val)).AddTo(_disposables);
-            _view.OnEnhancementPresentationClick.Subscribe(_ => _service.ExecuteEnhancementPresentation()).AddTo(_disposables);
-            _view.OnProtectMaterialsClick.Subscribe(_ => _service.ExecuteProtectMaterials()).AddTo(_disposables);
-            _view.OnAutoselectMaterialsChanged.Subscribe(val => _service.SetAutoselectMaterials(val)).AddTo(_disposables);
-            _view.OnExpeditionNoticeChanged.Subscribe(val => _service.SetExpeditionNotice(val)).AddTo(_disposables);
-            _view.OnQuicksellAlertChanged.Subscribe(val => _service.SetQuicksellAlert(val)).AddTo(_disposables);
-            _view.OnScreenShakeChanged.Subscribe(val => _service.SetScreenShake(val)).AddTo(_disposables);
-            _view.OnAccountLinkClick.Subscribe(_ => _service.ExecuteAccountLink()).AddTo(_disposables);
-            _view.OnTermsOfUseClick.Subscribe(_ => _service.ExecuteTermsOfUse()).AddTo(_disposables);
+            _view.OnVibrationChanged.Subscribe(this, static (val, self) => self._service.SetVibration(val)).AddTo(_disposables);
+            _view.OnEnhancementPresentationClick.Subscribe(this, static (_, self) => self._service.ExecuteEnhancementPresentation()).AddTo(_disposables);
+            _view.OnProtectMaterialsClick.Subscribe(this, static (_, self) => self._service.ExecuteProtectMaterials()).AddTo(_disposables);
+            _view.OnAutoselectMaterialsChanged.Subscribe(this, static (val, self) => self._service.SetAutoselectMaterials(val)).AddTo(_disposables);
+            _view.OnExpeditionNoticeChanged.Subscribe(this, static (val, self) => self._service.SetExpeditionNotice(val)).AddTo(_disposables);
+            _view.OnQuicksellAlertChanged.Subscribe(this, static (val, self) => self._service.SetQuicksellAlert(val)).AddTo(_disposables);
+            _view.OnScreenShakeChanged.Subscribe(this, static (val, self) => self._service.SetScreenShake(val)).AddTo(_disposables);
+            _view.OnAccountLinkClick.Subscribe(this, static (_, self) => self._service.ExecuteAccountLink()).AddTo(_disposables);
+            _view.OnTermsOfUseClick.Subscribe(this, static (_, self) => self._service.ExecuteTermsOfUse()).AddTo(_disposables);
         }
         public void Hide()
         {

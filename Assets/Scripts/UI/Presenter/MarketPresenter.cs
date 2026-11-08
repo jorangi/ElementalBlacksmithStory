@@ -60,27 +60,27 @@ namespace ElementalBlacksmithStory.UI
 
 
             _tabPresenter.OnTabSwitchedAsObservable()
-                .Subscribe(isSellMode => UpdateShopModeStrategy(isSellMode))
+                .Subscribe(this, static (isSellMode, self) => self.UpdateShopModeStrategy(isSellMode))
                 .AddTo(_disposable);
 
             _view.OnGeneralShopBtnClickAsObservable
-                .Subscribe(_ => OpenShop(MarketType.GENERAL))
+                .Subscribe(this, static (_, self) => self.OpenShop(MarketType.GENERAL))
                 .AddTo(_disposable);
 
             _view.OnEquipmentShopBtnClickAsObservable
-                .Subscribe(_ => OpenShop(MarketType.WEAPON))
+                .Subscribe(this, static (_, self) => self.OpenShop(MarketType.WEAPON))
                 .AddTo(_disposable);
 
             _view.OnTradingPostBtnClickAsObservable
-                .Subscribe(_ => OpenShop(MarketType.TRADINGPOST))
+                .Subscribe(this, static (_, self) => self.OpenShop(MarketType.TRADINGPOST))
                 .AddTo(_disposable);
 
             _view.OnCloseBtnClickAsObservable
-                .Subscribe(_ =>
+                .Subscribe(this, static (_, self) =>
                 {
-                    _shopKeeperPresenter.ClearView();
-                    _itemGridPresenter.HideShop();
-                    _view.Hide();
+                    self._shopKeeperPresenter.ClearView();
+                    self._itemGridPresenter.HideShop();
+                    self._view.Hide();
                 })
                 .AddTo(_disposable);
         }

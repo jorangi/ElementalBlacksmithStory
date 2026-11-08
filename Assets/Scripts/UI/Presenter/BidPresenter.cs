@@ -50,51 +50,51 @@ namespace ElementalBlacksmithStory.UI
             _materialSpriteLoader = materialSpriteLoader;
             _runeSpriteLoader = runeSpriteLoader;
             _view.OnBidButtonAsObservable()
-                .Subscribe(_ =>
+                .Subscribe(this, static (_, self) =>
                 {
-                    _service.Bid(_currentTargetId, new BidContext("player", _settedPrice));
-                    _playerData.TrySpend(_settedPrice);
-                    Hide();
+                    self._service.Bid(self._currentTargetId, new BidContext("player", self._settedPrice));
+                    self._playerData.TrySpend(self._settedPrice);
+                    self.Hide();
                 }).AddTo(_disposables);
 
             _view.OnCancelButtonAsObservable()
-                .Subscribe(_ => { Hide(); }).AddTo(_disposables);
+                .Subscribe(this, static (_, self) => { self.Hide(); }).AddTo(_disposables);
 
             _view.OnChangedBidPriceAsObservable()
-                .Subscribe(e =>
+                .Subscribe(this, static (e, self) =>
                 {
-                    ulong money = _playerData.Money.CurrentValue;
+                    ulong money = self._playerData.Money.CurrentValue;
                     if (e > money)
                     {
-                        _settedPrice = money;
-                        _view.SetBidPrice(_settedPrice);
+                        self._settedPrice = money;
+                        self._view.SetBidPrice(self._settedPrice);
                     }
                     else
                     {
-                        _settedPrice = e;
+                        self._settedPrice = e;
                     }
-                    _service.HighestBids.TryGetValue(_currentTargetId, out var bid);
-                    _view.SetInteract(IsBidValid(bid));
+                    self._service.HighestBids.TryGetValue(self._currentTargetId, out var bid);
+                    self._view.SetInteract(self.IsBidValid(bid));
                 }).AddTo(_disposables);
 
             _view.OnIncreaseButtonAsObservable()
                 .ThrottleFirst(TimeSpan.FromMilliseconds(20))
-                .Subscribe(_ =>
+                .Subscribe(this, static (_, self) =>
                 {
-                    _settedPrice = Math.Clamp(_settedPrice + GetPriceStep(_settedPrice), 0, _playerData.Money.CurrentValue);
-                    _view.SetBidPrice(_settedPrice);
-                    _service.HighestBids.TryGetValue(_currentTargetId, out var bid);
-                    _view.SetInteract(IsBidValid(bid));
+                    self._settedPrice = Math.Clamp(self._settedPrice + self.GetPriceStep(self._settedPrice), 0, self._playerData.Money.CurrentValue);
+                    self._view.SetBidPrice(self._settedPrice);
+                    self._service.HighestBids.TryGetValue(self._currentTargetId, out var bid);
+                    self._view.SetInteract(self.IsBidValid(bid));
                 }).AddTo(_disposables);
 
             _view.OnDecreaseButtonAsObservable()
                 .ThrottleFirst(TimeSpan.FromMilliseconds(20))
-                .Subscribe(_ =>
+                .Subscribe(this, static (_, self) =>
                 {
-                    _settedPrice = Math.Clamp(_settedPrice - GetPriceStep(_settedPrice), 0, _playerData.Money.CurrentValue);
-                    _view.SetBidPrice(_settedPrice);
-                    _service.HighestBids.TryGetValue(_currentTargetId, out var bid);
-                    _view.SetInteract(IsBidValid(bid));
+                    self._settedPrice = Math.Clamp(self._settedPrice - self.GetPriceStep(self._settedPrice), 0, self._playerData.Money.CurrentValue);
+                    self._view.SetBidPrice(self._settedPrice);
+                    self._service.HighestBids.TryGetValue(self._currentTargetId, out var bid);
+                    self._view.SetInteract(self.IsBidValid(bid));
                 }).AddTo(_disposables);
 
             _service.HighestBids.CollectionChanged += OnChangedHighestBids;

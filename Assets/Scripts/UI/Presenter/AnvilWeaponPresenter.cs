@@ -54,16 +54,16 @@ namespace ElementalBlacksmithStory.UI
                 await RefreshAllRunesAsync(_currentWeapon, cancellationToken);
 
                 _currentWeapon.OnRuneSlotChanged
-                    .Subscribe(slotCount =>
+                    .Subscribe(this, static (slotCount, self) =>
                     {
-                        _anvilWeaponView.SetRuneSlotCount(slotCount);
+                        self._anvilWeaponView.SetRuneSlotCount(slotCount);
                     })
                     .AddTo(_weaponDisposables);
 
                 _currentWeapon.OnRuneChanged
-                    .Subscribe(change =>
+                    .Subscribe(this, static (change, self) =>
                     {
-                        UpdateRuneSlotAsync(change.socketIndex, change.rune).Forget();
+                        self.UpdateRuneSlotAsync(change.socketIndex, change.rune).Forget();
                     })
                     .AddTo(_weaponDisposables);
             }
