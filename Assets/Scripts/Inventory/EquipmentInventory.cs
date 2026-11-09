@@ -94,6 +94,37 @@ namespace ElementalBlacksmithStory.Inventory
             }
             return false;
         }
+
+        /// <summary>
+        /// 특정 무기 인스턴스를 인벤토리에서 찾아 제거
+        /// </summary>
+        public bool Remove(Weapon weapon)
+        {
+            if (weapon == null) return false;
+            for (int i = 0; i < _inventory.Count; i++)
+            {
+                if (_inventory[i] == weapon || (_inventory[i] != null && _inventory[i].Id == weapon.Id))
+                {
+                    return Remove((uint)i);
+                }
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// 무기 인스턴스 ID로 찾아 제거
+        /// </summary>
+        public bool RemoveById(uint instanceId)
+        {
+            for (int i = 0; i < _inventory.Count; i++)
+            {
+                if (_inventory[i] != null && _inventory[i].Id == instanceId)
+                {
+                    return Remove((uint)i);
+                }
+            }
+            return false;
+        }
         /// <summary>
         /// idx번째 아이템을 Get(현재는 Weapon만 지원)
         /// </summary>

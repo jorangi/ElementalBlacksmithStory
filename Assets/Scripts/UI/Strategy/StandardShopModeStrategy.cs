@@ -141,7 +141,7 @@ namespace ElementalBlacksmithStory.UI.Strategy
             for (int i = 0; i < stockedItem.Count; i++)
             {
                 var entry = stockedItem[i];
-                var item = _itemShopFactory.Create(entry.itemId, entry.stock, 1.0f);
+                var item = _itemShopFactory.Create(entry.itemId, entry.stock);
                 if (item != null)
                 {
                     _shopBuyGoods.Add(item);

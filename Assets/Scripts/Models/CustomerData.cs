@@ -25,6 +25,7 @@ namespace ElementalBlacksmithStory.Data
         private readonly float _interpolationNoise;
         private string _name;
         private readonly Sprite _sprite;
+        private int _bargainCount = 0;
 
         public ulong FirstOfferPrice { get => _firstOfferPrice; }
         public ulong CurrentPrice { get => _currentPrice; }
@@ -37,11 +38,13 @@ namespace ElementalBlacksmithStory.Data
         public float InterpolationNoise { get => _interpolationNoise; }
         public IShopItem Item { get => _item; }
         public int Lifetime { get => _lifetime; }
+        public int BargainCount { get => _bargainCount; }
         public CustomerData(SO_CustomerGroup group, IShopItem item)
         {
             Group = group;
             _item = item;
-            _estimatePrice = (ulong)(item.Value * UnityEngine.Random.Range(group.minEstimateRatio, group.maxEstimateRatio));
+            ulong totalBaseValue = item.Value * (item.Count > 0 ? (ulong)item.Count : 1UL);
+            _estimatePrice = (ulong)(totalBaseValue * UnityEngine.Random.Range(group.minEstimateRatio, group.maxEstimateRatio));
             _firstOfferPrice = (ulong)(_estimatePrice * UnityEngine.Random.Range(group.minFirstOfferRatio, group.maxFirstOfferRatio));
             _currentPrice = _firstOfferPrice;
             _interpolation = UnityEngine.Random.Range(group.minInterpolation, group.maxInterpolation);
@@ -85,7 +88,7 @@ namespace ElementalBlacksmithStory.Data
 
             // 인내심 0: 최종 제안용
             _patience = _patience == 0 ? -1 : Mathf.Max(0, _patience - patienceDrain);
-
+            
             // 3. 인내심이 바닥난 경우 (흥정 결렬 -> 0 반환)
             if (_patience < 0)
             {
@@ -103,7 +106,7 @@ namespace ElementalBlacksmithStory.Data
             }
 
             _currentPrice += increment;
-
+            _bargainCount += 1;
             // 플레이어 제시가에 도달하거나 넘어서면 타결
             if (_currentPrice >= price)
             {

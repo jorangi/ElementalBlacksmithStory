@@ -75,7 +75,7 @@ MonoBehaviour:
   - speakerId: 0
     text: '방금 다른 물건이 떠올라서 마음이 갈라졌어. 그래도 {price}골드는 줄게.'
   - speakerId: 0
-    text: '{npcName}(은/는) 변덕이 심하다고들 하지. 맞아. 지금은 {price}골드.'
+    text: '다들 내가 변덕이 심하다고들 하지. 맞아. 지금은 {price}골드.'
   - speakerId: 0
     text: '{itemElement != none ? "기운이 아직 살아 있군. 놓치기 싫어. {price}골드." : "살아 있진 않지만 죽은 것도 아닌 것 같아. {price}골드."}'
   _finalOffer:
@@ -90,7 +90,7 @@ MonoBehaviour:
   - speakerId: 0
     text: '{askPrice}골드는 내 마음에서 멀어졌어. {price}골드. 결정해 줘.'
   - speakerId: 0
-    text: '{npcName}의 마지막 변덕이야. {price}골드. 다음엔 없을 수도 있어.'
+    text: '내 마지막 변덕이야. {price}골드. 다음엔 없을 수도 있어.'
   - speakerId: 0
     text: '{itemType == material ? "재료에 이 이상은 못 써. 더 소중한 게 있거든. {price}골드." : {itemType == rune ? "룬에 이 이상은 못 써. 벌써 속삭임이 줄었어. {price}골드." : "이 이상은 못 써. 더 소중한 게 있거든. {price}골드."}}'
   - speakerId: 0
@@ -115,7 +115,7 @@ MonoBehaviour:
   - speakerId: 0
     text: '{groupName}(은/는) 오늘 이 거래를 기록할 거야. 다들 부러워하겠지.'
   - speakerId: 0
-    text: '{npcName}, 오늘 운이 좋았어. 내일은 또 마음이 바뀔지도 모르지만.'
+    text: '후후, 오늘 운이 좋았어. 내일은 또 마음이 바뀔지도 모르지만.'
   - speakerId: 0
     text: '{price > baseValue ? "정가보다 더 쳤지만 후회는 없어. 이 아이는 그만한 값어치가 있어." : "그 값에 팔아 주다니, 의외로 쉬웠네. 내가 속은 건 아니겠지?"}'
   - speakerId: 0
@@ -134,7 +134,7 @@ MonoBehaviour:
   - speakerId: 0
     text: '{groupName}(은/는) 마음 가는 대로 사고 마음 가는 대로 돌아서. 오늘은 돌아설 차례야.'
   - speakerId: 0
-    text: '{npcName}(은/는) 이만 갈게. 다음에 보면 마음이 달라져 있을지도 몰라.'
+    text: '난 이만 갈게. 다음에 보면 마음이 달라져 있을지도 몰라.'
   - speakerId: 0
     text: '{itemType == sword ? "검은 이제 질렸어. 다른 이야기를 찾아볼래." : {itemType == bow ? "활은 이제 질렸어. 다른 이야기를 찾아볼래." : "이건 이제 질렸어. 다른 이야기를 찾아볼래."}}'
   - speakerId: 0

@@ -21,7 +21,7 @@ namespace ElementalBlacksmithStory.Core
         private readonly IPublisher<AcquireItemEvent> _acquireItemPublisher;
         private readonly IPublisher<CoinParticleEvent> _coinParticlePublisher;
         private readonly IPublisher<PlaySoundEvent> _soundPublisher;
-        private readonly IPublisher<SellEvent> _sellEventPublisher;
+        private readonly IPublisher<QuickSellEvent> _sellEventPublisher;
 
         public MaterialInventory MaterialInventory => _materialInventory;
         public EquipmentInventory EquipmentInventory => _equipmentInventory;
@@ -48,7 +48,7 @@ namespace ElementalBlacksmithStory.Core
             IPublisher<AcquireItemEvent> acquireItemPublisher,
             IPublisher<CoinParticleEvent> coinParticlePublisher,
             IPublisher<PlaySoundEvent> soundPublisher,
-            IPublisher<SellEvent> sellEventPublisher)
+            IPublisher<QuickSellEvent> sellEventPublisher)
         {
             _playerData = playerData;
             _materialInventory = materialInventory;
@@ -164,35 +164,10 @@ namespace ElementalBlacksmithStory.Core
             }
             _playerData.AddMoney(totalRevenue);
 
-            // 판매 수익에 비례한 코인 파티클 연출
-            int coinCount = totalRevenue switch
-            {
-                >= 100000 => 300,
-                >= 80000 => 250,
-                >= 50000 => 200,
-                >= 20000 => 150,
-                >= 10000 => 100,
-                >= 8000 => 90,
-                >= 5000 => 60,
-                >= 3000 => 40,
-                >= 1000 => 20,
-                > 0 => 10,
-                _ => 0
-            };
-
-            if (coinCount > 0)
-            {
-                _coinParticlePublisher.Publish(new CoinParticleEvent(coinCount));
-            }
-
             // 장착된 무기가 판매된 경우 대장간 초기화 및 기본 무기(10001) 재장착
             if (isEquippedWeaponSold)
             {
-                _sellEventPublisher.Publish(new SellEvent(0));
-            }
-            else
-            {
-                _soundPublisher.Publish(new PlaySoundEvent(40103));
+                _sellEventPublisher.Publish(new QuickSellEvent(0));
             }
 
             Debug.Log($"[ShopService] 판매 완료! {totalRevenue}골드 획득, 잔여: {_playerData.Money.CurrentValue}골드 (장착무기판매: {isEquippedWeaponSold})");

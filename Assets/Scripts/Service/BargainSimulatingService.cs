@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using ElementalBlacksmithStory.Data;
+using ElementalBlacksmithStory.Events;
 using MessagePipe;
 using ObservableCollections;
 using R3;
@@ -53,16 +54,27 @@ namespace ElementalBlacksmithStory.Core
 
         // 이름 추첨 시 가비지 방지용 재사용 버퍼
         private readonly List<string> _nameCandidateBuffer = new(16);
+        private readonly Dictionary<string, object> _dialogueParams = new(16);
         private readonly PlayerData _playerData;
+
+        private readonly Subject<IShopItem> _onItemSettledSubject = new();
+        public Observable<IShopItem> OnItemSettledAsObservable => _onItemSettledSubject.AsObservable();
+
+        private readonly Subject<IShopItem> _onItemWithdrawSubject = new();
+        public Observable<IShopItem> OnItemWithdrawAsObservable => _onItemWithdrawSubject.AsObservable();
+
+        private readonly IPublisher<AcquireItemEvent> _acquireItemEventPublisher;
 
         [Inject]
         public BargainSimulatingService(
             SO_CustomerGroupDatabase customerGroupDatabase,
-            PlayerData playerData
+            PlayerData playerData,
+            IPublisher<AcquireItemEvent> acquireItemEventPublisher
         )
         {
             _playerData = playerData;
             _customerGroupDatabase = customerGroupDatabase;
+            _acquireItemEventPublisher = acquireItemEventPublisher;
         }
 
         public IReadOnlyList<CustomerData> GetCustomers(uint itemId)
@@ -203,6 +215,7 @@ namespace ElementalBlacksmithStory.Core
                 {
                     int delaySeconds = group.RegisterDelay(item);
                     if (delaySeconds <= 0) delaySeconds = 5;
+                    delaySeconds = 1;
                     // Debug.Log($"{group._customerGroupName} {delaySeconds}초 -> {DateTime.Now.AddSeconds(delaySeconds):HH:mm:ss} 도착");
                     bool isCancelled = await UniTask.Delay(TimeSpan.FromSeconds(delaySeconds), cancellationToken: ct)
                         .SuppressCancellationThrow();
@@ -316,9 +329,89 @@ namespace ElementalBlacksmithStory.Core
             }
         }
 
-        public string TryBargain(IShopItem item, CustomerData customer, ulong offeringPrice, out ulong offeredPrice)
+        /// <summary>
+        /// 대사 템플릿에 사용할 파라미터를 갱신합니다.
+        /// </summary>
+        private void UpdateDialogueParams(IShopItem item, CustomerData customer, ulong currentPrice, ulong prevPrice, ulong askPrice)
         {
-            offeredPrice = 0UL;
+            _dialogueParams.Clear();
+            if (item == null || customer == null) return;
+
+            _dialogueParams["itemType"] = item.Category.ToString();
+            _dialogueParams["itemCount"] = item.Count;
+            _dialogueParams["itemName"] = item.Name;
+            _dialogueParams["npcName"] = customer.Name;
+            _dialogueParams["price"] = currentPrice;
+            _dialogueParams["askPrice"] = askPrice;
+            _dialogueParams["priceGap"] = askPrice >= prevPrice ? askPrice - prevPrice : prevPrice - askPrice;
+            _dialogueParams["unitPrice"] = item.Count > 0 ? currentPrice / item.Count : currentPrice;
+            _dialogueParams["prevPrice"] = prevPrice;
+            _dialogueParams["firstPrice"] = customer.FirstOfferPrice;
+            _dialogueParams["askRatio"] = prevPrice > 0 ? (float)askPrice / prevPrice : 1.0f;
+            _dialogueParams["bargainCount"] = customer.BargainCount;
+
+            string element = "None";
+            if (item is Weapon weapon && weapon.Data != null && weapon.Data.elementTypes != null && weapon.Data.elementTypes.Count > 0)
+            {
+                element = weapon.Data.elementTypes[0].ToString();
+            }
+            _dialogueParams["itemElement"] = element;
+            _dialogueParams["groupName"] = customer.Group != null ? customer.Group._customerGroupName : string.Empty;
+            _dialogueParams["baseValue"] = item.Value * (item.Count > 0 ? (ulong)item.Count : 1UL);
+        }
+
+        /// <summary>
+        /// 손님의 첫 제안 대사를 포맷팅하여 반환합니다.
+        /// </summary>
+        public string GetFirstOfferDialogue(IShopItem item, CustomerData customer)
+        {
+            if (item == null || customer == null || customer.Group == null) return string.Empty;
+            ulong price = customer.FirstOfferPrice;
+            UpdateDialogueParams(item, customer, currentPrice: price, prevPrice: price, askPrice: 0);
+            var dialogues = customer.Group._firstOffer;
+            return (dialogues != null && dialogues.Count > 0)
+                ? dialogues[UnityEngine.Random.Range(0, dialogues.Count)].GetFormattedText(_dialogueParams)
+                : string.Empty;
+        }
+
+        public void WithDraw(IShopItem item)
+        {
+            if (item == null) return;
+            if (!_registeredItems.ContainsKey(item.Id)) return;
+
+            _onItemWithdrawSubject.OnNext(item);
+            RemoveItem(item.Id);
+            if (item is Weapon weapon)
+            {
+                _acquireItemEventPublisher.Publish(new AcquireItemEvent(
+                    weapon: weapon,
+                    sender: "BargainSimulatingService",
+                    target: "player",
+                    reason: "Withdraw"
+                ));
+            }
+            else
+            {
+                _acquireItemEventPublisher.Publish(new AcquireItemEvent(
+                    itemId: item.ItemId,
+                    amount: item.Count,
+                    sender: "BargainSimulatingService",
+                    target: "player",
+                    reason: "Withdraw"
+                ));
+            }
+        }
+        /// <summary>
+        /// 플레이어가 가격을 제시하는 함수
+        /// </summary>
+        /// <param name="item"></param>
+        /// <param name="customer"></param>
+        /// <param name="playerPrice"></param>
+        /// <param name="customerPrice"></param>
+        /// <returns></returns>
+        public string TryBargain(IShopItem item, CustomerData customer, ulong playerPrice, out ulong customerPrice)
+        {
+            customerPrice = 0UL;
             if (item == null)
             {
                 Debug.LogError("[BargainSimulatingService] item이 존재하지 않습니다.");
@@ -329,34 +422,36 @@ namespace ElementalBlacksmithStory.Core
                 Debug.LogError("[BargainSimulatingService] customer가 존재하지 않습니다.");
                 return string.Empty;
             }
-            ulong newPrice = customer.Bargain(offeringPrice);
-            offeredPrice = newPrice;
+
+            ulong prevPrice = customer.CurrentPrice;
+            ulong newPrice = customer.Bargain(playerPrice);
+            customerPrice = newPrice;
+            UpdateDialogueParams(item, customer, currentPrice: newPrice, prevPrice: prevPrice, askPrice: playerPrice);
+
             string text = string.Empty;
             if (newPrice == 0)
             {
                 // 결렬: 인내심 소모로 손님 퇴장
-                text = CancelBargain(item.Id, customer);
+                text = CancelBargain(item.Id, customer, playerPrice, prevPrice);
             }
-            else if (offeredPrice == offeringPrice)
+            else if (customerPrice == playerPrice)
             {
-                text = SettleBargain(item, customer, newPrice);
+                text = SettleBargain(item, customer, newPrice, playerPrice, prevPrice);
             }
             else if (customer.Patience == 0)
             {
                 // 최종 제안
                 var finalOffer = customer.Group._finalOffer;
-                text = finalOffer[UnityEngine.Random.Range(0, finalOffer.Count)].GetFormattedText(
-                    parameters: new Dictionary<string, object>()
-                    { }
-                );
+                text = (finalOffer != null && finalOffer.Count > 0)
+                    ? finalOffer[UnityEngine.Random.Range(0, finalOffer.Count)].GetFormattedText(_dialogueParams)
+                    : string.Empty;
             }
             else
             {
                 var negotiation = customer.Group._negotiation;
-                text = negotiation[UnityEngine.Random.Range(0, negotiation.Count)].GetFormattedText(
-                    parameters: new Dictionary<string, object>()
-                    { }
-                );
+                text = (negotiation != null && negotiation.Count > 0)
+                    ? negotiation[UnityEngine.Random.Range(0, negotiation.Count)].GetFormattedText(_dialogueParams)
+                    : string.Empty;
             }
 
             return text;
@@ -366,7 +461,9 @@ namespace ElementalBlacksmithStory.Core
         /// </summary>
         /// <param name="itemId"></param>
         /// <param name="customer"></param>
-        public string CancelBargain(uint itemId, CustomerData customer)
+        /// <param name="askPrice"></param>
+        /// <param name="prevPrice"></param>
+        public string CancelBargain(uint itemId, CustomerData customer, ulong askPrice = 0, ulong prevPrice = 0)
         {
             if (customer == null)
             {
@@ -379,22 +476,33 @@ namespace ElementalBlacksmithStory.Core
                 return string.Empty;
             }
             RemoveCustomer(itemId, customer);
+
+            ulong pPrice = prevPrice > 0 ? prevPrice : customer.CurrentPrice;
+            UpdateDialogueParams(item, customer, currentPrice: customer.CurrentPrice, prevPrice: pPrice, askPrice: askPrice);
+
             var rejection = customer.Group._rejection;
-            string text = rejection[UnityEngine.Random.Range(0, rejection.Count)].GetFormattedText(
-                parameters: new Dictionary<string, object>()
-                { }
-            );
+            string text = (rejection != null && rejection.Count > 0)
+                ? rejection[UnityEngine.Random.Range(0, rejection.Count)].GetFormattedText(_dialogueParams)
+                : string.Empty;
             return text;
         }
-        public string SettleBargain(IShopItem item, CustomerData customer, ulong finalPrice)
+        public string SettleBargain(IShopItem item, CustomerData customer, ulong finalPrice, ulong askPrice = 0, ulong prevPrice = 0)
         {
-            RemoveItem(item.Id);
             _playerData.AddMoney(finalPrice);
+            ulong unitPrice = item.Count > 0 ? (finalPrice / item.Count) : finalPrice;
+            _playerData.RecordTradePrice(item.ItemId, unitPrice, item.Value);
+
+            ulong aPrice = askPrice > 0 ? askPrice : finalPrice;
+            ulong pPrice = prevPrice > 0 ? prevPrice : customer.CurrentPrice;
+            UpdateDialogueParams(item, customer, currentPrice: finalPrice, prevPrice: pPrice, askPrice: aPrice);
+
             var acception = customer.Group._acception;
-            string text = acception[UnityEngine.Random.Range(0, acception.Count)].GetFormattedText(
-                parameters: new Dictionary<string, object>()
-                { }
-            );
+            string text = (acception != null && acception.Count > 0)
+                ? acception[UnityEngine.Random.Range(0, acception.Count)].GetFormattedText(_dialogueParams)
+                : string.Empty;
+            _onItemSettledSubject.OnNext(item);
+            RemoveItem(item.Id);
+            if (item is IDisposable disposableItem) disposableItem.Dispose();
             return text;
         }
         public void Clear()

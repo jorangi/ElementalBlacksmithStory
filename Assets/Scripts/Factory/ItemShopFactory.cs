@@ -23,7 +23,7 @@ namespace ElementalBlacksmithStory.Core
             _runeDatabase = runeDatabase;
         }
 
-        public IShopItem Create(uint id, uint stock = 1, float margin = 1.0f)
+        public IShopItem Create(uint id, uint stock = 1)
         {
             ItemCategory category = ItemIdHelper.GetCategory(id);
 
@@ -47,10 +47,6 @@ namespace ElementalBlacksmithStory.Core
                         if (wep != null)
                         {
                             var weapon = new Weapon(wep);
-                            if (margin > 0)
-                            {
-                                weapon.SetMargin(margin);
-                            }
                             return weapon;
                         }
                     }

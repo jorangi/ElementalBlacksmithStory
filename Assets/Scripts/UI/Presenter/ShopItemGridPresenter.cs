@@ -89,6 +89,21 @@ namespace ElementalBlacksmithStory.UI
                 {
                     self.OnBargainCustomerChanged(data.itemId);
                 }).AddTo(_disposables);
+
+            // 거래 흥정 성사
+            _tradingPostService.OnBargainItemSettledAsObservable
+                .Subscribe(this, static (item, self) =>
+                {
+                    self.RemoveItem(item.Id);
+                }).AddTo(_disposables);
+
+            // 거래 등록 아이템 회수
+            _tradingPostService.OnBargainItemWithdrawAsObservable
+                .Subscribe(this, static (item, self) =>
+                {
+                    self.RemoveItem(item.Id);
+                }).AddTo(_disposables);
+
             _tradingPostService.OnCustomerLeft
                 .Subscribe(this, static (data, self) =>
                 {
@@ -111,6 +126,7 @@ namespace ElementalBlacksmithStory.UI
                 _equipmentInventory.OnAddWeapon
                     .Subscribe(this, static (weapon, self) =>
                     {
+                        if (self._strategy is not StandardShopModeStrategy) return;
                         if (!self._isSellMode || weapon == null) return;
                         if (self._categoryFilter == null || self._categoryFilter(weapon))
                         {
@@ -122,6 +138,7 @@ namespace ElementalBlacksmithStory.UI
                 _equipmentInventory.OnRemoveWeapon
                     .Subscribe(this, static (_, self) =>
                     {
+                        if (self._strategy is not StandardShopModeStrategy) return;
                         if (self._isSellMode)
                         {
                             self.RefreshGridAsync().Forget();
@@ -165,6 +182,7 @@ namespace ElementalBlacksmithStory.UI
         }
         private void OnMaterialCountChanged((SO_MaterialData item, uint count) data)
         {
+            if (_strategy is not StandardShopModeStrategy) return;
             if (data.item == null) return;
 
             if (_isSellMode)
@@ -197,6 +215,7 @@ namespace ElementalBlacksmithStory.UI
 
         private void OnRuneCountChanged((SO_RuneData item, uint count) data)
         {
+            if (_strategy is not StandardShopModeStrategy) return;
             if (data.item == null) return;
 
             if (_isSellMode)

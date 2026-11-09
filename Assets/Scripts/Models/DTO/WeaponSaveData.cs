@@ -19,7 +19,6 @@ namespace ElementalBlacksmithStory.Data.DTO
         public ulong Cost { get; set; }
         public ulong BasePrice { get; set; }
         public ulong Price { get; set; }
-        public uint MinimunGuarantee { get; set; }
         public int RuneSlot { get; set; }
         public uint[] SocketedRuneIds { get; set; }
         public List<EnhanceStepSaveData> EnhanceHistory { get; set; }

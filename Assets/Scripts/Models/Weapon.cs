@@ -36,17 +36,11 @@ namespace ElementalBlacksmithStory.Core
         public ulong Cost => _cost;
 
         /// <summary>
-        /// 누적 가격(+최종, 마진 제외)
+        /// 누적 가격(+최종)
         /// </summary>
         private ulong _basePrice;
         public ulong BasePrice => _basePrice;
-        private ulong _price;
-        public ulong Price => _price;
-        /// <summary>
-        /// 최소 금액 보장 횟수
-        /// </summary>
-        private uint _minimumGuarantee = 0;
-        public uint MinimumGuarantee => _minimumGuarantee;
+        public ulong Price => _basePrice;
         private readonly SO_WeaponData _baseWeaponData;
         public SO_WeaponData BaseWeaponData => _baseWeaponData;
         /// <summary>
@@ -55,7 +49,7 @@ namespace ElementalBlacksmithStory.Core
         private readonly Stack<EnhanceStep> _enhanceHistory = new();
         public Stack<EnhanceStep> EnhanceHistory => _enhanceHistory;
         string IShopItem.Name => Data != null ? Data.weaponName : string.Empty;
-        public ulong Value => _price;
+        public ulong Value => _basePrice;
 
         uint IShopItem.ItemId => Data != null ? WeaponId : 0;
 
@@ -72,7 +66,6 @@ namespace ElementalBlacksmithStory.Core
             _baseWeaponData = baseWeaponData;
             _cost = saveData.Cost;
             _basePrice = saveData.BasePrice;
-            _minimumGuarantee = saveData.MinimunGuarantee;
             _runeSlot = saveData.RuneSlot;
             if (saveData.EnhanceHistory != null)
             {
@@ -141,15 +134,6 @@ namespace ElementalBlacksmithStory.Core
             _baseWeaponData = weaponData;
             _cost = weaponData != null ? weaponData.cost : 0;
             _basePrice = weaponData != null ? weaponData.basePrice : 0;
-            SetMargin(1f);
-        }
-        /// <summary>
-        /// 마진값 설정
-        /// </summary>
-        /// <param name="margin"></param>
-        public void SetMargin(float margin)
-        {
-            _price = (ulong)(BasePrice * margin);
         }
         /// <summary>
         /// SO 데이터 설정
@@ -322,8 +306,7 @@ namespace ElementalBlacksmithStory.Core
                 BaseWeaponDataId = _baseWeaponData != null ? _baseWeaponData.Id : 0,
                 Cost = _cost,
                 BasePrice = _basePrice,
-                Price = _price,
-                MinimunGuarantee = _minimumGuarantee,
+                Price = _basePrice,
                 RuneSlot = _runeSlot,
                 SocketedRuneIds = runeIds,
                 EnhanceHistory = historyList

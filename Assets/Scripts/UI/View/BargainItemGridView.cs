@@ -21,7 +21,7 @@ namespace ElementalBlacksmithStory.UI
         [SerializeField] private TextMeshProUGUI _categoryName;
         [SerializeField] private Button _prevCategoryButton;
         [SerializeField] private Button _nextCategoryButton;
-        [SerializeField] private Button _cancleButton;
+        [SerializeField] private Button _cancelButton;
         [SerializeField] private Button _registerButton;
         private readonly List<BargainRegisterItemView> _itemCards = new();
         private IObjectPool<BargainRegisterItemView> _itemCardPool;
@@ -73,14 +73,14 @@ namespace ElementalBlacksmithStory.UI
             }
             return _registerButton.OnClickAsObservable();
         }
-        public Observable<Unit> OnCancleButtonAsObservable()
+        public Observable<Unit> OnCancelButtonAsObservable()
         {
-            if (_cancleButton == null)
+            if (_cancelButton == null)
             {
                 Debug.LogWarning("[BargainItemGridView] Cancel Button이 없습니다.");
                 return Observable.Empty<Unit>();
             }
-            return _cancleButton.OnClickAsObservable();
+            return _cancelButton.OnClickAsObservable();
         }
         public Observable<Unit> OnNextCategoryButtonAsObservable()
         {

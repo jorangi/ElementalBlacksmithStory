@@ -1,13 +1,13 @@
 using System;
+using Cysharp.Threading.Tasks;
+using ElementalBlacksmithStory.Core;
+using ElementalBlacksmithStory.Events;
+using MessagePipe;
+using R3;
 using UnityEngine;
 using UnityEngine.UI;
 using VContainer;
 using VContainer.Unity;
-using MessagePipe;
-using R3;
-using ElementalBlacksmithStory.Events;
-using Cysharp.Threading.Tasks;
-using ElementalBlacksmithStory.Core;
 
 namespace ElementalBlacksmithStory.UI
 {
@@ -19,7 +19,7 @@ namespace ElementalBlacksmithStory.UI
         private readonly ForgeManager _forgeManager;
         [Inject]
         public EnhanceButtonPresenter(
-            EnhanceButtonView view, 
+            EnhanceButtonView view,
             IPublisher<EnhanceRequestEvent> enhanceRequestPublisher,
             ForgeManager forgeManager,
             ISubscriber<EnhanceButtonPositionEvent> buttonPositionSubscriber,
@@ -53,9 +53,8 @@ namespace ElementalBlacksmithStory.UI
                 .Subscribe(this, static (_, self) =>
                 {
                     Debug.Log($"[EnhanceButtonPresenter] {self._forgeManager.CurrentWeapon.Id}({self._forgeManager.CurrentWeapon.WeaponId})을 강화시도");
-                    // Debug.Log($"[EnhanceButtonPresenter] EnhanceRequestEvent {self._forgeManager.CurrentWeapon.Id} 전송");
                     EnhanceResult result = self._enhancementService.TryEnhance(self._forgeManager.CurrentWeapon, null);
-                    if(result == EnhanceResult.SUCESS)
+                    if (result == EnhanceResult.SUCESS)
                     {
                         Debug.Log($"[EnhanceButtonPresenter] {self._forgeManager.CurrentWeapon.Id}({self._forgeManager.CurrentWeapon.WeaponId})로 강화성공");
                     }
@@ -63,7 +62,6 @@ namespace ElementalBlacksmithStory.UI
                     {
                         Debug.LogWarning($"[EnhanceButtonPresenter] {self._forgeManager.CurrentWeapon.Id}({self._forgeManager.CurrentWeapon.WeaponId})을 강화하지 못함: {result}");
                     }
-                    // self._enhanceRequestPublisher.Publish(new EnhanceRequestEvent(self._forgeManager.CurrentWeapon));
                 })
                 .AddTo(_disposables);
         }

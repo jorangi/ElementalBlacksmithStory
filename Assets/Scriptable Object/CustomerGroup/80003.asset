@@ -75,7 +75,7 @@ MonoBehaviour:
   - speakerId: 0
     text: '{priceGap}골드 차이쯤은 내가 접지. {price}골드야. 정해.'
   - speakerId: 0
-    text: '{npcName}(은/는) 같은 말 두 번 하는 거 싫어한다. {price}골드야.'
+    text: '난 같은 말 두 번 하는 거 싫어한다. {price}골드야.'
   - speakerId: 0
     text: '{itemElement != none ? "속성이 붙은 값은 쳐주지. {price}골드, 끝내지." : "흥정할 시간에 한 놈이라도 더 벤다. {price}골드, 끝내지."}'
   _finalOffer:
@@ -88,7 +88,7 @@ MonoBehaviour:
   - speakerId: 0
     text: '{itemCount > 1 ? "{itemCount}개에 {price}골드가 전부다." : "{price}골드가 전부다."} 정해.'
   - speakerId: 0
-    text: '{npcName}의 마지막 말이다. {price}골드.'
+    text: '마지막으로 하는 경고다. {price}골드.'
   - speakerId: 0
     text: '{itemName}(이/가) 아무리 좋아도 {price}골드 이상은 없다.'
   - speakerId: 0
@@ -115,7 +115,7 @@ MonoBehaviour:
   - speakerId: 0
     text: '{npcTitle}(은/는) 값을 치르면 뒤끝이 없어. 가지.'
   - speakerId: 0
-    text: '{npcName}, 신세 하나 졌군. 기억해 두지.'
+    text: '신세 하나 졌군. 기억해 두지.'
   - speakerId: 0
     text: '{itemElement != none ? "속성이 깃든 물건이라니, 운이 좋군. 잘 쓰지." : "좋아. 늑대는 값을 치르면 뒤끝이 없어."}'
   - speakerId: 0
@@ -134,7 +134,7 @@ MonoBehaviour:
   - speakerId: 0
     text: '{groupName}(은/는) 시간 낭비 안 해. 이만 가지.'
   - speakerId: 0
-    text: '{npcName}(은/는) 같은 말을 되풀이하지 않아. 간다.'
+    text: '난 같은 말을 되풀이하지 않아. 간다.'
   - speakerId: 0
     text: '{itemType == sword ? "검은 다른 데서도 구해." : {itemType == bow ? "활은 다른 데서도 구해." : "물건은 다른 데서도 구해."}} 이만 가지.'
   - speakerId: 0

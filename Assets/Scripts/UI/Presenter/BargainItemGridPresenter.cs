@@ -100,7 +100,7 @@ namespace ElementalBlacksmithStory.UI
                             state.shopItemGridPresenter.RefreshGridAsync().Forget();
                         })
                         .AddTo(_disposables);
-            _view.OnCancleButtonAsObservable()
+            _view.OnCancelButtonAsObservable()
                         .Subscribe(this, static (_, self) =>
                         {
                             self.Hide();
@@ -171,7 +171,7 @@ namespace ElementalBlacksmithStory.UI
                     var weapons = _playerData.EquipmentInventory.GetAllActive();
                     foreach (var weapon in weapons)
                     {
-                        if (weapon == null || _forgeManager.CurrentWeapon == weapon) continue;
+                        if (weapon == null || weapon.WeaponId % 1000 == 1) continue;
                         _displayItems[weapon.Id] = weapon;
                         Sprite icon = await _weaponSpriteLoader.GetSprite(weapon.WeaponId);
                         var card = _view.CreatItem(weapon.Id, icon, 1);

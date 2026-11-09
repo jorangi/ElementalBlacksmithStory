@@ -54,11 +54,11 @@ namespace ElementalBlacksmithStory.UI
                     instance.SetActive(false);
                     var itemView = instance.GetComponent<CustomerListItemView>();
                     itemView.OnButtonAsObservable()
-                        .Subscribe((this, itemView), static (_, state) =>
+                        .Subscribe((self: this, itemView), static (_, state) =>
                         {
                             if (state.itemView.Data != null)
                             {
-                                state.Item1._onItemClickedSubject.OnNext(state.itemView.Data);
+                                state.self._onItemClickedSubject.OnNext(state.itemView.Data);
                             }
                         });
                     return itemView;
@@ -136,6 +136,10 @@ namespace ElementalBlacksmithStory.UI
 
             await motionHandle.ToUniTask(_cts.Token)
                                 .SuppressCancellationThrow();
+        }
+        public void HideImmediately()
+        {
+            _customerListUI.gameObject.SetActive(false);
         }
         public async UniTask Hide(CancellationToken ct = default)
         {

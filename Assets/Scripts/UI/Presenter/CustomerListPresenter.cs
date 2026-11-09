@@ -11,6 +11,7 @@ namespace ElementalBlacksmithStory.UI
     public class CustomerListPresenter : IDisposable
     {
         private readonly CustomerListView _view;
+        private readonly BargainSimulatingService _bargainService;
         private readonly TradingPostService _service;
         private readonly UIBackPanelPresenter _uiBackPanelPresenter;
         private readonly WeaponSpriteLoader _weaponSpriteLoader;
@@ -18,6 +19,7 @@ namespace ElementalBlacksmithStory.UI
         private readonly RuneSpriteLoader _runeSpriteLoader;
         private readonly CompositeDisposable _disposables = new();
         private IShopItem _currentItem;
+        private readonly BargainPresenter _bargainPresenter;
 
         [Inject]
         public CustomerListPresenter(
@@ -26,21 +28,36 @@ namespace ElementalBlacksmithStory.UI
             TradingPostService service,
             WeaponSpriteLoader weaponSpriteLoader,
             MaterialSpriteLoader materialSpriteLoader,
-            RuneSpriteLoader runeSpriteLoader
+            RuneSpriteLoader runeSpriteLoader,
+            BargainPresenter bargainPresenter,
+            BargainSimulatingService barginService
         )
         {
             _view = view;
             _uiBackPanelPresenter = uiBackPanelPresenter;
             _service = service;
+            _bargainService = barginService;
             _weaponSpriteLoader = weaponSpriteLoader;
             _materialSpriteLoader = materialSpriteLoader;
             _runeSpriteLoader = runeSpriteLoader;
+            _bargainPresenter = bargainPresenter;
 
             _view.OnCloseButtonAsObservable()
                 .Subscribe(this, static (_, self) => { self.Hide(); })
                 .AddTo(_disposables);
 
-
+            _view.OnWithdrawButtonAsObservable()
+                .ThrottleFirst(TimeSpan.FromMilliseconds(300))
+                .Subscribe(this, static (_, self) =>
+                {
+                    if (self._currentItem != null)
+                    {
+                        var itemToWithdraw = self._currentItem;
+                        self._currentItem = null;
+                        self._bargainService.WithDraw(itemToWithdraw);
+                    }
+                    self.Hide();
+                }).AddTo(_disposables);
             _service.OnCustomerArrived.
                 Subscribe(this, static (e, self) =>
                 {
@@ -57,6 +74,14 @@ namespace ElementalBlacksmithStory.UI
                     {
                         self._view.Remove(e.customer);
                     }
+                }).AddTo(_disposables);
+
+            _view.OnItemClicked
+                .Subscribe(this, static (e, self) =>
+                {
+                    self._view.HideImmediately();
+                    self._bargainPresenter.SetData(e.Item, e).Forget();
+                    self._bargainPresenter.Show();
                 }).AddTo(_disposables);
         }
         public async UniTask SetItem(IShopItem item)

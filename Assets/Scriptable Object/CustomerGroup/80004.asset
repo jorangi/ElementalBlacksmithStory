@@ -78,7 +78,7 @@ MonoBehaviour:
   - speakerId: 0
     text: '제 지갑 사정도 좀 봐주세요. {price}골드, 눈물 머금고 올립니다.'
   - speakerId: 0
-    text: '{npcName}(은/는) 남는 게 없으면 안 사요. {price}골드, 이게 마지노선에 가까워요.'
+    text: '저도 남는 게 없으면 장사 못 해요. {price}골드, 이게 마지노선에 가까워요.'
   - speakerId: 0
     text: '자, 한 푼만 더 얹어서 {price}골드. 이런 인심은 쉽게 안 나온다고요.'
   _finalOffer:
@@ -93,7 +93,7 @@ MonoBehaviour:
   - speakerId: 0
     text: '{askPrice}골드는 꿈에서나 가능해요. {price}골드, 지금 결정하세요.'
   - speakerId: 0
-    text: '{npcName}의 마지막 제안이에요. {price}골드. 이걸 놓치면 후회할걸요?'
+    text: '제 마지막 제안이에요. {price}골드. 이걸 놓치면 후회할걸요?'
   - speakerId: 0
     text: '{itemName}(이/가) 아무리 좋아도 {price}골드가 끝이에요. 정말로요.'
   - speakerId: 0
@@ -118,7 +118,7 @@ MonoBehaviour:
   - speakerId: 0
     text: '{npcTitle}(은/는) 한번 한 약속은 지켜요. 값은 바로 치를게요.'
   - speakerId: 0
-    text: '{npcName}, 이 거래 기억해 둘게요. 다음에도 이렇게 봐주세요.'
+    text: '사장님, 이 거래 기억해 둘게요. 다음에도 이렇게 봐주세요.'
   - speakerId: 0
     text: '{itemElement == flame ? "불 속성이면 추운 지방에서 잘 팔리겠어요." : {itemElement == cold ? "냉기 속성이면 더운 지방에서 잘 팔리겠어요." : "좋아요, {groupName}(은/는) 값만 맞으면 뒤끝 없어요."}}'
   - speakerId: 0
@@ -137,7 +137,7 @@ MonoBehaviour:
   - speakerId: 0
     text: '{groupName}(은/는) 밑지는 장사는 안 해요. 이만 가요.'
   - speakerId: 0
-    text: '{npcName}(은/는) 안 사는 쪽이 이득이면 안 사요. 안녕히.'
+    text: '안 사는 쪽이 이득이라면 전 안 사요. 안녕히.'
   - speakerId: 0
     text: '{itemType == sword ? "검은 시장에 널렸어요. 굳이 이 값에 안 사요." : {itemType == bow ? "활은 시장에 널렸어요. 굳이 이 값에 안 사요." : "이런 건 시장에 널렸어요. 굳이 이 값에 안 사요."}}'
   - speakerId: 0

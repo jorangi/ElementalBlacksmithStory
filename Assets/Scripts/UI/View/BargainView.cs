@@ -1,3 +1,4 @@
+using System;
 using System.Threading;
 using Cysharp.Text;
 using Cysharp.Threading.Tasks;
@@ -30,6 +31,7 @@ namespace ElementalBlacksmithStory.UI
         /// </summary>
         [SerializeField] private Color _badColor;
         [SerializeField] private Button _offerButton;
+        [SerializeField] private TextMeshProUGUI _offerText;
         [SerializeField] private Button _cancelButton;
         [SerializeField] private Button _warningAcceptButton;
         [SerializeField] private Button _warningCancelButton;
@@ -40,6 +42,7 @@ namespace ElementalBlacksmithStory.UI
         [SerializeField] private TextMeshProUGUI _highestPrice;
         [SerializeField] private TextMeshProUGUI _lowestPrice;
         [SerializeField] private TextMeshProUGUI _averagePrice;
+        [SerializeField] private TextMeshProUGUI _pricePerAmount;
         [SerializeField] private Button _increaseButton;
         [SerializeField] private Button _decreaseButton;
         [SerializeField] private RectTransform _bargainUI;
@@ -48,6 +51,7 @@ namespace ElementalBlacksmithStory.UI
         /// </summary>
         [SerializeField] private RectTransform _warningUI;
         [SerializeField] private Image _warningPanel;
+        public bool _canBargain;
 
         private void Awake()
         {
@@ -139,6 +143,7 @@ namespace ElementalBlacksmithStory.UI
             _itemImage.sprite = itemImage;
             _itemAmount.SetText(amount > 1 ? ZString.Format("x{0}", amount) : string.Empty);
             LayoutRebuilder.ForceRebuildLayoutImmediate(_itemAmount.rectTransform);
+            SetInteract(true);
         }
         public void SetPriceHistory(ulong highestPrice, ulong lowestPrice, ulong averagePrice)
         {
@@ -146,14 +151,17 @@ namespace ElementalBlacksmithStory.UI
             _lowestPrice.SetText(ZString.Format("최저 판매가: {0:N0}", lowestPrice));
             _averagePrice.SetText(ZString.Format("평균 판매가: {0:N0}", averagePrice));
         }
-        public void SetOfferPrice(ulong price, bool isLower)
+        public void SetOfferPrice(ulong price, bool isLower, uint amount = 1)
         {
-            _offerPrice.SetTextWithoutNotify(ZString.Format("{0:N0}", price));
+            _offerPrice.SetTextWithoutNotify(ZString.Format("{0:N0}G", price));
+            _pricePerAmount.SetText(ZString.Format("개당: {0:N0}G", amount > 0 ? price / amount : price));
             _offerPrice.textComponent.color = isLower ? _badColor : Color.white;
         }
         public void SetInteract(bool canBargain)
         {
-            _offerButton.interactable = canBargain;
+            _canBargain = canBargain;
+            _offerText.SetText(canBargain ? "제시" : "닫기");
+            _cancelButton.gameObject.SetActive(canBargain);
         }
         public Observable<ulong> OnChangedOfferPriceAsObservable()
         {
@@ -175,13 +183,33 @@ namespace ElementalBlacksmithStory.UI
             if (bubbleText != null)
             {
                 bubbleText.SetText(text);
+                LayoutRebuilder.ForceRebuildLayoutImmediate(bubbleText.rectTransform);
+                TypingText(text).Forget();
             }
+        }
+        private async UniTask TypingText(string text, CancellationToken ct = default)
+        {
+            if (bubbleText == null) return;
+            _cts?.Cancel();
+            _cts = CancellationTokenSource.CreateLinkedTokenSource(ct, destroyCancellationToken);
+            for (int i = 0; i < text.Length; i++)
+            {
+                bubbleText.maxVisibleCharacters = i;
+
+                bool isCanceled = await
+                    UniTask.Delay(TimeSpan.FromMilliseconds(10), cancellationToken: _cts.Token)
+                    .SuppressCancellationThrow();
+
+                if (isCanceled) break;
+            }
+            bubbleText.maxVisibleCharacters = text.Length;
         }
         public void SetNPCName(string name)
         {
             if (npcName != null)
             {
                 npcName.SetText(name);
+                LayoutRebuilder.ForceRebuildLayoutImmediate(npcName.rectTransform);
             }
         }
 

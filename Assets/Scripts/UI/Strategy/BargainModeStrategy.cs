@@ -71,7 +71,6 @@ namespace ElementalBlacksmithStory.UI.Strategy
         public void OnRegisterCardClicked()
         {
             _bargainItemGridPresenter.Show();
-            UnityEngine.Debug.Log("[BargainModeStrategy] 판매 등록(+ 카드) 클릭됨");
         }
 
         /// <summary>

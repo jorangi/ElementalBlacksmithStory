@@ -75,7 +75,7 @@ MonoBehaviour:
   - speakerId: 0
     text: '이 늙은이 지갑은 현역 때만큼 두둑하질 않아서 말이야. {price}골드, 이게 내 성의일세.'
   - speakerId: 0
-    text: '{npcName}(은/는) 마음에 든 물건엔 모질게 못 구는 성미라네. 그래서 {price}골드일세.'
+    text: '이 늙은이는 마음에 든 물건엔 모질게 못 구는 성미라네. 그래서 {price}골드일세.'
   - speakerId: 0
     text: '젊을 땐 이런 흥정도 전투처럼 했는데, 이젠 웃으면서 끝내고 싶군. {price}골드 어떤가?'
   _finalOffer:
@@ -90,7 +90,7 @@ MonoBehaviour:
   - speakerId: 0
     text: '{askPrice}골드까진 못 가네. {price}골드면 기꺼이 사겠네. 어떤가?'
   - speakerId: 0
-    text: '{npcName}의 마지막 말일세. {price}골드. 이 늙은이 부탁이라 여기게나.'
+    text: '내 마지막 말일세. {price}골드. 이 늙은이 부탁이라 여기게나.'
   - speakerId: 0
     text: '{itemType == material ? "좋은 재료라 욕심은 나지만, 이 이상은 무리일세." : {itemType == rune ? "룬이 탐나긴 하네만, 이 이상은 무리일세." : {itemType == consumable ? "소모품에 이 이상 쓰면 다음 철 양식이 모자라네." : "탐나긴 하네만, 이 이상은 무리일세."}}} {price}골드일세.'
   - speakerId: 0
@@ -115,7 +115,7 @@ MonoBehaviour:
   - speakerId: 0
     text: '{groupName} 동료들에게 자랑해야겠군. 다들 배 아파 할 걸세.'
   - speakerId: 0
-    text: '{npcName}, 오늘 좋은 인연을 만났네. 기억해 두겠네.'
+    text: '허허, 오늘 좋은 인연을 만났네. 기억해 두겠네.'
   - speakerId: 0
     text: '{price >= baseValue ? "제값 이상으로 샀으니 마음이 편하군. 이런 거래가 오래 남는 법이지." : "제값에 샀으니 서로 손해는 없지. 이런 게 좋은 거래야."}'
   - speakerId: 0
@@ -134,7 +134,7 @@ MonoBehaviour:
   - speakerId: 0
     text: '{groupName}에서 놀려 대겠군. 또 허탕이라고. 허허.'
   - speakerId: 0
-    text: '{npcName}(은/는) 이만 가 보겠네. 좋은 주인 만나길 바라네.'
+    text: '난 이만 가 보겠네. 좋은 주인 만나길 바라네.'
   - speakerId: 0
     text: '{askRatio >= 1.5 ? "그 값은 현역 때 번 돈을 다 털어도 모자라겠군. 허허, 이만 가겠네." : "조금만 더 맞았으면 좋았을 걸. 다음에 또 보세."}'
   - speakerId: 0

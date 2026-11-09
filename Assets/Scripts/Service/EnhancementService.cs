@@ -75,7 +75,7 @@ namespace ElementalBlacksmithStory.Core
                                     RecipeUnlockService recipeUnlockService,
                                     WeaponRollbackService weaponRollbackService,
                                     WeaponTreePathService pathService,
-                                    ISubscriber<SellEvent> sellEventSubscriber,
+                                    ISubscriber<QuickSellEvent> sellEventSubscriber,
                                     ISubscriber<ChangeRecipeFlagEvent> changeRecipeFlagSubscriber,
                                     ISubscriber<SubmitMaterialEvent> submitMaterialSubscriber
                                     )
@@ -116,9 +116,11 @@ namespace ElementalBlacksmithStory.Core
 
             sellEventSubscriber.Subscribe(e =>
             {
-                playerData.AddMoney(e.Price);
+                if (e.Price > 0)
+                {
+                    playerData.AddMoney(e.Price);
+                }
                 totalCost = 0;
-                soundPublisher.Publish(new PlaySoundEvent(40103));
 
                 if (!_fixedRecipe)
                 {
@@ -126,6 +128,11 @@ namespace ElementalBlacksmithStory.Core
                 }
                 cachedPinnedWeaponEnhancePath = null;
                 _selectedMaterials.Clear();
+
+                if (_currentWeapon != null)
+                {
+                    playerData.EquipmentInventory.Remove(_currentWeapon);
+                }
 
                 _currentWeapon = new Weapon(weaponDatabase.Get(10001));
                 cachedWeaponId = 10001;
@@ -346,7 +353,7 @@ namespace ElementalBlacksmithStory.Core
                         cost += kv.Value * kv.Key.Value;
                     }
 
-                    if (_playerData.TrySpend(cost))
+                    if (!_playerData.TrySpend(cost))
                     {
                         Debug.LogWarning($"[EnhancementService] 강화 비용이 부족합니다. 요구비용: {cost}, 현재보유금액: {_playerData.Money.CurrentValue}");
                         return EnhanceResult.NEEDSMOREMONEY;
@@ -364,7 +371,7 @@ namespace ElementalBlacksmithStory.Core
                         {
                             cachedPinnedWeaponEnhancePath = null;
                             cachedWeaponId = weapon.WeaponId;
-                            Debug.LogWarning($"[EnhancementService][하드모드] 없는 레시피로 강화 실패 -> 1단계 강등됨: {weapon.Data?.weaponName ?? weapon.WeaponId.ToString()}");
+                            Debug.LogWarning($"[EnhancementService][하드모드] 없는 레시피로 강화 실패 -> 1단계 강등됨: {(weapon.Data != null ? weapon.Data.weaponName : null ?? weapon.WeaponId.ToString())}");
                         }
                         else
                         {
@@ -374,7 +381,7 @@ namespace ElementalBlacksmithStory.Core
                     else
                     {
                         // 이지모드: 무기 강등 없이 유지, 재료 및 비용만 소모
-                        Debug.LogWarning($"[EnhancementService][이지모드] 없는 레시피로 강화 실패 -> 무기 유지: {weapon.Data?.weaponName}");
+                        Debug.LogWarning($"[EnhancementService][이지모드] 없는 레시피로 강화 실패 -> 무기 유지: {(weapon.Data != null ? weapon.Data.weaponName : null)}");
                     }
 
                     weaponChangePublisher.Publish(new ChangeWeaponEvent(weapon: weapon, nextWeaponId: weapon.WeaponId, totalCost: totalCost));
@@ -411,11 +418,7 @@ namespace ElementalBlacksmithStory.Core
 
                     cachedWeaponId = _currentRecipe.recipeOutcome.resultWeapon.Id;
 
-                    //테스트용 마진 값 설정
-                    float margin = _currentRecipe.recipeOutcome.resultWeapon.margin > 1f ? UnityEngine.Random.Range(1.0f, _currentRecipe.recipeOutcome.resultWeapon.margin) : _currentRecipe.recipeOutcome.resultWeapon.margin;
-                    margin = 1f;
-                    weapon.SetMargin(margin);
-                    Debug.Log($"[EnhancementService] 현재 무기: {_currentRecipe.recipeOutcome.resultWeapon.weaponName}, 가격: {weapon.Price}({weapon.BasePrice}x{margin}) / 총 소모비용: {totalCost}");
+                    Debug.Log($"[EnhancementService] 현재 무기: {_currentRecipe.recipeOutcome.resultWeapon.weaponName}, 가격: {weapon.Price} / 총 소모비용: {totalCost}");
                     weaponChangePublisher.Publish(new ChangeWeaponEvent(weapon: weapon, nextWeaponId: _currentRecipe.recipeOutcome.resultWeapon.Id, totalCost: totalCost));
 
                     // 새로운 레시피 해금
@@ -432,7 +435,7 @@ namespace ElementalBlacksmithStory.Core
                     cachedPinnedWeaponEnhancePath = null;
                     cachedWeaponId = _currentRecipe.recipeOutcome.defaultFailWeapon.Id;
 
-                    Debug.Log($"[EnhancementService] 현재 무기: {weapon.Data?.weaponName}, 가격: {weapon.Price} / 총 소모비용: {totalCost}");
+                    Debug.Log($"[EnhancementService] 현재 무기: {weapon.Data.weaponName}, 가격: {weapon.Price} / 총 소모비용: {totalCost}");
                     weaponChangePublisher.Publish(new ChangeWeaponEvent(weapon: weapon, nextWeaponId: _currentRecipe.recipeOutcome.defaultFailWeapon.Id, totalCost: totalCost));
 
                     UpdateNextRecipe();
@@ -512,10 +515,7 @@ namespace ElementalBlacksmithStory.Core
                 }
                 cachedWeaponId = currentWeaponData.Id;
 
-                float margin = currentWeaponData.margin > 1f ? UnityEngine.Random.Range(1.0f, currentWeaponData.margin) : currentWeaponData.margin;
-                margin = 1f;
-                weapon.SetMargin(margin);
-                Debug.Log($"[EnhancementService] 현재 무기: {currentWeaponData.weaponName}, 가격: {weapon.Price}({weapon.BasePrice}x{margin}) / 총 소모비용: {totalCost}");
+                Debug.Log($"[EnhancementService] 현재 무기: {currentWeaponData.weaponName}, 가격: {weapon.Price} / 총 소모비용: {totalCost}");
                 weaponChangePublisher.Publish(new ChangeWeaponEvent(weapon: weapon, nextWeaponId: currentWeaponData.Id, totalCost: totalCost));
 
                 UpdateNextRecipe();
@@ -525,7 +525,7 @@ namespace ElementalBlacksmithStory.Core
             {
                 _soundPublisher.Publish(new PlaySoundEvent(40101));
                 _weaponRollbackService.RollbackTo(weapon, result.defaultFailWeapon);
-                currentWeaponData = weapon.Data ?? result.defaultFailWeapon;
+                currentWeaponData = weapon.Data != null ? weapon.Data : result.defaultFailWeapon;
                 Debug.Log($"[EnhancementService] 강화 요청 처리됨 -> 실패, 결과물: {currentWeaponData.weaponName}");
                 cachedPinnedWeaponEnhancePath = null;
                 cachedWeaponId = currentWeaponData.Id;

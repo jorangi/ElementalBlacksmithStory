@@ -242,7 +242,7 @@ namespace ElementalBlacksmithStory.UI.Strategy
                     stock = CalculateMaterialBundleCount(picked.UnitValue, progression);
                 }
 
-                IShopItem shopItem = _itemShopFactory.Create(picked.ItemId, stock, 1.0f);
+                IShopItem shopItem = _itemShopFactory.Create(picked.ItemId, stock);
                 if (shopItem == null) continue;
 
                 ulong startPrice = CalculateStartingBid(shopItem);

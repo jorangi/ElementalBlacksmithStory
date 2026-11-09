@@ -28,6 +28,10 @@ namespace ElementalBlacksmithStory.Core
         private readonly SO_RuneDatabase _runeDatabase;
         private readonly AuctionSimulatingService _auctionSimulateService;
         private readonly BargainSimulatingService _bargainSimulateService;
+        private readonly ForgeManager _forgeManager;
+        private readonly IPublisher<QuickSellEvent> _quickSellPublisher;
+        public Observable<IShopItem> OnBargainItemSettledAsObservable => _bargainSimulateService.OnItemSettledAsObservable;
+        public Observable<IShopItem> OnBargainItemWithdrawAsObservable => _bargainSimulateService.OnItemWithdrawAsObservable;
 
         [Inject]
         public TradingPostService(
@@ -36,7 +40,9 @@ namespace ElementalBlacksmithStory.Core
             BargainSimulatingService bargainSimulateService,
             IPublisher<AcquireItemEvent> acquireItemPublisher,
             SO_MaterialDatabase materialDatabase,
-            SO_RuneDatabase runeDatabase
+            SO_RuneDatabase runeDatabase,
+            ForgeManager forgeManager = null,
+            IPublisher<QuickSellEvent> quickSellPublisher = null
         )
         {
             _playerData = playerData;
@@ -45,6 +51,8 @@ namespace ElementalBlacksmithStory.Core
             _runeDatabase = runeDatabase;
             _auctionSimulateService = auctionSimulateService;
             _bargainSimulateService = bargainSimulateService;
+            _forgeManager = forgeManager;
+            _quickSellPublisher = quickSellPublisher;
 
             _auctionSimulateService.SetAuctionHandler(
                 getCurerentPrice: itemId => _highestBids.TryGetValue(itemId, out var bid) ? bid.Price : 0,
@@ -54,6 +62,17 @@ namespace ElementalBlacksmithStory.Core
             _bargainItems[ItemCategory.Weapon] = new List<IShopItem>();
             _bargainItems[ItemCategory.Material] = new List<IShopItem>();
             _bargainItems[ItemCategory.Rune] = new List<IShopItem>();
+
+            _bargainSimulateService.OnItemSettledAsObservable
+                .Subscribe(this, static (item, self) =>
+                {
+                    self.RemoveBargainItem(item);
+                }).AddTo(_disposables);
+            _bargainSimulateService.OnItemWithdrawAsObservable
+                .Subscribe(this, static (item, self) =>
+                {
+                    self.RemoveBargainItem(item);
+                }).AddTo(_disposables);
         }
         /// <summary>
         /// 경매 아이템을 등록하는 함수
@@ -179,6 +198,7 @@ namespace ElementalBlacksmithStory.Core
                 Debug.LogWarning("[TradingPostService] 등록할 아이템이 없습니다.");
                 return;
             }
+            bool isEquippedWeaponRegistered = false;
             foreach (var item in items)
             {
                 if (item == null)
@@ -193,11 +213,30 @@ namespace ElementalBlacksmithStory.Core
                     case ShopItemCategory.Sword:
                     case ShopItemCategory.Bow:
                         category = ItemCategory.Weapon;
-                        _playerData.EquipmentInventory.Remove(item.Id);
+                        if (item is Weapon w)
+                        {
+                            if (_forgeManager != null && _forgeManager.CurrentWeapon != null &&
+                                (_forgeManager.CurrentWeapon == w || _forgeManager.CurrentWeapon.Id == w.Id))
+                            {
+                                isEquippedWeaponRegistered = true;
+                            }
+                            _playerData.EquipmentInventory.Remove(w);
+                        }
+                        else
+                        {
+                            _playerData.EquipmentInventory.RemoveById(item.Id);
+                        }
                         break;
                     case ShopItemCategory.Material:
                         category = ItemCategory.Material;
-                        _playerData.MaterialInventory.Get(_materialDatabase.Get(item.ItemId), item.Count);
+                        if (item is MaterialShopItem mItem)
+                        {
+                            _playerData.MaterialInventory.Get(mItem.Data, item.Count);
+                        }
+                        else
+                        {
+                            _playerData.MaterialInventory.Get(_materialDatabase.Get(item.ItemId), item.Count);
+                        }
                         if (item.Id == item.ItemId && item is MaterialShopItem matItem)
                         {
                             registeredItem = new MaterialShopItem(matItem.Data, item.Count, MaterialShopItem.GenerateInstanceId());
@@ -205,7 +244,14 @@ namespace ElementalBlacksmithStory.Core
                         break;
                     case ShopItemCategory.Rune:
                         category = ItemCategory.Rune;
-                        _playerData.RuneInventory.Get(_runeDatabase.Get(item.ItemId), item.Count);
+                        if (item is Rune rItem)
+                        {
+                            _playerData.RuneInventory.Get(rItem.Data, item.Count);
+                        }
+                        else
+                        {
+                            _playerData.RuneInventory.Get(_runeDatabase.Get(item.ItemId), item.Count);
+                        }
                         if (item.Id == item.ItemId && item is Rune runeItem)
                         {
                             registeredItem = new Rune(runeItem.Data, item.Count, Rune.GenerateInstanceId());
@@ -220,6 +266,10 @@ namespace ElementalBlacksmithStory.Core
                     list.Add(registeredItem);
                 }
                 _bargainSimulateService.RegisterItem(registeredItem);
+            }
+            if (isEquippedWeaponRegistered)
+            {
+                _quickSellPublisher?.Publish(new QuickSellEvent(0));
             }
         }
 
@@ -246,6 +296,29 @@ namespace ElementalBlacksmithStory.Core
                 return list;
             }
             return Array.Empty<IShopItem>();
+        }
+        private void RemoveBargainItem(IShopItem item)
+        {
+            ShopItemCategory shopItemCategory = item.Category;
+            var itemCategory = shopItemCategory switch
+            {
+                ShopItemCategory.Sword or ShopItemCategory.Bow => ItemCategory.Weapon,
+                ShopItemCategory.Material => ItemCategory.Material,
+                ShopItemCategory.Rune => ItemCategory.Rune,
+                ShopItemCategory.Consumable => ItemCategory.Unknown,
+                _ => ItemCategory.Unknown,
+            };
+            if (_bargainItems.TryGetValue(itemCategory, out var shopItems))
+            {
+                for (int i = shopItems.Count - 1; i >= 0; i--)
+                {
+                    if (shopItems[i].Id == item.Id)
+                    {
+                        shopItems.RemoveAt(i);
+                        return;
+                    }
+                }
+            }
         }
 
         public void Dispose()
