@@ -68,15 +68,15 @@ namespace ElementalBlacksmithStory.UI
             newCard.SetRune(data, sprite, ea, isFavorite);
 
             newCard.OnFavoriteButtonClickAsObservable()
-                .Subscribe(_ => _onFavoriteClickedSubject.OnNext(data.Id))
+                .Subscribe((this, data.Id), static (_, state) => state.Item1._onFavoriteClickedSubject.OnNext(state.Id))
                 .AddTo(_disposables);
 
             newCard.OnCardButtonClickAsObservable()
-                .Subscribe(_ => _onCardClickedSubject.OnNext(data.Id))
+                .Subscribe((this, data.Id), static (_, state) => state.Item1._onCardClickedSubject.OnNext(state.Id))
                 .AddTo(_disposables);
 
             newCard.OnCardRightClickAsObservable()
-                .Subscribe(_ => _onCardRightClickedSubject.OnNext(data.Id))
+                .Subscribe((this, data.Id), static (_, state) => state.Item1._onCardRightClickedSubject.OnNext(state.Id))
                 .AddTo(_disposables);
 
             _runeCardDic.Add(data.Id, newCard);

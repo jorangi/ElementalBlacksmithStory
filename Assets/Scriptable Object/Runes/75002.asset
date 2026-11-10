@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ElementalBlacksmithStory.Data.SO_RuneData
   runeName: "\uC12C\uAD11\uC758 \uB8EC"
   description: "\uBB34\uAE30\uC758 \uACF5\uACA9\uC18D\uB3C4\uAC00 50% \uC99D\uAC00\uD55C\uB2E4."
-  grade: 250000
+  grade: 150001
   nextRune: {fileID: 0}
   value: 2000
   effects:
@@ -27,5 +27,5 @@ MonoBehaviour:
       type: {class: StatModifierEffect, ns: ElementalBlacksmithStory.Effect, asm: Assembly-CSharp}
       data:
         statType: 1
-        statModifierType: 2
         value: 0.5
+        statModifierType: 2

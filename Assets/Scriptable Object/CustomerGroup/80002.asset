@@ -1,0 +1,145 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b32617f483474c042a505f5b4002c486, type: 3}
+  m_Name: 80002
+  m_EditorClassIdentifier: Assembly-CSharp::ElementalBlacksmithStory.Data.SO_CustomerGroup
+  _customerGroupTitle: 왕실 기사
+  _customerGroupName: 백은 사자 근위대
+  _description: 왕도에서 정식 파견된 정예 기사단원들. 명예와 품위를 중시하며, 정당한 성능과 만듦새가 보장된다면 후한 값을 치른다.
+  minEstimateRatio: 1.15
+  maxEstimateRatio: 1.55
+  minFirstOfferRatio: 0.75
+  maxFirstOfferRatio: 0.9
+  minInterpolation: 0.15
+  maxInterpolation: 0.25
+  minPatience: 75
+  maxPatience: 110
+  greedSensitivity: 1.2
+  _customerNames:
+  - 알렉시스
+  - 발렌타인
+  - 세드릭
+  - 길버트
+  - 빅토르
+  - 로웰
+  - 아서
+  - 데이먼
+  - 이사벨
+  - 루돌프
+  _customerSprites: []
+  _firstOffer:
+  - speakerId: 0
+    text: '{itemType == sword ? "검날의 균형이 흠잡을 데 없군요." : {itemType == bow ? "활의 장력이 훌륭합니다." : {itemType == rune ? "룬에 깃든 기운이 맑습니다." : {itemType == material ? "재료의 질이 고르군요." : "품질이 훌륭하군요."}}}} {price}골드를 제시하겠습니다.'
+  - speakerId: 0
+    text: '{itemName}(이/가) 눈에 띄는군요. {price}골드는 드려야 예의겠지요.'
+  - speakerId: 0
+    text: '왕도에서도 쉽게 보기 힘든 물건이군요. {price}골드로 모시겠습니다.'
+  - speakerId: 0
+    text: '{itemCount > 1 ? "{itemCount}개 모두 들이고 싶습니다. {price}골드를 제시하겠습니다." : "한 점이면 충분합니다. {price}골드를 제시하겠습니다."}'
+  - speakerId: 0
+    text: '백은 사자 근위대의 {npcName}입니다. {itemName}에 {price}골드를 드리겠습니다.'
+  - speakerId: 0
+    text: '{itemName}(이/가) 기사단에 어울리는군요. {price}골드면 부족하지 않으리라 봅니다.'
+  - speakerId: 0
+    text: '좋은 물건에는 좋은 값을 치르는 것이 도리입니다. {price}골드를 드리겠습니다.'
+  - speakerId: 0
+    text: '{itemType == material ? "이만한 재료라면 보급에 쓸 만하겠군요." : {itemType == rune ? "이런 룬은 왕도에서도 귀하지요." : "이만한 물건은 왕도에서도 귀하지요."}} {price}골드면 어떻겠습니까?'
+  - speakerId: 0
+    text: '먼저 정당한 값을 말씀드리지요. {price}골드입니다.'
+  - speakerId: 0
+    text: '품위 있는 거래를 하고 싶습니다. {price}골드, 받아주시겠습니까?'
+  _negotiation:
+  - speakerId: 0
+    text: '그 뜻은 알겠습니다. {price}골드까지 올려 보지요.'
+  - speakerId: 0
+    text: '{itemCount > 1 ? "{itemCount}개를 들이는 만큼 성의를 보이겠습니다." : "한 점뿐이어도 성의를 보이겠습니다."} {price}골드면 어떻습니까?'
+  - speakerId: 0
+    text: '정당한 요구라 여기겠습니다. {price}골드로 맞추지요.'
+  - speakerId: 0
+    text: '가치를 알아본 값이라면 인색하게 굴지 않겠습니다. {price}골드입니다.'
+  - speakerId: 0
+    text: '제 이름을 걸고 말씀드립니다. {price}골드면 충분히 후한 값입니다.'
+  - speakerId: 0
+    text: '푼돈으로 실랑이하고 싶지는 않군요. {price}골드로 정리하지요.'
+  - speakerId: 0
+    text: '한 걸음 양보하겠습니다. {price}골드, 합당한 값이라 봅니다.'
+  - speakerId: 0
+    text: '말씀에도 일리가 있군요. 다만 {price}골드를 넘기기는 신중해야 합니다.'
+  - speakerId: 0
+    text: '{itemType == sword ? "검의 가치는 인정합니다." : {itemType == bow ? "활의 가치는 인정합니다." : "{itemName}의 가치는 인정합니다."}} {price}골드까지 드리겠습니다.'
+  - speakerId: 0
+    text: '기사의 체면이 있으니 길게 다투지는 않겠습니다. {price}골드는 어떻습니까?'
+  _finalOffer:
+  - speakerId: 0
+    text: '이것이 마지막 제안입니다. {price}골드, 이 이상은 어렵습니다.'
+  - speakerId: 0
+    text: '더는 길게 끌지 않겠습니다. {price}골드로 결정해 주십시오.'
+  - speakerId: 0
+    text: '{itemName}의 가치를 감안해도 한계가 있습니다. {price}골드가 제 한도입니다.'
+  - speakerId: 0
+    text: '근위대의 예산도 정해져 있습니다. {price}골드, 이것이 끝입니다.'
+  - speakerId: 0
+    text: '{itemCount > 1 ? "{itemCount}개를 들이는 값으로 {price}골드가 최선입니다." : "이 한 점에 {price}골드가 최선입니다."} 받아주시겠습니까?'
+  - speakerId: 0
+    text: '품위를 지키는 선에서는 {price}골드가 전부입니다.'
+  - speakerId: 0
+    text: '마지막으로 말씀드립니다. {price}골드에 응하지 않으신다면 물러나겠습니다.'
+  - speakerId: 0
+    text: '제 이름을 걸고 말씀드립니다. {price}골드가 마지막입니다.'
+  - speakerId: 0
+    text: '제게 허락된 선은 여기까지입니다. {price}골드, 정중히 청합니다.'
+  - speakerId: 0
+    text: '더 오르는 값은 없습니다. {price}골드로 서로 얼굴 붉히지 않았으면 합니다.'
+  _acception:
+  - speakerId: 0
+    text: '좋습니다. 그 값으로 하지요.'
+  - speakerId: 0
+    text: '{itemType == sword ? "이 검이라면 믿고 맡길 만하겠군요." : {itemType == bow ? "이 활이라면 믿고 맡길 만하겠군요." : "이 물건이라면 믿고 쓸 만하겠군요."}}'
+  - speakerId: 0
+    text: '정당한 거래였습니다. 감사드립니다.'
+  - speakerId: 0
+    text: '합의에 이르러 기쁩니다. 값은 바로 치르겠습니다.'
+  - speakerId: 0
+    text: '{itemCount > 1 ? "{itemCount}개 모두 확실히 받겠습니다." : "확실히 받겠습니다."} 감사합니다.'
+  - speakerId: 0
+    text: '좋은 거래였습니다. 약속은 반드시 지키겠습니다.'
+  - speakerId: 0
+    text: '백은 사자 근위대로서 오늘 일을 잊지 않겠습니다.'
+  - speakerId: 0
+    text: '품위 있는 흥정에 감사드립니다.'
+  - speakerId: 0
+    text: '{price}골드, 확실히 치르겠습니다. {itemName}(을/를) 감사히 받겠습니다.'
+  - speakerId: 0
+    text: '기사단에 보탬이 되겠군요. 감사히 받겠습니다.'
+  _rejection:
+  - speakerId: 0
+    text: '유감이지만 이번에는 접겠습니다.'
+  - speakerId: 0
+    text: '서로 뜻이 맞지 않는 듯하군요. 이만 물러나겠습니다.'
+  - speakerId: 0
+    text: '정당한 선을 넘는 값은 치를 수 없습니다. 실례했습니다.'
+  - speakerId: 0
+    text: '{itemName}(이/가) 훌륭한 것은 압니다만, 이 값에는 곤란합니다.'
+  - speakerId: 0
+    text: '더는 다투지 않겠습니다. 다른 기회에 뵙지요.'
+  - speakerId: 0
+    text: '{itemCount > 1 ? "{itemCount}개를 들이기엔 값이 맞지 않는군요." : "값이 맞지 않는군요."} 이만 가보겠습니다.'
+  - speakerId: 0
+    text: '명예를 해치는 거래는 하지 않습니다. 이만 물러나겠습니다.'
+  - speakerId: 0
+    text: '저는 이만 물러나겠습니다. 인연이 닿으면 다시 뵙지요.'
+  - speakerId: 0
+    text: '무리한 거래는 서로에게 득이 되지 않습니다. 접겠습니다.'
+  - speakerId: 0
+    text: '마음은 감사하나 이번에는 사양하겠습니다.'
+  _minTimer: 90
+  _maxTimer: 180

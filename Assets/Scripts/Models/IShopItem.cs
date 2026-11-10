@@ -2,6 +2,14 @@ using ElementalBlacksmithStory.Inventory;
 
 namespace ElementalBlacksmithStory.Data
 {
+    public enum ShopItemCategory
+    {
+        Sword,
+        Bow,
+        Material,
+        Rune,
+        Consumable
+    }
     /// <summary>
     /// 상점에서 판매/구매 가능한 아이템 인터페이스
     /// </summary>
@@ -15,12 +23,17 @@ namespace ElementalBlacksmithStory.Data
         /// <summary>
         /// 스프라이트 아틀라스 로드에 사용되는 원본 데이터 ID
         /// </summary>
-        public uint SpriteId { get; }
+        public uint ItemId { get; }
 
         /// <summary>
         /// 아이템 수량
         /// </summary>
         public uint Count { get; }
+
+        /// <summary>
+        /// 아이템 카테고리
+        /// </summary>
+        public ShopItemCategory Category { get; }
 
         /// <summary>
         /// 구매 완료 시 플레이어 인벤토리에 지급

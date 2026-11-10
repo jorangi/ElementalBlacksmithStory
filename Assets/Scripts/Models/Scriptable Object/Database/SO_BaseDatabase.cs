@@ -8,6 +8,7 @@ namespace ElementalBlacksmithStory.Data
     {
         [SerializeField] protected List<T> _itemList = new();
         protected Dictionary<uint, T> _itemDict = new();
+        public IReadOnlyList<T> Items => _itemList;
         public virtual void Init()
         {
             _itemDict = new();

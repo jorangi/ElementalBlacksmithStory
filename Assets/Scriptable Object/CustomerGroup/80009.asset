@@ -1,0 +1,218 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b32617f483474c042a505f5b4002c486, type: 3}
+  m_Name: 80009
+  m_EditorClassIdentifier: Assembly-CSharp::ElementalBlacksmithStory.Data.SO_CustomerGroup
+  _customerGroupTitle: "\uB5A0\uB3CC\uC774 \uC0AC\uB0E5\uAFBC"
+  _customerGroupName: "\uC232\uC758 \uADF8\uB9BC\uC790"
+  _description: "\uC232\uACFC \uC0B0\uB9E5\uC744 \uB204\uBE44\uB294 \uACE0\uB3C5\uD55C
+    \uC0AC\uB0E5\uAFBC\uB4E4. \uD65C\uACFC \uAC00\uBCBC\uC6B4 \uC7A5\uBE44, \uC57C\uC0DD
+    \uB3D9\uBB3C \uAC00\uC8FD \uBC0F \uC18C\uC7AC\uC5D0 \uAD00\uC2EC\uC774 \uB9CE\uB2E4."
+  minEstimateRatio: 0.85
+  maxEstimateRatio: 1.25
+  minFirstOfferRatio: 0.6
+  maxFirstOfferRatio: 0.75
+  minInterpolation: 0.15
+  maxInterpolation: 0.3
+  minPatience: 70
+  maxPatience: 100
+  greedSensitivity: 1.2
+  itemPreferenceData:
+    allowedCategories: 
+    preferredCategories: 000000000100000002000000
+    preferredElements: 
+    dislikedElements: 
+  _customerNames:
+  - "\uB77C\uC774\uC5B8"
+  - "\uD5E4\uC774\uC990"
+  - "\uCF54\uB108"
+  - "\uC2E4\uBC14"
+  - "\uC544\uC0E4"
+  - "\uC624\uD06C"
+  - "\uBC14\uB78C"
+  - "\uBE0C\uB77C\uC774\uC5B4"
+  - "\uD1A0\uB974\uBCA4"
+  - "\uBA54\uC774\uD50C"
+  _customerSprites: []
+  _firstOffer:
+  - speakerId: 0
+    text: "{itemType == material ? \"\uACB0\uC774 \uACF1\uAD70. \uACA8\uC6B8 \uB098\uAE30
+      \uC804\uC5D0 \uC7C1\uC5EC \uB458 \uB9CC\uD574.\" : {itemType == consumable
+      ? \"\uC4F0\uACE0 \uB098\uBA74 \uC5C6\uC5B4\uC9C0\uB294 \uAC83\uB4E4\uC774\uB77C
+      \uB298 \uBAA8\uC790\uB77C\uC9C0. \uB9C8\uCE68 \uB5A8\uC5B4\uC84C\uC5B4.\" :
+      \"\uB208\uC5D0 \uB4E4\uC5B4\uC624\uB294 \uBB3C\uAC74\uC774\uAD70.\"}} {price}\uACE8\uB4DC."
+  - speakerId: 0
+    text: "{itemName}... \uC190\uC73C\uB85C \uD55C\uBC88 \uB9CC\uC838 \uBCF4\uACE0
+      \uC2F6\uAD70. {price}\uACE8\uB4DC."
+  - speakerId: 0
+    text: "{itemCount > 1 ? \"{itemCount}\uAC1C. \uB2E4 \uAC00\uC838\uAC00\uC9C0.
+      \uD569\uCCD0\uC11C {price}\uACE8\uB4DC.\" : \"\uD558\uB098\uBA74 \uB3FC. {price}\uACE8\uB4DC.\"}"
+  - speakerId: 0
+    text: "\uB0C4\uC0C8\uAC00 \uC88B\uC544. \uC624\uB798 \uBB35\uC740 \uBB3C\uAC74\uC740
+      \uC544\uB2C8\uAD70. {price}\uACE8\uB4DC \uC8FC\uC9C0."
+  - speakerId: 0
+    text: "{price}\uACE8\uB4DC. \uAE4E\uC744 \uC0DD\uAC01\uC740 \uC5C6\uC5B4. \uB9D0
+      \uB9CE\uC740 \uAC74 \uC9C8\uC0C9\uC774\uB77C."
+  - speakerId: 0
+    text: "{price >= baseValue ? \"\uC81C\uAC12\uC740 \uCCD0\uC8FC\uC9C0. {price}\uACE8\uB4DC.\"
+      : \"\uAE09\uD55C \uAC74 \uC544\uB2C8\uB2C8 {price}\uACE8\uB4DC\uBD80\uD130
+      \uB9D0\uD558\uC9C0.\"}"
+  - speakerId: 0
+    text: "{itemType == material ? \"\uC4F8 \uB9CC\uD55C \uC7AC\uB8CC\uB294 \uC0B0\uC5D0\uC11C\uB3C4
+      \uAD6C\uD558\uAE30 \uC5B4\uB835\uC9C0. {price}\uACE8\uB4DC.\" : {itemType ==
+      consumable ? \"\uC0B0\uC5D0\uC11C\uB294 \uD558\uB098\uAC00 \uBAA9\uC228 \uAC12\uC774\uC57C.
+      \uC544\uB07C\uC9C0 \uC54A\uACE0 \uCCD0\uC8FC\uC9C0. {price}\uACE8\uB4DC.\"
+      : \"\uC4F8 \uB9CC\uD558\uAD70. {price}\uACE8\uB4DC.\"}}"
+  - speakerId: 0
+    text: "{groupName}\uC758 {npcName}. {itemName}(\uC744/\uB97C) {price}\uACE8\uB4DC\uC5D0
+      \uC0AC\uC9C0."
+  - speakerId: 0
+    text: "\uB208\uC774 \uC624\uAE30 \uC804\uC5D0 \uCC44\uC6CC \uB46C\uC57C \uD574\uC11C.
+      {price}\uACE8\uB4DC, \uC5B4\uB54C."
+  - speakerId: 0
+    text: "\uC0C1\uD55C \uB370\uAC00 \uC5C6\uAD70. \uBCF4\uAD00\uC744 \uC798\uD588\uC5B4.
+      {price}\uACE8\uB4DC."
+  _negotiation:
+  - speakerId: 0
+    text: "{prevPrice}\uACE8\uB4DC\uC5D0\uC11C {price}\uACE8\uB4DC. \uC774\uAC8C
+      \uB0B4 \uB2F5\uC774\uC57C."
+  - speakerId: 0
+    text: "{askPrice}\uACE8\uB4DC\uB294 \uACFC\uD574. {price}\uACE8\uB4DC\uAE4C\uC9C0."
+  - speakerId: 0
+    text: "{bargainCount >= 2 ? \"\uAC19\uC740 \uB9D0\uC744 \uBA87 \uBC88 \uD558\uB294
+      \uAC70\uC9C0. {price}\uACE8\uB4DC. \uB354\uB294 \uC548 \uBCC0\uD574.\" : \"\uC88B\uC544.
+      {price}\uACE8\uB4DC\uAE4C\uC9C0 \uC62C\uB9AC\uC9C0.\"}"
+  - speakerId: 0
+    text: "{askRatio >= 1.5 ? \"{askPrice}\uACE8\uB4DC\uB77C\uB2C8. \uADF8\uB7F0
+      \uAC12\uC744 \uBD80\uB974\uB294 \uB188\uC740 \uC9D0\uC2B9\uBCF4\uB2E4 \uBA3C\uC800
+      \uB2F9\uD574. {price}\uACE8\uB4DC.\" : \"{askPrice}\uACE8\uB4DC\uB294 \uC870\uAE08
+      \uB192\uAD70. {price}\uACE8\uB4DC\uB85C \uB9DE\uCD94\uC9C0.\"}"
+  - speakerId: 0
+    text: "{priceGap}\uACE8\uB4DC \uCC28\uC774\uAD70. \uADF8\uB9CC\uD07C\uC740 \uBABB
+      \uBA54\uC6CC. {price}\uACE8\uB4DC."
+  - speakerId: 0
+    text: "{itemCount > 1 ? \"{itemCount}\uAC1C\uBA74 \uAC1C\uB2F9 {unitPrice}\uACE8\uB4DC\uAF34\uC774\uAD70.
+      \uD569\uCCD0\uC11C {price}\uACE8\uB4DC.\" : \"\uD558\uB098\uCE58\uACE0\uB294
+      \uD6C4\uD558\uAC8C \uCCE4\uC5B4. {price}\uACE8\uB4DC.\"}"
+  - speakerId: 0
+    text: "{itemType == material ? \"\uC7AC\uB8CC\uB294 \uCCA0 \uB530\uB77C \uAC12\uC774
+      \uB2EC\uB77C\uC838. \uC9C0\uAE08 \uCCA0\uC5D4 {price}\uACE8\uB4DC\uAC00 \uB9DE\uC544.\"
+      : {itemType == consumable ? \"\uC18C\uBAA8\uD488\uC740 \uC4F0\uB294 \uC0AC\uB78C\uC774
+      \uAC12\uC744 \uC54C\uC544. \uB0B4\uAC00 \uC544\uB294 \uAC12\uC740 {price}\uACE8\uB4DC.\"
+      : \"\uB0B4\uAC00 \uC544\uB294 \uAC12\uC740 {price}\uACE8\uB4DC.\"}}"
+  - speakerId: 0
+    text: "\uB9D0\uC744 \uC544\uB07C\uC9C0. {price}\uACE8\uB4DC."
+  - speakerId: 0
+    text: "{price >= baseValue ? \"\uC81C\uAC12 \uC774\uC0C1\uC774\uC57C. \uB354\uB294
+      \uBABB \uC918. {price}\uACE8\uB4DC.\" : \"{price}\uACE8\uB4DC. \uC774 \uC815\uB3C4\uBA74
+      \uACF5\uD3C9\uD558\uC9C0.\"}"
+  - speakerId: 0
+    text: "\uB09C \uD55C \uBC88 \uC815\uD55C \uAC12\uC740 \uC798
+      \uC548 \uBC14\uAFD4. \uC774\uBC88\uB9CC {price}\uACE8\uB4DC\uB85C \uC62C\uB9AC\uC9C0."
+  _finalOffer:
+  - speakerId: 0
+    text: "\uB9C8\uC9C0\uB9C9\uC774\uC57C. {price}\uACE8\uB4DC. \uC2EB\uC73C\uBA74
+      \uB9D0\uD574."
+  - speakerId: 0
+    text: "{firstPrice}\uACE8\uB4DC\uB85C \uC2DC\uC791\uD574\uC11C {price}\uACE8\uB4DC\uAE4C\uC9C0
+      \uC654\uC5B4. \uC5EC\uAE30\uAE4C\uC9C0\uC57C."
+  - speakerId: 0
+    text: "\uD574 \uC9C0\uAE30 \uC804\uC5D0 \uC6C0\uC9C1\uC5EC\uC57C \uD574. {price}\uACE8\uB4DC,
+      \uC815\uD574."
+  - speakerId: 0
+    text: "{itemCount > 1 ? \"{itemCount}\uAC1C\uC5D0 {price}\uACE8\uB4DC. \uB354\uB294
+      \uC5C6\uC5B4.\" : \"\uD558\uB098\uC5D0 {price}\uACE8\uB4DC. \uB354\uB294 \uC5C6\uC5B4.\"}"
+  - speakerId: 0
+    text: "{askPrice}\uACE8\uB4DC\uB294 \uC548 \uB3FC. {price}\uACE8\uB4DC\uBA74
+      \uC0AC\uC9C0."
+  - speakerId: 0
+    text: "{itemName}(\uC774/\uAC00) \uC88B\uAE34 \uD574\uB3C4 {price}\uACE8\uB4DC
+      \uC704\uB85C\uB294 \uBABB \uAC00."
+  - speakerId: 0
+    text: "{askRatio >= 1.5 ? \"{priceGap}\uACE8\uB4DC\uB098 \uBC8C\uC5B4\uC84C\uAD70.
+      \uB354 \uC598\uAE30\uD574 \uBD10\uC57C \uAC19\uC740 \uB2F5\uC774\uC57C. {price}\uACE8\uB4DC.\"
+      : \"{price}\uACE8\uB4DC. \uC774 \uC815\uB3C4 \uCC28\uC774\uB294 \uB208 \uAC10\uC9C0.\"}"
+  - speakerId: 0
+    text: "{itemType == material ? \"\uC7AC\uB8CC\uC5D0 \uB354 \uC4F8 \uB3C8\uC740
+      \uB0A8\uACA8 \uB450\uC9C0 \uC54A\uC558\uC5B4. {price}\uACE8\uB4DC.\" : {itemType
+      == consumable ? \"\uC18C\uBAA8\uD488\uC740 \uC544\uAEF4 \uC4F0\uBA74 \uB3FC.
+      \uB354 \uC5B9\uC744 \uC774\uC720\uB294 \uC5C6\uC5B4. {price}\uACE8\uB4DC.\"
+      : \"\uB354 \uC5B9\uC744 \uC774\uC720\uB294 \uC5C6\uC5B4. {price}\uACE8\uB4DC.\"}}"
+  - speakerId: 0
+    text: "\uB9C8\uC9C0\uB9C9\uC73C\uB85C \uD558\uB294 \uB9D0\uC774\uC57C. {price}\uACE8\uB4DC."
+  - speakerId: 0
+    text: "\uB2F5\uC774 \uB290\uB9AC\uAD70. \uAE30\uB2E4\uB9AC\uB294 \uB370\uB294
+      \uC775\uC219\uD558\uC9C0\uB9CC \uAE38\uAC8C\uB294 \uC548 \uD574. {price}\uACE8\uB4DC."
+  _acception:
+  - speakerId: 0
+    text: "\uC88B\uC544. \uADF8 \uAC12\uC73C\uB85C \uD558\uC9C0."
+  - speakerId: 0
+    text: "{itemType == material ? \"\uACB0\uC774 \uC88B\uC740 \uAC78 \uAD6C\uD588\uAD70.
+      \uACA8\uC6B8 \uC900\uBE44\uAC00 \uD55C\uACB0 \uB0AB\uACA0\uC5B4.\" : {itemType
+      == consumable ? \"\uC774\uB9CC\uD07C\uC774\uBA74 \uD55C \uCCA0\uC740 \uBC84\uD2F0\uACA0\uC5B4.\"
+      : \"\uC88B\uC740 \uBB3C\uAC74\uC774\uAD70. \uC798 \uC4F0\uC9C0.\"}}"
+  - speakerId: 0
+    text: "{price}\uACE8\uB4DC. \uD655\uC778\uD574."
+  - speakerId: 0
+    text: "{itemName}(\uC744/\uB97C) \uCC59\uAE30\uC9C0. \uC2E0\uC138 \uC84C\uAD70."
+  - speakerId: 0
+    text: "{itemCount > 1 ? \"{itemCount}\uAC1C \uB2E4 \uAC00\uC838\uAC00\uC9C0.
+      \uC218\uACE0\uD588\uC5B4.\" : \"\uAC00\uC838\uAC00\uC9C0. \uC218\uACE0\uD588\uC5B4.\"}"
+  - speakerId: 0
+    text: "\uB9D0\uC774 \uC9E7\uC544\uC11C \uD3B8\uD588\uC5B4."
+  - speakerId: 0
+    text: "{groupName}(\uC740/\uB294) \uAC12\uC744 \uCE58\uB978 \uB9CC\uD07C \uAE30\uC5B5\uD574."
+  - speakerId: 0
+    text: "\uC2E0\uC138\uB97C \uC84C\uAD70. \uAE30\uC5B5\uD574
+      \uB450\uC9C0."
+  - speakerId: 0
+    text: "{price >= baseValue ? \"\uC81C\uAC12 \uC774\uC0C1\uC73C\uB85C \uCCE4\uC73C\uB2C8
+      \uB9C8\uC74C \uD3B8\uD788 \uAC00\uC838\uAC00\uC9C0.\" : \"\uC81C\uAC12\uC774\uBA74
+      \uCDA9\uBD84\uD574. \uAC00\uC838\uAC00\uC9C0.\"}"
+  - speakerId: 0
+    text: "\uBC14\uB78C\uC774 \uBC14\uB00C\uAE30 \uC804\uC5D0 \uAC00\uC57C\uACA0\uAD70.
+      \uAC70\uB798 \uACE0\uB9C8\uC6CC."
+  _rejection:
+  - speakerId: 0
+    text: "\uB9DE\uC9C0 \uC54A\uAD70. \uC774\uB9CC \uAC00\uC9C0."
+  - speakerId: 0
+    text: "{askPrice}\uACE8\uB4DC\uB294 \uC548 \uC0AC."
+  - speakerId: 0
+    text: "{itemCount > 1 ? \"{itemCount}\uAC1C\uB4E0 \uD558\uB098\uB4E0 \uADF8 \uAC12\uC740
+      \uC544\uB2C8\uC57C. \uAC04\uB2E4.\" : \"\uADF8 \uAC12\uC740 \uC544\uB2C8\uC57C.
+      \uAC04\uB2E4.\"}"
+  - speakerId: 0
+    text: "{itemName}(\uC774/\uAC00) \uC88B\uAE34 \uD558\uC9C0\uB9CC \uADF8 \uAC12\uC5D4
+      \uBABB \uC0AC. \uBC1C\uAE38\uC744 \uB3CC\uB9AC\uC9C0."
+  - speakerId: 0
+    text: "{itemType == material ? \"\uC7AC\uB8CC\uB294 \uB2E4\uB978 \uB370\uC11C\uB3C4
+      \uAD6C\uD560 \uC218 \uC788\uC5B4. \uC774\uB9CC \uAC00\uC9C0.\" : {itemType
+      == consumable ? \"\uC18C\uBAA8\uD488\uC740 \uC544\uAEF4 \uC4F0\uBA74 \uB3FC.
+      \uC774\uBC88\uC5D4 \uC811\uC9C0.\" : \"\uB2E4\uB978 \uAE38\uB85C \uAD6C\uD574
+      \uBCF4\uC9C0.\"}}"
+  - speakerId: 0
+    text: "\uB354 \uB9D0\uD574 \uBD10\uC57C \uAC19\uC544. \uC811\uC9C0."
+  - speakerId: 0
+    text: "\uB09C \uAC12\uC774 \uC548 \uB9DE\uC73C\uBA74 \uBBF8\uB828
+      \uB450\uC9C0 \uC54A\uC544."
+  - speakerId: 0
+    text: "{groupName}(\uC740/\uB294) \uB9D0 \uAE38\uAC8C \uB044\uB294 \uAC70\uB798\uB294
+      \uC548 \uD574."
+  - speakerId: 0
+    text: "{askRatio >= 1.5 ? \"\uADF8 \uAC12\uC744 \uBD80\uB97C \uC904\uC740 \uBAB0\uB790\uAD70.
+      \uC811\uC9C0.\" : \"\uC870\uAE08\uB9CC \uB354 \uB9DE\uC558\uC73C\uBA74. \uB2E4\uC74C\uC5D0
+      \uBCF4\uC9C0.\"}"
+  - speakerId: 0
+    text: "\uD574\uAC00 \uAE30\uC6B8\uACE0 \uC788\uC5B4. \uAE38\uC744 \uAC00\uC57C
+      \uD574."
+  _minTimer: 35
+  _maxTimer: 75

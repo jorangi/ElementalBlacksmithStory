@@ -1,0 +1,923 @@
+fileFormatVersion: 2
+guid: 0d825628e94ad3546af553a8b10da265
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 8648665478220623759
+    second: Button_RegisterItem_for_Market_0
+  - first:
+      213: -789751562277797377
+    second: Button_RegisterItem_for_Market_1
+  - first:
+      213: -565334314447607209
+    second: Button_RegisterItem_for_Market_2
+  - first:
+      213: -8105293565500714322
+    second: Button_RegisterItem_for_Market_3
+  - first:
+      213: 7711641408732903700
+    second: Button_RegisterItem_for_Market_4
+  - first:
+      213: 4728312439711818097
+    second: Button_RegisterItem_for_Market_5
+  - first:
+      213: -5742429903603773691
+    second: Button_RegisterItem_for_Market_6
+  - first:
+      213: 9039255126782415816
+    second: Button_RegisterItem_for_Market_7
+  - first:
+      213: 1584855480970560433
+    second: Button_RegisterItem_for_Market_8
+  - first:
+      213: -7279357605532339175
+    second: Button_RegisterItem_for_Market_9
+  - first:
+      213: 1658720920601537677
+    second: Button_RegisterItem_for_Market_10
+  - first:
+      213: 7079564552548564162
+    second: Button_RegisterItem_for_Market_11
+  - first:
+      213: -8604105814908025716
+    second: Button_RegisterItem_for_Market_12
+  - first:
+      213: 7350377489463184723
+    second: Button_RegisterItem_for_Market_13
+  - first:
+      213: 1193747993926181134
+    second: Button_RegisterItem_for_Market_14
+  - first:
+      213: -1698897714501384965
+    second: Button_RegisterItem_for_Market_15
+  - first:
+      213: 5229103930772865686
+    second: Button_RegisterItem_for_Market_16
+  - first:
+      213: -3567367590329789385
+    second: Button_RegisterItem_for_Market_17
+  - first:
+      213: 8623698017591459671
+    second: Button_RegisterItem_for_Market_18
+  - first:
+      213: 304067722749316044
+    second: Button_RegisterItem_for_Market_19
+  - first:
+      213: -975458935995368824
+    second: Button_RegisterItem_for_Market_20
+  - first:
+      213: 8253140209860068643
+    second: Button_RegisterItem_for_Market_21
+  - first:
+      213: -1096149449112754653
+    second: Button_RegisterItem_for_Market_22
+  - first:
+      213: 3250175583881448984
+    second: Button_RegisterItem_for_Market_23
+  - first:
+      213: 487561148859633334
+    second: Button_RegisterItem_for_Market_24
+  - first:
+      213: 714884573599493350
+    second: Button_RegisterItem_for_Market_25
+  - first:
+      213: -7500563305679426576
+    second: Button_RegisterItem_for_Market_26
+  - first:
+      213: 1189437831157180505
+    second: Button_RegisterItem_for_Market_27
+  - first:
+      213: -8219752293254321351
+    second: Button_RegisterItem_for_Market_28
+  - first:
+      213: -2763848838304528882
+    second: Button_RegisterItem_for_Market_29
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 1
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: iOS
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Button_RegisterItem_for_Market_0
+      rect:
+        serializedVersion: 2
+        x: 5
+        y: 244
+        width: 24
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f8f268a0e6b360870800000000000000
+      internalID: 8648665478220623759
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Button_RegisterItem_for_Market_1
+      rect:
+        serializedVersion: 2
+        x: 34
+        y: 265
+        width: 44
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ff14f9d632d3a05f0800000000000000
+      internalID: -789751562277797377
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Button_RegisterItem_for_Market_2
+      rect:
+        serializedVersion: 2
+        x: 87
+        y: 268
+        width: 27
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 75ae200bf678728f0800000000000000
+      internalID: -565334314447607209
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Button_RegisterItem_for_Market_3
+      rect:
+        serializedVersion: 2
+        x: 123
+        y: 268
+        width: 27
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ea212142276348f80800000000000000
+      internalID: -8105293565500714322
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Button_RegisterItem_for_Market_4
+      rect:
+        serializedVersion: 2
+        x: 159
+        y: 268
+        width: 27
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 419b7b2d001450b60800000000000000
+      internalID: 7711641408732903700
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Button_RegisterItem_for_Market_5
+      rect:
+        serializedVersion: 2
+        x: 195
+        y: 268
+        width: 27
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 171651cbc175e9140800000000000000
+      internalID: 4728312439711818097
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Button_RegisterItem_for_Market_6
+      rect:
+        serializedVersion: 2
+        x: 231
+        y: 268
+        width: 27
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 50fcd186d6ace40b0800000000000000
+      internalID: -5742429903603773691
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Button_RegisterItem_for_Market_7
+      rect:
+        serializedVersion: 2
+        x: 267
+        y: 256
+        width: 26
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8c39ef155a2e17d70800000000000000
+      internalID: 9039255126782415816
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Button_RegisterItem_for_Market_8
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 210
+        width: 9
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1b3c49bb9a98ef510800000000000000
+      internalID: 1584855480970560433
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Button_RegisterItem_for_Market_9
+      rect:
+        serializedVersion: 2
+        x: 294
+        y: 227
+        width: 16
+        height: 27
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 914f43153d68afa90800000000000000
+      internalID: -7279357605532339175
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Button_RegisterItem_for_Market_10
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 174
+        width: 7
+        height: 27
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d8ca6f593e5f40710800000000000000
+      internalID: 1658720920601537677
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Button_RegisterItem_for_Market_11
+      rect:
+        serializedVersion: 2
+        x: 90
+        y: 72
+        width: 130
+        height: 130
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2ccba1f837aaf3260800000000000000
+      internalID: 7079564552548564162
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Button_RegisterItem_for_Market_12
+      rect:
+        serializedVersion: 2
+        x: 303
+        y: 191
+        width: 7
+        height: 27
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c84c88c0953189880800000000000000
+      internalID: -8604105814908025716
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Button_RegisterItem_for_Market_13
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 138
+        width: 7
+        height: 27
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 35d0b78f169c10660800000000000000
+      internalID: 7350377489463184723
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Button_RegisterItem_for_Market_14
+      rect:
+        serializedVersion: 2
+        x: 303
+        y: 155
+        width: 7
+        height: 27
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e012e49c97b019010800000000000000
+      internalID: 1193747993926181134
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Button_RegisterItem_for_Market_15
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 102
+        width: 7
+        height: 27
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bf40c61a78d4c68e0800000000000000
+      internalID: -1698897714501384965
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Button_RegisterItem_for_Market_16
+      rect:
+        serializedVersion: 2
+        x: 303
+        y: 119
+        width: 7
+        height: 27
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 692c05fe152819840800000000000000
+      internalID: 5229103930772865686
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Button_RegisterItem_for_Market_17
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 66
+        width: 7
+        height: 27
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 734d62bc31a2e7ec0800000000000000
+      internalID: -3567367590329789385
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Button_RegisterItem_for_Market_18
+      rect:
+        serializedVersion: 2
+        x: 303
+        y: 83
+        width: 7
+        height: 27
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 75f77cc18a78da770800000000000000
+      internalID: 8623698017591459671
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Button_RegisterItem_for_Market_19
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 30
+        width: 12
+        height: 27
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ccb822a9bf3483400800000000000000
+      internalID: 304067722749316044
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Button_RegisterItem_for_Market_20
+      rect:
+        serializedVersion: 2
+        x: 302
+        y: 47
+        width: 8
+        height: 27
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 88af30314497672f0800000000000000
+      internalID: -975458935995368824
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Button_RegisterItem_for_Market_21
+      rect:
+        serializedVersion: 2
+        x: 10
+        y: 3
+        width: 25
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 325c33a3b4b098270800000000000000
+      internalID: 8253140209860068643
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Button_RegisterItem_for_Market_22
+      rect:
+        serializedVersion: 2
+        x: 258
+        y: 0
+        width: 27
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 326e4e832e1b9c0f0800000000000000
+      internalID: -1096149449112754653
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Button_RegisterItem_for_Market_23
+      rect:
+        serializedVersion: 2
+        x: 288
+        y: 13
+        width: 21
+        height: 26
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 81ec6ee2971fa1d20800000000000000
+      internalID: 3250175583881448984
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Button_RegisterItem_for_Market_24
+      rect:
+        serializedVersion: 2
+        x: 42
+        y: 0
+        width: 27
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6be4f0c184a24c600800000000000000
+      internalID: 487561148859633334
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Button_RegisterItem_for_Market_25
+      rect:
+        serializedVersion: 2
+        x: 78
+        y: 0
+        width: 27
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6ecedc86bb7cbe900800000000000000
+      internalID: 714884573599493350
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Button_RegisterItem_for_Market_26
+      rect:
+        serializedVersion: 2
+        x: 114
+        y: 0
+        width: 27
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0fbe5a5c965a8e790800000000000000
+      internalID: -7500563305679426576
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Button_RegisterItem_for_Market_27
+      rect:
+        serializedVersion: 2
+        x: 150
+        y: 0
+        width: 27
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 958e880d76bb18010800000000000000
+      internalID: 1189437831157180505
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Button_RegisterItem_for_Market_28
+      rect:
+        serializedVersion: 2
+        x: 186
+        y: 0
+        width: 27
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 93bafd2e6d29ded80800000000000000
+      internalID: -8219752293254321351
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Button_RegisterItem_for_Market_29
+      rect:
+        serializedVersion: 2
+        x: 222
+        y: 0
+        width: 27
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e068bf30026d4a9d0800000000000000
+      internalID: -2763848838304528882
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      Button_RegisterItem_for_Market_0: 8648665478220623759
+      Button_RegisterItem_for_Market_1: -789751562277797377
+      Button_RegisterItem_for_Market_10: 1658720920601537677
+      Button_RegisterItem_for_Market_11: 7079564552548564162
+      Button_RegisterItem_for_Market_12: -8604105814908025716
+      Button_RegisterItem_for_Market_13: 7350377489463184723
+      Button_RegisterItem_for_Market_14: 1193747993926181134
+      Button_RegisterItem_for_Market_15: -1698897714501384965
+      Button_RegisterItem_for_Market_16: 5229103930772865686
+      Button_RegisterItem_for_Market_17: -3567367590329789385
+      Button_RegisterItem_for_Market_18: 8623698017591459671
+      Button_RegisterItem_for_Market_19: 304067722749316044
+      Button_RegisterItem_for_Market_2: -565334314447607209
+      Button_RegisterItem_for_Market_20: -975458935995368824
+      Button_RegisterItem_for_Market_21: 8253140209860068643
+      Button_RegisterItem_for_Market_22: -1096149449112754653
+      Button_RegisterItem_for_Market_23: 3250175583881448984
+      Button_RegisterItem_for_Market_24: 487561148859633334
+      Button_RegisterItem_for_Market_25: 714884573599493350
+      Button_RegisterItem_for_Market_26: -7500563305679426576
+      Button_RegisterItem_for_Market_27: 1189437831157180505
+      Button_RegisterItem_for_Market_28: -8219752293254321351
+      Button_RegisterItem_for_Market_29: -2763848838304528882
+      Button_RegisterItem_for_Market_3: -8105293565500714322
+      Button_RegisterItem_for_Market_4: 7711641408732903700
+      Button_RegisterItem_for_Market_5: 4728312439711818097
+      Button_RegisterItem_for_Market_6: -5742429903603773691
+      Button_RegisterItem_for_Market_7: 9039255126782415816
+      Button_RegisterItem_for_Market_8: 1584855480970560433
+      Button_RegisterItem_for_Market_9: -7279357605532339175
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

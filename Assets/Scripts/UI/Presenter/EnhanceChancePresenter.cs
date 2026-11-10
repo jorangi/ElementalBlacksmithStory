@@ -55,7 +55,8 @@ namespace ElementalBlacksmithStory.UI
         public void Start()
         {
             var weapon = _weaponDatabase.Get(10001);
-            _currentCost = weapon?.basePrice ?? 0;
+            if (weapon != null) _currentCost = weapon.basePrice;
+            else _currentCost = 0;
             _currentChance = -1f;
             _view.SetChance(_currentChance, _currentCost);
         }

@@ -1,0 +1,145 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b32617f483474c042a505f5b4002c486, type: 3}
+  m_Name: 80012
+  m_EditorClassIdentifier: Assembly-CSharp::ElementalBlacksmithStory.Data.SO_CustomerGroup
+  _customerGroupTitle: 마을 주민
+  _customerGroupName: 상점가 이웃들
+  _description: 상점가를 오가는 평범한 거주민들. 생업용 도구나 간단한 호신용 물품을 조심스럽게 살펴본다.
+  minEstimateRatio: 0.8
+  maxEstimateRatio: 1.05
+  minFirstOfferRatio: 0.6
+  maxFirstOfferRatio: 0.75
+  minInterpolation: 0.2
+  maxInterpolation: 0.35
+  minPatience: 65
+  maxPatience: 95
+  greedSensitivity: 1.4
+  _customerNames:
+  - 피터
+  - 몰리
+  - 루카스
+  - 안나
+  - 조지
+  - 클로이
+  - 다니엘
+  - 엠마
+  - 샘
+  - 루시
+  _customerSprites: []
+  _firstOffer:
+  - speakerId: 0
+    text: '{itemType == sword ? "검이네요. 요즘 밤길이 뒤숭숭해서 하나쯤 곁에 두고 싶었어요." : {itemType == bow ? "활이네요. 밭을 헤집는 멧돼지 때문에 골치였는데, 이거면 좀 나을까요." : {itemType == rune ? "룬이네요. 신기해서 자꾸 눈이 가요. 쓸 데가 있겠죠?" : {itemType == material ? "재료네요. 지붕 고칠 만한 게 없나 찾던 참이었어요." : {itemType == consumable ? "이런 건 꼭 급할 때 떨어져 있더라고요. 마침 잘됐어요." : "어머, 이거 괜찮아 보이네요."}}}}} {price}골드로 안 될까요?'
+  - speakerId: 0
+    text: '{itemName}(이/가) 집에 있으면 쓸모가 많겠어요. 이번 달 생활비 빼고 남는 게 {price}골드인데, 괜찮을까요?'
+  - speakerId: 0
+    text: '{itemCount > 1 ? "{itemCount}개나 있네요. 이웃이랑 나눠 쓰면 되겠다 싶어요. 다 해서 {price}골드 어때요?" : "하나면 충분해요. {price}골드 드릴게요."}'
+  - speakerId: 0
+    text: '{groupName}의 {npcName}이에요. 이웃이 괜찮다고 해서 마음먹고 왔어요. {itemName}에 {price}골드 드릴게요.'
+  - speakerId: 0
+    text: '{price >= baseValue ? "비싼 줄은 알지만 {price}골드까지는 내 볼게요." : "{price}골드면 어떨까요. 더는 빠듯해서요."}'
+  - speakerId: 0
+    text: '겨울나기 전에 하나쯤 마련해 두려고요. {price}골드면 될까요?'
+  - speakerId: 0
+    text: '{itemType == consumable ? "이런 건 쓰다 보면 금방 동나더라고요. 넉넉히 사 두고 싶어요." : {itemType == material ? "고쳐 쓸 데가 한두 군데가 아니라서요. 이거면 한동안 버티겠어요." : "식구들이 보면 좋아하겠어요."}} {price}골드 드릴게요.'
+  - speakerId: 0
+    text: '애들 몰래 모아 둔 돈이에요. {price}골드, 받아 주시겠어요?'
+  - speakerId: 0
+    text: '아침부터 한참 고민하다 나왔어요. {price}골드로 부탁드려요.'
+  - speakerId: 0
+    text: '오래 쓸 물건이니 대충 사기는 싫어요. {price}골드로 시작해 볼게요.'
+  _negotiation:
+  - speakerId: 0
+    text: '{prevPrice}골드에서 {price}골드로 올릴게요. 쌈짓돈 털어서 그래요.'
+  - speakerId: 0
+    text: '{askRatio >= 1.3 ? "{askPrice}골드요? 그 돈이면 식구들 한 달 장을 봐요. {price}골드까지 해 볼게요." : "{askPrice}골드는 조금 부담이네요. {price}골드로 맞춰 주세요."}'
+  - speakerId: 0
+    text: '{bargainCount >= 2 ? "자꾸 올려 드려서 식구들한테 혼나겠어요. {price}골드가 최선이에요." : "조금만 더 보태 볼게요. {price}골드 어때요?"}'
+  - speakerId: 0
+    text: '{priceGap}골드 차이가 나네요. 반씩 양보하면 어떨까요. 저는 {price}골드로 할게요.'
+  - speakerId: 0
+    text: '{itemCount > 1 ? "{itemCount}개면 개당 {unitPrice}골드 꼴이네요. 많이 사는 값으로 {price}골드 어때요?" : "하나 사는 건데 {price}골드면 후하게 쳐 드린 거예요."}'
+  - speakerId: 0
+    text: '{price >= baseValue ? "이미 제값은 드린 것 같은데요... {price}골드면 충분히 쳐 드린 거죠?" : "{price}골드면 나쁘지 않죠? 저도 많이 올린 거예요."}'
+  - speakerId: 0
+    text: '{itemType == sword ? "호신용이면 너무 좋은 것까진 필요 없어요." : {itemType == rune ? "룬이 좋다는 건 알겠는데 제 형편엔 과해요." : {itemType == material ? "재료는 쓰는 만큼만 사면 돼요." : {itemType == consumable ? "금방 쓰고 없어질 건데 너무 비싸면 아까워요." : "{itemName}(이/가) 좋은 건 알겠어요."}}}} {price}골드까지 올릴게요.'
+  - speakerId: 0
+    text: '이웃 아주머니는 이거 더 싸게 샀다던데요... 그래도 {price}골드로 할게요.'
+  - speakerId: 0
+    text: '제가 장 볼 때도 한참 고민하는 편이라서요. 오늘은 {price}골드로 정할게요.'
+  - speakerId: 0
+    text: '이 정도면 안 될까요. 돌아가서 장부를 맞춰 봐야 해서요. {price}골드요.'
+  _finalOffer:
+  - speakerId: 0
+    text: '정말 이게 마지막이에요. {price}골드, 주머니를 다 털었어요.'
+  - speakerId: 0
+    text: '{firstPrice}골드로 시작해서 {price}골드까지 왔어요. 더는 못 올려요.'
+  - speakerId: 0
+    text: '{price}골드요. 이것도 다음 달 생활비에서 빼는 거예요.'
+  - speakerId: 0
+    text: '{itemCount > 1 ? "{itemCount}개 전부에 {price}골드가 전부예요. 더는 어려워요." : "하나에 {price}골드가 전부예요. 더는 어려워요."} 부탁드려요.'
+  - speakerId: 0
+    text: '{askPrice}골드는 도저히 못 맞춰요. {price}골드로 안 될까요?'
+  - speakerId: 0
+    text: '정말 마지막 부탁이에요. {price}골드로 부탁드려요.'
+  - speakerId: 0
+    text: '{itemType == material ? "재료에 더 쓰면 고칠 데를 다 못 고쳐요." : {itemType == consumable ? "금방 쓰고 없어질 건데 이 이상은 아까워요." : "이 물건에 이 이상은 못 써요."}} {price}골드예요.'
+  - speakerId: 0
+    text: '{askRatio >= 1.3 ? "{priceGap}골드나 벌어지면 저로선 방법이 없어요. {price}골드가 전부예요." : "{price}골드로 정해요. 이 정도 차이는 눈 감아 주세요."}'
+  - speakerId: 0
+    text: '{itemName}(이/가) 필요하긴 한데 빚까지 질 순 없어요. {price}골드예요.'
+  - speakerId: 0
+    text: '해 지기 전에 집에 돌아가야 해요. {price}골드로 정해 주세요.'
+  _acception:
+  - speakerId: 0
+    text: '고마워요. 이웃한테 자랑해야겠어요.'
+  - speakerId: 0
+    text: '{itemType == sword ? "검을 곁에 두니 밤길이 무섭지 않겠어요." : {itemType == bow ? "활이 있으니 밭 걱정이 줄겠어요." : {itemType == consumable ? "이만큼이면 한동안 걱정 없겠어요." : "좋은 물건이에요. 아껴 쓸게요."}}}'
+  - speakerId: 0
+    text: '{price}골드, 여기요. 세어 보세요. 저도 두 번 셌어요.'
+  - speakerId: 0
+    text: '{itemName}(을/를) 들고 가면 식구들이 깜짝 놀라겠어요.'
+  - speakerId: 0
+    text: '{itemCount > 1 ? "{itemCount}개 전부 들고 갈게요. 이웃이랑 나눠야겠어요." : "소중히 들고 갈게요."} 고마워요.'
+  - speakerId: 0
+    text: '이만하면 한시름 놓았어요. 그동안 걱정이 많았거든요.'
+  - speakerId: 0
+    text: '{groupName}(은/는) 서로 소식 나누는 게 일이라, 다음엔 이웃들도 데려올게요.'
+  - speakerId: 0
+    text: '어머나, 오늘 일 잊지 않을게요. 감사해요.'
+  - speakerId: 0
+    text: '{price >= baseValue ? "제값보다 더 드렸으니 후회는 없어요." : "제값에 샀으니 마음이 편해요."} 감사해요.'
+  - speakerId: 0
+    text: '오늘 저녁은 마음 편히 먹겠네요.'
+  _rejection:
+  - speakerId: 0
+    text: '아쉽지만 이번엔 어렵겠어요.'
+  - speakerId: 0
+    text: '{askPrice}골드는 제 형편엔 너무 커요. 죄송해요.'
+  - speakerId: 0
+    text: '{itemCount > 1 ? "{itemCount}개나 살 형편은 안 되네요." : "하나도 이 값엔 무리네요."} 마음만 받아 갈게요.'
+  - speakerId: 0
+    text: '{itemName}(이/가) 필요하긴 한데 이 값은 무리예요. 조금 더 모아서 올게요.'
+  - speakerId: 0
+    text: '{itemType == sword ? "검은 다음에 또 기회가 오겠죠. 밤길은 조심해서 다닐게요." : {itemType == bow ? "활은 다음 기회에 볼게요. 멧돼지는 다른 수로 막아 봐야죠." : {itemType == consumable ? "아쉽지만 있는 걸 아껴 쓰면서 버틸게요." : "아쉽지만 다음 기회에 볼게요."}}}'
+  - speakerId: 0
+    text: '{groupName}(은/는) 다들 빠듯하게 살아서요. 돌아가서 다시 생각해 볼게요.'
+  - speakerId: 0
+    text: '전 이만 가 볼게요. 집에 할 일이 쌓였어요.'
+  - speakerId: 0
+    text: '{askRatio >= 1.3 ? "그 값은 제가 일 년 모아도 못 만져요. 놀라서 말이 안 나오네요." : "조금만 더 맞았으면 좋았을 텐데요. 다음에 봐요."}'
+  - speakerId: 0
+    text: '괜히 시간만 뺏었네요. 죄송해요. 다음에 또 올게요.'
+  - speakerId: 0
+    text: '오늘은 그냥 돌아갈게요. 아쉬움은 잠들면 사라지겠죠.'
+  _minTimer: 70
+  _maxTimer: 140

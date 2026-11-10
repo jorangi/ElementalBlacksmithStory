@@ -1,12 +1,14 @@
 using System;
+using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
+using ElementalBlacksmithStory.Core;
 using ElementalBlacksmithStory.Data;
 using ElementalBlacksmithStory.Events;
-using R3;
+using ElementalBlacksmithStory.UI.Strategy;
 using MessagePipe;
+using R3;
 using VContainer;
 using VContainer.Unity;
-using System.Collections.Generic;
 
 namespace ElementalBlacksmithStory.UI
 {
@@ -22,6 +24,13 @@ namespace ElementalBlacksmithStory.UI
         private readonly ShopTabPresenter _tabPresenter;
         private readonly CompositeDisposable _disposable = new();
         private readonly IPublisher<StartShopDialogueEvent> _shopDialoguePublisher;
+        private MarketType _currentMarketType;
+
+        private readonly StandardShopModeStrategy _standardShopStrategy;
+        private readonly BidModeStrategy _bidStrategy;
+        private readonly BargainModeStrategy _bargainStrategy;
+
+        private readonly ShopService _shopService;
 
         [Inject]
         public MarketPresenter(
@@ -30,7 +39,11 @@ namespace ElementalBlacksmithStory.UI
             ShopItemGridPresenter itemGridPresenter,
             ShopKeeperPresenter shopKeeperPresenter,
             ShopTabPresenter tabPresenter,
-            IPublisher<StartShopDialogueEvent> shopDialoguePublisher
+            IPublisher<StartShopDialogueEvent> shopDialoguePublisher,
+            StandardShopModeStrategy standardShopStrategy,
+            BidModeStrategy bidStrategy,
+            BargainModeStrategy bargainStrategy,
+            ShopService shopService
             )
         {
             _view = marketView;
@@ -40,40 +53,70 @@ namespace ElementalBlacksmithStory.UI
             _tabPresenter = tabPresenter;
             _shopDialoguePublisher = shopDialoguePublisher;
 
+            _standardShopStrategy = standardShopStrategy;
+            _bidStrategy = bidStrategy;
+            _bargainStrategy = bargainStrategy;
+            _shopService = shopService;
+
+
+            _tabPresenter.OnTabSwitchedAsObservable()
+                .Subscribe(this, static (isSellMode, self) => self.UpdateShopModeStrategy(isSellMode))
+                .AddTo(_disposable);
+
             _view.OnGeneralShopBtnClickAsObservable
-                .Subscribe(_ => OpenShop(MarketType.GENERAL))
+                .Subscribe(this, static (_, self) => self.OpenShop(MarketType.GENERAL))
                 .AddTo(_disposable);
 
             _view.OnEquipmentShopBtnClickAsObservable
-                .Subscribe(_ => OpenShop(MarketType.WEAPON))
+                .Subscribe(this, static (_, self) => self.OpenShop(MarketType.WEAPON))
                 .AddTo(_disposable);
 
-            _view.OnAuctionBtnClickAsObservable
-                .Subscribe(_ =>
-                {
-                    // TODO: 경매장 세션은 아마 따로 팔 듯
-                })
+            _view.OnTradingPostBtnClickAsObservable
+                .Subscribe(this, static (_, self) => self.OpenShop(MarketType.TRADINGPOST))
                 .AddTo(_disposable);
 
             _view.OnCloseBtnClickAsObservable
-                .Subscribe(_ =>
+                .Subscribe(this, static (_, self) =>
                 {
-                    _shopKeeperPresenter.ClearView();
-                    _view.Hide();
+                    self._shopKeeperPresenter.ClearView();
+                    self._itemGridPresenter.HideShop();
+                    self._view.Hide();
                 })
                 .AddTo(_disposable);
         }
 
-        public void Start() { }
+        public void Start()
+        {
+            InitializeShop(MarketType.GENERAL);
+            InitializeShop(MarketType.WEAPON);
+            _bidStrategy.Initialize();
+        }
+        private void InitializeShop(MarketType type)
+        {
+            var shopData = _view.GetShopData(type);
+            if (shopData != null)
+            {
+                _shopService.InitializeShop(shopData);
+            }
+        }
 
         /// <summary>
         /// 특정 상점 타입에 맞는 데이터로 세션을 열고 UI를 초기화
         /// </summary>
         private void OpenShop(MarketType type)
         {
+            _currentMarketType = type;
             var shopData = _view.GetShopData(type);
+
+            if (type != MarketType.TRADINGPOST && shopData != null)
+            {
+                _standardShopStrategy.SetShopData(shopData);
+            }
+            _itemGridPresenter.OpenShop();
             _shopKeeperPresenter.ClearView();
-            _view.Show(type);
+            _view.Show();
+
+
 
             if (shopData != null)
             {
@@ -82,7 +125,6 @@ namespace ElementalBlacksmithStory.UI
                     _shopKeeperPresenter.SetNPCAsync(shopData.NpcId).Forget();
                 }
 
-                _itemGridPresenter.SetShopGoods(shopData);
                 _categoriesPresenter.SetCategories(shopData.Categories);
                 _tabPresenter.SetShop(shopData);
 
@@ -99,6 +141,26 @@ namespace ElementalBlacksmithStory.UI
                     };
                     _shopDialoguePublisher.Publish(new StartShopDialogueEvent(shopData.BuyDialogueId, parameters));
                 }
+            }
+            UpdateShopModeStrategy(false);
+        }
+
+        private void UpdateShopModeStrategy(bool isSellMode)
+        {
+            if (_currentMarketType == MarketType.TRADINGPOST)
+            {
+                if (isSellMode && _bargainStrategy != null)
+                {
+                    _itemGridPresenter.SetInteractionStrategy(_bargainStrategy);
+                }
+                else
+                {
+                    _itemGridPresenter.SetInteractionStrategy(_bidStrategy);
+                }
+            }
+            else
+            {
+                _itemGridPresenter.SetInteractionStrategy(_standardShopStrategy);
             }
         }
 

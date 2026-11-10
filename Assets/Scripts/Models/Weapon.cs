@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using ElementalBlacksmithStory.Data;
+using ElementalBlacksmithStory.Data.DTO;
 using ElementalBlacksmithStory.Events;
 using ElementalBlacksmithStory.Inventory;
 using R3;
@@ -12,37 +13,69 @@ namespace ElementalBlacksmithStory.Core
     {
         private SO_WeaponData _weaponData;
         public SO_WeaponData Data => _weaponData;
-        //Weapon 인스턴스 Id 누적용
+        /// <summary>
+        /// Weapon 인스턴스 Id 누적용
+        /// </summary>
         private static uint lastId;
 
-        //Weapon 인스턴스의 id
+        /// <summary>
+        /// Weapon 인스턴스의 id
+        /// </summary>
         private readonly uint _id;
         public uint Id => _id;
 
-        //Weapon의 데이터 id
+        /// <summary>
+        /// Weapon의 데이터 id
+        /// </summary>
         public uint WeaponId => _weaponData.Id;
 
-        // 최종 비용
+        /// <summary>
+        /// 최종 비용
+        /// </summary>
         private ulong _cost;
         public ulong Cost => _cost;
 
-        // 누적 가격(+최종, 마진 제외)
+        /// <summary>
+        /// 누적 가격(+최종)
+        /// </summary>
         private ulong _basePrice;
         public ulong BasePrice => _basePrice;
-        private ulong _price;
-        public ulong Price => _price;
+        public ulong Price => _basePrice;
         private readonly SO_WeaponData _baseWeaponData;
         public SO_WeaponData BaseWeaponData => _baseWeaponData;
-        // 강화 히스토리 스택 (무기 ID, 해당 단계에서 추가된 기본 가격, 해당 단계 비용)
+        /// <summary>
+        /// 강화 히스토리 스택 (무기 ID, 해당 단계에서 추가된 기본 가격, 해당 단계 비용)
+        /// </summary>
         private readonly Stack<EnhanceStep> _enhanceHistory = new();
         public Stack<EnhanceStep> EnhanceHistory => _enhanceHistory;
         string IShopItem.Name => Data != null ? Data.weaponName : string.Empty;
-        public ulong Value => _price;
+        public ulong Value => _basePrice;
 
-        uint IShopItem.SpriteId => Data != null ? WeaponId : 0;
+        uint IShopItem.ItemId => Data != null ? WeaponId : 0;
 
         uint IShopItem.Count => 1;
-
+        public ShopItemCategory Category => (WeaponId >= 11000 && WeaponId <= 11999) ? ShopItemCategory.Bow : ShopItemCategory.Sword;
+        private Weapon(WeaponSaveData saveData, SO_WeaponData weaponData, SO_WeaponData baseWeaponData)
+        {
+            _id = saveData.InstanceId;
+            if (lastId <= saveData.InstanceId)
+            {
+                lastId = saveData.InstanceId + 1;
+            }
+            _weaponData = weaponData;
+            _baseWeaponData = baseWeaponData;
+            _cost = saveData.Cost;
+            _basePrice = saveData.BasePrice;
+            _runeSlot = saveData.RuneSlot;
+            if (saveData.EnhanceHistory != null)
+            {
+                for (int i = 0; i < saveData.EnhanceHistory.Count; i++)
+                {
+                    var step = saveData.EnhanceHistory[i];
+                    _enhanceHistory.Push(new EnhanceStep(step.WeaponId, step.AddedBasePrice, step.Cost));
+                }
+            }
+        }
         public void OnPurchased(IInventoryContext context, uint amount)
         {
             var publisher = context.AcquireItemPublisher;
@@ -100,15 +133,7 @@ namespace ElementalBlacksmithStory.Core
             _weaponData = weaponData;
             _baseWeaponData = weaponData;
             _cost = weaponData != null ? weaponData.cost : 0;
-            SetMargin(1f);
-        }
-        /// <summary>
-        /// 마진값 설정
-        /// </summary>
-        /// <param name="margin"></param>
-        public void SetMargin(float margin)
-        {
-            _price = (ulong)(BasePrice * margin);
+            _basePrice = weaponData != null ? weaponData.basePrice : 0;
         }
         /// <summary>
         /// SO 데이터 설정
@@ -255,6 +280,63 @@ namespace ElementalBlacksmithStory.Core
         {
             _onRuneSlotChanged.Dispose();
             _onRuneChanged.Dispose();
+        }
+        public WeaponSaveData ToSaveData()
+        {
+            uint[] runeIds = new uint[_runes.Length];
+            for (int i = 0; i < _runes.Length; i++)
+            {
+                runeIds[i] = _runes[i] != null ? _runes[i].Id : 0;
+            }
+            var historyList = new List<EnhanceStepSaveData>(_enhanceHistory.Count);
+            var steps = _enhanceHistory.ToArray();
+            for (int i = steps.Length - 1; i >= 0; i--)
+            {
+                historyList.Add(new EnhanceStepSaveData
+                {
+                    WeaponId = steps[i].WeaponId,
+                    AddedBasePrice = steps[i].AddedBasePrice,
+                    Cost = steps[i].Cost,
+                });
+            }
+            return new WeaponSaveData
+            {
+                InstanceId = Id,
+                WeaponDataId = _weaponData != null ? _weaponData.Id : 0,
+                BaseWeaponDataId = _baseWeaponData != null ? _baseWeaponData.Id : 0,
+                Cost = _cost,
+                BasePrice = _basePrice,
+                Price = _basePrice,
+                RuneSlot = _runeSlot,
+                SocketedRuneIds = runeIds,
+                EnhanceHistory = historyList
+            };
+        }
+        public static Weapon FromSaveData(WeaponSaveData saveData, SO_WeaponData weaponData, SO_WeaponData baseWeaponData, SO_RuneDatabase runeDatabase = null)
+        {
+            if (saveData == null)
+            {
+                Debug.LogError("[Weapon] SaveData가 비어있습니다.");
+                return null;
+            }
+            var weapon = new Weapon(saveData, weaponData, baseWeaponData);
+
+            if (runeDatabase != null && saveData.SocketedRuneIds != null)
+            {
+                for (int i = 0; i < saveData.SocketedRuneIds.Length; i++)
+                {
+                    var runeId = saveData.SocketedRuneIds[i];
+                    if (runeId > 0)
+                    {
+                        var rune = runeDatabase.Get(runeId);
+                        if (rune != null)
+                        {
+                            weapon.EquipRune(new Rune(rune), i);
+                        }
+                    }
+                }
+            }
+            return weapon;
         }
     }
 

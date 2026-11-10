@@ -24,9 +24,9 @@ namespace ElementalBlacksmithStory.UI
             IPublisher<GameExitEvent> exitPub
         )
         {
-            view.OnExitButtonAsObservable().Subscribe(_ =>
+            view.OnExitButtonAsObservable().Subscribe(exitPub, static (_, pub) =>
             {
-                exitPub.Publish(new GameExitEvent{});
+                pub.Publish(new GameExitEvent{});
             }).AddTo(_disposables);
             _settingsPresenter = settingsPresenter;
             _weaponTreePresenter = weaponTreePresenter;

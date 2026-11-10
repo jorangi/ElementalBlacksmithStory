@@ -1,0 +1,145 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b32617f483474c042a505f5b4002c486, type: 3}
+  m_Name: 80008
+  m_EditorClassIdentifier: Assembly-CSharp::ElementalBlacksmithStory.Data.SO_CustomerGroup
+  _customerGroupTitle: 중견 모험가
+  _customerGroupName: 브론즈 크레스트
+  _description: 던전 탐색에 능숙한 실전파 모험가들. 파티 장비 갱신과 안전성을 최우선으로 여기며 합리적인 거래를 선호한다.
+  minEstimateRatio: 0.95
+  maxEstimateRatio: 1.3
+  minFirstOfferRatio: 0.65
+  maxFirstOfferRatio: 0.8
+  minInterpolation: 0.2
+  maxInterpolation: 0.35
+  minPatience: 60
+  maxPatience: 90
+  greedSensitivity: 1.1
+  _customerNames:
+  - 카일
+  - 로건
+  - 세레나
+  - 바론
+  - 디아나
+  - 헥터
+  - 발리안
+  - 아이리스
+  - 고든
+  - 나디아
+  _customerSprites: []
+  _firstOffer:
+  - speakerId: 0
+    text: '{itemType == sword ? "검이네요. 우리 전위 검이 어제 던전에서 반으로 부러졌거든요. 때마침 잘 만났네요." : {itemType == bow ? "활이네요. 우리 궁수가 시위 끊어졌다고 며칠째 투덜대던데, 이거면 조용해지겠어요." : {itemType == rune ? "룬이네요. 어느 장비에든 달 수 있으니 동료들이 서로 자기 몫이라고 우기겠어요." : {itemType == material ? "재료네요. 정비 목록에서 마지막 한 줄이 비어 있었는데, 딱이에요." : "물건이 괜찮네요. 마침 장비 목록에서 비어 있던 자리예요."}}}} {price}골드 어때요?'
+  - speakerId: 0
+    text: '{itemName}(이/가) 눈에 들어오네요. 요즘 시세로 보면 {price}골드쯤이 맞을 거예요. 틀리면 말해 줘요.'
+  - speakerId: 0
+    text: '{price >= baseValue ? "기준가보다 조금 얹었어요. 이 정도 인심은 쓸 수 있죠." : "시세를 아니까 솔직하게 갈게요. 이 정도가 적당해요."} {price}골드예요.'
+  - speakerId: 0
+    text: '{itemCount > 1 ? "{itemCount}개나 있네요. 파티원 수대로 맞추려던 참인데 마침이에요. 합쳐서 {price}골드 어때요?" : "딱 하나만 필요했어요. {price}골드 어때요?"}'
+  - speakerId: 0
+    text: '{groupName} 소속, {npcName}. 던전 다녀오는 길이라 몰골이 말이 아니네요. {itemName}에 {price}골드 드릴게요.'
+  - speakerId: 0
+    text: '{itemElement == flame ? "화염 속성이네요. 다음 층에 냉기 몬스터가 나온다던데, 소문이 맞으면 이게 딱이에요." : {itemElement == cold ? "냉기 속성이네요. 불덩이 쏘는 놈들한테 몇 번 데였거든요. 이번엔 갚아 줘야죠." : {itemElement == lightning ? "번개 속성이네요. 갑옷 두른 놈들한테 써 보면 속이 시원하겠어요." : {itemElement == wind ? "바람 속성이네요. 날아다니는 놈들 잡느라 화살 낭비한 게 몇 개인데요." : {itemElement == earth ? "땅 속성이네요. 단단한 놈들 앞에서 버티는 데 도움이 되겠어요." : {itemElement == holy ? "신성 속성이네요. 언데드 나오는 층은 이제 질색이었는데 숨통 트이겠어요." : {itemElement == dark ? "어둠 속성이네요. 솔직히 좀 찜찜한데, 효과만 있다면 상관없죠." : "물건 상태가 괜찮네요. 마침 필요했어요."}}}}}}} {price}골드면 적당하겠죠?'
+  - speakerId: 0
+    text: '전위가 요즘 맨날 다쳐서 돌아와요. {itemName}에 {price}골드 쓰는 게 치료비보다는 싸죠.'
+  - speakerId: 0
+    text: '길게 끌지 말죠. 저 시세 대충 알아요. {price}골드면 서로 속 편하잖아요.'
+  - speakerId: 0
+    text: '{itemType == material ? "재료는 시세가 철마다 달라지는 거 알죠. 지금 기준으로 {price}골드 드릴게요." : {itemType == rune ? "룬은 값이 들쭉날쭉해서 오래 재 보는 사람이 손해예요. {price}골드로 갈게요." : "이런 건 오래 재 보는 사람이 손해예요. {price}골드로 갈게요."}}'
+  - speakerId: 0
+    text: '파티 회의에서 이번 달 장비 예산을 정했거든요. 그 안에서 {price}골드 드릴게요. 넘기면 제가 혼나요.'
+  _negotiation:
+  - speakerId: 0
+    text: '{prevPrice}골드에서 {price}골드로 올릴게요. 동료들한테는 비밀로 해 줘요. 너무 많이 줬다고 한소리 들을 거예요.'
+  - speakerId: 0
+    text: '{askRatio >= 1.3 ? "{askPrice}골드요? 하하, 설마 진심은 아니죠. 시세 아는 사람한테는 안 통해요. {price}골드까지 볼게요." : "{askPrice}골드면 그렇게 터무니없진 않네요. 조금만 맞춰 주면 되겠어요. {price}골드 어때요?"}'
+  - speakerId: 0
+    text: '{bargainCount >= 2 ? "벌써 몇 번째예요. 이쯤 되면 서로 지치잖아요. {price}골드로 합의 봐요." : "좋아요, 한 걸음 양보할게요. {price}골드, 이 정도면 공평하죠?"}'
+  - speakerId: 0
+    text: '{priceGap}골드 차이면 중간쯤에서 만나죠. 제가 {price}골드까지 갈 테니 그쪽도 한 발 와 줘요.'
+  - speakerId: 0
+    text: '{price >= baseValue ? "기준가는 이미 넘었어요. 이 위로는 장부에 못 적어요. {price}골드가 선이에요." : "{price}골드 정도면 무리 없는 값이에요. 다들 이 정도로 사 가요."}'
+  - speakerId: 0
+    text: '{itemCount > 1 ? "{itemCount}개면 개당 {unitPrice}골드 꼴이네요. 많이 사는 값으로 합쳐서 {price}골드 어때요?" : "하나 사는 건데 이 정도면 충분히 쳐준 거예요. {price}골드 어때요?"}'
+  - speakerId: 0
+    text: '{itemElement == flame ? "화염 속성은 인정해요. 얼음 층에서 쓸 생각하면 군침이 돌긴 하네요." : {itemElement == cold ? "냉기 속성은 인정해요. 불 쓰는 놈들 얼굴 떠올리면 탐나긴 하네요." : {itemElement == lightning ? "번개 속성은 인정해요. 단단한 놈들 생각하면 탐나긴 하네요." : {itemElement == wind ? "바람 속성은 인정해요. 날아다니는 놈들 생각하면 탐나긴 하네요." : {itemElement == earth ? "땅 속성은 인정해요. 버티는 싸움 생각하면 탐나긴 하네요." : {itemElement == holy ? "신성 속성은 인정해요. 언데드 생각하면 탐나긴 하네요." : {itemElement == dark ? "어둠 속성은 인정해요. 좀 꺼림칙하지만 쓸모는 있겠네요." : "{itemName}(이/가) 쓸 만한 건 인정해요."}}}}}}} {price}골드까지 올릴게요.'
+  - speakerId: 0
+    text: '{price}골드. 이 이상 쓰면 장부 보는 동료한테 잔소리를 한 바가지 들어요.'
+  - speakerId: 0
+    text: '나도 시세 밖의 값은 안 줘요. 그래도 물건이 마음에 들어서 이만큼 올렸으니 알아줘요. {price}골드예요.'
+  - speakerId: 0
+    text: '서로 시간 아끼죠. {price}골드에 악수하면 저도 오늘 저녁은 일찍 쉴 수 있어요.'
+  _finalOffer:
+  - speakerId: 0
+    text: '이게 최종이에요. {price}골드, 이 이상은 파티 장부가 허락을 안 해요.'
+  - speakerId: 0
+    text: '{firstPrice}골드로 시작해서 {price}골드까지 왔어요. 저도 꽤 양보한 거예요.'
+  - speakerId: 0
+    text: '{price}골드가 마지노선이에요. 이 위는 동료들 몫에서 빼야 해서 곤란해요.'
+  - speakerId: 0
+    text: '{itemCount > 1 ? "{itemCount}개 합쳐서 {price}골드가 한계예요. 더 주면 다음 의뢰 준비를 못 해요." : "하나에 {price}골드가 한계예요. 더 주면 다음 의뢰 준비를 못 해요."} 결정해 줘요.'
+  - speakerId: 0
+    text: '{askPrice}골드는 못 맞춰 줘요. {price}골드로 끝내죠. 안 되면 아쉬워도 접어요.'
+  - speakerId: 0
+    text: '내 마지막 제안이에요. {price}골드, 어때요?'
+  - speakerId: 0
+    text: '{itemType == material ? "재료 하나에 이 이상 쓰면 다른 정비 항목을 못 채워요." : {itemType == rune ? "룬 하나에 이 이상 쓰면 다른 장비 정비를 못 해요." : "이거 하나에 이 이상 쓰면 다른 장비 정비를 못 해요."}} {price}골드예요.'
+  - speakerId: 0
+    text: '{askRatio >= 1.3 ? "{priceGap}골드나 벌어지면 메울 방법이 없어요. {price}골드가 최종이에요." : "{price}골드로 정하죠. 이 정도 차이는 서로 눈 감아요."}'
+  - speakerId: 0
+    text: '{itemName}(이/가) 탐나는 건 사실이에요. 그래도 예산 넘겨서 사 가면 동료들한테 쫓겨나요. {price}골드예요.'
+  - speakerId: 0
+    text: '{price >= baseValue ? "기준가 이상으로 드리는 거예요. 이쯤에서 웃으며 끝내요. {price}골드예요." : "{price}골드로 마무리해요. 끌어 봤자 서로 피곤하잖아요."}'
+  _acception:
+  - speakerId: 0
+    text: '좋아요, 그 값으로 하죠. 시원시원해서 좋네요.'
+  - speakerId: 0
+    text: '{itemType == sword ? "이 검이면 다음 던전은 한결 마음 놓고 들어가겠어요." : {itemType == bow ? "이 활이면 우리 궁수가 드디어 웃겠네요." : "이 물건이면 다음 던전은 한결 마음 놓고 들어가겠어요."}}'
+  - speakerId: 0
+    text: '{price}골드 여기 있어요. 세어 봐도 돼요. 저도 세어 보는 편이에요.'
+  - speakerId: 0
+    text: '{itemName}(을/를) 보여 주면 동료들이 좋아할 거예요. 한동안 투덜거림이 줄겠네요.'
+  - speakerId: 0
+    text: '{itemCount > 1 ? "{itemCount}개 전부 챙겨 갈게요. 파티원들이 하나씩 나눠 가지면 되겠네요." : "잘 챙겨 갈게요."} 깔끔한 거래였어요.'
+  - speakerId: 0
+    text: '{itemElement == flame ? "화염 속성이니까 다음 얼음 층은 이제 겁날 게 없어요." : {itemElement == cold ? "냉기 속성이니까 불 쓰는 놈들 만나도 이제 느긋해요." : {itemElement == lightning ? "번개 속성이니까 단단한 놈들도 이제 겁날 게 없어요." : {itemElement == wind ? "바람 속성이니까 날아다니는 놈들도 이제 문제없어요." : {itemElement == earth ? "땅 속성이니까 버티는 싸움도 이제 든든해요." : {itemElement == holy ? "신성 속성이니까 언데드 층도 이제 마음이 편해요." : {itemElement == dark ? "어둠 속성이라 좀 찜찜하지만, 일단 써 보죠." : "{itemName}(이/가) 있으니 한시름 놓겠어요."}}}}}}} 좋은 거래였어요.'
+  - speakerId: 0
+    text: '{groupName}(은/는) 합리적인 거래를 좋아해요. 오늘은 서로 기분 좋게 끝났네요.'
+  - speakerId: 0
+    text: '고마워요, 이 거래 기억해 둘게요. 다음에도 부탁해요.'
+  - speakerId: 0
+    text: '{price >= baseValue ? "기준가 이상으로 샀으니 동료들한테 큰소리칠 수 있겠어요." : "시세에 맞게 샀으니 장부에 당당하게 적을 수 있어요."} 감사해요.'
+  - speakerId: 0
+    text: '역시 빨리 끝나니까 좋네요. 던전 들어가기 전에 한잔할 시간도 생기겠어요.'
+  _rejection:
+  - speakerId: 0
+    text: '이 값은 어렵겠네요. 다음에 다시 봐요.'
+  - speakerId: 0
+    text: '{askPrice}골드는 시세와 너무 멀어요. 다른 물건을 찾아볼게요.'
+  - speakerId: 0
+    text: '{itemCount > 1 ? "{itemCount}개 값으로는 무리예요. 예산을 훌쩍 넘어요." : "그 값으로는 무리예요. 예산을 훌쩍 넘어요."} 이만 접을게요.'
+  - speakerId: 0
+    text: '{itemName}(이/가) 필요하긴 했는데, 그 값으로 사 가면 동료들한테 혼나요. 다음 기회에요.'
+  - speakerId: 0
+    text: '{itemElement != none ? "속성이 탐나긴 했는데 값이 맞질 않네요. 아쉬워요." : "쓸 만해 보였는데 값이 안 맞네요. 아쉬워요."}'
+  - speakerId: 0
+    text: '{groupName}(은/는) 시세에 안 맞는 거래는 안 해요. 이만 갈게요.'
+  - speakerId: 0
+    text: '난 돌아가서 동료들한테 설명해야겠네요. 또 봐요.'
+  - speakerId: 0
+    text: '{itemType == sword ? "검은 다음 기회에 다시 찾아볼게요. 지금 쓰는 걸 한 번만 더 버텨 달라고 빌어야겠네요." : {itemType == bow ? "활은 다음 기회에 다시 찾아볼게요. 궁수한테 시위를 한 번만 더 감아 쓰라고 해야겠네요." : "다음 기회에 다시 찾아볼게요. 오늘은 있는 걸로 버텨야겠네요."}}'
+  - speakerId: 0
+    text: '{askRatio >= 1.3 ? "시세와 너무 동떨어졌어요. 이만 접을게요." : "조금만 더 맞았으면 좋았을 텐데요. 다음에 봐요."}'
+  - speakerId: 0
+    text: '서로 입장이 다르네요. 아쉽지만 접을게요.'
+  _minTimer: 60
+  _maxTimer: 120

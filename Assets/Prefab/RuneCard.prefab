@@ -873,7 +873,9 @@ PrefabInstance:
       propertyPath: m_Name
       value: RuneCircle
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: -5803388375257560967, guid: fae7c426bb7dd9b4b9f7f241dad02406, type: 3}
+    - {fileID: 4619544463515321153, guid: fae7c426bb7dd9b4b9f7f241dad02406, type: 3}
     m_RemovedGameObjects:
     - {fileID: 7654083771808578290, guid: fae7c426bb7dd9b4b9f7f241dad02406, type: 3}
     m_AddedGameObjects: []

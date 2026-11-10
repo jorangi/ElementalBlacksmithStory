@@ -1,4 +1,5 @@
 using ElementalBlacksmithStory.UI;
+using ElementalBlacksmithStory.UI.Strategy;
 using VContainer;
 using VContainer.Unity;
 
@@ -30,6 +31,12 @@ namespace ElementalBlacksmithStory.Core
             builder.RegisterComponentInHierarchy<RuneInventoryView>();
             builder.RegisterComponentInHierarchy<RuneEquipView>();
             builder.RegisterComponentInHierarchy<RuneSynthesisView>();
+            builder.RegisterComponentInHierarchy<BidView>();
+            builder.RegisterComponentInHierarchy<BargainView>();
+            builder.RegisterComponentInHierarchy<CustomerListView>();
+            builder.RegisterComponentInHierarchy<BargainItemGridView>();
+            builder.RegisterComponentInHierarchy<BargainRegisterItemDetailView>();
+
 
             // Presenter 등록
             builder.RegisterEntryPoint<MoneyPresenter>();
@@ -52,6 +59,17 @@ namespace ElementalBlacksmithStory.Core
             builder.RegisterEntryPoint<RuneInventoryPresenter>().AsSelf();
             builder.RegisterEntryPoint<RuneEquipPresenter>().AsSelf();
             builder.RegisterEntryPoint<RuneSynthesisPresenter>().AsSelf();
+            builder.Register<BidPresenter>(Lifetime.Singleton).AsSelf();
+            builder.Register<BargainPresenter>(Lifetime.Singleton).AsSelf();
+            builder.Register<CustomerListPresenter>(Lifetime.Singleton).AsSelf();
+            builder.Register<BargainItemGridPresenter>(Lifetime.Singleton).AsSelf();
+            builder.Register<BargainRegisterItemDetailPresenter>(Lifetime.Singleton).AsSelf();
+
+
+            //Strategy 등록
+            builder.Register<StandardShopModeStrategy>(Lifetime.Singleton);
+            builder.Register<BidModeStrategy>(Lifetime.Singleton);
+            builder.Register<BargainModeStrategy>(Lifetime.Singleton);
         }
     }
 }

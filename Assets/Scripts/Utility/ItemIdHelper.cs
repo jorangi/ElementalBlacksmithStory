@@ -6,10 +6,14 @@ namespace ElementalBlacksmithStory.Core
     public enum ItemCategory
     {
         Unknown = 0,
-        Weapon = 1,    // 10000 ~ 19999 (무기)
-        Material = 3,  // 30000 ~ 39999 (재료)
-        Rune = 7,      // 70000 ~ 79999 (룬)
+        Weapon = 1,    // 무기
+        Recipe = 2,    // 레시피
+        Material = 3,  // 재료
+        Sounds = 4, // 오디오
+        NPC = 5,    //NPC 데이터
         Dialogue = 6,  // 600000 ~ 699999 (대사)
+        Rune = 7,      //(룬)
+        CustomerGroup = 8, // 손님 그룹 (80000 ~ 89999)
     }
 
     /// <summary>

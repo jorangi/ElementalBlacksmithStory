@@ -1,13 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.Threading;
-using System.Threading.Tasks;
+using Cysharp.Text;
 using Cysharp.Threading.Tasks;
 using ElementalBlacksmithStory.Core;
 using ElementalBlacksmithStory.Data;
-using ElementalBlacksmithStory.Events;
 using ElementalBlacksmithStory.Inventory;
+using ElementalBlacksmithStory.UI.Strategy;
 using MessagePipe;
+using ObservableCollections;
 using R3;
 using UnityEngine;
 using VContainer;
@@ -17,6 +18,8 @@ namespace ElementalBlacksmithStory.UI
 {
     public class ShopItemGridPresenter : IAsyncStartable, IDisposable
     {
+        private IShopModeStrategy _strategy;
+        private readonly PlayerData _playerData;
         private readonly ShopItemGridView _view;
         private readonly WeaponSpriteLoader _weaponSpriteLoader;
         private readonly MaterialSpriteLoader _materialSpriteLoader;
@@ -27,18 +30,23 @@ namespace ElementalBlacksmithStory.UI
         private readonly IItemShopFactory _itemShopFactory;
         private readonly ShopCartPresenter _shopCartPresenter;
         private readonly ShopService _shopService;
+        private readonly TradingPostService _tradingPostService;
         private readonly Dictionary<uint, ShopItemViewBase> _displayItems = new();
+        private readonly Dictionary<uint, IShopItem> _displayedShopItems = new();
         private readonly Dictionary<uint, IDisposable> _itemDisposables = new();
         private readonly CompositeDisposable _disposables = new();
-
-        private readonly List<IShopItem> _shopBuyGoods = new();
+        private IDisposable _registerCardDisposable;
         private bool _isSellMode = false;
         private bool _isInitialized = false;
         private CancellationTokenSource _refreshCts;
         private Func<IShopItem, bool> _categoryFilter = _ => true;
 
+        private readonly List<IShopItem> _itemBuffer = new(64);
+        private IDisposable _timerDisposable;
+
         [Inject]
         public ShopItemGridPresenter(
+            PlayerData playerData,
             ShopItemGridView view,
             WeaponSpriteLoader weaponSpriteLoader,
             MaterialSpriteLoader materialSpriteLoader,
@@ -48,10 +56,11 @@ namespace ElementalBlacksmithStory.UI
             RuneInventory runeInventory,
             IItemShopFactory itemShopFactory,
             ShopCartPresenter shopCartPresenter,
-            ShopService shopService = null,
-            ISubscriber<ChangeMoneyEvent> moneySubscriber = null
+            ShopService shopService,
+            TradingPostService tradingPostService
         )
         {
+            _playerData = playerData;
             _view = view;
             _weaponSpriteLoader = weaponSpriteLoader;
             _materialSpriteLoader = materialSpriteLoader;
@@ -62,63 +71,118 @@ namespace ElementalBlacksmithStory.UI
             _itemShopFactory = itemShopFactory;
             _shopCartPresenter = shopCartPresenter;
             _shopService = shopService;
+            _tradingPostService = tradingPostService;
 
-            moneySubscriber?.Subscribe(_ =>
+            playerData.Money.Subscribe(this, static (_, self) =>
             {
-                UpdateAllItemsAffordability();
+                self.UpdateAllItemsAffordability();
             }).AddTo(_disposables);
 
             _shopCartPresenter?.OnCartChanged
-                .Subscribe(_ =>
+                .Subscribe(this, static (_, self) =>
                 {
-                    UpdateAllItemsAffordability();
+                    self.UpdateAllItemsAffordability();
                 })
                 .AddTo(_disposables);
+            _tradingPostService.OnCustomerArrived
+                .Subscribe(this, static (data, self) =>
+                {
+                    self.OnBargainCustomerChanged(data.itemId);
+                }).AddTo(_disposables);
 
+            // 거래 흥정 성사
+            _tradingPostService.OnBargainItemSettledAsObservable
+                .Subscribe(this, static (item, self) =>
+                {
+                    self.RemoveItem(item.Id);
+                }).AddTo(_disposables);
+
+            // 거래 등록 아이템 회수
+            _tradingPostService.OnBargainItemWithdrawAsObservable
+                .Subscribe(this, static (item, self) =>
+                {
+                    self.RemoveItem(item.Id);
+                }).AddTo(_disposables);
+
+            _tradingPostService.OnCustomerLeft
+                .Subscribe(this, static (data, self) =>
+                {
+                    self.OnBargainCustomerChanged(data.itemId);
+                }).AddTo(_disposables);
+            _tradingPostService.HighestBids.CollectionChanged += OnHighestBidsChanged;
             // 재료 인벤토리 수량 변경 시 실시간 그리드 갱신
-            if (_materialInventory != null)
-            {
-                _materialInventory.OnItemCountChangedAsObservable
-                    .Subscribe(OnMaterialCountChanged)
+            _materialInventory?.OnItemCountChangedAsObservable
+                    .Subscribe(this, static (item, self) => self.OnMaterialCountChanged(item))
                     .AddTo(_disposables);
-            }
 
             // 룬 인벤토리 수량 변경 시 실시간 그리드 갱신
-            if (_runeInventory != null)
-            {
-                _runeInventory.OnItemCountChangedAsObservable
-                    .Subscribe(OnRuneCountChanged)
+            _runeInventory?.OnItemCountChangedAsObservable
+                    .Subscribe(this, static (item, self) => self.OnRuneCountChanged(item))
                     .AddTo(_disposables);
-            }
 
             // 장비(무기) 인벤토리 변경 시 실시간 그리드 갱신
             if (_equipmentInventory != null)
             {
                 _equipmentInventory.OnAddWeapon
-                    .Subscribe(weapon =>
+                    .Subscribe(this, static (weapon, self) =>
                     {
-                        if (!_isSellMode || weapon == null) return;
-                        if (_categoryFilter == null || _categoryFilter(weapon))
+                        if (self._strategy is not StandardShopModeStrategy) return;
+                        if (!self._isSellMode || weapon == null) return;
+                        if (self._categoryFilter == null || self._categoryFilter(weapon))
                         {
-                            AddItem(weapon).Forget();
+                            self.AddItem(weapon).Forget();
                         }
                     })
                     .AddTo(_disposables);
 
                 _equipmentInventory.OnRemoveWeapon
-                    .Subscribe(_ =>
+                    .Subscribe(this, static (_, self) =>
                     {
-                        if (_isSellMode)
+                        if (self._strategy is not StandardShopModeStrategy) return;
+                        if (self._isSellMode)
                         {
-                            RefreshGridAsync().Forget();
+                            self.RefreshGridAsync().Forget();
                         }
                     })
                     .AddTo(_disposables);
             }
+
+            _view.OnRefreshButtonAsObservable()
+                .Subscribe(this, static (_, self) =>
+                {
+                    if (self._strategy is IRefreshableShopMode refreshStrategy)
+                    {
+                        refreshStrategy.OnRefresh();
+                        self.RefreshGridAsync().Forget();
+                        self.StartRefreshTimer();
+                    }
+                })
+                .AddTo(_disposables);
         }
 
+        private void OnBargainCustomerChanged(uint itemId)
+        {
+            if (_displayItems.TryGetValue(itemId, out var view) && _displayedShopItems.TryGetValue(itemId, out var item))
+            {
+                if (_strategy != null && _strategy.IsBargainCard)
+                {
+                    view.SetPrice(_strategy.GetPrice(item));
+                }
+            }
+        }
+
+        private void OnHighestBidsChanged(in NotifyCollectionChangedEventArgs<KeyValuePair<uint, BidContext>> e)
+        {
+            UpdateAllItemsAffordability();
+        }
+        public void SetInteractionStrategy(IShopModeStrategy strategy)
+        {
+            _strategy = strategy;
+            if (_isInitialized) RefreshGridAsync().Forget();
+        }
         private void OnMaterialCountChanged((SO_MaterialData item, uint count) data)
         {
+            if (_strategy is not StandardShopModeStrategy) return;
             if (data.item == null) return;
 
             if (_isSellMode)
@@ -151,6 +215,7 @@ namespace ElementalBlacksmithStory.UI
 
         private void OnRuneCountChanged((SO_RuneData item, uint count) data)
         {
+            if (_strategy is not StandardShopModeStrategy) return;
             if (data.item == null) return;
 
             if (_isSellMode)
@@ -186,33 +251,14 @@ namespace ElementalBlacksmithStory.UI
             _isInitialized = true;
             await UniTask.CompletedTask;
         }
-
-        /// <summary>
-        /// SO_ShopData 기반으로 상점 판매 물품 목록 교체 (소속 카테고리의 모든 입고 아이템 취합)
-        /// </summary>
-        public void SetShopGoods(SO_ShopData shopData)
+        public void OpenShop()
         {
-            _shopBuyGoods.Clear();
-
-            if (shopData != null)
-            {
-                var stockedItems = shopData.GetAllStockedItems();
-                foreach (var entry in stockedItems)
-                {
-                    var item = _itemShopFactory.Create(entry.itemId, entry.stock, 1.0f);
-                    if (item != null)
-                    {
-                        _shopBuyGoods.Add(item);
-                    }
-                }
-            }
-
-            if (_isInitialized && !_isSellMode)
-            {
-                RefreshGridAsync().Forget();
-            }
+            StartRefreshTimer();
         }
-
+        public void HideShop()
+        {
+            StopRefreshTimer();
+        }
         /// <summary>
         /// 구매/판매 모드 전환
         /// </summary>
@@ -253,13 +299,39 @@ namespace ElementalBlacksmithStory.UI
 
             try
             {
-                if (_isSellMode)
+                if (_strategy == null) return;
+                _itemBuffer.Clear();
+                await _strategy.GetDisplayItemAsync(_itemBuffer, _isSellMode, ct);
+
+                for (int i = 0; i < _itemBuffer.Count; i++)
                 {
-                    await PopulateSellItemsAsync(ct);
+                    ct.ThrowIfCancellationRequested();
+                    var item = _itemBuffer[i];
+
+                    if (_categoryFilter != null && !_categoryFilter(item)) continue;
+
+                    await AddItem(item);
+                }
+                if (_strategy is ITimedShopMode timedShopMode)
+                {
+                    _view.ShowRefreshButton();
+                    _view.SetRefreshButtonInteractable(_strategy is IRefreshableShopMode);
                 }
                 else
                 {
-                    await PopulateBuyItemsAsync(ct);
+                    _view.HideRefreshButton();
+                }
+
+                if (_strategy is IItemRegisterableShopMode bargainStrategy)
+                {
+                    var registerCard = _view.CreateRegisterCard();
+                    if (registerCard != null)
+                    {
+                        _registerCardDisposable?.Dispose();
+                        _registerCardDisposable = registerCard.OnClickAsObservable()
+                            .ThrottleFirst(TimeSpan.FromMilliseconds(200))
+                            .Subscribe(bargainStrategy, static (_, strategy) => strategy.OnRegisterCardClicked());
+                    }
                 }
             }
             catch (OperationCanceledException)
@@ -267,143 +339,52 @@ namespace ElementalBlacksmithStory.UI
                 // 빠른 탭 전환 등으로 취소된 경우 무시
             }
         }
-
-        /// <summary>
-        /// 구매 탭 아이템 목록 생성 (상점 판매 상품 중 현재 카테고리 필터를 만족하는 항목)
-        /// </summary>
-        private async UniTask PopulateBuyItemsAsync(CancellationToken ct)
-        {
-            for (int i = 0; i < _shopBuyGoods.Count; i++)
-            {
-                ct.ThrowIfCancellationRequested();
-                var item = _shopBuyGoods[i];
-                if (_categoryFilter != null && !_categoryFilter(item)) continue;
-                await AddItem(item);
-            }
-        }
-
-        /// <summary>
-        /// 판매 탭 아이템 목록 생성 (보유 재료, 룬, 무기 중 현재 카테고리 필터를 만족하는 항목)
-        /// </summary>
-        private async UniTask PopulateSellItemsAsync(CancellationToken ct)
-        {
-            // 1. 재료 인벤토리
-            if (_materialInventory != null)
-            {
-                foreach (var pair in _materialInventory.GetAll())
-                {
-                    ct.ThrowIfCancellationRequested();
-                    if (pair.Key != null && pair.Value > 0)
-                    {
-                        var item = new MaterialShopItem(pair.Key, pair.Value);
-                        if (_categoryFilter != null && !_categoryFilter(item)) continue;
-                        await AddItem(item);
-                    }
-                }
-            }
-
-            // 2. 룬 인벤토리
-            if (_runeInventory != null)
-            {
-                foreach (var pair in _runeInventory.GetAll())
-                {
-                    ct.ThrowIfCancellationRequested();
-                    if (pair.Key != null && pair.Value > 0)
-                    {
-                        var item = new Rune(pair.Key);
-                        if (_categoryFilter != null && !_categoryFilter(item)) continue;
-                        await AddItem(item);
-                    }
-                }
-            }
-
-            // 3. 장비(무기) 인벤토리
-            if (_equipmentInventory != null)
-            {
-                foreach (var weapon in _equipmentInventory.GetAllActive())
-                {
-                    ct.ThrowIfCancellationRequested();
-                    if (weapon != null)
-                    {
-                        if (_categoryFilter != null && !_categoryFilter(weapon)) continue;
-                        await AddItem(weapon);
-                    }
-                }
-            }
-        }
-
         public async UniTask AddItem(IShopItem item)
         {
             Sprite icon = null;
             bool isUniqueItem = false;
-            switch (ItemIdHelper.GetCategory(item.SpriteId))
+            switch (item.Category)
             {
-                case ItemCategory.Weapon:
-                    icon = await _weaponSpriteLoader.GetSprite(item.SpriteId);
+                case ShopItemCategory.Sword:
+                case ShopItemCategory.Bow:
+                    icon = await _weaponSpriteLoader.GetSprite(item.ItemId);
                     isUniqueItem = true;
                     break;
-                case ItemCategory.Material:
-                    icon = await _materialSpriteLoader.GetSprite(item.SpriteId);
+                case ShopItemCategory.Material:
+                    icon = await _materialSpriteLoader.GetSprite(item.ItemId);
                     isUniqueItem = false;
                     break;
-                case ItemCategory.Rune:
-                    icon = await _runeSpriteLoader.GetSprite(item.SpriteId);
+                case ShopItemCategory.Rune:
+                    icon = await _runeSpriteLoader.GetSprite(item.ItemId);
                     isUniqueItem = false;
                     break;
                 default:
-                    Debug.LogError($"[ShopItemGridPresenter]: {item.SpriteId}은 유효한 Sprite ID가 아닙니다.");
+                    Debug.LogError($"[ShopItemGridPresenter]: {item.ItemId} ({item.Category})은 유효한 카테고리가 아닙니다.");
                     return;
             }
 
-            ShopItemViewBase itemView = _view.CreateItem(item.Id, item.Name, item.Value, icon, isUniqueItem);
+            bool isBargain = _strategy?.IsBargainCard ?? false;
+            ulong price = _strategy != null ? _strategy.GetPrice(item) : item.Value;
+            uint bundleCount = _strategy != null ? _strategy.GetBundleCount(item) : 1;
+            ShopItemViewBase itemView = _view.CreateItem(item.Id, item.Name, price, icon, isUniqueItem, isBargain, bundleCount);
             if (itemView == null) return;
 
             if (item is Weapon weapon && itemView is EquipmentShopItemView eqView)
             {
                 await SetupWeaponRuneSlotsAsync(weapon, eqView);
             }
-
-            ulong availableMoney = _shopCartPresenter != null
-                ? _shopCartPresenter.ExpectedRemainingMoney
-                : (_shopService != null ? _shopService.CurrentMoney : 0);
-            bool inCartAlready = isUniqueItem && _shopCartPresenter != null && _shopCartPresenter.ContainsCartItem(item.Id);
-            bool canAfford = _isSellMode || (!inCartAlready && availableMoney >= item.Value);
-            itemView.SetInteractable(canAfford);
-
+            bool canInteract = _strategy?.CanInteract(item) ?? true;
+            itemView.SetInteractable(canInteract);
             if (_itemDisposables.TryGetValue(item.Id, out var prevDisp))
             {
                 prevDisp.Dispose();
                 _itemDisposables.Remove(item.Id);
             }
-
             var clickSub = itemView.OnClickAsObservable()
                 .ThrottleFirst(TimeSpan.FromMilliseconds(200))
-                .Subscribe(_ =>
+                .Subscribe((this, item), static (_, state) =>
                 {
-                    ulong currentExpected = _shopCartPresenter != null
-                        ? _shopCartPresenter.ExpectedRemainingMoney
-                        : (_shopService != null ? _shopService.CurrentMoney : 0);
-                    if (!_isSellMode && currentExpected < item.Value)
-                    {
-                        return;
-                    }
-
-                    if (isUniqueItem || item is Weapon || itemView is EquipmentShopItemView)
-                    {
-                        // 장비(무기) 아이템은 수량 선택 모달창 없이 1개를 카트에 즉시 추가
-                        if (_shopCartPresenter != null)
-                        {
-                            if (!_isSellMode && _shopCartPresenter.ContainsCartItem(item.Id))
-                            {
-                                return;
-                            }
-                            _shopCartPresenter.AddItem(item, 1).Forget();
-                        }
-                    }
-                    else
-                    {
-                        _shopCartPresenter.OpenAmountModal(item).Forget();
-                    }
+                    state.Item1._strategy?.OnItemClicked(state.item);
                 });
             _itemDisposables[item.Id] = clickSub;
 
@@ -421,6 +402,7 @@ namespace ElementalBlacksmithStory.UI
                 }
             }
 
+            _displayedShopItems[item.Id] = item;
             _displayItems[item.Id] = itemView;
         }
 
@@ -432,6 +414,7 @@ namespace ElementalBlacksmithStory.UI
                 _itemDisposables.Remove(id);
             }
 
+            _displayedShopItems.Remove(id);
             _displayItems.Remove(id);
             _view.RemoveItem(id);
         }
@@ -452,15 +435,25 @@ namespace ElementalBlacksmithStory.UI
 
             ulong availableMoney = _shopCartPresenter != null
                 ? _shopCartPresenter.ExpectedRemainingMoney
-                : (_shopService != null ? _shopService.CurrentMoney : 0);
+                : (_shopService != null ? _playerData.Money.CurrentValue : 0);
 
             foreach (var kvp in _displayItems)
             {
-                if (kvp.Value != null)
+                var view = kvp.Value;
+                if (view == null) continue;
+                if (_tradingPostService.HighestBids.TryGetValue(kvp.Key, out var bidContext)) view.SetBaseColor(bidContext.Bidder == "player");
+                if (_displayedShopItems.TryGetValue(kvp.Key, out var item))
                 {
-                    bool inCartAlready = kvp.Value.IsUniqueItem && _shopCartPresenter != null && _shopCartPresenter.ContainsCartItem(kvp.Key);
-                    kvp.Value.SetInteractable(!inCartAlready && availableMoney >= kvp.Value.Price);
+                    if (_strategy != null)
+                    {
+                        view.SetPrice(_strategy.GetPrice(item));
+                        view.SetInteractable(_strategy.CanInteract(item));
+                        continue;
+                    }
                 }
+
+                bool inCartAlready = view.IsUniqueItem && _shopCartPresenter != null && _shopCartPresenter.ContainsCartItem(kvp.Key);
+                view.SetInteractable(!inCartAlready && availableMoney >= view.Price);
             }
         }
 
@@ -497,17 +490,49 @@ namespace ElementalBlacksmithStory.UI
             }
             _itemDisposables.Clear();
 
+            _registerCardDisposable?.Dispose();
+            _registerCardDisposable = null;
+
+            _displayedShopItems.Clear();
             _displayItems.Clear();
             _view.Clear();
         }
+        private void StartRefreshTimer()
+        {
+            _timerDisposable?.Dispose();
+            _timerDisposable = Observable.Timer(TimeSpan.Zero, TimeSpan.FromSeconds(1))
+                .Subscribe(this, static (_, self) =>
+                {
+                    if (self._strategy is ITimedShopMode timedShopMode)
+                    {
+                        TimeSpan remaining = timedShopMode.RemainingTime;
+                        self._view.SetRefreshTimer(remaining.Minutes, remaining.Seconds, timedShopMode.TimerPrefix);
 
+                        if (remaining <= TimeSpan.Zero)
+                        {
+                            if (self._strategy is IRefreshableShopMode refreshStrategy)
+                            {
+                                refreshStrategy.OnRefresh();
+                            }
+                            self.RefreshGridAsync().Forget();
+                        }
+                    }
+                });
+        }
+        private void StopRefreshTimer()
+        {
+            _timerDisposable?.Dispose();
+            _timerDisposable = null;
+        }
         public void Dispose()
         {
             _refreshCts?.Cancel();
             _refreshCts?.Dispose();
             _refreshCts = null;
 
+            StopRefreshTimer();
             ClearItems();
+            _tradingPostService.HighestBids.CollectionChanged -= OnHighestBidsChanged;
             _disposables.Dispose();
         }
     }

@@ -1,9 +1,9 @@
-using UnityEngine;
-using UnityEngine.UI;
+using Cysharp.Text;
 using R3;
 using TMPro;
-using Cysharp.Text;
+using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 using VContainer;
 using VContainer.Unity;
 
@@ -43,7 +43,7 @@ namespace ElementalBlacksmithStory.UI
         /// <returns></returns>
         public Observable<uint> OnChangedAmountAsObservable()
         {
-            if(countText == null)
+            if (countText == null)
             {
                 Debug.LogError("[SelectMaterialAmountView] countText가 없습니다.");
                 return Observable.Empty<uint>();
@@ -171,7 +171,7 @@ namespace ElementalBlacksmithStory.UI
         /// <param name="amount">설정할 값</param>
         public void SetAmount(uint amount)
         {
-            if(countText == null)
+            if (countText == null)
             {
                 Debug.LogError("[SelectMaterialAmountView] countText가 없습니다.");
                 return;

@@ -59,7 +59,7 @@ namespace ElementalBlacksmithStory.UI
 
             _view.OnClickDialogueBoxAsObservable()
                 .ThrottleFirst(TimeSpan.FromMilliseconds(150))
-                .Subscribe(_ => OnClickDialogueBox())
+                .Subscribe(this, static (_, self) => self.OnClickDialogueBox())
                 .AddTo(_disposables);
 
             if (!IsPlaying && _view.IsActivated)

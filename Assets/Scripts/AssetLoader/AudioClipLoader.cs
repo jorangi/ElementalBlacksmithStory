@@ -1,16 +1,16 @@
-using VContainer;
-using VContainer.Unity;
 using System;
 using System.Collections.Generic;
 using System.Threading;
+using Cysharp.Threading.Tasks;
+using ElementalBlacksmithStory.Events;
+using MessagePipe;
+using R3;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.ResourceManagement.ResourceLocations;
-using Cysharp.Threading.Tasks;
-using R3;
-using MessagePipe;
-using ElementalBlacksmithStory.Events;
+using VContainer;
+using VContainer.Unity;
 
 namespace ElementalBlacksmithStory.Core
 {
@@ -125,7 +125,7 @@ namespace ElementalBlacksmithStory.Core
                 Debug.Log("[AudioClipLoader] 로딩 취소됨");
                 _loadTcs.TrySetCanceled();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Debug.LogError($"[AudioClipLoader] AudioClip 로드 실패: {ex.Message}");
                 _loadTcs.TrySetException(ex);
@@ -175,7 +175,7 @@ namespace ElementalBlacksmithStory.Core
 
         public AudioClip GetAudioClip(uint id)
         {
-            if(_audioClips.TryGetValue(id, out AudioClip audioClip))
+            if (_audioClips.TryGetValue(id, out AudioClip audioClip))
             {
                 return audioClip;
             }

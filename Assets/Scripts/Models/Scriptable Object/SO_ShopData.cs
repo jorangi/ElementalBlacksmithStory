@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -29,14 +30,25 @@ namespace ElementalBlacksmithStory.Data
         public uint PurchaseDialogueId => _purchaseDialogueId != null ? _purchaseDialogueId.Id : 0;
         public IReadOnlyList<SO_ShopCategory> Categories => _categories;
 
-        /// <summary>
-        /// 이번 재입고 주기에 판매될 모든 카테고리의 입고 아이템 목록을 취합하여 반환
-        /// </summary>
-        public List<ShopCategoryItem> GetAllStockedItems()
-        {
-            var result = new List<ShopCategoryItem>();
-            var seenIds = new HashSet<uint>();
+        [Header("리프레시 설정")]
+        [Tooltip("자동 재입고/새로고침 주기 (분 단위)")]
+        [Range(0f, 60f)]
+        [SerializeField] private float _refreshIntervalMinutes = 15;
+        public TimeSpan RefreshInterval => TimeSpan.FromMinutes(_refreshIntervalMinutes);
 
+
+        private List<ShopCategoryItem> _cachedItems = new();
+        /// <summary>
+        /// 저장된 판매품 입고 프로퍼티(공개, 읽기용)
+        /// </summary>
+        public IReadOnlyList<ShopCategoryItem> AllStockedItems => _cachedItems.AsReadOnly();
+        /// <summary>
+        /// 판매될 모든 카테고리의 입고 아이템 목록을 취합하여 저장하는 재입고 함수
+        /// </summary>
+        public void RefreshStockedItems()
+        {
+            _cachedItems.Clear();
+            var seenIds = new HashSet<uint>();
             if (_categories != null)
             {
                 foreach (var category in _categories)
@@ -47,13 +59,11 @@ namespace ElementalBlacksmithStory.Data
                     {
                         if (seenIds.Add(item.itemId))
                         {
-                            result.Add(item);
+                            _cachedItems.Add(item);
                         }
                     }
                 }
             }
-
-            return result;
         }
 
         /// <summary>

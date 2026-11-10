@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b95dc85e94140ab4a84be25b52aada74, type: 3}
+  m_Name: 600708
+  m_EditorClassIdentifier: Assembly-CSharp::ElementalBlacksmithStory.Data.SO_DialogueData
+  description: "비실한 교역소 관리인, 코르크\n교역소 판매(흥정) 탭 입장 대사"
+  contents:
+  - speakerId: 50007
+    text: "{registeredItemCount == 0 ? 물건을 올려 두시면 관심 있는 분들이 모일 겁니다. 가격은 사람 얼굴을 보고 정하시지요. : {customerCount == 0 ? 아직 아무도 오지 않았습니다. 기다릴수록 오시는 분들이 더 간절해지니까요. : 구경꾼이 몇 분 모였습니다. 뭔가를 원하는 사람의 얼굴은 오래 봐도 질리지 않습니다.}}"

@@ -56,14 +56,14 @@ namespace ElementalBlacksmithStory.UI
 
             // 레시피 고정 토글 동기화
             _enhancementService.FixedRecipe = _treeBuilder.IsFixRecipeChecked;
-            _treeBuilder.OnFixRecipeChangedAsObservable.Subscribe(isOn =>
+            _treeBuilder.OnFixRecipeChangedAsObservable.Subscribe(this, static (isOn, self) =>
             {
-                _enhancementService.FixedRecipe = isOn;
-                Debug.Log($"[WeaponTreePresenter] 토글 OnValueChanged 수신됨 -> isOn: {isOn}, 현재 _pinnedRecipeId: {_pinnedRecipeId}");
-                if (isOn && _pinnedRecipeId != 0)
+                self._enhancementService.FixedRecipe = isOn;
+                Debug.Log($"[WeaponTreePresenter] 토글 OnValueChanged 수신됨 -> isOn: {isOn}, 현재 _pinnedRecipeId: {self._pinnedRecipeId}");
+                if (isOn && self._pinnedRecipeId != 0)
                 {
-                    var curWeaponId = _forgeManager.CurrentWeapon?.WeaponId ?? 10001;
-                    RerouteFrom(curWeaponId, _pinnedRecipeId);
+                    var curWeaponId = self._forgeManager.CurrentWeapon?.WeaponId ?? 10001;
+                    self.RerouteFrom(curWeaponId, self._pinnedRecipeId);
                 }
             }).AddTo(_disposables);
 
@@ -91,22 +91,22 @@ namespace ElementalBlacksmithStory.UI
             }).AddTo(_disposables);
 
             // 레시피 해금 시 노드 잠금 해제 갱신
-            _recipeUnlockService.OnRecipeUnlockedAsObservable.Subscribe(_ =>
+            _recipeUnlockService.OnRecipeUnlockedAsObservable.Subscribe(this, static (_, self) =>
             {
-                RefreshAllNodeLockStates();
+                self.RefreshAllNodeLockStates();
             }).AddTo(_disposables);
 
             // 레시피 변경 동기화
-            _treeBuilder.OnChangeRecipeFlagEventAsObservable.Subscribe(e =>
+            _treeBuilder.OnChangeRecipeFlagEventAsObservable.Subscribe(this, static (e, self) =>
             {
                 // 클릭한 대상 노드가 해금 가능한 상태(루트로부터 모든 경로 단계가 해금됨)인지 검사
-                if (!IsNodeFullyUnlocked(e._recipeId))
+                if (!self.IsNodeFullyUnlocked(e._recipeId))
                 {
                     Debug.LogWarning($"[WeaponTreePresenter] 무기 ID {e._recipeId}는 이전 단계 레시피가 모두 해금되지 않아 선택할 수 없습니다.");
                     return;
                 }
 
-                HandleNodeClick(e._recipeId);
+                self.HandleNodeClick(e._recipeId);
             }).AddTo(_disposables);
         }
 

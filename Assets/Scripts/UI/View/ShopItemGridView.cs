@@ -1,5 +1,9 @@
 using System.Collections.Generic;
+using Cysharp.Text;
+using R3;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace ElementalBlacksmithStory.UI
 {
@@ -8,8 +12,19 @@ namespace ElementalBlacksmithStory.UI
         [SerializeField] private Transform _gridContainer;
         [SerializeField] private GameObject _itemPrefab;
         [SerializeField] private GameObject _equipmentItemPrefab;
+        [SerializeField] private GameObject _bargainItemPrefab;
+        [SerializeField] private GameObject _bargainEquipmentItemPrefab;
+        [SerializeField] private GameObject _registerBargainItemPrefab;
+        [SerializeField] private Button _refreshButton;
+        [SerializeField] private TextMeshProUGUI _refreshTimer;
 
         private readonly Dictionary<uint, ShopItemViewBase> _itemViews = new();
+        private GameObject _registerItemCardInstance;
+
+        private void Awake()
+        {
+            Debug.Log($"[ShopItemGridView] Awake - _gridContainer: {_gridContainer}, _itemPrefab: {_itemPrefab}, _equipmentItemPrefab: {_equipmentItemPrefab}");
+        }
 
         /// <summary>
         /// 특정 아이템 ID의 뷰 반환
@@ -22,13 +37,21 @@ namespace ElementalBlacksmithStory.UI
         public IEnumerable<ShopItemViewBase> GetAllItemViews() => _itemViews.Values;
 
         /// <summary>
-        /// 그리드에 새 아이템을 생성하여 배치
+        /// 그리드에 새 아이템을 생성하여 배치.
+        /// bundleCount는 고정 묶음 판매 단위이며, 낱개 판매인 일반 상점에서는 1입니다.
         /// </summary>
-        public ShopItemViewBase CreateItem(uint itemId, string itemName, ulong price, Sprite icon, bool isUniqueItem = false)
+        public ShopItemViewBase CreateItem(
+            uint itemId,
+            string itemName,
+            ulong price,
+            Sprite icon,
+            bool isUniqueItem = false,
+            bool isBargain = false,
+            uint bundleCount = 1)
         {
             if (_gridContainer == null || _itemPrefab == null)
             {
-                Debug.LogWarning("[ShopItemGridView] _gridContainer 또는 _itemPrefab이 설정되지 않았습니다.");
+                Debug.LogWarning($"[ShopItemGridView] _gridContainer is null: {_gridContainer == null}, _itemPrefab is null: {_itemPrefab == null}");
                 return null;
             }
 
@@ -38,14 +61,36 @@ namespace ElementalBlacksmithStory.UI
                 RemoveItem(itemId);
             }
 
-            GameObject prefabToUse = (isUniqueItem && _equipmentItemPrefab != null) ? _equipmentItemPrefab : _itemPrefab;
+            GameObject prefabToUse;
+            if (isBargain)
+            {
+                if (isUniqueItem)
+                {
+                    prefabToUse = _bargainEquipmentItemPrefab != null ? _bargainEquipmentItemPrefab : _equipmentItemPrefab;
+                }
+                else
+                {
+                    prefabToUse = _bargainItemPrefab != null ? _bargainItemPrefab : _itemPrefab;
+                }
+            }
+            else
+            {
+                prefabToUse = (isUniqueItem && _equipmentItemPrefab != null) ? _equipmentItemPrefab : _itemPrefab;
+            }
+
             GameObject instance = Instantiate(prefabToUse, _gridContainer);
             instance.name = $"{itemName}_{itemId}";
 
             if (instance.TryGetComponent<ShopItemViewBase>(out var itemView))
             {
-                itemView.SetData(itemId, itemName, price, icon, isUniqueItem);
+                itemView.SetData(itemId, itemName, price, icon, isUniqueItem, bundleCount);
                 _itemViews[itemId] = itemView;
+
+                if (_registerItemCardInstance != null)
+                {
+                    _registerItemCardInstance.transform.SetAsLastSibling();
+                }
+
                 return itemView;
             }
 
@@ -69,11 +114,52 @@ namespace ElementalBlacksmithStory.UI
         }
 
         /// <summary>
+        /// 판매 등록 전용 카드(+ 버튼) 생성
+        /// </summary>
+        public ShopItemViewBase CreateRegisterCard()
+        {
+            if (_gridContainer == null || _registerBargainItemPrefab == null)
+            {
+                return null;
+            }
+
+            if (_registerItemCardInstance != null)
+            {
+                Destroy(_registerItemCardInstance);
+                _registerItemCardInstance = null;
+            }
+
+            _registerItemCardInstance = Instantiate(_registerBargainItemPrefab, _gridContainer);
+            _registerItemCardInstance.name = "RegisterBargainItemCard";
+            _registerItemCardInstance.transform.SetAsLastSibling();
+
+            if (_registerItemCardInstance.TryGetComponent<ShopItemViewBase>(out var itemView))
+            {
+                return itemView;
+            }
+
+            return null;
+        }
+
+        /// <summary>
+        /// 판매 등록 전용 카드 제거
+        /// </summary>
+        public void RemoveRegisterCard()
+        {
+            if (_registerItemCardInstance != null)
+            {
+                Destroy(_registerItemCardInstance);
+                _registerItemCardInstance = null;
+            }
+        }
+
+        /// <summary>
         /// 그리드의 모든 아이템 제거 및 정리
         /// </summary>
         public void Clear()
         {
             _itemViews.Clear();
+            _registerItemCardInstance = null;
 
             if (_gridContainer == null) return;
 
@@ -82,6 +168,30 @@ namespace ElementalBlacksmithStory.UI
                 Destroy(child.gameObject);
             }
         }
+        public Observable<Unit> OnRefreshButtonAsObservable()
+        {
+            if (_refreshButton == null)
+            {
+                return Observable.Empty<Unit>();
+            }
+            return _refreshButton.OnClickAsObservable();
+        }
+        public void ShowRefreshButton()
+        {
+            if (_refreshButton != null) _refreshButton.gameObject.SetActive(true);
+        }
+        public void HideRefreshButton()
+        {
+            if (_refreshButton != null) _refreshButton.gameObject.SetActive(false);
+        }
+        public void SetRefreshButtonInteractable(bool interactable)
+        {
+            if (_refreshButton != null) _refreshButton.interactable = interactable;
+        }
+        public void SetRefreshTimer(int min, int sec, string prefix = "재입고")
+        {
+            if (_refreshTimer == null) return;
+            _refreshTimer.SetText(ZString.Format("{0} ({1:00}:{2:00})", prefix, min, sec));
+        }
     }
 }
-

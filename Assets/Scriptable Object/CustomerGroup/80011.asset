@@ -1,0 +1,145 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b32617f483474c042a505f5b4002c486, type: 3}
+  m_Name: 80011
+  m_EditorClassIdentifier: Assembly-CSharp::ElementalBlacksmithStory.Data.SO_CustomerGroup
+  _customerGroupTitle: 은퇴한 모험가
+  _customerGroupName: 녹슨 검의 회고록
+  _description: 위험한 현업에서 물러나 거점 상점가에 정착한 옛 베테랑들. 물건의 만듦새를 음미하며 느긋하게 대화를 즐긴다.
+  minEstimateRatio: 0.9
+  maxEstimateRatio: 1.25
+  minFirstOfferRatio: 0.7
+  maxFirstOfferRatio: 0.85
+  minInterpolation: 0.2
+  maxInterpolation: 0.3
+  minPatience: 80
+  maxPatience: 130
+  greedSensitivity: 1.0
+  _customerNames:
+  - 던칸
+  - 발터
+  - 에스더
+  - 브로디
+  - 클레어
+  - 오스카
+  - 마일즈
+  - 바바라
+  - 루퍼스
+  - 테레사
+  _customerSprites: []
+  _firstOffer:
+  - speakerId: 0
+    text: '{itemType == sword ? "허허, 검이로군. 이런 걸 보면 옛 생각이 나서 손이 먼저 나간다네." : {itemType == bow ? "활이라... 젊을 때 이걸 메고 산을 몇 개나 넘었는지 몰라. 반갑군." : {itemType == rune ? "룬이군. 어디에 달아 볼까 상상만 해도 즐겁네." : {itemType == material ? "재료로군. 쥐어 보니 결이 좋아. 내가 이런 건 좀 보거든." : {itemType == consumable ? "소모품이군. 현역 때는 이게 떨어지면 목숨이 간당간당했지. 넉넉히 챙기는 게 버릇이라네." : "허허, 눈에 쏙 들어오는 물건이군."}}}}} {price}골드는 어떻겠나?'
+  - speakerId: 0
+    text: '{itemName}(이/가) 눈에 밟히는군. 한참 들여다봐도 질리지 않겠어. {price}골드는 쳐주고 싶은데, 어떤가?'
+  - speakerId: 0
+    text: '{price >= baseValue ? "제값보다 후하게 쳐 봤네. 섭섭하진 않겠지? {price}골드일세." : "물건 보는 눈은 아직 녹슬지 않았다네. 제값을 따져 보니 {price}골드가 맞겠어."}'
+  - speakerId: 0
+    text: '{itemCount > 1 ? "{itemCount}개나 있는가. 하나씩 살펴보는 재미가 쏠쏠하겠구먼. 한꺼번에 {price}골드 어떤가?" : "딱 하나라 더 눈이 가네. {price}골드 어떤가?"}'
+  - speakerId: 0
+    text: '{groupName} 소속 {npcName}일세. 옛 모험담 늘어놓는 게 낙인 늙은이지. {itemName}(을/를) {price}골드에 모시고 싶군.'
+  - speakerId: 0
+    text: '{itemElement == flame ? "불 속성이군. 옛날 화염 도마뱀 굴에서 눈썹이 홀랑 탔던 게 생각나네. 허허." : {itemElement == cold ? "냉기 속성이군. 설산에서 수염에 고드름 달고 다녔던 때가 떠오르네." : {itemElement == lightning ? "번개 속성이군. 폭풍 속에서 머리카락이 곤두섰던 날이 생각나는구먼." : {itemElement == wind ? "바람 속성이군. 절벽 위에서 휘청거리던 날이 떠오르네." : {itemElement == earth ? "땅 속성이군. 무너지는 갱도에서 버텼던 기억이 나는군." : {itemElement == holy ? "신성 속성이군. 사제 동료가 밤새 기도해 주던 밤이 생각나네." : {itemElement == dark ? "어둠 속성이군. 어쩐지 오싹하지만, 쓸모가 있다는 건 내가 잘 알지." : "물건이 마음에 드는군."}}}}}}} {price}골드 어떤가?'
+  - speakerId: 0
+    text: '이 늙은이 눈이 아직 쓸 만하다네. {itemName}에 {price}골드면 후회는 없을 걸세.'
+  - speakerId: 0
+    text: '{itemType == material ? "좋은 재료는 쥐어 보면 묵직함이 달라." : {itemType == rune ? "룬은 기운만 봐도 알지. 어디에 달아도 제 몫을 하겠어." : "좋은 물건은 보는 순간 알지."}} {price}골드를 내겠네.'
+  - speakerId: 0
+    text: '{price}골드. 서두를 것 없네. 천천히 생각해 보게나. 급할 거 없으니.'
+  - speakerId: 0
+    text: '옛 동료들이 봤으면 서로 달라고 난리였을 물건이군. {price}골드, 어떤가?'
+  _negotiation:
+  - speakerId: 0
+    text: '허허, {prevPrice}골드에서 {price}골드로 올리지. 이 늙은이 인심을 알아주게나.'
+  - speakerId: 0
+    text: '{askRatio >= 1.5 ? "{askPrice}골드라니, 배포가 현역 때 내 동료 못지않군. 허허, 그래도 {price}골드까지는 봐 주지." : "{askPrice}골드라... 나쁘지 않은 값이야. 조금만 맞춰 주면 좋겠네. {price}골드 어떤가?"}'
+  - speakerId: 0
+    text: '{bargainCount >= 2 ? "이렇게 주고받는 것도 오랜만이라 즐겁긴 한데, 슬슬 정리하세. {price}골드일세." : "좋네, 한 걸음 양보하지. {price}골드 어떤가?"}'
+  - speakerId: 0
+    text: '{priceGap}골드 차이라... 서로 한 걸음씩이면 메울 수 있겠군. {price}골드까지 가 보지.'
+  - speakerId: 0
+    text: '{itemCount > 1 ? "{itemCount}개면 개당 {unitPrice}골드 꼴이군. 묶음으로 가져가는 값으로 {price}골드 어떤가?" : "하나뿐인 물건에 이만하면 후하게 쳤네. {price}골드 어떤가?"}'
+  - speakerId: 0
+    text: '{price >= baseValue ? "제값은 이미 넘겼네. 이 늙은이 나름의 성의일세. {price}골드까지 하지." : "{price}골드면 내 눈에는 공정한 값이야."}'
+  - speakerId: 0
+    text: '{itemType == sword ? "좋은 검은 한눈에 알아보는 법이지. 그 값어치는 인정하네." : {itemType == bow ? "좋은 활은 시위를 당기기 전에 알아본다네. 그 값어치는 인정하지." : {itemType == rune ? "룬은 어디에 달아도 제 몫을 하니, 값어치를 인정하네." : {itemType == material ? "재료는 결만 봐도 알지. 그 값어치는 인정하네." : "{itemName}의 값어치는 인정하네."}}}} {price}골드까지 올리겠네.'
+  - speakerId: 0
+    text: '이 늙은이 지갑은 현역 때만큼 두둑하질 않아서 말이야. {price}골드, 이게 내 성의일세.'
+  - speakerId: 0
+    text: '이 늙은이는 마음에 든 물건엔 모질게 못 구는 성미라네. 그래서 {price}골드일세.'
+  - speakerId: 0
+    text: '젊을 땐 이런 흥정도 전투처럼 했는데, 이젠 웃으면서 끝내고 싶군. {price}골드 어떤가?'
+  _finalOffer:
+  - speakerId: 0
+    text: '허허, 이게 마지막일세. {price}골드, 이 늙은이 주머니는 여기까지라네.'
+  - speakerId: 0
+    text: '{firstPrice}골드로 시작해서 {price}골드까지 왔구먼. 이만하면 많이 왔지.'
+  - speakerId: 0
+    text: '{price}골드일세. 더 올리면 오늘 저녁 술값이 사라진다네.'
+  - speakerId: 0
+    text: '{itemCount > 1 ? "{itemCount}개 전부에 {price}골드가 끝이야. 더 얹으면 허리가 휘네." : "하나에 {price}골드가 끝이야. 더 얹으면 허리가 휘네."} 어떤가?'
+  - speakerId: 0
+    text: '{askPrice}골드까진 못 가네. {price}골드면 기꺼이 사겠네. 어떤가?'
+  - speakerId: 0
+    text: '내 마지막 말일세. {price}골드. 이 늙은이 부탁이라 여기게나.'
+  - speakerId: 0
+    text: '{itemType == material ? "좋은 재료라 욕심은 나지만, 이 이상은 무리일세." : {itemType == rune ? "룬이 탐나긴 하네만, 이 이상은 무리일세." : {itemType == consumable ? "소모품에 이 이상 쓰면 다음 철 양식이 모자라네." : "탐나긴 하네만, 이 이상은 무리일세."}}} {price}골드일세.'
+  - speakerId: 0
+    text: '{askRatio >= 1.5 ? "{priceGap}골드나 벌어졌구먼. 이건 늙은이한테 너무 높은 산일세. {price}골드가 끝이야." : "{price}골드로 정하세. 이 정도 차이는 웃어넘길 수 있지."}'
+  - speakerId: 0
+    text: '{itemName}(이/가) 탐나긴 하는데, 욕심내다 체하면 쓰나. {price}골드일세.'
+  - speakerId: 0
+    text: '{price >= baseValue ? "제값 위로 쳐 드렸으니 이제 웃으며 끝내세. {price}골드일세." : "{price}골드로 마무리하세. 서로 얼굴 붉힐 일은 아니지 않나."}'
+  _acception:
+  - speakerId: 0
+    text: '허허, 좋네. 그 값으로 하지.'
+  - speakerId: 0
+    text: '{itemType == sword ? "이 검은 벽에 걸어 두고 보기만 해도 흐뭇하겠구먼." : {itemType == bow ? "이 활은 시위를 한번 튕겨 보고 싶어 손이 근질거리네." : {itemType == rune ? "이 룬은 어디에 달아 볼지 고르는 재미가 있겠구먼." : {itemType == consumable ? "이만큼이면 한동안 든든하겠군." : "좋은 물건이로군. 오래 아껴 쓰겠네."}}}}'
+  - speakerId: 0
+    text: '{price}골드, 여기 있네. 천천히 세어 보게나.'
+  - speakerId: 0
+    text: '{itemName}(을/를) 손에 넣었으니 오늘 밤은 옛 얘기가 술술 나오겠군.'
+  - speakerId: 0
+    text: '{itemCount > 1 ? "{itemCount}개 모두 챙기겠네. 하나씩 꺼내 보는 재미가 쏠쏠하겠어." : "고이 챙기겠네."} 고맙네.'
+  - speakerId: 0
+    text: '{itemElement == flame ? "불 속성이라니, 옛 생각이 나서 가슴이 뛰는군." : {itemElement == cold ? "냉기 속성이라니, 설산의 바람이 되살아나는군." : {itemElement == lightning ? "번개 속성이라니, 폭풍 속에서 웃던 때가 떠오르는군." : {itemElement == wind ? "바람 속성이라니, 절벽 위의 하늘이 떠오르는군." : {itemElement == earth ? "땅 속성이라니, 든든했던 동료의 등짝이 생각나는군." : {itemElement == holy ? "신성 속성이라니, 그 사제 친구가 보고 싶어지는군." : {itemElement == dark ? "어둠 속성이라니, 간만에 등골이 서늘하군. 그래도 마음에 드네." : "이런 물건을 만나다니, 오래 살고 볼 일이야."}}}}}}} 고맙네.'
+  - speakerId: 0
+    text: '{groupName} 동료들에게 자랑해야겠군. 다들 배 아파 할 걸세.'
+  - speakerId: 0
+    text: '허허, 오늘 좋은 인연을 만났네. 기억해 두겠네.'
+  - speakerId: 0
+    text: '{price >= baseValue ? "제값 이상으로 샀으니 마음이 편하군. 이런 거래가 오래 남는 법이지." : "제값에 샀으니 서로 손해는 없지. 이런 게 좋은 거래야."}'
+  - speakerId: 0
+    text: '시원시원해서 좋군. 이 늙은이도 젊을 때 같은 기분이 드네.'
+  _rejection:
+  - speakerId: 0
+    text: '아쉽지만 이번엔 접어야겠군. 뒤끝은 없네.'
+  - speakerId: 0
+    text: '{askPrice}골드는 이 늙은이한텐 너무 크네. 마음만 받아 두겠네.'
+  - speakerId: 0
+    text: '{itemCount > 1 ? "{itemCount}개나 눈에 담았는데 놓치려니 서운하군." : "하나뿐인 물건인데 놓치려니 서운하군."} 허허, 어쩌겠나.'
+  - speakerId: 0
+    text: '{itemName}(이/가) 참 탐나는데... 주머니가 허락을 안 하네.'
+  - speakerId: 0
+    text: '{itemType == sword ? "좋은 검을 눈앞에서 놓치다니, 옛 동료를 보내는 기분이야." : {itemType == bow ? "좋은 활을 놓치는 건 아쉽지만 어쩌겠나." : {itemType == rune ? "룬을 놓치는 건 아쉽군. 어디에 달아 볼지 벌써 그려 뒀는데." : "좋은 물건을 놓치는 건 아쉽지만 어쩌겠나."}}}'
+  - speakerId: 0
+    text: '{groupName}에서 놀려 대겠군. 또 허탕이라고. 허허.'
+  - speakerId: 0
+    text: '난 이만 가 보겠네. 좋은 주인 만나길 바라네.'
+  - speakerId: 0
+    text: '{askRatio >= 1.5 ? "그 값은 현역 때 번 돈을 다 털어도 모자라겠군. 허허, 이만 가겠네." : "조금만 더 맞았으면 좋았을 걸. 다음에 또 보세."}'
+  - speakerId: 0
+    text: '이 나이엔 아쉬움도 오래 안 가네. 훌훌 털고 가지.'
+  - speakerId: 0
+    text: '인연이 닿으면 또 만나겠지. 건강하게 지내게나.'
+  _minTimer: 110
+  _maxTimer: 190

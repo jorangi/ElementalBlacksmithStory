@@ -1,0 +1,145 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b32617f483474c042a505f5b4002c486, type: 3}
+  m_Name: 80010
+  m_EditorClassIdentifier: Assembly-CSharp::ElementalBlacksmithStory.Data.SO_CustomerGroup
+  _customerGroupTitle: 수상한 수집가
+  _customerGroupName: 골동품 애호회
+  _description: 고대 유물과 기벽 어린 물건에 집착하는 괴짜 수집가들. 물건의 가치를 자신만의 기분과 기준으로 평가한다.
+  minEstimateRatio: 0.6
+  maxEstimateRatio: 2.0
+  minFirstOfferRatio: 0.5
+  maxFirstOfferRatio: 0.9
+  minInterpolation: 0.1
+  maxInterpolation: 0.4
+  minPatience: 40
+  maxPatience: 100
+  greedSensitivity: 0.9
+  _customerNames:
+  - 에즈라
+  - 모티머
+  - 오브리
+  - 헬가
+  - 퀼
+  - 빈센트
+  - 이디스
+  - 졸리
+  - 마그누스
+  - 래티
+  _customerSprites: []
+  _firstOffer:
+  - speakerId: 0
+    text: '{itemType == sword ? "이 검, 어딘가 사연이 배어 있어... 흐흐." : {itemType == bow ? "이 활, 누군가의 손때가 느껴지는군... 흐흐." : {itemType == rune ? "이 룬, 속삭이고 있어. 들려? 나만 들리나..." : {itemType == material ? "이 재료, 냄새가 심상치 않아... 킁킁." : {itemType == consumable ? "이 소모품, 쓰기엔 아깝고 두자니 아깝고..." : "이거, 마음에 걸려. 자꾸 눈이 가."}}}}} {price}골드. 지금 기분으로는 그래.'
+  - speakerId: 0
+    text: '{itemName}... 흐흐, 찾았다. {price}골드 줄게. 아니, 잠깐, 더 줄 수도 있어.'
+  - speakerId: 0
+    text: '{price > baseValue ? "정가라는 건 모욕이야. 이 아이한테는 {price}골드도 모자라지." : "솔직히 그렇게 끌리진 않아... {price}골드. 그것도 기분이 좋아서야."}'
+  - speakerId: 0
+    text: '{itemCount > 1 ? "{itemCount}개나? 짝이 맞는 건 드물지. 전부 해서 {price}골드." : "딱 하나뿐이라니, 외로워 보이는군. {price}골드."}'
+  - speakerId: 0
+    text: '{groupName}의 {npcName}이라고 해. 이름은 기억 안 해도 돼, 물건만 기억하면 되니까. {itemName}에 {price}골드.'
+  - speakerId: 0
+    text: '{itemElement != none ? "이 안에서 뭔가 꿈틀거려... 기운이 살아 있어. {price}골드, 아깝지 않아." : "기운은 없네. 그래도 이상하게 끌려. {price}골드."}'
+  - speakerId: 0
+    text: '아침에 꿈에서 본 물건이랑 닮았어. 그래서 {price}골드. 이유는 그게 전부야.'
+  - speakerId: 0
+    text: '{itemType == rune ? "룬은 어디에 달려 있었는지가 중요한데... 상관없나. {price}골드." : {itemType == material ? "재료는 어디서 났는지가 중요한데... 일단 {price}골드." : "어디서 났는지 궁금하지만 일단 {price}골드."}}'
+  - speakerId: 0
+    text: '{price}골드. 아, 마음이 바뀌기 전에 받아. 금방 바뀌거든.'
+  - speakerId: 0
+    text: '{itemName}(이/가) 나를 쳐다보고 있어. 부담스러울 정도로. {price}골드면 눈을 돌릴 수 있겠지.'
+  _negotiation:
+  - speakerId: 0
+    text: '{prevPrice}골드에서 {price}골드... 방금 마음이 바뀌었어. 이유는 묻지 마.'
+  - speakerId: 0
+    text: '{askRatio >= 1.5 ? "{askPrice}골드! 하하, 그 뻔뻔함이 마음에 쏙 들어. {price}골드까지 쓰지." : "{askPrice}골드는 좀 시들하군. {price}골드로 하자."}'
+  - speakerId: 0
+    text: '{bargainCount >= 2 ? "자꾸 말을 걸면 흥이 식어. {price}골드로 정리하자." : "흠, 다시 보니 처음보다 나쁘지 않아. {price}골드."}'
+  - speakerId: 0
+    text: '{priceGap}골드 차이... 숫자는 잘 몰라도 그 정도 거리는 느껴져. {price}골드.'
+  - speakerId: 0
+    text: '{itemCount > 1 ? "{itemCount}개 중에 하나만 마음에 들어. 나머지는 덤이야. 전부 {price}골드." : "{itemName}(이/가) 아까보다 더 오래돼 보여. 기분 탓인가. {price}골드."}'
+  - speakerId: 0
+    text: '{price > baseValue ? "정가라는 건 사람들이 멋대로 정한 거지. 나는 {price}골드로 정할래." : "이 값이면 충분히 쳐준 거야. 정가 같은 건 나한텐 의미 없어. {price}골드."}'
+  - speakerId: 0
+    text: '{itemType == sword ? "검에 묻은 이야기가 궁금해서 그래. {price}골드." : {itemType == bow ? "활에 남은 손자국이 마음에 들어서 그래. {price}골드." : "이야기가 궁금해서 그래. {price}골드."}}'
+  - speakerId: 0
+    text: '방금 다른 물건이 떠올라서 마음이 갈라졌어. 그래도 {price}골드는 줄게.'
+  - speakerId: 0
+    text: '다들 내가 변덕이 심하다고들 하지. 맞아. 지금은 {price}골드.'
+  - speakerId: 0
+    text: '{itemElement != none ? "기운이 아직 살아 있군. 놓치기 싫어. {price}골드." : "살아 있진 않지만 죽은 것도 아닌 것 같아. {price}골드."}'
+  _finalOffer:
+  - speakerId: 0
+    text: '이게 마지막이야. {price}골드. 이상하게 이 숫자에서 마음이 놓여.'
+  - speakerId: 0
+    text: '{firstPrice}골드로 시작해서 {price}골드까지 왔네. 여기서 더 가면 내가 나를 못 알아볼 거야.'
+  - speakerId: 0
+    text: '{price}골드. 더 말하면 갑자기 흥미가 사라질지도 몰라. 그런 일이 흔해.'
+  - speakerId: 0
+    text: '{itemCount > 1 ? "{itemCount}개를 전부 {price}골드에. 하나라도 빼면 싫어." : "하나를 {price}골드에. 이 이상은 다른 데 써야 해."}'
+  - speakerId: 0
+    text: '{askPrice}골드는 내 마음에서 멀어졌어. {price}골드. 결정해 줘.'
+  - speakerId: 0
+    text: '내 마지막 변덕이야. {price}골드. 다음엔 없을 수도 있어.'
+  - speakerId: 0
+    text: '{itemType == material ? "재료에 이 이상은 못 써. 더 소중한 게 있거든. {price}골드." : {itemType == rune ? "룬에 이 이상은 못 써. 벌써 속삭임이 줄었어. {price}골드." : "이 이상은 못 써. 더 소중한 게 있거든. {price}골드."}}'
+  - speakerId: 0
+    text: '{askRatio >= 1.5 ? "{priceGap}골드나 벌어졌군. 아까는 재미있었는데 지금은 아니야. {price}골드가 끝이야." : "{price}골드. 이 정도 차이면 마음이 흔들리지 않아."}'
+  - speakerId: 0
+    text: '{itemName}(이/가) 아직 마음에 들 때 끝내자. {price}골드. 식으면 후회하게 돼.'
+  - speakerId: 0
+    text: '{price}골드. 받든지 말든지. 말하고 보니 둘 다 괜찮네.'
+  _acception:
+  - speakerId: 0
+    text: '흐흐, 좋아. 이제 이 아이는 내 거야.'
+  - speakerId: 0
+    text: '{itemType == sword ? "이 검은 오늘 밤 내 곁에서 잘 거야." : {itemType == bow ? "이 활은 오늘 밤 내 곁에서 잘 거야." : "이 아이는 오늘 밤 내 곁에서 잘 거야."}}'
+  - speakerId: 0
+    text: '{price}골드, 여기. 세어 보지 않아도 돼. 나는 늘 정확하게 틀리거든.'
+  - speakerId: 0
+    text: '{itemName}(을/를) 손에 넣다니... 오늘 일찍 일어난 보람이 있어.'
+  - speakerId: 0
+    text: '{itemCount > 1 ? "{itemCount}개 모두 가방에 넣어 둘게. 서로 부딪치지 않게." : "가방 맨 안쪽에 넣어 둘게. 안전하게."} 고마워.'
+  - speakerId: 0
+    text: '{itemElement != none ? "기운이 아직 살아 있네. 잠들기 전에 한 번 더 보고 싶어." : "기운은 없지만 이상하게 따뜻해."} 잘 샀어.'
+  - speakerId: 0
+    text: '{groupName}(은/는) 오늘 이 거래를 기록할 거야. 다들 부러워하겠지.'
+  - speakerId: 0
+    text: '후후, 오늘 운이 좋았어. 내일은 또 마음이 바뀔지도 모르지만.'
+  - speakerId: 0
+    text: '{price > baseValue ? "정가보다 더 쳤지만 후회는 없어. 이 아이는 그만한 값어치가 있어." : "그 값에 팔아 주다니, 의외로 쉬웠네. 내가 속은 건 아니겠지?"}'
+  - speakerId: 0
+    text: '거래는 끝났지만 마음은 안 끝났어. 또 보자.'
+  _rejection:
+  - speakerId: 0
+    text: '아, 마음이 식었어. 그냥 그렇게 됐어.'
+  - speakerId: 0
+    text: '{askPrice}골드라니. 어제였다면 몰라도 오늘은 아니야.'
+  - speakerId: 0
+    text: '{itemCount > 1 ? "{itemCount}개나 있는데도 마음이 안 움직이네. 이상하지?" : "하나뿐인데도 마음이 안 움직이네. 이상하지?"} 접을게.'
+  - speakerId: 0
+    text: '{itemName}(이/가) 아깝지만 마음이 이미 다른 데 가 있어. 미안.'
+  - speakerId: 0
+    text: '{itemElement != none ? "기운이 아쉽긴 한데, 값이 기운보다 더 크네." : "솔직히 별로 끌리진 않았어."} 이만 갈게.'
+  - speakerId: 0
+    text: '{groupName}(은/는) 마음 가는 대로 사고 마음 가는 대로 돌아서. 오늘은 돌아설 차례야.'
+  - speakerId: 0
+    text: '난 이만 갈게. 다음에 보면 마음이 달라져 있을지도 몰라.'
+  - speakerId: 0
+    text: '{itemType == sword ? "검은 이제 질렸어. 다른 이야기를 찾아볼래." : {itemType == bow ? "활은 이제 질렸어. 다른 이야기를 찾아볼래." : "이건 이제 질렸어. 다른 이야기를 찾아볼래."}}'
+  - speakerId: 0
+    text: '{askRatio >= 1.5 ? "그 값을 부를 줄은 몰랐어. 웃음은 나는데 지갑은 안 열려." : "조금만 더 맞았으면 좋았을 텐데. 흥이 깨졌네."}'
+  - speakerId: 0
+    text: '밤이 되면 또 생각나겠지. 그래도 오늘은 접을게.'
+  _minTimer: 90
+  _maxTimer: 180

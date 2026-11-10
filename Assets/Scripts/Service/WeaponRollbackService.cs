@@ -80,12 +80,6 @@ namespace ElementalBlacksmithStory.Core
             {
                 weapon.SetData(weaponData);
             }
-
-            float margin = weapon.Data != null && weapon.Data.margin > 1f
-                ? Random.Range(1.0f, weapon.Data.margin)
-                : (weapon.Data != null ? weapon.Data.margin : 1f);
-
-            weapon.SetMargin(margin);
         }
     }
 }

@@ -7,7 +7,7 @@ using VContainer;
 namespace ElementalBlacksmithStory.Inventory
 {
     /// <summary>
-    /// 재료 아이템 전용 인벤토리
+    /// 재료 아이템 전용 인벤토리`
     /// </summary>
     public class MaterialInventory : BaseInventory<SO_MaterialData>
     {

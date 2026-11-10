@@ -2,7 +2,250 @@
 
 > Elemental Blacksmith Story 프로젝트의 일자별 개발 일지 및 주요 변경 사항 기록입니다.
 
----
+## 2026-11-09
+
+- 교역소 대화 UI 연동
+  - 흥정 단계별(첫 제안, 가격 제안 및 역제안, 최종 제안, 거래 성사, 결렬) 손님 대사 출력 연동
+  - 대사 텍스트 포맷팅에 필요한 매개변수 사전 캐싱을 통해 GC 메모리 할당 방지
+  - 해당 아이템의 역대 거래 히스토리(최고가, 최저가, 평균 거래가) 조회 및 UI 표기
+  - 교역소 등록 물품 회수 기능 및 인벤토리 원복 처리 구현
+- 교역소 판매가 기반 빠른 판매 3회 가격 보장 시스템 구축
+  - 아이템별 거래 기록 모델 작성 (최고가/최저가/평균가 및 보장 잔여 횟수 관리)
+  - 빠른 판매 시 보장 횟수 차감 및 3회 소진 시 기본가 자동 복귀
+- 대장간 모루 위 무기 가격 실시간 동기화
+- 무기 데이터 모델 정리 및 레거시 마진 로직 제거
+- 버그 수정 및 안정성 보강
+  - 기본 무기(10001, 11001 등 끝자리 001 무기)가 Bargain 등록 목록에 표시되지 않도록 적용
+  - 빠른 판매 진행 시 장착 중이던 무기가 인벤토리에서 누락되지 않고 정상 제거되도록 수정
+  - 모루 위에 올려진 무기를 Bargain에 등록할 때 인벤토리 제거 및 모루 무기 자동 리셋(10001) 연동
+  - 모루 무기 리셋시 코인 효과음 및 파티클이 재생되던 문제 해결 (`amount == 0` 방어 처리)
+
+## 2026-11-08
+
+- 교역소 거래(판매탭) 손님 방문 구현 및 UI 연결
+  - 서비스에서 Observer를 통해 Presenter에서 해당 아이템의 UI만 갱신되도록 적용
+- 교역소 흥정 손님 방문 딜레이 계산식 버그 수정
+  - 인내심 비율 계산 시 정수 나눗셈으로 인해 딜레이가 0초로 고정되던 문제 수정
+  - 무기 및 일반 아이템 선호 판별 로직 통합 및 안전성 보강
+- 기존 손님 리스트를 갱신할 때마다 `Instantiate`로 생성하던 것을 최적화
+  - `ObjectPool`을 이용하여 미리 생성 및 연결
+
+## 2026-11-07
+
+- 교역소 흥정 손님 방문 시뮬레이터 분리 및 버그 수정
+  - TradingPostService에 혼재되어 있던 흥정 손님 방문 루틴과 후보 추첨 로직을 전담 서비스로 이관
+  - 손님 이름 추첨 시 발생하던 인덱스 범위 초과 크래시 및 첫 손님 이름 누락 버그 해결
+  - 손님 그룹별 정원 판별 로직 수정 및 무한 루프 메모리 누수 방지
+  - 딕셔너리 키 타입을 아이템 인스턴스 ID로 일원화
+  - 만원 상태 그룹의 손님 퇴장 시 해당 그룹 방문 루틴 즉시 재개 메커니즘 구현
+
+## 2026-11-06
+
+- 손님그룹(CustomerGroup) 대사 데이터 구축 완료
+  - 11~13번 손님그룹(은퇴한 모험가, 마을 주민, 루미너스 순례자) 에셋 생성 및 대사 작성 완료
+  - 손님그룹별 아이템 선호/기피 필터 및 무할당 판별 로직 추가
+- 경매 입찰자 및 시뮬레이션 모델 설계
+  - `AuctionBidder` 도메인 모델 생성 (시그모이드 기반 입찰 확률 및 호가 증액 계산, 개인 타이머 구조)
+  - `AuctionSimulatingService` 기본 스캐폴딩 구성
+- 상점 아이템 카테고리 일원화 및 레거시 ID 판별 리팩토링
+  - `IShopItem`에 `ShopItemCategory` Enum 및 `Category` 프로퍼티 추가
+  - 구현체별 자체 카테고리 반환 구현 (검/활 ID 범위 판별)
+  - 상점 및 교역소 프레젠터/전략 클래스에서 `ItemIdHelper.GetCategory` 및 `is Weapon` 패턴 매칭을 `item.Category` 기반으로 교체
+- 기존 `BidStrategy`가 갖던 아이템에 대한 티어 매기기 관련 로직을 `ItemTierHelper`로 추출
+  - 추후 진행도 계산 등 사용처가 많음
+- `ItemShopFactory` 상점 아이템 생성 시 고유 인스턴스 ID 부여
+  - `MaterialShopItem` 및 `Rune` 생성 시 동일 재료/룬이 경매 및 상점에 복수 출품될 때 발생하는 ID 키 충돌 문제 해결
+- 경매 진행 시간 및 손님별 입찰 타이머 밸런싱
+  - `BidModeStrategy` 경매 1회 주기를 기존 5분에서 30분으로 현실적인 마켓 호흡에 맞추어 상향
+  - `SO_CustomerGroup`의 입찰 대기 타이머 기본값 및 범위를 초 단위로 설정
+  - 손님그룹 에셋에 그룹 특성별(성급함: 30~60초, 신중한: 100~200초 등) 입찰 쿨다운 타이머 세팅 완료
+- `AuctionBidder` 모델 최적화 및 타이머 필드 정돈
+  - 힙 할당 유발 요소인 튜플 제거
+  - `RemainingSeconds`, `IsFolded` 프로퍼티 추가
+  - 쿨다운 차감 및 타이머 재설정, 상한가 초과 시 자동 포기 로직 추가
+- 경매 타이머 시작 시점 및 마감 시 자동 갱신/정산 구현
+  - 게임 실행 시점부터 30분 경매 타이머 및 1회차 물품/입찰 시뮬레이션 즉시 가동
+  - 경매 마감(00:00) 시 낙찰/유찰 자동 정산 및 새 회차 경매 자동 갱신
+  - 상점 UI 열람 중 마감 시 그리드 실시간 갱신 처리
+
+## 2026-11-03
+
+- 손님그룹(CustomerGroup) 기본 시스템 및 1~10번 데이터 구축
+  - `SO_CustomerGroup` 및 `SO_CustomerGroupDatabase` 데이터 모델 설계
+  - 1~10번 손님그룹(초보 모험가, 왕실 기사, 베테랑 용병, 유랑 상인, 마법학자, 보급관, 귀족, 중견 모험가, 사냥꾼, 수집가) 에셋 생성 (각 10명 고유 이름 및 단계별 50문장 대사 작성)
+  - `CustomerData` 런타임 손님 인스턴스 생성 및 흥정(`Bargain`) 인내심 감소/제안가 산출 로직 구현
+  - 손님그룹 에셋 어드레서블 그룹 등록 및 `ItemIdHelper.CustomerGroup` 카테고리 ID(8) 추가
+- 상점 인터페이스 및 타이머 구조 개선
+  - 타이머가 필요한 상점 모드를 위해 `ITimedShopMode` 인터페이스 분리 (`TimerPrefix`, `RemainingTime`)
+  - `IItemShopFactory` 인터페이스 네임스페이스 및 디렉토리 위치 정리
+
+## 2026-11-02
+
+- 교역소 흥정(Bargain) 등록 상세 모달 UI 구현
+  - 등록할 아이템의 수량, 희망 가격, 마진율을 조절하는 팝업 UI 및 프레젠터(`BargainRegisterItemDetailView`, `BargainRegisterItemDetailPresenter`) 구현
+  - 아이템 등록 시 발생하는 `RegisterBargainItemEvent` 정의 및 MessagePipe 연동
+  - 모달 오픈 시 뒷배경 딤드 처리(`UIBackPanelPresenter`) 연동
+  - VContainer DI 컨테이너에 신규 뷰 및 프레젠터 등록
+
+## 2026-11-06
+
+- 손님그룹(CustomerGroup) 대사 데이터 구축 완료
+  - 11~13번 손님그룹(은퇴한 모험가, 마을 주민, 루미너스 순례자) 에셋 생성 및 대사 작성 완료 (총 13종 완성)
+  - 손님그룹별 아이템 선호/기피 필터(`ItemPreferenceData`) 및 무할당 판별 로직(`IsItemEligible`, `IsItemPreferred`) 추가
+- 경매 입찰자 및 시뮬레이션 모델 설계
+  - `AuctionBidder` 도메인 모델 생성 (시그모이드 기반 입찰 확률 및 호가 증액 계산, 개인 타이머 구조)
+  - `AuctionSimulatingService` 기본 스캐폴딩 구성
+- 상점 아이템 카테고리 일원화 및 레거시 ID 판별 리팩토링
+  - `IShopItem`에 `ShopItemCategory` Enum (`Sword, Bow, Material, Rune, Consumable`) 및 `Category` 프로퍼티 추가
+  - 구현체(`MaterialShopItem`, `Rune`, `Weapon`)별 자체 카테고리 반환 구현 (검/활 ID 범위 판별)
+  - 상점 및 교역소 프레젠터/전략 클래스(`StandardShopModeStrategy`, `BidPresenter`, `CustomerListPresenter`, `ShopItemGridPresenter`, `TradingPostService`)에서 `ItemIdHelper.GetCategory` 및 `is Weapon` 패턴 매칭을 `item.Category` 기반으로 교체
+
+## 2026-11-03
+
+- 손님그룹(CustomerGroup) 기본 시스템 및 1~10번 데이터 구축
+  - `SO_CustomerGroup` 및 `SO_CustomerGroupDatabase` 데이터 모델 설계
+  - 1~10번 손님그룹(초보 모험가, 왕실 기사, 베테랑 용병, 유랑 상인, 마법학자, 보급관, 귀족, 중견 모험가, 사냥꾼, 수집가) 에셋 생성 (각 10명 고유 이름 및 단계별 50문장 대사 작성)
+  - `CustomerData` 런타임 손님 인스턴스 생성 및 흥정(`Bargain`) 인내심 감소/제안가 산출 로직 구현
+  - 손님그룹 에셋 어드레서블 그룹 등록 및 `ItemIdHelper.CustomerGroup` 카테고리 ID(8) 추가
+- 상점 인터페이스 및 타이머 구조 개선
+  - 타이머가 필요한 상점 모드를 위해 `ITimedShopMode` 인터페이스 분리 (`TimerPrefix`, `RemainingTime`)
+  - `IItemShopFactory` 인터페이스 네임스페이스 및 디렉토리 위치 정리
+
+## 2026-11-02
+
+- 교역소 흥정(Bargain) 등록 상세 모달 UI 구현
+  - 등록할 아이템의 수량, 희망 가격, 마진율을 조절하는 팝업 UI 및 프레젠터(`BargainRegisterItemDetailView`, `BargainRegisterItemDetailPresenter`) 구현
+  - 아이템 등록 시 발생하는 `RegisterBargainItemEvent` 정의 및 MessagePipe 연동
+  - 모달 오픈 시 뒷배경 딤드 처리(`UIBackPanelPresenter`) 연동
+  - VContainer DI 컨테이너에 신규 뷰 및 프레젠터 등록
+
+## 2026-11-01
+
+- 교역소(TradingPost) 경매 입찰 및 정산 시스템 구현
+  - `TradingPostService`의 입찰 로직
+    - 기존 플레이어 누적 입찰액을 추적하여 차액만 차감하도록 처리
+    - 최고 입찰자가 본인인 경우 추가 지출 없이 입찰 갱신 가능하도록 개선
+  - 경매 종료 후 낙찰 정산 로직 구현
+    - 최종 낙찰자가 플레이어일 경우 이벤트 발행으로 인벤토리 즉각 수령 연동
+    - 패찰 시 기존 입찰 누적금을 전액 플레이어 잔고로 환급 처리
+- 교역소 흥정(Bargain) 물품 등록 UI 및 프레젠터 구현
+  - 플레이어가 소지한 장비/재료/룬을 교역소에 등록할 수 있는 UI 제작 (`BargainItemGridView`, `BargainRegisterItemView`)
+  - `ObjectPool<BargainRegisterItemView>`을 활용한 카드 슬롯 재사용 및 GC Alloc 방지
+  - 카테고리 전환(무기/재료/룬) 기능 및 인벤토리 실시간 조회 연동
+  - 복수 선택 체크박스 토글 및 일괄 등록 연동 (`TradingPostService.RegisterBargainItems`)
+- 버그 수정 및 최적화
+  - 런타임 동적 생성 슬롯 프리팹(`BargainRegisterItemView`)이 씬 바인딩(`RegisterComponentInHierarchy`)에 등록되어 발생하던 VContainer 예외 해결
+  - `IReadOnlyCollection<Weapon>` 인덱서 접근 불가에 따른 순회 방식 수정
+
+## 2026-10-31
+
+- 상점 아이템 묶음(번들) 수량과 일반 재고 수량 분리
+  - 잡화점 등 일반 상점에서 재고가 많을 때 번들 아이템처럼 표시되던 문제 수정
+  - 번들 수량과 재고를 분리하여 경매 같은 묶음 판매 상품에만 번들 표기가 뜨도록 변경
+- 상점 모드 전략 구조 개선
+  - `ShopItemGridPresenter`에서 구체 전략 클래스를 직접 검사하던 분기 로직 제거
+  - 새로고침, 판매 등록 등 상점별 부가 기능을 위한 인터페이스 분리 (`IRefreshableShopMode`, `IItemRegisterableShopMode`)
+- 상점별 자동 재입고 타이머 구현
+  - `ShopService`에서 상점 종류별로 독립된 재입고 시간을 관리하도록 추가
+    - 앱을 끄거나 백그라운드로 나가도 남은 시간이 정상 유지되도록 처리
+  - `SO_ShopData`에서 상점마다 재입고 주기를 개별 설정할 수 있게 지원
+  - 상점 그리드 UI에 새로고침 버튼 및 타이머 텍스트 연동
+  - 상점 창이 열려 있을 때만 타이머가 돌도록 수명 주기 연결
+- 버그 수정
+  - 상점을 열 때마다 재입고 타이머가 리셋되던 문제
+    - 상점 진열 로드와 새로고침 로직을 분리하여 쿨다운이 끝났을 때만 재입고되도록 수정
+  - 첫 장비 상점 입장 시 물품이 비어있던 문제
+    - 입고 데이터가 비어있을 경우 즉시 채워지도록 방어 로직 추가
+  - 상점에 한 번도 들어가지 않으면 타이머가 작동하지 않던 문제
+    - 게임 시작 시 상점 데이터를 사전 초기화하여 즉시 타이머가 작동하도록 처리
+
+## 2026-10-30
+
+- 기존 지저분해지던 StandardShop, Bid, Bargain 관련 분류 코드를 정리하고자 전략패턴을 더욱 강화
+  - 기존 `IInteractionStrategy`에서 `IShopMode`로 승격
+  - 상점 아이템 디스플레이 관련 기능을 추가하여 Presenter의 과도한 책임을 전략으로 분리
+  - GC 최적화를 위해 버퍼를 매개변수로 받아 반환하도록 처리
+- 교역소 경매 출품 시스템 구현 및 고도화
+  - 출품 개수(6~10개) 및 시작가 비율(2~40%) 산정 로직 구현
+  - 재료 단가에 반비례한 묶음 수량(1~200개) 동적 산출 로직 구현
+  - 현재 제작 브랜치에서 부족한 재료와 상위 티어 재료의 가중치를 소폭 높여 자연스럽게 등장하도록 유도
+- 플레이어 진행도 평가 시스템 모듈화
+  - 룬, 재료, 무기, 골드 보유량을 바탕으로 플레이어 진행 단계를 종합 산출하는 서비스 구현
+  - 하드코딩을 방지하고 밸런싱 편의를 위해 설정값을 SO(`SO_ProgressionSettings`)로 분리
+  - 1점 단위의 `ulong` 점수 체계를 적용하고 극소수 헤비 유저에 의해 통계가 왜곡되지 않도록 설계
+- 상점 카테고리 데이터 관리 개선
+  - `SO_ShopCategory` 내부의 하드코딩 `switch`문을 전면 제거
+  - `SO_ShopCategoryEditor`에 카테고리별 DB 아이템 일괄 등록 기능을 추가하여 에셋 데이터 기반으로 유지보수하도록 개선
+- 상점/교역소 아이템 묶음 수량 표시
+  - 복수 묶음 아이템인 경우 이름 옆에 `(x99)` 형태로 수량을 표시하도록 뷰/프리젠터 연동
+  - 추후 프리팹 카드 개편을 대비해 아이콘 하단 수량 텍스트 기능도 함께 선구현 (Null-safe)
+- 버그 수정
+  - 시작가로 최초 입찰 시 골드만 빠지고 상위 입찰자가 갱신되지 않는 문제
+    - `TradingPostService.Bid`에서 입찰자가 비어있는 경우 시작가 이상(`>=`)이 아닌 초과(`>`)만 비교하던 조건 수정
+  - 상점/경매에 출품된 무기의 기본 가격이 0원으로 나오던 문제
+    - `Weapon` 생성자에서 `_basePrice` 초기화 누락 수정
+  - 재료 묶음 수량이 1개로 고정되던 문제
+    - `MaterialShopItem.Count` 프로퍼티가 전달받은 묶음 수량을 반환하지 않던 버그 수정
+  - 입찰 팝업 오픈 시 입찰가가 0원으로 초기화되던 문제
+    - 스프라이트 비동기 로드 대기 전에 타겟 ID가 세팅되지 않아 발생하던 타이밍 버그 수정
+
+_추가로 Adobe 구독 비용이 너무 많다 여겨 GIMP를 써보고자 여러가지 플러그인이랑 AI 모델을 덧붙이는 중이다... 확실히 시간도 돈이구나 싶다_
+
+## 2026-10-27
+
+- 판매 버튼을 누를 시 흥정 세션으로 넘어가는 로직 구현
+- 판매 등록용 이미지 추가
+- 판매 세션에서 각 Item view를 기존 `ShopItemView`와 분리
+  - 해당 View의 버튼을 제거하고 View의 Rect 자체를 버튼으로 취급하여 사용
+  - 클릭시 구매 신청 리스트를 띄움
+
+## 2026-10-26
+
+- 입찰 시 플레이어의 골드가 차감되도록 수정
+  - 정산 시 획득하지 못한 경우 골드를 상환 할 것
+- 판매(흥정)사이드의 UI 디자인
+  - 구매 신청자 리스트 UI
+  - 구매 신청자와 흥정하는 UI
+
+## 2026-10-25
+
+- `ObservableCollections`라이브러리 추가
+  - `ObservableDictionary`등 옵저버형 콜렉션을 지원하기 위함
+  - `Subject`를 이용하여 수동 구현해도 되지만 라이브러리 사용이 Zero-Allocation인 등 이점이 많음
+- `BidContext` 클래스 추가
+  - 경매 입찰가 데이터로 bidder와 price만이 들어가는 가벼운 구조.
+- `TradingPostService`에 로직 추가
+  - 경매에 올라온 물품의 최고 입찰가를 기록하는 uint, BidContext 쌍의 ObservableDictionary를 추가
+    - Add, Remove, Clear 지원
+  - 입찰 함수 추가
+    - 입찰이 없거나 기존 입찰가보다 높은 경우에만 추가됨
+- 버그 수정
+  - 룬 장착·합성시 NPC의 이름이 출력되지 않던 문제
+  - 룬 합성 완료 대사가 즉시 변경되는 문제
+  - 룬 장착·합성 슬롯에서 룬을 해제해도 대사가 변경되지 않던 문제
+
+## 2026-10-24
+
+- 캐릭터 스탠딩 이미지 4종 추가
+  - 포르테
+  - 멜리아
+  - 호룬
+  - 코르크
+- 교역소장 코르크 데이터 일부 수정
+  - 경매장 주인 -> 교역소장
+  - Auction 키워드 -> TradingPost로 변경
+- `TradingPost`를 위한 하위 Presenter와 View, Service 작성
+  - `BidView` 작성
+  - `BidPresenter` 작성
+    - `IShopItem`을 인자로 받아 모든 아이템에 대응하게끔 작성
+    - 버튼을 통한 가격 변동은 점진적으로 델타값이 커지게끔 설정(log10)
+- `ChangeMoneyEvent` 제거
+  - 기존에 여기저기 뿔뿔이 흩어져 있던 money관련 변수를 `PlayerData` 내의 `ReactiveProperty`로 통합
+    - `ChangeMoneyEvent`나 각 서비스 로직에서 개별적으로 사용하던 돈 관련 로직을 통합
+- `ShopItemGridPresenter`에 있던 아이템 선택 로직을 `IItemInteractionStrategy`을 이용하여 전략패턴으로 리팩토링하여 상점별 다르게 대응
+  - 기존에 사용하던 로직은 `ShopCartInteractionStrategy`로 분리
+  - 교역소에서 아이템을 구매하는 경매 해동은 `TradingPostBidInteractionStrategy`로 추가
+  - 후에 `TradingPostNegotiationInteractionStrategy`로 추가할 것
 
 ## 2026-10-23
 

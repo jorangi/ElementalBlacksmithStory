@@ -184,7 +184,8 @@ namespace ElementalBlacksmithStory.UI
                     else
                         itemView.SetIcon(sprite);
                     itemView.OnClickAsObservable()
-                        .Subscribe(_ => _onMaterialClickSubject.OnNext((material.Id, itemView.MaterialCount, itemView)))
+                        .Subscribe((this, material.Id, itemView), static (_, state) =>
+                            state.Item1._onMaterialClickSubject.OnNext((state.Id, state.itemView.MaterialCount, state.itemView)))
                         .AddTo(_itemDisposables);
                 }
             }
@@ -230,7 +231,8 @@ namespace ElementalBlacksmithStory.UI
                     itemView.SetIcon(sprite);
                 }
                 itemView.OnClickAsObservable()
-                    .Subscribe(_ => _onMaterialClickSubject.OnNext((material.Id, itemView.MaterialCount, itemView)))
+                    .Subscribe((this, material.Id, itemView), static (_, state) =>
+                        state.Item1._onMaterialClickSubject.OnNext((state.Id, state.itemView.MaterialCount, state.itemView)))
                     .AddTo(_itemDisposables);
             }
         }
