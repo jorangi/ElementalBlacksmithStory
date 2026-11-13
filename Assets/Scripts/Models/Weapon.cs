@@ -55,6 +55,69 @@ namespace ElementalBlacksmithStory.Core
 
         uint IShopItem.Count => 1;
         public ShopItemCategory Category => (WeaponId >= 11000 && WeaponId <= 11999) ? ShopItemCategory.Bow : ShopItemCategory.Sword;
+        private static readonly int StatTypeCount = Enum.GetValues(typeof(StatType)).Length;
+        private readonly Stat[] _stats = new Stat[StatTypeCount];
+        public IReadOnlyList<Stat> Stats => _stats;
+
+
+        /// <summary>
+        /// 무기 데이터의 기본 스탯으로 Stat 배열 초기화
+        /// </summary>
+        private void InitStats()
+        {
+            var empty = Array.Empty<StatModifier>();
+            for (int i = 0; i < StatTypeCount; i++)
+            {
+                float baseVal = _weaponData != null ? _weaponData.GetBaseStat((StatType)i) : 0f;
+                _stats[i] = new Stat(baseVal, empty);
+            }
+        }
+
+        /// <summary>
+        /// 현재 무기 데이터의 기본 스탯으로 기존 Stat의 BaseValue 동기화
+        /// </summary>
+        private void SyncBaseStats()
+        {
+            for (int i = 0; i < StatTypeCount; i++)
+            {
+                float baseVal = _weaponData != null ? _weaponData.GetBaseStat((StatType)i) : 0f;
+                _stats[i].SetBaseValue(baseVal);
+            }
+        }
+        /// <summary>
+        /// 스탯 값을 조회하는 함수
+        /// </summary>
+        /// <param name="statType"></param>
+        /// <returns></returns>
+        public float GetStatValue(StatType statType)
+        {
+            int idx = (int)statType;
+            if (idx < 0 || idx >= StatTypeCount) return 0f;
+            return _stats[idx].Value;
+        }
+        /// <summary>
+        /// 스탯을 조회하는 함수
+        /// </summary>
+        /// <param name="statType"></param>
+        /// <returns></returns>
+        public Stat GetStat(StatType statType)
+        {
+            int idx = (int)statType;
+            if (idx < 0 || idx >= StatTypeCount) return null;
+            return _stats[idx];
+        }
+        /// <summary>
+        /// 스탯 모디파이어를 추가하는 함수
+        /// </summary>
+        /// <param name="statType"></param>
+        /// <param name="modifier"></param>
+        /// <returns></returns>
+        public ModifierHandle AddStatModifier(StatType statType, StatModifier modifier)
+        {
+            int idx = (int)statType;
+            if (idx < 0 || idx >= StatTypeCount) return default;
+            return _stats[idx].AddModifier(modifier);
+        }
         private Weapon(WeaponSaveData saveData, SO_WeaponData weaponData, SO_WeaponData baseWeaponData)
         {
             _id = saveData.InstanceId;
@@ -75,6 +138,7 @@ namespace ElementalBlacksmithStory.Core
                     _enhanceHistory.Push(new EnhanceStep(step.WeaponId, step.AddedBasePrice, step.Cost));
                 }
             }
+            InitStats();
         }
         public void OnPurchased(IInventoryContext context, uint amount)
         {
@@ -134,6 +198,7 @@ namespace ElementalBlacksmithStory.Core
             _baseWeaponData = weaponData;
             _cost = weaponData != null ? weaponData.cost : 0;
             _basePrice = weaponData != null ? weaponData.basePrice : 0;
+            InitStats();
         }
         /// <summary>
         /// SO 데이터 설정
@@ -142,6 +207,7 @@ namespace ElementalBlacksmithStory.Core
         public void SetData(SO_WeaponData weaponData)
         {
             _weaponData = weaponData;
+            SyncBaseStats();
         }
         /// <summary>
         /// 기본 가격 설정

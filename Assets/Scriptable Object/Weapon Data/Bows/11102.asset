@@ -13,8 +13,11 @@ MonoBehaviour:
   m_Name: 11102
   m_EditorClassIdentifier: Assembly-CSharp::SO_WeaponData
   weaponName: "\uC5F4\uAE30\uC758 \uD06C\uB9BC\uC2A8 \uBCF4\uC6B0"
-  atk: 2
-  ats: 1
+  baseStats:
+  - StatType: 1
+    Value: 2
+  - StatType: 2
+    Value: 1
   cost: 3900
   recipes:
   - {fileID: 11400000, guid: a5fc2c9b96ab0da4e90632fe31e7c7f7, type: 2}

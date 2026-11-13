@@ -8,6 +8,7 @@ namespace ElementalBlacksmithStory.Data
     }
     public class StatModifier
     {
+        public uint Id { get; set; }
         public StatType Type { get; private set; }
         public StatModifierType ModifierType { get; private set; }
         public float Value { get; private set; }

@@ -13,8 +13,7 @@ namespace ElementalBlacksmithStory.Editor
     public class SO_WeaponDataEditor : UnityEditor.Editor
     {
         private SerializedProperty _weaponNameProp;
-        private SerializedProperty _atkProp;
-        private SerializedProperty _atsProp;
+        private SerializedProperty _baseStatsProp;
         private SerializedProperty _costProp;
         private SerializedProperty _recipesProp;
         private SerializedProperty _hideOutlineProp;
@@ -30,8 +29,7 @@ namespace ElementalBlacksmithStory.Editor
         private void OnEnable()
         {
             _weaponNameProp = serializedObject.FindProperty("weaponName");
-            _atkProp = serializedObject.FindProperty("atk");
-            _atsProp = serializedObject.FindProperty("ats");
+            _baseStatsProp = serializedObject.FindProperty("baseStats");
             _costProp = serializedObject.FindProperty("cost");
             _recipesProp = serializedObject.FindProperty("recipes");
             _hideOutlineProp = serializedObject.FindProperty("hideOutline");
@@ -118,7 +116,7 @@ namespace ElementalBlacksmithStory.Editor
 
                 if (weapon != null)
                 {
-                    EditorGUILayout.LabelField($"기본 제작비: {weapon.cost:N0} Gold | 기본 판매가: {weapon.basePrice:N0} Gold | ATK: {weapon.atk} | ATS: {weapon.ats}", EditorStyles.miniLabel);
+                    EditorGUILayout.LabelField($"기본 제작비: {weapon.cost:N0} Gold | 기본 판매가: {weapon.basePrice:N0} Gold | ATK: {weapon.GetBaseStat(StatType.ATK)} | ATS: {weapon.GetBaseStat(StatType.ATS)}", EditorStyles.miniLabel);
                 }
             }
 
@@ -129,8 +127,7 @@ namespace ElementalBlacksmithStory.Editor
             using (new EditorGUILayout.VerticalScope(EditorStyles.helpBox))
             {
                 EditorGUILayout.PropertyField(_weaponNameProp, new GUIContent("무기 이름"));
-                EditorGUILayout.PropertyField(_atkProp, new GUIContent("공격력 (ATK)"));
-                EditorGUILayout.PropertyField(_atsProp, new GUIContent("공격속도 (ATS)"));
+                EditorGUILayout.PropertyField(_baseStatsProp, new GUIContent("기본 스탯 (BaseStats)"), true);
                 EditorGUILayout.PropertyField(_costProp, new GUIContent("제작비 (Cost)"));
                 EditorGUILayout.PropertyField(_hideOutlineProp, new GUIContent("외곽선 숨김"));
                 EditorGUILayout.PropertyField(_elementTypesProp, new GUIContent("속성"), true);

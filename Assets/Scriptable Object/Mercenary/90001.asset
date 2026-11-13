@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b5e051bc0cc23e4094b6156ebf21b14, type: 3}
+  m_Name: 90001
+  m_EditorClassIdentifier: Assembly-CSharp::ElementalBlacksmithStory.Data.SO_Mercenary
+  MercName: "\uB2F9\uC2E0\uC758 \uD615, \uD3EC\uB974\uD14C"
+  Description: "\uBE44\uB85D \uC6A9\uC0AC\uB85C\uC11C\uC758 \uC7AC\uB2A5\uC774 \uC788\uB294
+    \uD3B8\uC740 \uC544\uB2C8\uC9C0\uB9CC \uADF8\uC758 \uC120\uD568\uC740 \uC5ED\uB300
+    \uC6A9\uC0AC \uD6C4\uBCF4\uB77C \uBD88\uB9B0 \uC790\uB4E4\uC5D0 \uBE44\uACAC\uD560
+    \uBC14 \uB418\uC9C0 \uBABB\uD55C\uB2E4.\n\uADF8\uB294 \uC790\uC2E0\uC758 \uBA85\uC608\uB098
+    \uC7AC\uBB3C \uB4F1\uC744 \uC77C\uC808 \uD0D0\uD558\uC9C0 \uC54A\uACE0 \uC138\uACC4\uC758
+    \uC548\uC704\uC640 \uC5B4\uB824\uC6C0\uC5D0 \uCC98\uD55C \uC790\uB4E4\uC744 \uB3D5\uB294
+    \uB370\uC5D0 \uAC00\uC7A5 \uB9CE\uC740 \uD798\uC744 \uC3DF\uACE0 \uC788\uB2E4."
+  WeaponType: 15
+  StandingImage: {fileID: 21300000, guid: 31e7a8e6ad20cf249958ed11314717be, type: 3}
+  BaseStats:
+  - StatType: 0
+    Value: 100
+  - StatType: 1
+    Value: 12
+  - StatType: 2
+    Value: 0.8
+  - StatType: 3
+    Value: 12
+  - StatType: 4
+    Value: 10
+  - StatType: 6
+    Value: 3
+  - StatType: 7
+    Value: 4

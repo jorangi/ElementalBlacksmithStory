@@ -7,12 +7,12 @@ using UnityEditor.AddressableAssets;
 
 namespace ElementalBlacksmithStory.Data
 {
-    public interface IReadOnlyNPCData: IIdentifiable
+    public interface IReadOnlyNPCData : IIdentifiable
     {
-        string NpcName {get;}
-        string NpcFriendlyName {get;}
-        IReadOnlyList<SO_DialogueData> Dialogues {get;}
-        IReadOnlyList<uint> PreferGift {get;}
+        string NpcName { get; }
+        string NpcFriendlyName { get; }
+        IReadOnlyList<SO_DialogueData> Dialogues { get; }
+        IReadOnlyList<uint> PreferGift { get; }
     }
     /// <summary>
     /// NPC 데이터
@@ -32,15 +32,15 @@ namespace ElementalBlacksmithStory.Data
         [TextArea(5, 30)]
         public string memo;
 
-        
-        #if UNITY_EDITOR
+
+#if UNITY_EDITOR
         [ContextMenu("ID 기반 대사 자동 등록")]
         private void AutoLinkDialogue()
         {
             string npcId = Id.ToString().Substring(2, 3);
             Debug.Log(npcId);
             var setting = AddressableAssetSettingsDefaultObject.Settings;
-            if(setting == null)
+            if (setting == null)
             {
                 Debug.LogError("[SO_DialogueData] AddressablesSettings를 찾을 수 없습니다.");
                 return;
@@ -48,28 +48,28 @@ namespace ElementalBlacksmithStory.Data
             dialogues.Clear();
             string[] guids = AssetDatabase.FindAssets($"6{npcId}* t:SO_DialogueData");
 
-            foreach(var guid in guids)
+            foreach (var guid in guids)
             {
                 string path = AssetDatabase.GUIDToAssetPath(guid);
                 string cleanedAddress = System.IO.Path.GetFileNameWithoutExtension(path);
                 var targetGroup = setting.FindGroup("DialogueData");
-                if(targetGroup == null)
+                if (targetGroup == null)
                 {
                     targetGroup = setting.CreateGroup(
                         "DialogueData",
-                        setAsDefaultGroup:false,
-                        readOnly:false,
-                        postEvent:true,
-                        schemasToCopy:setting.DefaultGroup.Schemas
+                        setAsDefaultGroup: false,
+                        readOnly: false,
+                        postEvent: true,
+                        schemasToCopy: setting.DefaultGroup.Schemas
                     );
                 }
                 var entry = setting.CreateOrMoveEntry(guid, targetGroup);
-                if(entry != null)
+                if (entry != null)
                 {
                     entry.SetAddress(cleanedAddress);
                 }
                 var dialogue = AssetDatabase.LoadAssetAtPath<SO_DialogueData>(path);
-                if(dialogue != null)
+                if (dialogue != null)
                 {
                     dialogues.Add(dialogue);
                 }
@@ -80,6 +80,6 @@ namespace ElementalBlacksmithStory.Data
             }
             Debug.Log($"[SO_NPCData] 총 {dialogues.Count}개의 대사 데이터를 등록했습니다.");
         }
-        #endif
+#endif
     }
 }

@@ -14,9 +14,18 @@ namespace ElementalBlacksmithStory.Data
     {
         [Header("무기 기본 정보")]
         public string weaponName;
-        public float atk;
-        public float ats;
+        public List<BaseStat> baseStats = new();
         public ulong cost;
+
+        public float GetBaseStat(StatType statType)
+        {
+            for (int i = 0; i < baseStats.Count; i++)
+            {
+                if (baseStats[i].StatType == statType)
+                    return baseStats[i].Value;
+            }
+            return 0f;
+        }
         [Header("레시피 목록")]
         public List<SO_CraftRecipe> recipes;
         [Header("외곽선 숨김 여부")]

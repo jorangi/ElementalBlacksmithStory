@@ -24,6 +24,7 @@ namespace ElementalBlacksmithStory.Data
         public Observable<uint> OnTradePriceChanged => _onTradePriceChangedSubject;
         private readonly IPublisher<PlaySoundEvent> _soundPublisher;
         private readonly IPublisher<CoinParticleEvent> _coinParticlePublisher;
+        private readonly List<MercenaryData> _ownedMercenaries = new();
 
         /// <summary>
         /// 소지금
@@ -149,6 +150,35 @@ namespace ElementalBlacksmithStory.Data
                 return (record.HighestPrice, record.LowestPrice, record.AveragePrice);
             }
             return (0, 0, 0);
+        }
+        public bool AddMercenary(MercenaryData data)
+        {
+            if (data == null)
+            {
+                Debug.LogWarning($"[PlayerData] 용병 데이터가 존재하지 않습니다.");
+                return false;
+            }
+            if (!_ownedMercenaries.Contains(data))
+            {
+                _ownedMercenaries.Add(data);
+                Debug.Log($"[PlayerData]<{data.Id}>'{data.Name}'을 획득했습니다.");
+                return true;
+            }
+            Debug.Log($"[PlayerData]<{data.Id}>'{data.Name}'가 이미 있습니다.");
+            return false;
+        }
+        public MercenaryData GetMercenary(uint id)
+        {
+            for (int i = 0; i < _ownedMercenaries.Count; i++)
+            {
+                var data = _ownedMercenaries[i];
+                if (data.Id == id)
+                {
+                    return data;
+                }
+            }
+            Debug.LogWarning($"[PlayerData]<{id}>용병이 없습니다");
+            return null;
         }
         public void Dispose()
         {

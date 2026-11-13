@@ -15,7 +15,7 @@ namespace ElementalBlacksmithStory.Data
         /// <summary>
         /// 대사 내 삼항 연산 조건문({cond ? true : false}), {key} 플레이스홀더, 한국어 조사(A/B)를 연쇄적으로 처리하여 반환합니다.
         /// </summary>
-        public string GetFormattedText(IReadOnlyDictionary<string, object> parameters)
+        public readonly string GetFormattedText(IReadOnlyDictionary<string, object> parameters)
         {
             if (string.IsNullOrEmpty(text)) return string.Empty;
             if (!text.Contains('{')) return KoreanJosaHelper.ResolveJosa(text);

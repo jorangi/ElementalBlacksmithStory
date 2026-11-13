@@ -2,6 +2,39 @@
 
 > Elemental Blacksmith Story 프로젝트의 일자별 개발 일지 및 주요 변경 사항 기록입니다.
 
+## 2026-11-13
+
+- 용병 및 장비의 스탯 필드를 구조체 기반 리스트로 교체
+  - 기존 데이터 마이그레이션 작업 완료
+  - 외부에서 해당 스탯을 참조하던 것들도 마이그레이션 완료
+  - 스탯의 기본값 조회용 메서드 추가
+  - 무기의 기존 float 기반 스탯을 `Stat`으로 변경
+  - 런타임 데이터에는 모든 스탯을 배열로 추가하여 enum과 int로 배열 파싱 가능하게 작성
+- 테스트 자동화(CLI 및 TestRunner)를 위해 작업시작
+  - `TestManager` 작성
+    - 다만, 이것은 테스트 자동화 과정으로 변경할 것이라 더미 데이터이자 삭제 예정임.
+  - asmdef 파일 추가
+  - 기존 외부 라이브러리를 참조하도록 적용
+  - `MainAction`을 Scripts 폴더로 이동
+
+## 2026-11-12
+
+- 용병 이미지 추가
+- 용병 런타임 데이터 작성 `MercenaryData`
+- 스탯 모디파이어 수정
+  - 각 모디파이어를 관리(및 Dispose)하기 위해 `ModifierHandle` 추가
+- 새로운 스탯 추가
+  - Mag: 마력, Def: 방어력, Spd: 이동속도
+
+## 2026-11-10
+
+- 용병 데이터(SO) 작성
+- StatModifier 심화
+  - ModifierHandle 추가: Dispose용
+- Stat 작성
+- StatType 추가
+- UIButtonSound의 Inject를 Construct로 안전하게 주입
+
 ## 2026-11-09
 
 - 교역소 대화 UI 연동

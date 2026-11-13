@@ -1,8 +1,9 @@
+using ElementalBlacksmithStory.Events;
+using MessagePipe;
 using UnityEngine;
 using UnityEngine.UI;
 using VContainer;
-using MessagePipe;
-using ElementalBlacksmithStory.Events;
+using VContainer.Unity;
 
 namespace ElementalBlacksmithStory.UI
 {
@@ -11,10 +12,14 @@ namespace ElementalBlacksmithStory.UI
     {
         [SerializeField] private uint _soundId = 40106;
         [SerializeField] private bool _autoBindOnClick = true;
-
-        [Inject] private readonly IPublisher<PlaySoundEvent> _sfxPublisher;
+        private IPublisher<PlaySoundEvent> _sfxPublisher;
         private Button _button;
 
+        [Inject]
+        public void Construct(IPublisher<PlaySoundEvent> sfxPublisher)
+        {
+            _sfxPublisher = sfxPublisher;
+        }
         private void Awake()
         {
             _button = GetComponent<Button>();
