@@ -1,0 +1,54 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Mercenary
+  m_EditorClassIdentifier: Unity.Addressables.Editor::UnityEditor.AddressableAssets.Settings.AddressableAssetGroup
+  m_GroupName: Mercenary
+  m_GUID: 81eb60e0e01fec3499f7047d67bab46c
+  m_SerializeEntries:
+  - m_GUID: 033a92d95717bb446b6f1f909dee0d21
+    m_Address: 90002
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 08b00284379a51548a08b8b3b250ea54
+    m_Address: 90004
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1ed9e0dd1285126429a03b2001ffe5bc
+    m_Address: 90001
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5eba9fb5c177ba244806a36efed02d45
+    m_Address: 90005
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: cb48a035b9b421b45a5c863175e50e54
+    m_Address: 90003
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ff5b126cf11e97744b9638be9d248a49
+    m_Address: 90000
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: 0acc7c10e12a237469b3b620e2da354b, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: b137bddba5649c34bb7713abfd5b1361, type: 2}
+    - {fileID: 11400000, guid: ab477c6498d5191409269bcea6660bb7, type: 2}
+    - {fileID: 11400000, guid: cd695da975cc11443857de7ac1f1789e, type: 2}

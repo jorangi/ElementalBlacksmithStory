@@ -1,6 +1,6 @@
 {
     "name": "ElementalBlacksmithStory",
-    "rootNamespace": "",
+    "rootNamespace": "ElementalBlacksmithStory",
     "references": [
         "GUID:f51ebe6a0ceec4240a699833d6309b23",
         "GUID:77221876cc6b8244180b96e320b1bcd4",
@@ -15,8 +15,8 @@
         "GUID:33661e06c33d31b4c9223810bf503247",
         "GUID:a25f8e99c4faa4b4a8c38f41a406f5d3",
         "GUID:3aa1866a824b5472da50fe142777d95f",
-        "GUID:69448af7b92c7f342b298e06a37122aa",
-        "GUID:4f682e06dbb3e624faedad9cc27106cc"
+        "GUID:4f682e06dbb3e624faedad9cc27106cc",
+        "GUID:69448af7b92c7f342b298e06a37122aa"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

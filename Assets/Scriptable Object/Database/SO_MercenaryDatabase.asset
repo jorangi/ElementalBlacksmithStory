@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b665d21fc62b60b45a6f4de23960c794, type: 3}
+  m_Name: SO_MercenaryDatabase
+  m_EditorClassIdentifier: ElementalBlacksmithStory::ElementalBlacksmithStory.Data.SO_MercenaryDatabase
+  _itemList:
+  - {fileID: 11400000, guid: ff5b126cf11e97744b9638be9d248a49, type: 2}
+  - {fileID: 11400000, guid: 1ed9e0dd1285126429a03b2001ffe5bc, type: 2}
+  - {fileID: 11400000, guid: 033a92d95717bb446b6f1f909dee0d21, type: 2}
+  - {fileID: 11400000, guid: cb48a035b9b421b45a5c863175e50e54, type: 2}
+  - {fileID: 11400000, guid: 08b00284379a51548a08b8b3b250ea54, type: 2}
+  - {fileID: 11400000, guid: 5eba9fb5c177ba244806a36efed02d45, type: 2}

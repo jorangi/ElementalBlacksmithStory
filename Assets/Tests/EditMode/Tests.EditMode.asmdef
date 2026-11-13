@@ -2,12 +2,13 @@
     "name": "Tests.EditMode",
     "rootNamespace": "",
     "references": [
-        "GUID:4002236540197024a996b9849b2d98f2"
+        "GUID:4002236540197024a996b9849b2d98f2",
+        "GUID:08b38f39e2d9e594389b7a4cf4c2c338"
     ],
-    "includePlatforms": [],
-    "excludePlatforms": [
+    "includePlatforms": [
         "Editor"
     ],
+    "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": true,
     "precompiledReferences": [

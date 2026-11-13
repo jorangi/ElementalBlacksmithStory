@@ -30,7 +30,7 @@ MonoBehaviour:
     version: 2
     RefIds:
     - rid: 700730040001
-      type: {class: PlunderAttackEffect, ns: ElementalBlacksmithStory.Effect, asm: Assembly-CSharp}
+      type: {class: PlunderAttackEffect, ns: ElementalBlacksmithStory.Effect, asm: ElementalBlacksmithStory}
       data:
         goldPerDamage: 0.04
         chance: 30

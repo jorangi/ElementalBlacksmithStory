@@ -10,7 +10,15 @@ namespace ElementalBlacksmithStory.Data
     {
         private readonly SO_Mercenary _baseData;
         public uint Id => _baseData.Id;
-        public string Name => _baseData.name;
+        public string Name => _baseData.MercName;
+
+        [Header("기본 데이터")]
+        private readonly int _level = 1;
+        public int Level { get => _level; }
+        private readonly int _exp = 0;
+        public int Exp { get => _exp; }
+        private readonly int _maxExp = 1;
+        public int MaxExp { get => _maxExp; }
 
         [Header("스탯 데이터")]
         private static readonly int StatTypeCount = Enum.GetValues(typeof(StatType)).Length;
@@ -22,14 +30,9 @@ namespace ElementalBlacksmithStory.Data
         [Header("스킬 데이터")]
         private readonly List<SkillData> _skills = new();
 
-        [Header("인벤토리 데이터")]
-        private EquipmentInventory _eqiupmentInventory;
-        private ConsumableInventory _consumableInventory;
-        private MaterialInventory _materialInventory;
-        private RuneInventory _runeInventory;
-
         [Header("장비 데이터")]
         private Weapon _weapon;
+        public uint WeaponId => _weapon.WeaponId;
         //추후 방어구나 장신구 등이 추가될 수 있음
         public MercenaryData(SO_Mercenary baseData, Weapon weapon = null, IReadOnlyDictionary<StatType, IReadOnlyList<StatModifier>> modifiers = null)
         {

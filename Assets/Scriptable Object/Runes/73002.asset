@@ -24,7 +24,7 @@ MonoBehaviour:
     version: 2
     RefIds:
     - rid: 700730020001
-      type: {class: StatModifierEffect, ns: ElementalBlacksmithStory.Effect, asm: Assembly-CSharp}
+      type: {class: StatModifierEffect, ns: ElementalBlacksmithStory.Effect, asm: ElementalBlacksmithStory}
       data:
         statType: 0
         statModifierType: 2

@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace ElementalBlacksmithStory.Data
 {
-    [CreateAssetMenu(fileName = "SO_MercenaryDatabase", menuName = "ScriptableObjects/Database/SO_MercenaryDatabase")]
+    [CreateAssetMenu(fileName = "SO_MercenaryDatabase", menuName = "Scriptable Objects/Database/SO_MercenaryDatabase")]
     public class SO_MercenaryDatabase : SO_BaseDatabase<SO_Mercenary>
     {
         public IReadOnlyList<SO_Mercenary> GetAll() => _itemList;

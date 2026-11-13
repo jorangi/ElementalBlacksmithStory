@@ -285,6 +285,7 @@ namespace ElementalBlacksmithStory.Core
             }
             unequippedRune = _runes[socketIndex];
             _runes[socketIndex] = rune;
+
             _onRuneChanged.OnNext((socketIndex, rune));
         }
 
