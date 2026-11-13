@@ -25,6 +25,7 @@
 - 용병의 정보를 확인할 수 있는 UI 연결
   - `MercenaryInfoPresenter` 추가
   - `MercenaryInfoView` 추가
+- 장신구, 소모품, 방어구 등 이미지 추가
 
 ## 2026-11-12
 

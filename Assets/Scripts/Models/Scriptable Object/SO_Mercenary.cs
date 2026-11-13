@@ -18,8 +18,10 @@ namespace ElementalBlacksmithStory.Data
     {
         public uint Id => uint.Parse(name);
 
+
         [Header("용병 기본 데이터")]
         public string MercName;
+        public uint SpriteId;
         [TextArea(3, 5)]
         public string Description;
         public WeaponType WeaponType;

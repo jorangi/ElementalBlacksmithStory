@@ -10,6 +10,7 @@ namespace ElementalBlacksmithStory.Data
     {
         private readonly SO_Mercenary _baseData;
         public uint Id => _baseData.Id;
+        public uint SpriteId => _baseData.SpriteId;
         public string Name => _baseData.MercName;
 
         [Header("기본 데이터")]

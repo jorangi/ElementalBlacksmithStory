@@ -11,6 +11,7 @@ namespace ElementalBlacksmithStory.Core
         [SerializeField] private SO_MaterialDatabase materialDatabase;
         [SerializeField] private SO_RuneDatabase runeDatabase;
         [SerializeField] private SO_CustomerGroupDatabase customerGroupDatabase;
+        [SerializeField] private SO_MercenaryDatabase mercenaryDatabase;
         [SerializeField] private SO_SpriteSettings spriteSettings;
         [SerializeField] private SO_ProgressionSettings progressionSettings;
         protected override void Configure(IContainerBuilder builder)
@@ -21,6 +22,7 @@ namespace ElementalBlacksmithStory.Core
             builder.RegisterInstance(materialDatabase);
             builder.RegisterInstance(runeDatabase);
             builder.RegisterInstance(customerGroupDatabase);
+            builder.RegisterInstance(mercenaryDatabase);
             builder.RegisterInstance(spriteSettings);
             builder.RegisterInstance(progressionSettings);
             new MessagePipeInstaller().Install(builder);

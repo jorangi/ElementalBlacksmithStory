@@ -15,7 +15,7 @@ namespace ElementalBlacksmithStory.Data
     public class PlayerData : IDisposable
     {
         private readonly CompositeDisposable _disposables = new();
-        private readonly ReactiveProperty<ulong> _money = new(1000000000);
+        private readonly ReactiveProperty<ulong> _money = new(5000);
         public MaterialInventory MaterialInventory { get; private set; }
         public RuneInventory RuneInventory { get; private set; }
         public EquipmentInventory EquipmentInventory { get; private set; }

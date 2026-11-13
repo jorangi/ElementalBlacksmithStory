@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8b5e051bc0cc23e4094b6156ebf21b14, type: 3}
-  m_Name: 90004
+  m_Name: 91002
   m_EditorClassIdentifier: Assembly-CSharp::ElementalBlacksmithStory.Data.SO_Mercenary
   MercName: "\uBD88\uC758 \uB9C8\uBC95\uC0AC, \uB9AC\uD14C\uB860"
   Description: "\uC5B4\uB9B4\uC801 \uB300\uC7A5\uC7A5\uC774 \uC544\uBC84\uC9C0\uC758

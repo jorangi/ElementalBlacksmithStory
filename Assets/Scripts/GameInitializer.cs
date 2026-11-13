@@ -28,16 +28,31 @@ namespace ElementalBlacksmithStory.Core
             GameExitPresenter gameExitPresenter,
             IPublisher<PlaySoundEvent> sfxPublisher,
             ISubscriber<GameExitEvent> exitSubscriber,
-            SO_RuneDatabase runeDatabase = null
+            SO_RuneDatabase runeDatabase,
+            SO_CustomerGroupDatabase customerGroupDatabase,
+            SO_MercenaryDatabase mercenaryDatabase,
+
+            PlayerData playerData,
+            MercenaryInfoPresenter mercenaryInfoPresenter
         )
         {
             weaponDatabase.Init();
             materialDatabase.Init();
             runeDatabase.Init();
+            customerGroupDatabase.Init();
+            mercenaryDatabase.Init();
             _acquireItemPublisher = acquireItemPublisher;
             _gameExitPresenter = gameExitPresenter;
             _sfxPublisher = sfxPublisher;
             _exitSubscription = exitSubscriber.Subscribe(_ => { Debug.Log("게임을 정상적으로 종료했습니다."); Application.Quit(); });
+
+            // //테스트
+            // uint mercId = 91002;
+            // uint weaponId = 10005;
+            // playerData.AddMercenary(new MercenaryData(mercenaryDatabase.Get(mercId)));
+            // playerData.GetMercenary(mercId).EquipWeapon(new Weapon(weaponDatabase.Get(weaponId)));
+            // mercenaryInfoPresenter.SetData(playerData.GetMercenary(mercId));
+            // mercenaryInfoPresenter.Show();
         }
         public void Start()
         {

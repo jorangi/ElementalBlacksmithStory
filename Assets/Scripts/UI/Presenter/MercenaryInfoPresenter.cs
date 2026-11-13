@@ -54,13 +54,13 @@ namespace ElementalBlacksmithStory.UI
             _view.SetLevelText(data.Level.ToString());
             float exp = data.MaxExp == 0 ? 1f : Mathf.Clamp01((float)data.Exp / data.MaxExp);
             _view.SetExpBar(exp);
-            _view.SetHpText(data.Stats[(int)StatType.HP].ToString());
-            _view.SetDefText(data.Stats[(int)StatType.DEF].ToString());
-            _view.SetAtkText(data.Stats[(int)StatType.ATK].ToString());
-            _view.SetMagText(data.Stats[(int)StatType.MAG].ToString());
-            _view.SetAtsText(data.Stats[(int)StatType.ATS].ToString());
-            _view.SetSpdText(data.Stats[(int)StatType.SPD].ToString());
-            _view.SetGoldBonusText(data.Stats[(int)StatType.GOLDBONUS].ToString());
+            _view.SetHpText(data.Stats[(int)StatType.HP].Value.ToString());
+            _view.SetDefText(data.Stats[(int)StatType.DEF].Value.ToString());
+            _view.SetAtkText(data.Stats[(int)StatType.ATK].Value.ToString());
+            _view.SetMagText(data.Stats[(int)StatType.MAG].Value.ToString());
+            _view.SetAtsText($"{data.Stats[(int)StatType.ATS].Value}/s");
+            _view.SetSpdText(data.Stats[(int)StatType.SPD].Value.ToString());
+            _view.SetGoldBonusText($"{data.Stats[(int)StatType.GOLDBONUS].Value * 100.0f}%");
 
             SetEquipmentIcon(data.WeaponId).Forget();
             SetStandingImage(data.Id).Forget();
