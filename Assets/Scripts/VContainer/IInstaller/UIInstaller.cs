@@ -10,6 +10,7 @@ namespace ElementalBlacksmithStory.Core
         public void Install(IContainerBuilder builder)
         {
             // view 등록
+            builder.RegisterComponentInHierarchy<SessionMenusView>();
             builder.RegisterComponentInHierarchy<MoneyView>();
             builder.RegisterComponentInHierarchy<QuickSellView>();
             builder.RegisterComponentInHierarchy<AnvilWeaponView>();
@@ -40,6 +41,7 @@ namespace ElementalBlacksmithStory.Core
 
 
             // Presenter 등록
+            builder.RegisterEntryPoint<SessionMenusPresenter>();
             builder.RegisterEntryPoint<MoneyPresenter>();
             builder.RegisterEntryPoint<QuickSellPresenter>();
             builder.RegisterEntryPoint<AnvilWeaponPresenter>();
