@@ -15,23 +15,31 @@ namespace ElementalBlacksmithStory.UI
         private readonly CompositeDisposable _disposables = new();
         private readonly WeaponSpriteLoader _weaponSpriteLoader;
         private readonly NPCStandingSpriteLoader _npcSpriteLoader;
+        private readonly WeaponSpriteLoader _accessorySpriteLoader;
         [Inject]
         public MercenaryInfoPresenter(
             MercenaryInfoView view,
             WeaponSpriteLoader weaponSpriteLoader,
+            WeaponSpriteLoader accessorySpriteLoader,
             NPCStandingSpriteLoader npcSpriteLoader
-            )
+        )
         {
             _view = view;
             _weaponSpriteLoader = weaponSpriteLoader;
+            _accessorySpriteLoader = accessorySpriteLoader;
             _npcSpriteLoader = npcSpriteLoader;
 
 
+            _view.OnCloseButtonClick()
+                .Subscribe(this, static (_, self) =>
+                {
+                    self.Hide();
+                }).AddTo(_disposables);
             _view.OnWeaponButtonClick()
                 .Subscribe(this, static (_, self) =>
                 {
                 }).AddTo(_disposables);
-            _view.OnArmorButtonClick()
+            _view.OnAccessory3ButtonClick()
                 .Subscribe(this, static (_, self) =>
                 {
                 }).AddTo(_disposables);
@@ -43,7 +51,7 @@ namespace ElementalBlacksmithStory.UI
                 .Subscribe(this, static (_, self) =>
                 {
                 }).AddTo(_disposables);
-            _view.OnConsumableButtonClick()
+            _view.OnAccessory4ButtonClick()
                 .Subscribe(this, static (_, self) =>
                 {
                 }).AddTo(_disposables);
@@ -95,6 +103,35 @@ namespace ElementalBlacksmithStory.UI
                 var sprite = await _weaponSpriteLoader.GetSprite(id);
                 ct.ThrowIfCancellationRequested();
                 _view.SetWeaponIcon(sprite);
+            }
+            catch (OperationCanceledException) { }
+            catch (Exception e)
+            {
+                Debug.LogError($"[MercenaryInfoPresenter] {e.Message}");
+            }
+        }
+
+        public async UniTask SetAccessoryIcon(int idx, uint id, CancellationToken ct = default)
+        {
+            try
+            {
+                var sprite = await _accessorySpriteLoader.GetSprite(id);
+                ct.ThrowIfCancellationRequested();
+                switch (idx)
+                {
+                    case 1:
+                        _view.SetAccessory1Icon(sprite);
+                        break;
+                    case 2:
+                        _view.SetAccessory2Icon(sprite);
+                        break;
+                    case 3:
+                        _view.SetAccessory3Icon(sprite);
+                        break;
+                    case 4:
+                        _view.SetAccessory4Icon(sprite);
+                        break;
+                }
             }
             catch (OperationCanceledException) { }
             catch (Exception e)

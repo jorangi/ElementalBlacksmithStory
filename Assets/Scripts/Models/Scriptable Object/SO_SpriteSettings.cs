@@ -10,10 +10,12 @@ namespace ElementalBlacksmithStory.Data
         [SerializeField] private Sprite defaultWeaponSprite;
         [SerializeField] private Sprite defaultNPCStandingSprite;
         [SerializeField] private Sprite defaultRuneSprite;
+        [SerializeField] private Sprite defaultAccessorySprite;
 
         public Sprite DefaultMaterialSprite => defaultMaterialSprite;
         public Sprite DefaultWeaponSprite => defaultWeaponSprite;
         public Sprite DefaultNPCStandingSprite => defaultNPCStandingSprite;
         public Sprite DefaultRuneSprite => defaultRuneSprite;
+        public Sprite DefaultAccessorySprite => defaultAccessorySprite;
     }
 }

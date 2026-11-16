@@ -15,24 +15,24 @@ namespace ElementalBlacksmithStory.UI
         [SerializeField] private Color _panelColor;
         [SerializeField] private Image _panel;
         [SerializeField] private RectTransform _rect;
+        [SerializeField] private Button _closeButton;
         private const float ANIM_DURATION = 0.3f;
 
         [Header("장비 슬롯")]
         [SerializeField] private Button _weaponButton;
         [SerializeField] private Image _weaponIcon;
 
-        [SerializeField] private Button _armorButton;
-        [SerializeField] private Image _armorIcon;
-
-        [SerializeField] private Button _accessoryButton1;
+        [SerializeField] private Button _accessory1Button;
         [SerializeField] private Image _accessoryIcon1;
 
-        [SerializeField] private Button _accessoryButton2;
+        [SerializeField] private Button _accessory2Button;
         [SerializeField] private Image _accessoryIcon2;
 
+        [SerializeField] private Button _accessory3Button;
+        [SerializeField] private Image _accessory3Icon;
 
-        [SerializeField] private Button _consumableButton;
-        [SerializeField] private Image _consumableIcon;
+        [SerializeField] private Button _accessory4Button;
+        [SerializeField] private Image _accessory4Icon;
 
         [Header("유닛 정보")]
         [SerializeField] private Image _standingImage;
@@ -63,10 +63,6 @@ namespace ElementalBlacksmithStory.UI
         {
             _weaponIcon.sprite = icon;
         }
-        public void SetArmorIcon(Sprite icon)
-        {
-            _armorIcon.sprite = icon;
-        }
         public void SetAccessory1Icon(Sprite icon)
         {
             _accessoryIcon1.sprite = icon;
@@ -75,9 +71,13 @@ namespace ElementalBlacksmithStory.UI
         {
             _accessoryIcon2.sprite = icon;
         }
-        public void SetConsumableIcon(Sprite icon)
+        public void SetAccessory3Icon(Sprite icon)
         {
-            _consumableIcon.sprite = icon;
+            _accessory3Icon.sprite = icon;
+        }
+        public void SetAccessory4Icon(Sprite icon)
+        {
+            _accessory4Icon.sprite = icon;
         }
         public void SetNameText(string name)
         {
@@ -120,6 +120,15 @@ namespace ElementalBlacksmithStory.UI
             _goldBonusText.SetText(text);
         }
 
+        public Observable<Unit> OnCloseButtonClick()
+        {
+            if (_closeButton == null)
+            {
+                Debug.LogError("[MercenaryInfoView]_closeButton이 없습니다.");
+                return Observable.Empty<Unit>();
+            }
+            return _closeButton.OnClickAsObservable();
+        }
         public Observable<Unit> OnWeaponButtonClick()
         {
             if (_weaponButton == null)
@@ -129,41 +138,41 @@ namespace ElementalBlacksmithStory.UI
             }
             return _weaponButton.OnClickAsObservable();
         }
-        public Observable<Unit> OnArmorButtonClick()
-        {
-            if (_armorButton == null)
-            {
-                Debug.LogError("[MercenaryInfoView]_armorButton이 없습니다.");
-                return Observable.Empty<Unit>();
-            }
-            return _armorButton.OnClickAsObservable();
-        }
         public Observable<Unit> OnAccessory1ButtonClick()
         {
-            if (_accessoryButton1 == null)
+            if (_accessory1Button == null)
             {
-                Debug.LogError("[MercenaryInfoView]_accessoryButton1이 없습니다.");
+                Debug.LogError("[MercenaryInfoView]_accessory1Button 없습니다.");
                 return Observable.Empty<Unit>();
             }
-            return _accessoryButton1.OnClickAsObservable();
+            return _accessory1Button.OnClickAsObservable();
         }
         public Observable<Unit> OnAccessory2ButtonClick()
         {
-            if (_accessoryButton2 == null)
+            if (_accessory2Button == null)
             {
-                Debug.LogError("[MercenaryInfoView]_accessoryButton2이 없습니다.");
+                Debug.LogError("[MercenaryInfoView]_accessory2Button 없습니다.");
                 return Observable.Empty<Unit>();
             }
-            return _accessoryButton2.OnClickAsObservable();
+            return _accessory2Button.OnClickAsObservable();
         }
-        public Observable<Unit> OnConsumableButtonClick()
+        public Observable<Unit> OnAccessory3ButtonClick()
         {
-            if (_consumableButton == null)
+            if (_accessory3Button == null)
             {
-                Debug.LogError("[MercenaryInfoView]_consumableButton이 없습니다.");
+                Debug.LogError("[MercenaryInfoView]_accessory3Button이 없습니다.");
                 return Observable.Empty<Unit>();
             }
-            return _consumableButton.OnClickAsObservable();
+            return _accessory3Button.OnClickAsObservable();
+        }
+        public Observable<Unit> OnAccessory4ButtonClick()
+        {
+            if (_accessory4Button == null)
+            {
+                Debug.LogError("[MercenaryInfoView]_accessory4Button이 없습니다.");
+                return Observable.Empty<Unit>();
+            }
+            return _accessory4Button.OnClickAsObservable();
         }
 
         public async UniTask Show()
@@ -193,12 +202,12 @@ namespace ElementalBlacksmithStory.UI
                 _handle.Cancel();
             }
             _handle = LSequence.Create()
-                .Append(LMotion.Create(_panelColor, Color.clear, ANIM_DURATION)
-                                .WithEase(Ease.InOutBack)
-                                .BindToColor(_panel))
                 .Append(LMotion.Create(Vector3.one, Vector3.zero, ANIM_DURATION)
                                 .WithEase(Ease.InOutBack)
                                 .BindToLocalScale(_rect))
+                .Append(LMotion.Create(_panelColor, Color.clear, ANIM_DURATION)
+                                .WithEase(Ease.InOutBack)
+                                .BindToColor(_panel))
                 .Run()
                 .AddTo(_panel.gameObject);
 

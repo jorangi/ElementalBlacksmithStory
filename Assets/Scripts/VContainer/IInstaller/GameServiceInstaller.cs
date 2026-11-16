@@ -34,6 +34,7 @@ namespace ElementalBlacksmithStory.Core
             builder.RegisterEntryPoint<SettingsService>(Lifetime.Singleton).AsSelf();
 
             builder.RegisterEntryPoint<WeaponSpriteLoader>(Lifetime.Singleton).AsSelf();
+            builder.RegisterEntryPoint<AccessorySpriteLoader>(Lifetime.Singleton).AsSelf();
             builder.RegisterEntryPoint<MaterialSpriteLoader>(Lifetime.Singleton).AsSelf();
             builder.RegisterEntryPoint<RuneSpriteLoader>(Lifetime.Singleton).AsSelf();
             builder.RegisterEntryPoint<NPCStandingSpriteLoader>(Lifetime.Singleton).AsSelf();
