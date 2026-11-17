@@ -12,6 +12,7 @@ using VContainer.Unity;
 
 namespace ElementalBlacksmithStory.UI
 {
+    [Obsolete("ForgePresenter로 통합됨")]
     public class QuickSellPresenter : IStartable, IDisposable
     {
         private readonly QuickSellView _view;

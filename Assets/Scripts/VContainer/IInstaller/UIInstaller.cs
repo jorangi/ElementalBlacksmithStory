@@ -12,10 +12,11 @@ namespace ElementalBlacksmithStory.Core
             // view 등록
             builder.RegisterComponentInHierarchy<SessionMenusView>();
             builder.RegisterComponentInHierarchy<MoneyView>();
-            builder.RegisterComponentInHierarchy<QuickSellView>();
             builder.RegisterComponentInHierarchy<AnvilWeaponView>();
+
+            builder.RegisterComponentInHierarchy<ForgeView>();
+
             builder.RegisterComponentInHierarchy<EnhanceButtonView>();
-            builder.RegisterComponentInHierarchy<EnhanceChanceView>();
             builder.RegisterComponentInHierarchy<MaterialsView>();
             builder.RegisterComponentInHierarchy<SelectMaterialAmountView>();
             builder.RegisterComponentInHierarchy<GameExitView>();
@@ -43,10 +44,11 @@ namespace ElementalBlacksmithStory.Core
             // Presenter 등록
             builder.RegisterEntryPoint<SessionMenusPresenter>();
             builder.RegisterEntryPoint<MoneyPresenter>();
-            builder.RegisterEntryPoint<QuickSellPresenter>();
             builder.RegisterEntryPoint<AnvilWeaponPresenter>();
+
+            builder.RegisterEntryPoint<ForgePresenter>();
+
             builder.RegisterEntryPoint<EnhanceButtonPresenter>();
-            builder.RegisterEntryPoint<EnhanceChancePresenter>();
             builder.RegisterEntryPoint<MaterialsPresenter>();
             builder.RegisterEntryPoint<WeaponTreePresenter>().AsSelf();
             builder.RegisterEntryPoint<GameExitPresenter>().AsSelf();

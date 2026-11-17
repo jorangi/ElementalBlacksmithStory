@@ -10,6 +10,7 @@ using VContainer.Unity;
 
 namespace ElementalBlacksmithStory.UI
 {
+    [Obsolete("ForgePresenter로 병합됨")]
     public class EnhanceChancePresenter : IStartable, IDisposable
     {
         private readonly SO_WeaponDatabase _weaponDatabase;

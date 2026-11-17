@@ -47,7 +47,9 @@ namespace ElementalBlacksmithStory.Core
         /// 강화 히스토리 스택 (무기 ID, 해당 단계에서 추가된 기본 가격, 해당 단계 비용)
         /// </summary>
         private readonly Stack<EnhanceStep> _enhanceHistory = new();
-        public Stack<EnhanceStep> EnhanceHistory => _enhanceHistory;
+        public IReadOnlyCollection<EnhanceStep> EnhanceHistory => _enhanceHistory;
+        public ReactiveProperty<ulong> _totalCost = new(0);
+        public ReadOnlyReactiveProperty<ulong> TotalCost => _totalCost;
         string IShopItem.Name => Data != null ? Data.weaponName : string.Empty;
         public ulong Value => _basePrice;
 
@@ -135,7 +137,7 @@ namespace ElementalBlacksmithStory.Core
                 for (int i = 0; i < saveData.EnhanceHistory.Count; i++)
                 {
                     var step = saveData.EnhanceHistory[i];
-                    _enhanceHistory.Push(new EnhanceStep(step.WeaponId, step.AddedBasePrice, step.Cost));
+                    PushEnhanceStep(new EnhanceStep(step.WeaponId, step.AddedBasePrice, step.Cost));
                 }
             }
             InitStats();
@@ -225,6 +227,27 @@ namespace ElementalBlacksmithStory.Core
         {
             _cost = cost;
         }
+        public void PushEnhanceStep(EnhanceStep step)
+        {
+            _enhanceHistory.Push(step);
+            _totalCost.OnNext(_totalCost.Value + step.Cost);
+        }
+        public EnhanceStep PopEnhanceStep()
+        {
+            var step = _enhanceHistory.Pop();
+            _totalCost.OnNext(_totalCost.Value >= step.Cost ? _totalCost.Value - step.Cost : 0);
+            return step;
+        }
+        public bool TryPeekEnhanceStep(out EnhanceStep result)
+        {
+            if (_enhanceHistory.Count > 0)
+            {
+                result = _enhanceHistory.Peek();
+                return true;
+            }
+            result = default;
+            return false;
+        }
         /// <summary>
         /// 강화 히스토리 설정
         /// </summary>
@@ -233,7 +256,7 @@ namespace ElementalBlacksmithStory.Core
         /// <param name="nextCost">다음 비용</param>
         public void PushEnhanceStep(uint weaponId, ulong addedBasePrice, ulong nextCost)
         {
-            _enhanceHistory.Push(new EnhanceStep(weaponId, addedBasePrice, nextCost));
+            PushEnhanceStep(new EnhanceStep(weaponId, addedBasePrice, nextCost));
             _basePrice += addedBasePrice;
             _cost = nextCost;
         }
@@ -252,14 +275,6 @@ namespace ElementalBlacksmithStory.Core
         {
             _enhanceHistory.Clear();
             _basePrice = 0;
-        }
-        /// <summary>
-        /// 비용 추가
-        /// </summary>
-        /// <param name="cost">추가할 비용</param>
-        public void PushCost(ulong cost)
-        {
-            _cost = cost;
         }
         /// <summary>
         /// 비용 초기화

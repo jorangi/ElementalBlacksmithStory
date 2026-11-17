@@ -1,13 +1,15 @@
+using System;
+using System.Threading;
+using Cysharp.Text;
+using Cysharp.Threading.Tasks;
+using R3;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using Cysharp.Threading.Tasks;
-using System.Threading;
-using Cysharp.Text;
-using R3;
 
 namespace ElementalBlacksmithStory.UI
 {
+    [Obsolete("ForgeView로 통합됨")]
     public class QuickSellView : MonoBehaviour
     {
         [SerializeField] private TextMeshProUGUI _priceText;
@@ -23,7 +25,7 @@ namespace ElementalBlacksmithStory.UI
         }
         public Observable<Unit> OnClickAsObservable()
         {
-            if(_sellButton == null)
+            if (_sellButton == null)
             {
                 Debug.LogError("[QuickSellView] _sellButton 연결되지 않았습니다.");
                 return Observable.Empty<Unit>();
@@ -37,7 +39,7 @@ namespace ElementalBlacksmithStory.UI
             _cts?.Dispose();
             _cts = new CancellationTokenSource();
             var token = _cts.Token;
-        
+
             double startPrice = _currentPrice;
             double endPrice = targetPrice;
             float duration = 0.5f;

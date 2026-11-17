@@ -26,7 +26,7 @@ namespace ElementalBlacksmithStory.Core
                 return false;
             }
 
-            var popped = weapon.EnhanceHistory.Pop();
+            var popped = weapon.PopEnhanceStep();
             ulong newBasePrice = weapon.BasePrice >= popped.AddedBasePrice
 
                 ? weapon.BasePrice - popped.AddedBasePrice
@@ -36,9 +36,8 @@ namespace ElementalBlacksmithStory.Core
 
             uint prevWeaponId;
             ulong prevCost;
-            if (weapon.EnhanceHistory.Count > 0)
+            if (weapon.TryPeekEnhanceStep(out var top))
             {
-                var top = weapon.EnhanceHistory.Peek();
                 prevWeaponId = top.WeaponId;
                 prevCost = top.Cost;
             }
@@ -60,9 +59,9 @@ namespace ElementalBlacksmithStory.Core
         {
             if (weapon == null || targetFailWeapon == null) return;
 
-            while (weapon.EnhanceHistory.Count > 0 && weapon.EnhanceHistory.Peek().WeaponId != targetFailWeapon.Id)
+            while (weapon.TryPeekEnhanceStep(out var peek) && peek.WeaponId != targetFailWeapon.Id)
             {
-                var popped = weapon.EnhanceHistory.Pop();
+                var popped = weapon.PopEnhanceStep();
                 ulong newBasePrice = weapon.BasePrice >= popped.AddedBasePrice
                     ? weapon.BasePrice - popped.AddedBasePrice
                     : 0;
@@ -75,7 +74,7 @@ namespace ElementalBlacksmithStory.Core
 
         private void ApplyWeaponData(Weapon weapon, uint weaponId, SO_WeaponData cachedData = null)
         {
-            SO_WeaponData weaponData = cachedData ?? _weaponDatabase.Get(weaponId);
+            SO_WeaponData weaponData = cachedData != null ? cachedData : _weaponDatabase.Get(weaponId);
             if (weaponData != null)
             {
                 weapon.SetData(weaponData);

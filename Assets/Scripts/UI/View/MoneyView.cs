@@ -1,8 +1,8 @@
-using TMPro;
-using UnityEngine;
-using Cysharp.Threading.Tasks;
 using System.Threading;
 using Cysharp.Text;
+using Cysharp.Threading.Tasks;
+using TMPro;
+using UnityEngine;
 
 namespace ElementalBlacksmithStory.UI
 {
@@ -11,7 +11,7 @@ namespace ElementalBlacksmithStory.UI
         [SerializeField] private TextMeshProUGUI _moneyText;
         private ulong _currentMoney;
         private CancellationTokenSource _cts;
-        
+
 
         public async UniTaskVoid SetMoney(ulong targetMoney)
         {
@@ -33,13 +33,13 @@ namespace ElementalBlacksmithStory.UI
                 double t = Mathf.Clamp01(elapsed / duration);
 
                 _currentMoney = (ulong)(startMoney + (endMoney - startMoney) * t);
-                _moneyText.SetText(ZString.Format("<sprite name=\"CoinSack\"> {0:N0}", _currentMoney));
+                _moneyText.SetText(ZString.Format("<sprite name=\"CoinSack\"> {0:N0} G", _currentMoney));
 
                 await UniTask.Yield(PlayerLoopTiming.Update, token);
             }
 
             _currentMoney = targetMoney;
-            _moneyText.SetText(ZString.Format("<sprite name=\"CoinSack\"> {0:N0}", _currentMoney));
+            _moneyText.SetText(ZString.Format("<sprite name=\"CoinSack\"> {0:N0} G", _currentMoney));
         }
 
         private void OnDestroy()

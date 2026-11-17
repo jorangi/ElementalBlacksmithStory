@@ -2,6 +2,23 @@
 
 > Elemental Blacksmith Story 프로젝트의 일자별 개발 일지 및 주요 변경 사항 기록입니다.
 
+## 2026-11-18
+
+- Weapon의 강화 이력을 오로지 내부 함수로만 되게끔
+  - TotalCost에 Stack의 Push값이 반영되게끔 적용
+- 돈 표시 애니메이션 이전
+- 기존 빠른 판매 관련 이벤트를 없애는 중
+  - 이벤트 -> 서비스 로직으로 이주
+
+## 2026-11-17
+
+- 대장간 UI 재디자인
+  - 기존 `EnhanceButtonView` 등 분리되어 있던 단순 View와 Presenter를 `ForgeView`와 `ForgePresenter`로 통합
+    - SRP측면에서 보면 아쉽지만 컴포넌트와 소스코드가 너무 분리되어 있어 보일러 플레이트 느낌이 심했음.
+    - 다른 세션은 이미 통합 UI로 진행하고 있기에 어느정도 통일성이 필요했고 해당 세션들도 분리하자면 소스코드가 너무 난잡해졌음.
+    - `EnhanceChanceView`를 Deprecated하고 Forge에 통합
+    - `ForgePresenter`에 강화확률, 빠른 판매 가격, 강화 비용, 누적 소요 비용 표시 및 버튼 연동
+
 ## 2026-11-16
 
 - UI 재디자인
